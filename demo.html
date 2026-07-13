@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Wayfare — see where in the world you could go</title>
+  <meta name="description" content="Wayfare is a visa eligibility simulator for travellers, backpackers, students and digital nomads. An early prototype built on official-source research." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ============ Wayfare demo page — self-contained, no dependencies ============ */
+    :root {
+      --accent: #1f9d8f;
+      --accent-deep: #156b60;
+      --accent-tint: rgba(31, 157, 143, 0.14);
+      --bg: #05090b;
+      --bg-2: #0a1114;
+      --card: #0d1619;
+      --line: rgba(138, 168, 162, 0.18);
+      --ink: #eef3f1;
+      --ink-2: #c8d8d4;
+      --ink-3: #8aa8a2;
+      --font-display: "Space Grotesk", system-ui, sans-serif;
+      --font-body: "Manrope", system-ui, sans-serif;
+      --radius: 14px;
+      --maxw: 960px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background:
+        radial-gradient(1100px 500px at 85% -10%, rgba(31,157,143,0.16), transparent 60%),
+        radial-gradient(900px 500px at -10% 30%, rgba(31,157,143,0.07), transparent 55%),
+        var(--bg);
+      color: var(--ink);
+      font-family: var(--font-body);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+    h1, h2, h3 { font-family: var(--font-display); font-weight: 600; letter-spacing: -0.02em; }
+    .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 20px; }
+
+    /* ---- header ---- */
+    header {
+      position: sticky; top: 0; z-index: 10;
+      backdrop-filter: blur(10px);
+      background: rgba(5, 9, 11, 0.75);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; max-width: var(--maxw); margin: 0 auto; }
+    .brand { font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; letter-spacing: -0.02em; }
+    .brand .dot { color: var(--accent); }
+    .nav a.launch {
+      font-size: 0.85rem; font-weight: 700; text-decoration: none;
+      color: var(--bg); background: var(--accent);
+      padding: 8px 16px; border-radius: 999px;
+      transition: background 0.15s ease;
+    }
+    .nav a.launch:hover { background: var(--accent-deep); color: var(--ink); }
+
+    /* ---- hero ---- */
+    .hero { padding: 84px 0 64px; text-align: center; }
+    .hero .badge {
+      display: inline-block; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--accent);
+      border: 1px solid var(--accent-deep); border-radius: 999px;
+      padding: 5px 14px; margin-bottom: 22px; background: var(--accent-tint);
+    }
+    .hero h1 { font-size: clamp(2.6rem, 7vw, 4.2rem); line-height: 1.05; }
+    .hero h1 .dot { color: var(--accent); }
+    .hero p.sub {
+      max-width: 620px; margin: 18px auto 0;
+      font-size: clamp(1rem, 2.4vw, 1.2rem); color: var(--ink-2);
+    }
+    .hero .cta-row { margin-top: 34px; display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    a.cta {
+      display: inline-block; text-decoration: none; font-weight: 800; font-size: 1rem;
+      color: var(--bg); background: var(--accent);
+      padding: 14px 30px; border-radius: 12px;
+      box-shadow: 0 8px 30px rgba(31,157,143,0.35);
+      transition: transform 0.12s ease, background 0.15s ease;
+    }
+    a.cta:hover { transform: translateY(-2px); background: #27b5a5; }
+    a.cta.ghost {
+      color: var(--ink-2); background: transparent; border: 1px solid var(--line); box-shadow: none;
+    }
+    a.cta.ghost:hover { border-color: var(--accent); color: var(--ink); }
+    .hero .fineprint { margin-top: 16px; font-size: 0.8rem; color: var(--ink-3); }
+
+    /* ---- sections ---- */
+    section { padding: 56px 0; }
+    section.alt { background: var(--bg-2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .kicker {
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 10px;
+    }
+    section h2 { font-size: clamp(1.5rem, 4vw, 2.1rem); margin-bottom: 14px; }
+    section p.lead { color: var(--ink-2); max-width: 700px; }
+
+    .cards { display: grid; gap: 16px; margin-top: 28px; grid-template-columns: 1fr; }
+    @media (min-width: 640px) { .cards.c2 { grid-template-columns: 1fr 1fr; } .cards.c3 { grid-template-columns: 1fr 1fr; } }
+    @media (min-width: 900px) { .cards.c3 { grid-template-columns: repeat(3, 1fr); } }
+    .card {
+      background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+      padding: 22px;
+    }
+    .card h3 { font-size: 1.02rem; margin-bottom: 8px; }
+    .card p { font-size: 0.92rem; color: var(--ink-2); }
+    .card .num {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 30px; height: 30px; border-radius: 9px; margin-bottom: 12px;
+      background: var(--accent-tint); color: var(--accent);
+      font-family: var(--font-display); font-weight: 700; font-size: 0.95rem;
+    }
+    .card .icon { font-size: 1.4rem; margin-bottom: 10px; display: block; }
+
+    /* ---- coverage ---- */
+    .coverage { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+    .pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      border: 1px solid var(--line); border-radius: 999px;
+      padding: 9px 16px; font-size: 0.88rem; font-weight: 600; color: var(--ink-2);
+      background: var(--card);
+    }
+    .pill .st { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+    .pill .st.ok { background: var(--accent); box-shadow: 0 0 8px rgba(31,157,143,0.8); }
+    .pill .st.wip { background: #d9a83c; box-shadow: 0 0 8px rgba(217,168,60,0.7); }
+    .coverage-note { margin-top: 14px; font-size: 0.82rem; color: var(--ink-3); max-width: 640px; }
+
+    /* ---- trust list ---- */
+    ul.trust { list-style: none; margin-top: 22px; display: grid; gap: 12px; }
+    ul.trust li {
+      display: flex; gap: 12px; align-items: flex-start;
+      background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+      padding: 16px 18px; font-size: 0.93rem; color: var(--ink-2);
+    }
+    ul.trust li .tick { color: var(--accent); font-weight: 800; flex-shrink: 0; }
+
+    /* ---- demo note ---- */
+    .note {
+      margin-top: 26px; border: 1px dashed var(--accent-deep); border-radius: var(--radius);
+      background: var(--accent-tint); padding: 18px 20px;
+      font-size: 0.88rem; color: var(--ink-2);
+    }
+    .note strong { color: var(--ink); }
+
+    /* ---- footer ---- */
+    footer { padding: 44px 0 60px; text-align: center; border-top: 1px solid var(--line); }
+    footer p { font-size: 0.8rem; color: var(--ink-3); max-width: 640px; margin: 0 auto; }
+    footer .brand { display: block; margin-bottom: 10px; font-size: 1rem; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="nav">
+      <span class="brand">Wayfare<span class="dot">.</span></span>
+      <a class="launch" href="index.html">Launch demo</a>
+    </div>
+  </header>
+
+  <!-- 1 · Hero -->
+  <section class="hero wrap">
+    <span class="badge">Early prototype · Eligibility simulator</span>
+    <h1>Wayfare<span class="dot">.</span></h1>
+    <p class="sub">A visa eligibility simulator for travellers, backpackers, students and digital nomads —
+      see where in the world you could go, and what it would realistically take to get there.</p>
+    <div class="cta-row">
+      <a class="cta" href="index.html">Open the prototype</a>
+      <a class="cta ghost" href="#how">How it works</a>
+    </div>
+    <p class="fineprint">Simulated guidance built on official-source research. Not legal or immigration advice.</p>
+  </section>
+
+  <!-- 2 · Problem -->
+  <section class="alt">
+    <div class="wrap">
+      <p class="kicker">The problem</p>
+      <h2>Visa research is a maze.</h2>
+      <p class="lead">Whether you can visit, study or work in another country depends on your nationality, your age,
+        the destination, the visa type, your funds, your documents — and official rules that are scattered across
+        government websites, worded differently everywhere, and changing all the time. Most people end up piecing it
+        together from forums and guesswork.</p>
+      <div class="cards c3">
+        <div class="card"><span class="icon">🌍</span><h3>Rules depend on everything</h3><p>The same destination can mean a free entry, an online authorisation, or a full visa application — depending only on your passport.</p></div>
+        <div class="card"><span class="icon">📄</span><h3>Requirements hide in fine print</h3><p>Funds thresholds, age bands, quotas, ballots, insurance, sponsor letters — each lives on a different official page.</p></div>
+        <div class="card"><span class="icon">⏳</span><h3>Everything changes</h3><p>Fees, quotas and opening dates shift every season. What was true last year may be wrong today.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 · Solution -->
+  <section>
+    <div class="wrap">
+      <p class="kicker">The idea</p>
+      <h2>One profile. Every path, side by side.</h2>
+      <p class="lead">Wayfare takes a short profile — nationality, age, education, savings, goals — and maps it against
+        researched visa rules for each destination. Instead of twenty browser tabs, you get a single comparable view of
+        which visa paths look possible, which look partial, and exactly which requirements you'd still need to verify.</p>
+    </div>
+  </section>
+
+  <!-- 4 · How it works -->
+  <section class="alt" id="how">
+    <div class="wrap">
+      <p class="kicker">How it works</p>
+      <h2>Five steps, no jargon.</h2>
+      <div class="cards c3">
+        <div class="card"><span class="num">1</span><h3>Enter your profile</h3><p>Nationality, age, education, English level, savings — nothing is stored; it's a prototype.</p></div>
+        <div class="card"><span class="num">2</span><h3>Choose a destination</h3><p>Pick a country on the interactive globe to explore what it offers someone like you.</p></div>
+        <div class="card"><span class="num">3</span><h3>See possible visa options</h3><p>Visitor, student, working holiday and more — scored as eligible, partial or unlikely for your profile.</p></div>
+        <div class="card"><span class="num">4</span><h3>Review the details</h3><p>Each option lists warnings, requirements, fees and conditions drawn from official-source research.</p></div>
+        <div class="card"><span class="num">5</span><h3>Confirm on official sites</h3><p>Every result points you back to the official government source — that's always the final word.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 · Coverage -->
+  <section>
+    <div class="wrap">
+      <p class="kicker">Current coverage</p>
+      <h2>Where the research is deepest today.</h2>
+      <p class="lead">Wayfare's visa data goes through an internal audit pipeline that checks the app's answers against
+        captured official government pages. Coverage is being built destination by destination:</p>
+      <div class="coverage">
+        <span class="pill"><span class="st ok"></span>New Zealand — visitor, student &amp; 20 working-holiday nationalities</span>
+        <span class="pill"><span class="st ok"></span>Australia — visitor, student &amp; working holiday</span>
+        <span class="pill"><span class="st ok"></span>United Kingdom — visitor, student &amp; Youth Mobility</span>
+        <span class="pill"><span class="st wip"></span>Canada — visitor, study permit &amp; IEC (being audited)</span>
+      </div>
+      <p class="coverage-note">Other destinations shown in the prototype use simulated placeholder rules and are clearly
+        marked as such. Wayfare does not claim global coverage — audited destinations grow over time.</p>
+    </div>
+  </section>
+
+  <!-- 6 · Trust / safety -->
+  <section class="alt">
+    <div class="wrap">
+      <p class="kicker">Trust &amp; safety</p>
+      <h2>Honest by design.</h2>
+      <ul class="trust">
+        <li><span class="tick">✓</span><span><strong>Official-source research.</strong>&nbsp;Audited rules are captured from government immigration websites — never from blogs, agents or forums.</span></li>
+        <li><span class="tick">✓</span><span><strong>Warnings over promises.</strong>&nbsp;Anything that can't be verified from your profile — funds, documents, quotas, ballots — is shown as a warning or checklist item, not a green light.</span></li>
+        <li><span class="tick">✓</span><span><strong>Time-sensitive facts are flagged.</strong>&nbsp;Fees, quotas and opening dates change; Wayfare marks them and tells you to re-check the official page.</span></li>
+        <li><span class="tick">✓</span><span><strong>No approval guarantees.</strong>&nbsp;Wayfare never predicts that a visa will be granted — only whether the published requirements look like a fit.</span></li>
+        <li><span class="tick">✓</span><span><strong>Not legal advice.</strong>&nbsp;Wayfare is an eligibility simulator. It does not replace official government guidance or professional immigration advice.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 7 · Vision -->
+  <section>
+    <div class="wrap">
+      <p class="kicker">Where this is going</p>
+      <h2>Making mobility understandable.</h2>
+      <p class="lead">The goal is simple: help travellers understand their realistic visa options, cut through the
+        confusion of scattered official pages, and make immigration information easy to compare — building step by step
+        toward a reliable public beta covering the world's most in-demand destinations.</p>
+
+      <!-- 8 · Demo notes -->
+      <div class="note">
+        <strong>A note before you try it:</strong> this is an early prototype. Some countries and visa types are still
+        being added, and non-audited destinations use simulated rules. Whatever Wayfare shows you, always confirm the
+        details on the official government website before making plans.
+      </div>
+
+      <div class="cta-row" style="margin-top: 34px;">
+        <a class="cta" href="index.html">Launch the demo</a>
+        <a class="cta ghost" href="seo/index.html">Verified visa guides (ES)</a>
+        <a class="cta ghost" href="mailto:edulinovlcn@gmail.com?subject=Wayfare%20beta%20feedback">Send feedback</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <span class="brand">Wayfare<span class="dot">.</span></span>
+      <p>Prototype · Eligibility simulator based on official-source research · Not legal or immigration advice ·
+        No approval guarantees · Always verify with official government sources.</p>
+    </div>
+  </footer>
+
+</body>
+</html>

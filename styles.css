@@ -1,0 +1,136 @@
+/* =============================================================================
+   WAYFARE â€” design tokens & base styles
+   Dark space stage with textured Earth globe background on questionnaire.
+   ========================================================================== */
+
+:root {
+  /* accent â€” teal, overridable by TweaksPanel */
+  --accent: #1f9d8f;
+  --accent-deep: #156b60;
+  --accent-tint: rgba(31,157,143,0.14);
+
+  /* dark stage palette â€” used by questionnaire, processing, and globe       */
+  --bg: #05090b;
+  --surface: rgba(13,22,24,0.80);
+  --surface-2: rgba(255,255,255,0.06);
+
+  --ink: #eef3f1;        /* primary text on dark bg                          */
+  --ink-2: #c8d8d4;      /* secondary text                                   */
+  --ink-3: #8aa8a2;      /* tertiary / hints                                  */
+
+  --line: rgba(255,255,255,0.12);
+  --line-2: rgba(255,255,255,0.07);
+
+  /* eligibility status */
+  --st-eligible: #1f9d57;
+  --st-eligible-tint: #e6f5ec;
+  --st-partial: #d99316;
+  --st-partial-tint: #fbf1dd;
+  --st-unlikely: #d96a3a;
+  --st-unlikely-tint: #fae9e0;
+
+  /* dark globe stage */
+  --space-0: #05090b;
+  --space-1: #0a1316;
+  --glass: rgba(13,22,24,0.66);
+  --glass-line: rgba(255,255,255,0.09);
+  --on-dark: #eef3f1;
+  --on-dark-2: #9fb0ab;
+
+  --radius: 14px;
+  --radius-sm: 10px;
+  --radius-lg: 22px;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.16), 0 1px 3px rgba(0,0,0,0.12);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.22), 0 1px 4px rgba(0,0,0,0.14);
+  --shadow-lg: 0 18px 48px rgba(0,0,0,0.36);
+
+  --font-display: "Space Grotesk", system-ui, sans-serif;
+  --font-body: "Manrope", system-ui, sans-serif;
+
+  --maxw: 880px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0; height: 100%;
+  background: #05090b;   /* space fallback while bg-stars canvas loads       */
+  color: var(--on-dark);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+#root { height: 100%; }
+
+h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; letter-spacing: -0.02em; margin: 0; }
+button { font-family: inherit; cursor: pointer; }
+input, select, button { font-family: inherit; }
+::selection { background: var(--accent); color: #fff; }
+
+/* ---- app frame -------------------------------------------------------- */
+.app { height: 100%; display: flex; flex-direction: column; overflow: hidden; }
+
+.topbar {
+  flex: 0 0 auto; height: 60px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 24px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  background: transparent;   /* no dark overlay â€” space/globe show through  */
+  z-index: 20;
+}
+.topbar.on-stage {
+  background: transparent;
+  border-bottom-color: transparent;
+  color: var(--on-dark);
+  position: absolute; left: 0; right: 0; top: 0;
+}
+.brand { display: flex; align-items: center; gap: 10px; font-family: var(--font-display);
+  font-weight: 600; font-size: 18px; letter-spacing: -0.02em; color: var(--on-dark); }
+.brand-mark {
+  width: 26px; height: 26px; border-radius: 8px;
+  background: var(--accent); display: grid; place-items: center; position: relative;
+}
+.brand-mark::after {
+  content: ""; width: 11px; height: 11px; border-radius: 50%;
+  border: 2px solid #fff; border-right-color: transparent; transform: rotate(-30deg);
+}
+
+/* topbar right-side control group: Edit profile + lang switcher inline     */
+.topbar-right {
+  display: flex; align-items: center; gap: 10px;
+}
+
+/* Edit profile button â€” lives in the topbar, styled to match the lang pill */
+.btn-edit-topbar {
+  display: inline-flex; align-items: center; gap: 7px;
+  border: 1px solid var(--glass-line);
+  background: var(--glass);
+  color: var(--on-dark-2);
+  font-weight: 600; font-size: 13px;
+  padding: 6px 13px; border-radius: 999px;
+  backdrop-filter: blur(10px);
+  transition: color .14s, border-color .14s, background .14s;
+  white-space: nowrap;
+}
+.btn-edit-topbar:hover {
+  color: var(--on-dark);
+  border-color: rgba(255,255,255,0.22);
+  background: rgba(255,255,255,0.12);
+}
+
+/* language toggle */
+.lang { display: inline-flex; align-items: center; gap: 2px;
+  background: var(--glass); border: 1px solid var(--glass-line); border-radius: 999px; padding: 3px; }
+.on-stage .lang { background: rgba(255,255,255,0.1); }
+.lang button { border: 0; background: transparent; color: var(--on-dark-2);
+  font-weight: 700; font-size: 12px; letter-spacing: 0.04em;
+  padding: 5px 11px; border-radius: 999px; transition: .15s; }
+.on-stage .lang button { color: var(--on-dark-2); }
+.lang button.active { background: rgba(255,255,255,0.14); color: var(--on-dark); box-shadow: var(--shadow-sm); }
+.on-stage .lang button.active { background: rgba(255,255,255,0.92); color: #10201c; }
+
+/* fade/slide screen transitions */
+.screen { flex: 1 1 auto; min-height: 0; position: relative; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
