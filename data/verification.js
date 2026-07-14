@@ -40,6 +40,12 @@ window.VERIFICATION = {
       "facts": 13,
       "monitored": false,
       "lastCheck": "2026-07-14"
+    },
+    "JP": {
+      "routes": 2,
+      "facts": 15,
+      "monitored": false,
+      "lastCheck": "2026-07-14"
     }
   }
 };

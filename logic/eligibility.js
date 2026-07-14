@@ -1316,6 +1316,136 @@ window.Eligibility = (function () {
   };
 
   /* =========================================================================
+     JAPAN — Wave 2 (v1.16.0). Evidencia oficial capturada 14-jul-2026:
+     - MOFA working holiday (snapshot archive.org 06-jul-2026): 32 socios a
+       1-abr-2026, cupos por país, 18-30 inclusive, residencia en el país de
+       nacionalidad, sin dependientes, nunca WHV japonesa previa.
+     - MOFA exención de visado (snapshot 30-jun-2026): 74 países/regiones,
+       90 días estándar; Brasil/Perú/Paraguay/Panamá/Serbia solo ePassport.
+     - Nómada digital (ISA): fuente directa bloqueada y sin snapshot =>
+       redacción con cobertura y sin cifras (REVIEW).
+  ========================================================================= */
+  var JP_WHV = {  /* cupo null = "no limit" oficial */
+    AU: { quota: null },  NZ: { quota: null },  CA: { quota: 6283 }, KR: { quota: 10000 },
+    FR: { quota: 1800 },  DE: { quota: null },  GB: { quota: 6000 }, IE: { quota: 800 },
+    DK: { quota: null },  NO: { quota: null },  PT: { quota: null }, PL: { quota: 500 },
+    SK: { quota: 400 },   AT: { quota: 200 },   HU: { quota: 200 },  ES: { quota: 700 },
+    AR: { quota: 400 },   CL: { quota: 200 },   IS: { quota: 30 },   CZ: { quota: 400 },
+    LT: { quota: 100 },   SE: { quota: null },  EE: { quota: 100 },  NL: { quota: 200 },
+    UY: { quota: 100 },   FI: { quota: 200 },   LV: { quota: 100 },  LU: { quota: 100 },
+    MT: { quota: 100 },   IT: { quota: 500 },
+  };
+  /* Exentos de visado (90 días) presentes en el selector; eP = solo ePassport */
+  var JP_EXEMPT = ["AR","AT","BE","BG","CH","CL","CR","CY","CZ","DE","DK","DO","EE","ES","FI","FR",
+    "GB","GR","GT","HN","HR","HU","IE","IS","IT","LT","LU","LV","MX","NL","NO","PA","PE","PL","PT",
+    "PY","RS","SE","SV","TR","US","UY","CA","AU","NZ","JP","KR","BR"];
+  var JP_EXEMPT_EPASSPORT = ["BR","PE","PY","PA","RS"];
+
+  COUNTRY_RULES.JP = {
+
+    tourist: function (p) {
+      var m = [], w = [], x = [], score = 0, nat = p.nationality;
+      function jpTourist(sc) {
+        var r = visaResult("tourist", sc, m, w, x);
+        r.officialName = "Japan short-term stay (visa exemption)"; r.route = "jp_visa_exemption";
+        return r;
+      }
+      if (inList(JP_EXEMPT, nat)) {
+        score += 55;
+        m.push("Your passport nationality appears to be visa-exempt for short-term stays in Japan (up to 90 days).");
+        if (inList(JP_EXEMPT_EPASSPORT, nat)) {
+          w.push("The visa exemption applies only to holders of an ICAO-compliant ePassport; without one you must obtain a visa in advance.");
+        }
+      } else {
+        score += 10;
+        w.push("A short-term visa is likely required for your nationality. Check the Japanese embassy or consulate in your country.");
+        x.push("passport");
+      }
+      w.push("You cannot work during a short-term stay; paid activities are not allowed.");
+      finReq("You may need to show sufficient funds for your stay and onward travel.", w);
+      w.push("This is simulated guidance only. Always verify with the Ministry of Foreign Affairs of Japan.");
+      return jpTourist(clamp(score, 0, 68));
+    },
+
+    work_and_holiday: function (p) {
+      var m = [], w = [], x = [], score = 0, nat = p.nationality;
+      var cfg = JP_WHV[nat];
+      function jpYm(sc) {
+        var r = visaResult("work_and_holiday", sc, m, w, x);
+        r.officialName = "Japan Working Holiday"; r.route = "jp_working_holiday";
+        return r;
+      }
+      if (!cfg) {
+        w.push("Japan's working holiday programmes cover 32 partner countries/regions; your nationality does not appear to be among them.");
+        x.push("passport");
+        return jpYm(10);
+      }
+      score += 42; m.push("Your passport nationality has a working holiday programme with Japan.");
+      score += scoreAge(p.age, 18, 30, 38);
+      if (p.age < 18 || p.age > 30) { x.push("maxAge"); }
+      else { m.push("Your age appears to be within the eligible range for this visa (18 to 30)."); }
+      if (cfg.quota) {
+        w.push("This visa has a limited annual quota of about " + cfg.quota.toLocaleString("en-US") + " places, which can run out.");
+      }
+      w.push("You must be residing in your country of nationality when you apply.");
+      w.push("You must intend primarily to spend a holiday in Japan; work must be incidental.");
+      w.push("You cannot be accompanied by dependents or children.");
+      finReq("You must have a return ticket (or funds to buy one) and reasonable funds for your initial stay.", w);
+      w.push("You must never have held a Japanese working holiday visa before.");
+      w.push("Verify current conditions with the Japanese embassy or consulate in your country. Simulated guidance only.");
+      return jpYm(score);
+    },
+
+    student: function (p) {
+      var m = [], w = [], x = [], score = 0;
+      var pt = passportTier(p.nationality);
+      if (pt <= 2) { score += 16; m.push("Your passport nationality is generally accepted for Japanese student visa applications."); }
+      else         { score += 8;  w.push("Additional documentation requirements may apply for your passport nationality."); }
+      score += scoreEdu(p, "secondary", 24);
+      if (eduRank(p.education) < eduRank("secondary")) x.push("minEdu");
+      else m.push("Your education level appears to meet general requirements.");
+      score += scoreAge(p.age, 17, 65, 10);
+      finReq("You may need to show sufficient funds for tuition and living costs. Check official Japanese student visa requirements.", w);
+      w.push("A Certificate of Eligibility (COE) sponsored by the receiving institution is required before the visa. Simulated guidance only.");
+      var r = visaResult("student", Math.min(score, 68), m, w, x);
+      r.officialName = "Japan Student Visa (COE)"; r.route = "jp_student";
+      return r;
+    },
+
+    work: function (p) {
+      var m = [], w = [], x = [], score = 0;
+      if (passportTier(p.nationality) <= 2) { score += 12; }
+      else { score += 5; w.push("Work visa processes may be more complex for your passport nationality."); }
+      score += scoreEdu(p, "university_plus", 30);
+      if (eduRank(p.education) < eduRank("university_plus")) { x.push("minEdu"); }
+      else { m.push("Your education level appears to meet typical requirements."); }
+      score += scoreEng(p, "intermediate", 14);
+      w.push("Japanese work visas require employer sponsorship and a Certificate of Eligibility (COE). Simulated guidance only.");
+      finReq("You may need to show sufficient funds. Check official Japanese work visa requirements.", w);
+      var r = visaResult("work", score, m, w, x);
+      r.officialName = "Japan Work Visa (COE)"; r.route = "jp_work";
+      return r;
+    },
+
+    digital_nomad: function (p) {
+      var m = [], w = [], x = [], score = 0;
+      function jpDnv(sc) {
+        var r = visaResult("digital_nomad", sc, m, w, x);
+        r.officialName = "Japan Digital Nomad (designated activities)"; r.route = "jp_digital_nomad";
+        return r;
+      }
+      if (!p.remoteWork) {
+        w.push("Japan's digital nomad status requires active remote work for a foreign employer or clients.");
+        return jpDnv(6);
+      }
+      score += 30; m.push("Your profile indicates remote work, which is the primary condition for this route.");
+      w.push("Japan introduced a digital nomad status (designated activities) with strict conditions, a short stay (about 6 months) and a high income threshold - check the Immigration Services Agency of Japan for current requirements.");
+      w.push("This route could not be verified against a captured official source yet. Treat as preliminary guidance.");
+      return jpDnv(clamp(score, 0, 45));
+    },
+  };
+
+  /* =========================================================================
      GENERIC FALLBACK  (mock.js countries without COUNTRY_RULES)
   ========================================================================= */
   function genericVisa(visaType, p, hints) {
