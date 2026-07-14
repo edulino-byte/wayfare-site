@@ -1533,6 +1533,97 @@ window.Eligibility = (function () {
   };
 
   /* =========================================================================
+     EUROPA SCHENGEN — Wave 2 ampliada (v1.19.0). Fábrica de reglas compartida
+     para los 26 miembros Schengen sin modelo propio (ES/PT tienen el suyo;
+     Irlanda NO es Schengen y queda para su propia fase).
+     - tourist: reutiliza el modelo Schengen auditado de ES (regla 90/180,
+       fuente Comisión Europea) — mismas cadenas, mismos appMatch.
+     - work: libre circulación UE/EEE; no comunitarios -> patrocinio (genérico
+       conservador). Suiza no está en euEea -> tratamiento genérico prudente.
+     - student/digital_nomad/work_and_holiday: genéricos conservadores con
+       redacción prudente por verificar (sin negativas absolutas — lección PT).
+  ========================================================================= */
+  var EU_SCHENGEN_SHARED = ["AT","BE","BG","CH","CZ","DE","DK","EE","FI","FR","GR","HR","HU",
+    "IS","IT","LI","LT","LU","LV","MT","NL","NO","PL","RO","SE","SI","SK"];
+
+  function makeSchengenRules(iso) {
+    var slug = iso.toLowerCase();
+    return {
+      tourist: function (p) {
+        var r = COUNTRY_RULES.ES.tourist(p);   /* regla Schengen auditada compartida */
+        r.type = "tourist";
+        r.officialName = "Schengen short stay (90/180)";
+        r.route = slug + "_schengen_visit";
+        return r;
+      },
+      work: function (p) {
+        var m = [], w = [], x = [], score = 0, nat = p.nationality;
+        if (inList(PASSPORT.euEea, nat)) {
+          score += 50; m.push("EU/EEA citizens can work in this destination under freedom of movement.");
+        } else if (passportTier(nat) <= 2) {
+          score += 14; w.push("A work visa with employer sponsorship is required for non-EU nationals."); x.push("passport");
+        } else {
+          score += 6; w.push("A work visa is required. Conditions vary significantly by nationality."); x.push("passport");
+        }
+        score += scoreEdu(p, "university_plus", 28);
+        if (eduRank(p.education) < eduRank("university_plus")) { x.push("minEdu"); }
+        else { m.push("Your education level appears to meet typical requirements."); }
+        score += scoreEng(p, "intermediate", 16);
+        finReq("You may need to show sufficient funds. Check official work visa requirements for this destination.", w);
+        w.push("Non-EU work permits typically require employer sponsorship. Simulated guidance only.");
+        var r = visaResult("work", score, m, w, x);
+        r.officialName = "National work permit"; r.route = slug + "_work";
+        return r;
+      },
+      student: function (p) {
+        var m = [], w = [], x = [], score = 0, nat = p.nationality;
+        if (inList(PASSPORT.euEea, nat)) { score += 22; m.push("EU/EEA citizens face minimal visa barriers for studying in this destination."); }
+        else if (passportTier(nat) <= 2) { score += 16; m.push("Your passport nationality is generally accepted for student visa applications in this destination."); }
+        else                              { score += 8;  w.push("Additional documentation requirements may apply for your passport nationality."); }
+        score += scoreEng(p, "basic", 14);
+        score += scoreEdu(p, "secondary", 24);
+        if (eduRank(p.education) < eduRank("secondary")) x.push("minEdu");
+        else m.push("Your education level appears to meet general requirements.");
+        score += scoreAge(p.age, 17, 65, 10);
+        finReq("You may need to show sufficient funds for tuition and living costs. Check official student visa requirements for this destination.", w);
+        w.push("Enrollment acceptance from a recognised institution is required. National requirements have not been verified by Wayfare yet - simulated guidance only.");
+        var r = visaResult("student", Math.min(score, 68), m, w, x);
+        r.officialName = "National student visa"; r.route = slug + "_study";
+        return r;
+      },
+      work_and_holiday: function (p) {
+        var m = [], w = [], x = [], score = 12;
+        w.push("Working holiday availability for this destination depends on bilateral agreements and has not been verified by Wayfare yet. Check the official sources of this country.");
+        x.push("passport");
+        var r = visaResult("work_and_holiday", score, m, w, x);
+        r.officialName = "Working holiday (unverified)"; r.route = slug + "_youth_mobility";
+        return r;
+      },
+      digital_nomad: function (p) {
+        var m = [], w = [], x = [], score = 0, nat = p.nationality;
+        function dnv(sc) {
+          var r = visaResult("digital_nomad", sc, m, w, x);
+          r.officialName = "National remote-work provisions (unverified)"; r.route = slug + "_dnv";
+          return r;
+        }
+        if (inList(PASSPORT.euEea, nat)) {
+          m.push("As an EU/EEA citizen, you can live and work in this destination under freedom of movement.");
+          w.push("EU freedom of movement rules apply. No Digital Nomad Visa is required.");
+          return dnv(82);
+        }
+        if (!p.remoteWork) {
+          w.push("Digital nomad or remote-work permits require active remote work for a foreign employer or clients.");
+          return dnv(6);
+        }
+        score += 30; m.push("Your profile indicates remote work, which is the primary factor for this route.");
+        w.push("Several European countries offer national digital nomad or remote-work permits; provisions vary by country and have not been verified for this destination yet. Check official national sources.");
+        return dnv(clamp(score, 0, 40));
+      },
+    };
+  }
+  EU_SCHENGEN_SHARED.forEach(function (iso) { COUNTRY_RULES[iso] = makeSchengenRules(iso); });
+
+  /* =========================================================================
      GENERIC FALLBACK  (mock.js countries without COUNTRY_RULES)
   ========================================================================= */
   function genericVisa(visaType, p, hints) {
@@ -1884,6 +1975,10 @@ window.Eligibility = (function () {
         if (curated) {
           var c = Object.assign({}, curated, { iso: g.iso || curated.iso, name: g.name || curated.name });
           out[g.id] = evaluateCountry(c, profile);
+        } else if (g.iso && COUNTRY_RULES[g.iso]) {
+          /* v1.19.0 — países con reglas reales pero fuera de la lista curada del
+             prototipo (p.ej. los 26 Schengen de la fábrica): usar sus reglas. */
+          out[g.id] = evaluateCountry({ iso: g.iso, name: g.name, region: "europe", visas: [] }, profile);
         } else {
           out[g.id] = syntheticCountry(g.iso, g.name, profile);
         }

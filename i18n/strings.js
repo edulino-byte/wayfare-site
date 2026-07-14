@@ -1079,6 +1079,18 @@ window.I18N = {
     "You may need to show sufficient funds. Check official US work visa requirements.": "Puede que necesites demostrar fondos suficientes. Consulta los requisitos oficiales de la visa de trabajo de EE.UU.",
     "The USA does not offer a digital nomad visa; working remotely while on a visitor status is restricted.": "EE.UU. no ofrece visa de nómada digital; trabajar en remoto con estatus de visitante está restringido.",
     "Additional scrutiny may apply for your passport nationality.": "Puede aplicarse un escrutinio adicional para tu nacionalidad de pasaporte.",
+
+    /* ── Europa Schengen compartida (v1.19.0) ── */
+    "EU/EEA citizens can work in this destination under freedom of movement.": "Los ciudadanos UE/EEE pueden trabajar en este destino por libre circulación.",
+    "Your passport nationality is generally accepted for student visa applications in this destination.": "Tu nacionalidad de pasaporte es generalmente aceptada para solicitudes de visa de estudiante en este destino.",
+    "EU/EEA citizens face minimal visa barriers for studying in this destination.": "Los ciudadanos UE/EEE tienen barreras de visado mínimas para estudiar en este destino.",
+    "You may need to show sufficient funds for tuition and living costs. Check official student visa requirements for this destination.": "Puede que necesites demostrar fondos suficientes para matrícula y manutención. Consulta los requisitos oficiales de la visa de estudiante de este destino.",
+    "Enrollment acceptance from a recognised institution is required. National requirements have not been verified by Wayfare yet - simulated guidance only.": "Se requiere aceptación de matrícula de una institución reconocida. Los requisitos nacionales aún no han sido verificados por Wayfare - solo orientación simulada.",
+    "Working holiday availability for this destination depends on bilateral agreements and has not been verified by Wayfare yet. Check the official sources of this country.": "La disponibilidad de working holiday en este destino depende de acuerdos bilaterales y aún no ha sido verificada por Wayfare. Consulta las fuentes oficiales de este país.",
+    "As an EU/EEA citizen, you can live and work in this destination under freedom of movement.": "Como ciudadano UE/EEE, puedes vivir y trabajar en este destino por libre circulación.",
+    "Digital nomad or remote-work permits require active remote work for a foreign employer or clients.": "Los permisos de nómada digital o trabajo remoto requieren trabajo remoto activo para un empleador o clientes extranjeros.",
+    "Several European countries offer national digital nomad or remote-work permits; provisions vary by country and have not been verified for this destination yet. Check official national sources.": "Varios países europeos ofrecen permisos nacionales de nómada digital o trabajo remoto; varían por país y aún no han sido verificados para este destino. Consulta las fuentes oficiales nacionales.",
+    "You may need to show sufficient funds. Check official work visa requirements for this destination.": "Puede que necesites demostrar fondos suficientes. Consulta los requisitos oficiales de la visa de trabajo de este destino.",
   },
 };
 
