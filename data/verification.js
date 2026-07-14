@@ -28,6 +28,12 @@ window.VERIFICATION = {
       "facts": 29,
       "monitored": true,
       "lastCheck": "2026-07-12"
+    },
+    "PT": {
+      "routes": 5,
+      "facts": 19,
+      "monitored": false,
+      "lastCheck": "2026-07-14"
     }
   }
 };

@@ -1147,6 +1147,7 @@ window.Eligibility = (function () {
       /* Schengen member — same access structure as Spain */
       var r = COUNTRY_RULES.ES.tourist(p);
       r.type = "tourist";
+      r.officialName = "Schengen short stay (90/180)"; r.route = "pt_schengen_visit";
       return r;
     },
 
@@ -1155,27 +1156,46 @@ window.Eligibility = (function () {
       if (inList(PASSPORT.euEea, nat)) {
         m.push("EU/EEA citizens may live and work in Portugal under freedom of movement. The D8 visa is not required.");
         w.push("EU freedom of movement applies. No Digital Nomad Visa needed for EU/EEA citizens.");
-        return visaResult("digital_nomad", 82, m, w, x);
+        var rEu = visaResult("digital_nomad", 82, m, w, x);
+        rEu.officialName = "D8 Remote Work / Digital Nomad Visa"; rEu.route = "pt_d8";
+        return rEu;
       }
       if (!p.remoteWork) {
         w.push("The Portugal D8 Digital Nomad Visa requires active remote work or freelancing.");
         finReq("You may need to show sufficient financial means. Check official Portuguese immigration sources for current requirements.", w);
-        return visaResult("digital_nomad", 6, m, w, x);
+        var rNo = visaResult("digital_nomad", 6, m, w, x);
+        rNo.officialName = "D8 Remote Work / Digital Nomad Visa"; rNo.route = "pt_d8";
+        return rNo;
       }
       score += 48; m.push("Your profile indicates remote work, which appears to satisfy the primary D8 condition.");
       if (passportTier(nat) <= 2) { score += 12; m.push("Your passport nationality is generally accepted for this route."); }
       else { w.push("Additional scrutiny may apply for your passport nationality."); }
       /* Income threshold informational only */
-      w.push("The Portugal D8 visa typically requires proof of income of approximately 4× the Portuguese minimum wage (~3,040 EUR/month, simulated). Check the official threshold before applying.");
+      w.push("The Portugal D8 visa typically requires proof of income of approximately 4× the Portuguese minimum wage (about EUR 3,680/month with the 2026 minimum wage of EUR 920). Check the official threshold before applying.");
       finReq("You may need to show sufficient financial means. Check official Portuguese immigration sources for current requirements.", w);
       w.push("Proof of remote employment or freelance clients is required. This is simulated guidance based on approximate thresholds.");
-      return visaResult("digital_nomad", score, m, w, x);
+      var r = visaResult("digital_nomad", score, m, w, x);
+      r.officialName = "D8 Remote Work / Digital Nomad Visa"; r.route = "pt_d8";
+      return r;
     },
 
     student: function (p) {
-      /* Delegates to ES.student — similar framework */
-      var r = COUNTRY_RULES.ES.student(p);
-      r.type = "student";
+      /* v1.14.0 — función propia, ESPEJO EXACTO de ES.student (misma
+         puntuación) con redacción portuguesa. Antes delegaba en ES.student y
+         emitía textos de España — bug del prototipo corregido. */
+      var m = [], w = [], x = [], score = 0, nat = p.nationality;
+      if (inList(PASSPORT.euEea, nat)) { score += 22; m.push("EU/EEA citizens face minimal visa barriers for studying in Portugal."); }
+      else if (passportTier(nat) <= 2) { score += 16; m.push("Your passport nationality is generally accepted for Portuguese student visa applications."); }
+      else                              { score += 8;  w.push("Additional documentation requirements may apply for your passport nationality."); }
+      score += scoreEng(p, "basic", 14);
+      score += scoreEdu(p, "secondary", 24);
+      if (eduRank(p.education) < eduRank("secondary")) x.push("minEdu");
+      else m.push("Your education level appears to meet general requirements.");
+      score += scoreAge(p.age, 17, 65, 10);
+      finReq("You may need to show sufficient funds for tuition and living costs. Check official Portuguese student visa requirements.", w);
+      w.push("Enrollment acceptance from an accredited Portuguese institution is required. Simulated guidance only.");
+      var r = visaResult("student", score, m, w, x);
+      r.officialName = "Portugal Study Visa"; r.route = "pt_study";
       return r;
     },
 
@@ -1198,24 +1218,60 @@ window.Eligibility = (function () {
       score += scoreEng(p, "intermediate", 16);
       finReq("You may need to show sufficient funds. Check official Portuguese work visa requirements.", w);
       w.push("Non-EU work permits typically require employer sponsorship. Simulated guidance only.");
-      return visaResult("work", score, m, w, x);
+      var r = visaResult("work", score, m, w, x);
+      r.officialName = "Subordinate Work Residency Visa"; r.route = "pt_subordinate_work";
+      return r;
     },
 
     work_and_holiday: function (p) {
+      /* v1.14.0 — corrección mayor: la lista del prototipo (AU CA NZ AR BR UY
+         CO EC BO PY) era una suposición y estaba mal. Tabla OFICIAL de los 9
+         memorandos de youth mobility vigentes (vistos.mne.gov.pt, capturado
+         14-jul-2026), con edad y cupo por país. */
+      var PT_YM = {
+        AR: { min: 18, max: 30, quota: 100 },
+        AU: { min: 18, max: 31, quota: 500 },
+        CA: { min: 18, max: 35, quota: 600 },
+        CL: { min: 18, max: 30, quota: null },
+        JP: { min: 18, max: 30, quota: null },
+        NZ: { min: 18, max: 30, quota: 50 },
+        PE: { min: 18, max: 31, quota: 400, degree: true },
+        KR: { min: 18, max: 34, quota: 200 },
+        US: { min: null, max: null, quota: 400, pilot: true },
+      };
       var m = [], w = [], x = [], score = 0, nat = p.nationality;
-      var whPT = ["AU","CA","NZ","AR","BR","UY","CO","EC","BO","PY"];
-      if (!inList(whPT, nat)) {
-        w.push("Portugal's Working Holiday programme appears limited to a specific set of nationalities.");
+      var cfg = PT_YM[nat];
+      if (!cfg) {
+        w.push("Portugal's youth mobility programme is limited to: Argentina, Australia, Canada, Chile, Japan, New Zealand, Peru, South Korea and the USA.");
         x.push("passport");
-        return visaResult("work_and_holiday", 10, m, w, x);
+        var r0 = visaResult("work_and_holiday", 10, m, w, x);
+        r0.officialName = "Youth Mobility Portugal"; r0.route = "pt_youth_mobility";
+        return r0;
       }
-      score += 42; m.push("Your passport nationality appears to have a Working Holiday arrangement with Portugal.");
-      score += scoreAge(p.age, 18, 30, 38);
-      if (p.age < 18 || p.age > 30) { x.push("maxAge"); }
-      else { m.push("Your age appears to fall within the eligible range (18–30)."); }
+      score += 42; m.push("Your passport nationality has a youth mobility memorandum with Portugal.");
+      if (cfg.pilot) {
+        /* EE.UU.: piloto de 12 meses sin rango de edad publicado — no se
+           puntúa edad; condiciones específicas => tope partial. */
+        score += 26;
+        w.push("The USA arrangement is a 12-month pilot programme focused on training at innovative organizations; specific conditions apply.");
+      } else {
+        score += scoreAge(p.age, cfg.min, cfg.max, 38);
+        if (p.age < cfg.min || p.age > cfg.max) { x.push("maxAge"); }
+        else { m.push("Your age appears to be within the eligible range for this visa (" + cfg.min + " to " + cfg.max + ")."); }
+      }
+      if (cfg.quota) {
+        w.push("This visa has a limited annual quota of about " + cfg.quota + " places, which can run out.");
+      }
+      if (cfg.degree) {
+        w.push("Peru's memorandum requires a university degree or at least 2 completed years of university studies.");
+      }
+      w.push("Stays are limited to 12 months, with no possibility of extension.");
+      w.push("Work or study must remain secondary to the holiday purpose of the stay.");
       finReq("You may need to show sufficient funds for your stay. Check with the Portuguese consulate for current financial requirements.", w);
       w.push("Verify current conditions with the Portuguese consulate in your country. Simulated guidance only.");
-      return visaResult("work_and_holiday", score, m, w, x);
+      var r = visaResult("work_and_holiday", score, m, w, x);
+      r.officialName = "Youth Mobility Portugal"; r.route = "pt_youth_mobility";
+      return r;
     },
   };
 

@@ -988,6 +988,36 @@ window.I18N = {
     "Your passport nationality is generally accepted for Australian skilled work visa pathways.": "Tu nacionalidad de pasaporte es generalmente aceptada para las vías de visas de trabajo cualificado australianas.",
     "Your passport nationality is generally accepted for Canadian study permit applications.": "Tu nacionalidad de pasaporte es generalmente aceptada para las solicitudes de permiso de estudios canadiense.",
     "Your passport nationality may be eligible for visa-free entry or an eTA (Electronic Travel Authorization) for Canada.": "Tu nacionalidad de pasaporte puede ser elegible para entrada sin visa o una eTA (autorización electrónica de viaje) para Canadá.",
+
+    /* ── Portugal v1.14.0: youth mobility oficial + student propio + D8 actualizado ── */
+    "Portugal's youth mobility programme is limited to: Argentina, Australia, Canada, Chile, Japan, New Zealand, Peru, South Korea and the USA.": "El programa de movilidad juvenil de Portugal está limitado a: Argentina, Australia, Canadá, Chile, Japón, Nueva Zelanda, Perú, Corea del Sur y EE.UU.",
+    "Your passport nationality has a youth mobility memorandum with Portugal.": "Tu nacionalidad de pasaporte tiene un memorando de movilidad juvenil con Portugal.",
+    "The USA arrangement is a 12-month pilot programme focused on training at innovative organizations; specific conditions apply.": "El acuerdo con EE.UU. es un programa piloto de 12 meses centrado en formación en organizaciones innovadoras; aplican condiciones específicas.",
+    "Your age appears to be within the eligible range for this visa (18 to 31).": "Tu edad parece estar dentro del rango elegible para esta visa (18 a 31).",
+    "Your age appears to be within the eligible range for this visa (18 to 34).": "Tu edad parece estar dentro del rango elegible para esta visa (18 a 34).",
+    "This visa has a limited annual quota of about 500 places, which can run out.": "Esta visa tiene un cupo anual limitado de aproximadamente 500 plazas, que puede agotarse.",
+    "This visa has a limited annual quota of about 600 places, which can run out.": "Esta visa tiene un cupo anual limitado de aproximadamente 600 plazas, que puede agotarse.",
+    "This visa has a limited annual quota of about 400 places, which can run out.": "Esta visa tiene un cupo anual limitado de aproximadamente 400 plazas, que puede agotarse.",
+    "Stays are limited to 12 months, with no possibility of extension.": "Las estancias están limitadas a 12 meses, sin posibilidad de extensión.",
+    "Work or study must remain secondary to the holiday purpose of the stay.": "El trabajo o el estudio deben ser secundarios al propósito vacacional de la estancia.",
+    "Peru's memorandum requires a university degree or at least 2 completed years of university studies.": "El memorando con Perú exige un título universitario o al menos 2 años completados de estudios universitarios.",
+    "EU/EEA citizens face minimal visa barriers for studying in Portugal.": "Los ciudadanos UE/EEE tienen barreras de visado mínimas para estudiar en Portugal.",
+    "Your passport nationality is generally accepted for Portuguese student visa applications.": "Tu nacionalidad de pasaporte es generalmente aceptada para solicitudes de visa de estudiante portuguesa.",
+    "You may need to show sufficient funds for tuition and living costs. Check official Portuguese student visa requirements.": "Puede que necesites demostrar fondos suficientes para matrícula y manutención. Consulta los requisitos oficiales de la visa de estudiante portuguesa.",
+    "Enrollment acceptance from an accredited Portuguese institution is required. Simulated guidance only.": "Se requiere la aceptación de matrícula de una institución portuguesa acreditada. Solo orientación simulada.",
+    "The Portugal D8 visa typically requires proof of income of approximately 4× the Portuguese minimum wage (about EUR 3,680/month with the 2026 minimum wage of EUR 920). Check the official threshold before applying.": "El visado D8 de Portugal normalmente requiere demostrar ingresos de aproximadamente 4× el salario mínimo portugués (unos 3.680 EUR/mes con el salario mínimo de 920 EUR de 2026). Verifica el umbral oficial antes de aplicar.",
+
+    /* ── Cadenas PT preexistentes destapadas por la matriz ampliada (v1.14.0) ── */
+    "A Schengen visa is likely required. Processing times and approval rates vary by nationality.": "Probablemente se requiera una visa Schengen. Los tiempos de tramitación y las tasas de aprobación varían según la nacionalidad.",
+    "A work visa is required. Conditions vary significantly by nationality.": "Se requiere una visa de trabajo. Las condiciones varían significativamente según la nacionalidad.",
+    "A work visa with employer sponsorship is required for non-EU nationals.": "Los no comunitarios necesitan una visa de trabajo con patrocinio de un empleador.",
+    "Additional documentation requirements may apply for your passport nationality.": "Pueden aplicar requisitos de documentación adicionales para tu nacionalidad de pasaporte.",
+    "CPLP nationals (Portuguese-speaking community) may benefit from simplified work access to Portugal.": "Los nacionales de la CPLP (comunidad de países de lengua portuguesa) pueden beneficiarse de un acceso laboral simplificado a Portugal.",
+    "Specific conditions apply. Verify with AIMA (Portuguese immigration authority).": "Aplican condiciones específicas. Verifica con AIMA (la autoridad migratoria portuguesa).",
+    "The Portugal D8 Digital Nomad Visa requires active remote work or freelancing.": "El visado D8 de nómada digital de Portugal requiere trabajo remoto activo o actividad freelance.",
+    "Verify current conditions with the Portuguese consulate in your country. Simulated guidance only.": "Verifica las condiciones vigentes con el consulado portugués de tu país. Solo orientación simulada.",
+    "You may need to show sufficient financial means. Check official Portuguese immigration sources for current requirements.": "Puede que necesites demostrar medios económicos suficientes. Consulta las fuentes oficiales de inmigración portuguesa.",
+    "You may need to show sufficient funds for your stay. Check with the Portuguese consulate for current financial requirements.": "Puede que necesites demostrar fondos suficientes para tu estancia. Consulta con el consulado portugués los requisitos financieros vigentes.",
   },
 };
 
