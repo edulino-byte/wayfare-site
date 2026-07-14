@@ -42,14 +42,14 @@ window.VERIFICATION = {
       "lastCheck": "2026-07-14"
     },
     "JP": {
-      "routes": 2,
-      "facts": 15,
+      "routes": 3,
+      "facts": 17,
       "monitored": false,
       "lastCheck": "2026-07-14"
     },
     "US": {
-      "routes": 2,
-      "facts": 3,
+      "routes": 3,
+      "facts": 5,
       "monitored": false,
       "lastCheck": "2026-07-14"
     }
