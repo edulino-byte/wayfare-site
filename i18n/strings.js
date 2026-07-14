@@ -1063,6 +1063,22 @@ window.I18N = {
     "Japan's digital nomad status requires active remote work for a foreign employer or clients.": "El estatus de nómada digital de Japón requiere trabajo remoto activo para un empleador o clientes extranjeros.",
     "Japan introduced a digital nomad status (designated activities) with strict conditions, a short stay (about 6 months) and a high income threshold - check the Immigration Services Agency of Japan for current requirements.": "Japón introdujo un estatus de nómada digital (actividades designadas) con condiciones estrictas, estancia corta (unos 6 meses) y un umbral de ingresos alto - consulta la Agencia de Servicios de Inmigración de Japón.",
     "This route could not be verified against a captured official source yet. Treat as preliminary guidance.": "Esta ruta aún no se ha podido verificar contra una fuente oficial capturada. Tómala como orientación preliminar.",
+
+    /* ── EE.UU. Wave 2 (v1.17.0) ── */
+    "Your passport nationality appears to be in the Visa Waiver Program: stays of 90 days or less without a visa.": "Tu nacionalidad de pasaporte parece estar en el Visa Waiver Program: estancias de 90 días o menos sin visado.",
+    "You must obtain an approved ESTA (Electronic System for Travel Authorization) before travelling.": "Debes obtener una ESTA aprobada (autorización electrónica de viaje) antes de viajar.",
+    "A B-1/B-2 visitor visa is likely required, including a consular interview. Approval rates vary by nationality and profile.": "Probablemente necesites una visa de visitante B-1/B-2, con entrevista consular. Las tasas de aprobación varían según nacionalidad y perfil.",
+    "You cannot work during a visitor stay; paid activities are not allowed.": "No se puede trabajar durante una estancia de visitante; las actividades remuneradas no están permitidas.",
+    "You may need to show sufficient funds and strong ties to your home country.": "Puede que necesites demostrar fondos suficientes y vínculos sólidos con tu país de origen.",
+    "This is simulated guidance only. Always verify with travel.state.gov.": "Esto es solo orientación simulada. Verifica siempre en travel.state.gov.",
+    "The USA does not operate a working holiday programme. The closest alternative is the J-1 Exchange Visitor Program (e.g., Summer Work Travel for university students), which requires a designated sponsor.": "EE.UU. no opera un programa working holiday. La alternativa más cercana es el J-1 Exchange Visitor (p. ej. Summer Work Travel para universitarios), que requiere un patrocinador designado.",
+    "Your passport nationality is generally accepted for US student visa applications.": "Tu nacionalidad de pasaporte es generalmente aceptada para solicitudes de visa de estudiante estadounidense.",
+    "You need a Form I-20 issued by a SEVP-approved school, the SEVIS fee, and a consular interview. Simulated guidance only.": "Necesitas un formulario I-20 emitido por una escuela aprobada por SEVP, la tasa SEVIS y una entrevista consular. Solo orientación simulada.",
+    "You may need to show sufficient funds for tuition and living costs. Check official US student visa requirements.": "Puede que necesites demostrar fondos suficientes para matrícula y manutención. Consulta los requisitos oficiales de la visa de estudiante de EE.UU.",
+    "Most US work visas (e.g., H-1B) require employer sponsorship and are subject to caps or lotteries. Simulated guidance only.": "La mayoría de las visas de trabajo de EE.UU. (p. ej. H-1B) requieren patrocinio de empleador y están sujetas a cupos o loterías. Solo orientación simulada.",
+    "You may need to show sufficient funds. Check official US work visa requirements.": "Puede que necesites demostrar fondos suficientes. Consulta los requisitos oficiales de la visa de trabajo de EE.UU.",
+    "The USA does not offer a digital nomad visa; working remotely while on a visitor status is restricted.": "EE.UU. no ofrece visa de nómada digital; trabajar en remoto con estatus de visitante está restringido.",
+    "Additional scrutiny may apply for your passport nationality.": "Puede aplicarse un escrutinio adicional para tu nacionalidad de pasaporte.",
   },
 };
 

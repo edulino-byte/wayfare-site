@@ -1341,6 +1341,93 @@ window.Eligibility = (function () {
     "PY","RS","SE","SV","TR","US","UY","CA","AU","NZ","JP","KR","BR"];
   var JP_EXEMPT_EPASSPORT = ["BR","PE","PY","PA","RS"];
 
+  /* =========================================================================
+     USA — Wave 2 (v1.17.0). Evidencia oficial capturada 14-jul-2026
+     (travel.state.gov responde 200 a herramienta simple):
+     - VWP: 41+ países, ESTA, estancias de 90 días o menos sin visado.
+     - B1/B2 para el resto (entrevista consular).
+     - F-1: Form I-20 de escuela aprobada por SEVP.
+     Sin working holiday (la alternativa es el J-1 Exchange Visitor) y sin
+     visa de nómada digital.
+  ========================================================================= */
+  var US_VWP = ["AD","AU","AT","BE","BN","CL","HR","CZ","DK","EE","FI","FR","DE","GR","HU","IS","IE",
+    "IL","IT","JP","LV","LI","LT","LU","MT","MC","NL","NZ","NO","PL","PT","QA","SM","SG","SK","SI",
+    "KR","ES","SE","CH","TW","GB"];
+
+  COUNTRY_RULES.US = {
+
+    tourist: function (p) {
+      var m = [], w = [], x = [], score = 0, nat = p.nationality;
+      function usTourist(sc) {
+        var r = visaResult("tourist", sc, m, w, x);
+        r.officialName = "Visa Waiver Program (ESTA) / B-2 Visitor"; r.route = "us_vwp_b2";
+        return r;
+      }
+      if (inList(US_VWP, nat)) {
+        score += 55;
+        m.push("Your passport nationality appears to be in the Visa Waiver Program: stays of 90 days or less without a visa.");
+        w.push("You must obtain an approved ESTA (Electronic System for Travel Authorization) before travelling.");
+      } else {
+        score += 10;
+        w.push("A B-1/B-2 visitor visa is likely required, including a consular interview. Approval rates vary by nationality and profile.");
+        x.push("passport");
+      }
+      w.push("You cannot work during a visitor stay; paid activities are not allowed.");
+      finReq("You may need to show sufficient funds and strong ties to your home country.", w);
+      w.push("This is simulated guidance only. Always verify with travel.state.gov.");
+      return usTourist(clamp(score, 0, 68));
+    },
+
+    work_and_holiday: function (p) {
+      var m = [], w = [], x = [], score = 5;
+      w.push("The USA does not operate a working holiday programme. The closest alternative is the J-1 Exchange Visitor Program (e.g., Summer Work Travel for university students), which requires a designated sponsor.");
+      x.push("passport");
+      var r = visaResult("work_and_holiday", score, m, w, x);
+      r.officialName = "No working holiday (see J-1 alternatives)"; r.route = "us_no_whv";
+      return r;
+    },
+
+    student: function (p) {
+      var m = [], w = [], x = [], score = 0;
+      var pt = passportTier(p.nationality);
+      if (pt <= 2) { score += 14; m.push("Your passport nationality is generally accepted for US student visa applications."); }
+      else         { score += 6;  w.push("Additional scrutiny may apply for your passport nationality."); }
+      score += scoreEng(p, "intermediate", 26);
+      if (engRank(p.english) < engRank("intermediate")) { x.push("minEnglish"); }
+      else { m.push("Your English level appears to meet general requirements."); }
+      score += scoreEdu(p, "secondary", 20);
+      if (eduRank(p.education) < eduRank("secondary")) x.push("minEdu");
+      w.push("You need a Form I-20 issued by a SEVP-approved school, the SEVIS fee, and a consular interview. Simulated guidance only.");
+      finReq("You may need to show sufficient funds for tuition and living costs. Check official US student visa requirements.", w);
+      var r = visaResult("student", Math.min(score, 68), m, w, x);
+      r.officialName = "F-1 Student Visa"; r.route = "us_f1";
+      return r;
+    },
+
+    work: function (p) {
+      var m = [], w = [], x = [], score = 0;
+      if (passportTier(p.nationality) <= 2) { score += 10; }
+      else { score += 4; w.push("Work visa processes may be more complex for your passport nationality."); }
+      score += scoreEdu(p, "university_plus", 28);
+      if (eduRank(p.education) < eduRank("university_plus")) { x.push("minEdu"); }
+      else { m.push("Your education level appears to meet typical requirements."); }
+      score += scoreEng(p, "intermediate", 16);
+      w.push("Most US work visas (e.g., H-1B) require employer sponsorship and are subject to caps or lotteries. Simulated guidance only.");
+      finReq("You may need to show sufficient funds. Check official US work visa requirements.", w);
+      var r = visaResult("work", Math.min(score, 60), m, w, x);
+      r.officialName = "Employment visas (sponsorship)"; r.route = "us_work";
+      return r;
+    },
+
+    digital_nomad: function (p) {
+      var m = [], w = [], x = [];
+      w.push("The USA does not offer a digital nomad visa; working remotely while on a visitor status is restricted.");
+      var r = visaResult("digital_nomad", 8, m, w, x);
+      r.officialName = "No digital nomad visa"; r.route = "us_no_dnv";
+      return r;
+    },
+  };
+
   COUNTRY_RULES.JP = {
 
     tourist: function (p) {
