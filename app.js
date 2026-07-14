@@ -646,17 +646,7 @@ function Questionnaire({ t, lang, profile, setProfile, onSubmit }) {
       max: 70,
       format: (v) => /* @__PURE__ */ React.createElement("span", null, v, /* @__PURE__ */ React.createElement("small", null, v >= 70 ? "+" : ""))
     }
-  )), /* @__PURE__ */ React.createElement(Field, { label: t("f_situation"), full: true }, /* @__PURE__ */ React.createElement(Segmented, { value: profile.situation, onChange: (v) => set("situation", v), options: sitOpts })))), /* @__PURE__ */ React.createElement("section", { className: "section" }, /* @__PURE__ */ React.createElement("div", { className: "section-head" }, /* @__PURE__ */ React.createElement("span", { className: "section-num" }, "02"), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h2", null, t("sec_education")), /* @__PURE__ */ React.createElement("p", null, t("sec_education_sub")))), /* @__PURE__ */ React.createElement("div", { className: "grid" }, /* @__PURE__ */ React.createElement(Field, { label: t("f_education"), full: true }, /* @__PURE__ */ React.createElement(SelectControl, { value: profile.education, onChange: (v) => set("education", v), options: eduOpts })))), /* @__PURE__ */ React.createElement("section", { className: "section" }, /* @__PURE__ */ React.createElement("div", { className: "section-head" }, /* @__PURE__ */ React.createElement("span", { className: "section-num" }, "03"), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h2", null, t("sec_means")), /* @__PURE__ */ React.createElement("p", null, t("sec_means_sub")))), /* @__PURE__ */ React.createElement("div", { className: "grid" }, /* @__PURE__ */ React.createElement(Field, { label: t("f_english") }, /* @__PURE__ */ React.createElement(Segmented, { value: profile.english, onChange: (v) => set("english", v), options: engOpts })), /* @__PURE__ */ React.createElement(Field, { label: t("f_savings") }, /* @__PURE__ */ React.createElement(
-    Slider,
-    {
-      value: profile.savings,
-      onChange: (v) => set("savings", v),
-      min: 0,
-      max: 8e4,
-      step: 1e3,
-      format: (v) => /* @__PURE__ */ React.createElement("span", null, fmt.money(v), v >= 8e4 ? "+" : "")
-    }
-  )), /* @__PURE__ */ React.createElement(Field, { label: t("f_remote_work"), full: true }, /* @__PURE__ */ React.createElement(
+  )), /* @__PURE__ */ React.createElement(Field, { label: t("f_situation"), full: true }, /* @__PURE__ */ React.createElement(Segmented, { value: profile.situation, onChange: (v) => set("situation", v), options: sitOpts })))), /* @__PURE__ */ React.createElement("section", { className: "section" }, /* @__PURE__ */ React.createElement("div", { className: "section-head" }, /* @__PURE__ */ React.createElement("span", { className: "section-num" }, "02"), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h2", null, t("sec_education")), /* @__PURE__ */ React.createElement("p", null, t("sec_education_sub")))), /* @__PURE__ */ React.createElement("div", { className: "grid" }, /* @__PURE__ */ React.createElement(Field, { label: t("f_education"), full: true }, /* @__PURE__ */ React.createElement(SelectControl, { value: profile.education, onChange: (v) => set("education", v), options: eduOpts })))), /* @__PURE__ */ React.createElement("section", { className: "section" }, /* @__PURE__ */ React.createElement("div", { className: "section-head" }, /* @__PURE__ */ React.createElement("span", { className: "section-num" }, "03"), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h2", null, t("sec_means")), /* @__PURE__ */ React.createElement("p", null, t("sec_means_sub")))), /* @__PURE__ */ React.createElement("div", { className: "grid" }, /* @__PURE__ */ React.createElement(Field, { label: t("f_english") }, /* @__PURE__ */ React.createElement(Segmented, { value: profile.english, onChange: (v) => set("english", v), options: engOpts })), /* @__PURE__ */ React.createElement(Field, { label: t("f_remote_work"), full: true }, /* @__PURE__ */ React.createElement(
     Segmented,
     {
       value: profile.remoteWork ? "yes" : "no",
@@ -666,25 +656,7 @@ function Questionnaire({ t, lang, profile, setProfile, onSubmit }) {
         { value: "no", label: t("remote_no") }
       ]
     }
-  )), /* @__PURE__ */ React.createElement(
-    Field,
-    {
-      label: t("f_monthly_income"),
-      hint: !profile.remoteWork ? t("f_monthly_income_hint") : null,
-      full: true
-    },
-    /* @__PURE__ */ React.createElement("div", { className: profile.remoteWork ? "" : "field-disabled" }, /* @__PURE__ */ React.createElement(
-      Slider,
-      {
-        value: profile.remoteWork ? profile.monthlyIncome : 0,
-        onChange: (v) => profile.remoteWork && set("monthlyIncome", v),
-        min: 0,
-        max: 15e3,
-        step: 250,
-        format: (v) => /* @__PURE__ */ React.createElement("span", null, fmt.money(v), v >= 15e3 ? "+" : "", /* @__PURE__ */ React.createElement("small", null, "/mo"))
-      }
-    ))
-  ))), /* @__PURE__ */ React.createElement("section", { className: "section" }, /* @__PURE__ */ React.createElement("div", { className: "section-head" }, /* @__PURE__ */ React.createElement("span", { className: "section-num" }, "04"), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h2", null, t("sec_intent")), /* @__PURE__ */ React.createElement("p", null, t("sec_intent_sub")))), /* @__PURE__ */ React.createElement("div", { className: "grid" }, /* @__PURE__ */ React.createElement(Field, { label: t("f_visas"), hint: t("f_visas_hint"), full: true }, /* @__PURE__ */ React.createElement(Chips, { selected: profile.visaTypes, onToggle: (v) => toggleIn("visaTypes", v), options: visaOpts })))), /* @__PURE__ */ React.createElement("div", { className: "submitbar" }, /* @__PURE__ */ React.createElement("button", { className: "btn-primary", onClick: onSubmit }, t("submit"), /* @__PURE__ */ React.createElement("svg", { className: "arr", width: "18", height: "18", viewBox: "0 0 24 24", fill: "none" }, /* @__PURE__ */ React.createElement("path", { d: "M5 12h14M13 6l6 6-6 6", stroke: "currentColor", strokeWidth: "2.2", strokeLinecap: "round", strokeLinejoin: "round" }))), /* @__PURE__ */ React.createElement("p", { className: "disclaimer-short" }, t("disclaimer_short")))));
+  )))), /* @__PURE__ */ React.createElement("section", { className: "section" }, /* @__PURE__ */ React.createElement("div", { className: "section-head" }, /* @__PURE__ */ React.createElement("span", { className: "section-num" }, "04"), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h2", null, t("sec_intent")), /* @__PURE__ */ React.createElement("p", null, t("sec_intent_sub")))), /* @__PURE__ */ React.createElement("div", { className: "grid" }, /* @__PURE__ */ React.createElement(Field, { label: t("f_visas"), hint: t("f_visas_hint"), full: true }, /* @__PURE__ */ React.createElement(Chips, { selected: profile.visaTypes, onToggle: (v) => toggleIn("visaTypes", v), options: visaOpts })))), /* @__PURE__ */ React.createElement("div", { className: "submitbar" }, /* @__PURE__ */ React.createElement("button", { className: "btn-primary", onClick: onSubmit }, t("submit"), /* @__PURE__ */ React.createElement("svg", { className: "arr", width: "18", height: "18", viewBox: "0 0 24 24", fill: "none" }, /* @__PURE__ */ React.createElement("path", { d: "M5 12h14M13 6l6 6-6 6", stroke: "currentColor", strokeWidth: "2.2", strokeLinecap: "round", strokeLinejoin: "round" }))), /* @__PURE__ */ React.createElement("p", { className: "disclaimer-short" }, t("disclaimer_short")))));
 }
 function countryName(iso, lang) {
   if (lang === "es" && window.COUNTRY_NAMES && window.COUNTRY_NAMES.es && window.COUNTRY_NAMES.es[iso]) {

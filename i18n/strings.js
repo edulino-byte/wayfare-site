@@ -23,8 +23,8 @@ window.I18N = {
     sec_education_sub: "Your highest level of completed education.",
     sec_background: "Education & work",
     sec_background_sub: "What you bring to a destination.",
-    sec_means: "Means & languages",
-    sec_means_sub: "Most programs check funds and language.",
+    sec_means: "Language & work style",
+    sec_means_sub: "Language level and remote work shape which routes fit you.",
     sec_intent: "What you're looking for",
     sec_intent_sub: "Tell us where your head's at — we'll prioritise it.",
 
@@ -482,8 +482,8 @@ window.I18N = {
     sec_education_sub: "Tu nivel de estudios más alto completado.",
     sec_background: "Educación y trabajo",
     sec_background_sub: "Lo que aportas a un destino.",
-    sec_means: "Recursos e idiomas",
-    sec_means_sub: "Casi todos los programas revisan fondos e idioma.",
+    sec_means: "Idioma y forma de trabajo",
+    sec_means_sub: "Tu nivel de idioma y el trabajo remoto definen qué rutas te encajan.",
     sec_intent: "Qué estás buscando",
     sec_intent_sub: "Cuéntanos qué te interesa — lo priorizaremos.",
 
