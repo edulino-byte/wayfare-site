@@ -1018,6 +1018,19 @@ window.I18N = {
     "Verify current conditions with the Portuguese consulate in your country. Simulated guidance only.": "Verifica las condiciones vigentes con el consulado portugués de tu país. Solo orientación simulada.",
     "You may need to show sufficient financial means. Check official Portuguese immigration sources for current requirements.": "Puede que necesites demostrar medios económicos suficientes. Consulta las fuentes oficiales de inmigración portuguesa.",
     "You may need to show sufficient funds for your stay. Check with the Portuguese consulate for current financial requirements.": "Puede que necesites demostrar fondos suficientes para tu estancia. Consulta con el consulado portugués los requisitos financieros vigentes.",
+
+    /* ── España v1.15.0: DNV con cifras oficiales (UGE + BOE SMI 2026) ── */
+    "The Spain Digital Nomad Visa requires income of 200% of the Spanish minimum wage (about EUR 2,450/month with the 2026 SMI of EUR 1,221). Check the official threshold before applying.": "El visado de nómada digital de España exige ingresos del 200% del salario mínimo (unos 2.450 EUR/mes con el SMI 2026 de 1.221 EUR). Verifica el umbral oficial antes de aplicar.",
+    "You must show a working relationship of at least 3 months with your foreign employer or clients, and a degree or 3 years of professional experience.": "Debes acreditar una relación laboral o profesional de al menos 3 meses con tu empleador o clientes extranjeros, y una titulación o 3 años de experiencia profesional.",
+    "The Spain Digital Nomad Visa (Ley de Startups) requires active remote employment or freelancing for a non-Spanish entity.": "El visado de nómada digital de España (Ley de Startups) requiere empleo remoto activo o actividad freelance para una entidad no española.",
+    "Spain's working holiday agreements appear limited to certain countries (Japan, Australia, Canada and New Zealand per the latest captured official source). Verify with the Spanish consulate in your country.": "Los acuerdos de working holiday de España parecen limitados a ciertos países (Japón, Australia, Canadá y Nueva Zelanda según la última fuente oficial capturada). Verifica con el consulado español de tu país.",
+    "Your passport nationality appears to have a working holiday agreement with Spain.": "Tu nacionalidad de pasaporte parece tener un acuerdo de working holiday con España.",
+    "You must have sufficient funds for your maintenance during the stay.": "Debes contar con fondos suficientes para tu manutención durante la estancia.",
+    "The main purpose of the stay must be holiday; work is complementary. Stays are limited to 12 months.": "El propósito principal de la estancia debe ser vacacional; el trabajo es complementario. Las estancias están limitadas a 12 meses.",
+    "Programme details are country-specific and the agreement list can change - verify current conditions with the Spanish consulate in your country.": "Los detalles del programa varían por país y la lista de acuerdos puede cambiar - verifica las condiciones vigentes con el consulado español de tu país.",
+    "A work permit with employer sponsorship (cuenta ajena) is typically required for non-EU nationals.": "Los no comunitarios normalmente necesitan un permiso de trabajo con patrocinio de empleador (cuenta ajena).",
+    "You may need to show sufficient financial means. Check official Spanish immigration sources for current requirements.": "Puede que necesites demostrar medios económicos suficientes. Consulta las fuentes oficiales de inmigración española.",
+    "Your passport nationality is generally accepted for Spanish student visa applications.": "Tu nacionalidad de pasaporte es generalmente aceptada para solicitudes de visa de estudiante española.",
   },
 };
 

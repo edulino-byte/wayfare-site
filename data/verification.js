@@ -34,6 +34,12 @@ window.VERIFICATION = {
       "facts": 19,
       "monitored": false,
       "lastCheck": "2026-07-14"
+    },
+    "ES": {
+      "routes": 5,
+      "facts": 13,
+      "monitored": false,
+      "lastCheck": "2026-07-14"
     }
   }
 };

@@ -1075,7 +1075,9 @@ window.Eligibility = (function () {
       if (p.remoteWork) m.push("Proof of regular remote income may strengthen a Schengen visa application.");
       finReq("You may need to show sufficient funds for your stay. Check official Schengen visa requirements.", w);
       w.push("The 90/180-day Schengen rule applies. This is simulated guidance only.");
-      return visaResult("tourist", score, m, w, x);
+      var r = visaResult("tourist", score, m, w, x);
+      r.officialName = "Schengen short stay (90/180)"; r.route = "es_schengen_visit";
+      return r;
     },
 
     digital_nomad: function (p) {
@@ -1083,21 +1085,29 @@ window.Eligibility = (function () {
       if (inList(PASSPORT.euEea, nat)) {
         m.push("As an EU/EEA citizen, you may live and work in Spain under freedom of movement without a Digital Nomad Visa.");
         w.push("EU freedom of movement rules apply. No Digital Nomad Visa is required.");
-        return visaResult("digital_nomad", 82, m, w, x);
+        var rEu = visaResult("digital_nomad", 82, m, w, x);
+        rEu.officialName = "Spain Digital Nomad Visa (international teleworker)"; rEu.route = "es_dnv";
+        return rEu;
       }
       if (!p.remoteWork) {
         w.push("The Spain Digital Nomad Visa (Ley de Startups) requires active remote employment or freelancing for a non-Spanish entity.");
         finReq("You may need to show sufficient financial means. Check official Spanish immigration sources for current requirements.", w);
-        return visaResult("digital_nomad", 6, m, w, x);
+        var rNo = visaResult("digital_nomad", 6, m, w, x);
+        rNo.officialName = "Spain Digital Nomad Visa (international teleworker)"; rNo.route = "es_dnv";
+        return rNo;
       }
       score += 48; m.push("Your profile indicates remote work, which appears to satisfy the primary condition.");
       if (passportTier(nat) <= 2) { score += 12; m.push("Your passport nationality is generally accepted for this visa route."); }
       else { w.push("Additional scrutiny may apply for your passport nationality."); }
-      /* Income threshold is informational only */
-      w.push("The Spain Digital Nomad Visa typically requires proof of income meeting approximately 200% of the Spanish minimum wage (~2,400 EUR/month, simulated). Check the official threshold before applying.");
+      /* Income threshold is informational only — UGE oficial (capturado 14-jul-2026):
+         "200% del salario mínimo interprofesional (SMI) vigente"; SMI 2026 = 1.221 €/mes (BOE RD 126/2026) */
+      w.push("The Spain Digital Nomad Visa requires income of 200% of the Spanish minimum wage (about EUR 2,450/month with the 2026 SMI of EUR 1,221). Check the official threshold before applying.");
+      w.push("You must show a working relationship of at least 3 months with your foreign employer or clients, and a degree or 3 years of professional experience.");
       finReq("You may need to show sufficient financial means. Check official Spanish immigration sources for current requirements.", w);
       w.push("Proof of remote work contract or freelance client invoices is required. This is simulated guidance based on approximate thresholds.");
-      return visaResult("digital_nomad", score, m, w, x);
+      var r = visaResult("digital_nomad", score, m, w, x);
+      r.officialName = "Spain Digital Nomad Visa (international teleworker)"; r.route = "es_dnv";
+      return r;
     },
 
     student: function (p) {
@@ -1112,7 +1122,9 @@ window.Eligibility = (function () {
       score += scoreAge(p.age, 17, 65, 10);
       finReq("You may need to show sufficient funds for tuition and living costs. Check official Spanish student visa requirements.", w);
       w.push("Enrollment acceptance from an accredited Spanish institution is required. Simulated guidance only.");
-      return visaResult("student", score, m, w, x);
+      var r = visaResult("student", score, m, w, x);
+      r.officialName = "Spain long-term study stay"; r.route = "es_study";
+      return r;
     },
 
     work: function (p) {
@@ -1130,13 +1142,41 @@ window.Eligibility = (function () {
       score += scoreEng(p, "intermediate", 16);
       finReq("You may need to show sufficient funds. Check official Spanish work visa requirements.", w);
       w.push("Non-EU work permits in Spain typically require employer sponsorship. Simulated guidance only.");
-      return visaResult("work", score, m, w, x);
+      var r = visaResult("work", score, m, w, x);
+      r.officialName = "Work and residence permit (cuenta ajena)"; r.route = "es_cuenta_ajena";
+      return r;
     },
 
     work_and_holiday: function (p) {
-      return visaResult("work_and_holiday", 5, [],
-        ["Spain does not currently operate a Working Holiday visa programme. This route is not available."],
-        ["passport"]);
+      /* v1.15.0 — corrección: España SÍ tiene acuerdos de working holiday como
+         destino. Evidencia oficial (Embajada de España en Tokio, capturada
+         14-jul-2026): programa con Japón en vigor desde 1-jul-2017 (18-30 años)
+         y "otros Acuerdos... con Australia, Canadá y Nueva Zelanda". La fuente
+         es un artículo de 2017 => tope partial y verificación con consulado.
+         Acuerdos posteriores (p.ej. Corea, Argentina) sin fuente oficial
+         capturada: no se listan todavía. */
+      var ES_YM = ["JP", "AU", "CA", "NZ"];
+      var m = [], w = [], x = [], score = 0, nat = p.nationality;
+      function esYmResult(sc) {
+        var r = visaResult("work_and_holiday", sc, m, w, x);
+        r.officialName = "Spain Working Holiday (bilateral agreements)";
+        r.route = "es_youth_mobility";
+        return r;
+      }
+      if (!inList(ES_YM, nat)) {
+        w.push("Spain's working holiday agreements appear limited to certain countries (Japan, Australia, Canada and New Zealand per the latest captured official source). Verify with the Spanish consulate in your country.");
+        x.push("passport");
+        return esYmResult(10);
+      }
+      score += 42; m.push("Your passport nationality appears to have a working holiday agreement with Spain.");
+      score += scoreAge(p.age, 18, 30, 38);
+      if (p.age < 18 || p.age > 30) { x.push("maxAge"); }
+      else { m.push("Your age appears to be within the eligible range for this visa (18 to 30)."); }
+      finReq("You must have sufficient funds for your maintenance during the stay.", w);
+      w.push("The main purpose of the stay must be holiday; work is complementary. Stays are limited to 12 months.");
+      w.push("Programme details are country-specific and the agreement list can change - verify current conditions with the Spanish consulate in your country.");
+      /* Fuente fechada (2017) => nunca banda eligible: tope partial */
+      return esYmResult(Math.min(score, 68));
     },
   };
 
