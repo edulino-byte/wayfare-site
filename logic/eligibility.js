@@ -1592,10 +1592,15 @@ window.Eligibility = (function () {
     return t;
   }
 
+  /* v1.11.0 — helper de solo lectura para la UI: ¿tiene este destino reglas
+     reales modeladas (COUNTRY_RULES)? Los demás usan reglas sintéticas. */
+  function hasRealRules(iso) { return !!COUNTRY_RULES[iso]; }
+
   return {
     passportTier: passportTier, evaluateCountry: evaluateCountry,
     evaluateAll: evaluateAll, resolveCountry: resolveCountry,
     topRecommendations: topRecommendations, tally: tally,
+    hasRealRules: hasRealRules,
   };
 
 })();
