@@ -14,7 +14,9 @@
 window.VISA_DATA = (function () {
   /* ---- ordered enums (used by logic for >= comparisons) ------------------ */
   const EDUCATION = ["primary", "secondary", "baccalaureate", "university_plus"];
-  const ENGLISH = ["basic", "intermediate", "advanced", "native"];
+  /* v1.13.0 — niveles CEFR/MCER para la UI; el motor los normaliza a su escala
+     interna (a1/a2->basic, b1->intermediate, b2/c1->advanced, c2->native). */
+  const ENGLISH = ["a1", "a2", "b1", "b2", "c1", "c2"];
 
   /* ---- visa types: id + default requirement template -------------------- */
   /* Requirements use the enums above. A country can override any field.      */

@@ -66,6 +66,13 @@ window.I18N = {
     eng_intermediate: "Intermediate",
     eng_advanced: "Advanced",
     eng_native: "Native",
+    eng_a1: "A1",
+    eng_a2: "A2",
+    eng_b1: "B1",
+    eng_b2: "B2",
+    eng_c1: "C1",
+    eng_c2: "C2",
+    f_english_hint: "CEFR levels — A1 beginner to C2 mastery/native.",
 
     /* professions */
     prof_tech: "Tech & engineering",
@@ -522,6 +529,13 @@ window.I18N = {
     eng_intermediate: "Intermedio",
     eng_advanced: "Avanzado",
     eng_native: "Nativo",
+    eng_a1: "A1",
+    eng_a2: "A2",
+    eng_b1: "B1",
+    eng_b2: "B2",
+    eng_c1: "C1",
+    eng_c2: "C2",
+    f_english_hint: "Niveles del Marco Común Europeo (MCER) — de A1 principiante a C2 dominio/nativo.",
 
     prof_tech: "Tecnología e ingeniería",
     prof_health: "Salud",

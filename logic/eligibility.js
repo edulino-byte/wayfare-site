@@ -15,10 +15,14 @@ window.Eligibility = (function () {
 
   var D   = window.VISA_DATA;
   var EDU = D.EDUCATION;
-  var ENG = D.ENGLISH;
+  /* v1.13.0 — escala INTERNA de inglés (estable: los umbrales del scoring se
+     expresan con estos nombres). La UI usa niveles CEFR (a1..c2) y aquí se
+     normalizan de forma conservadora; los valores antiguos siguen aceptándose. */
+  var ENG = ["basic", "intermediate", "advanced", "native"];
+  var ENG_CEFR = { a1: "basic", a2: "basic", b1: "intermediate", b2: "advanced", c1: "advanced", c2: "native" };
 
   function eduRank(e) { return Math.max(0, EDU.indexOf(e)); }
-  function engRank(e) { return Math.max(0, ENG.indexOf(e)); }
+  function engRank(e) { return Math.max(0, ENG.indexOf(ENG_CEFR[e] || e)); }
   function clamp(v, lo, hi) { return Math.min(hi, Math.max(lo, v)); }
   function inList(arr, code) { return arr.indexOf(code) !== -1; }
   function scoreToStatus(s) { return s >= 70 ? "eligible" : s >= 40 ? "partial" : "ineligible"; }
