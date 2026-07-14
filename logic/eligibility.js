@@ -1623,6 +1623,100 @@ window.Eligibility = (function () {
   }
   EU_SCHENGEN_SHARED.forEach(function (iso) { COUNTRY_RULES[iso] = makeSchengenRules(iso); });
 
+  /* ── Tanda 2 (v1.20.0): WHV reales de DE y FR (sobrescriben la fábrica) ── */
+  /* Alemania — FAQ oficial del Auswärtiges Amt (capturado 15-jul-2026):
+     AR AU BR CL HK IL JP KR NZ TW UY · 18-30 (KR hasta 34) · hasta 12 meses. */
+  var DE_YM = { AR:1, AU:1, BR:1, CL:1, HK:1, IL:1, JP:1, KR:1, NZ:1, TW:1, UY:1 };
+  COUNTRY_RULES.DE.work_and_holiday = function (p) {
+    var m = [], w = [], x = [], score = 0, nat = p.nationality;
+    function deYm(sc) {
+      var r = visaResult("work_and_holiday", sc, m, w, x);
+      r.officialName = "Germany Working Holiday"; r.route = "de_working_holiday";
+      return r;
+    }
+    if (!DE_YM[nat]) {
+      w.push("Germany's working holiday programmes appear limited to: Argentina, Australia, Brazil, Chile, Hong Kong, Israel, Japan, South Korea, New Zealand, Taiwan and Uruguay.");
+      x.push("passport");
+      return deYm(10);
+    }
+    score += 42; m.push("Your passport nationality has a working holiday programme with Germany.");
+    var maxAge = (nat === "KR") ? 34 : 30;
+    score += scoreAge(p.age, 18, maxAge, 38);
+    if (p.age < 18 || p.age > maxAge) { x.push("maxAge"); }
+    else { m.push("Your age appears to be within the eligible range for this visa (18 to " + maxAge + ")."); }
+    w.push("The programme allows stays of up to 12 months; holiday jobs may be accepted to help finance the stay.");
+    finReq("You may need to show sufficient funds for your stay. Check with the German mission in your country.", w);
+    w.push("Work allowances vary by nationality (e.g., limits on months worked or per employer). Verify current conditions with the German mission. Simulated guidance only.");
+    return deYm(score);
+  };
+
+  /* Francia — france-visas.gouv.fr (snapshot archive.org 18-oct-2025):
+     16 socios · 18-30 (AR/AU/CA hasta 35) · motivo principal turístico-cultural. */
+  var FR_YM = { AU:35, AR:35, BR:30, CA:35, CL:30, CO:30, KR:30, EC:30, JP:30, NZ:30, HK:30, MX:30, PE:30, RU:30, TW:30, UY:30 };
+  COUNTRY_RULES.FR.work_and_holiday = function (p) {
+    var m = [], w = [], x = [], score = 0, nat = p.nationality;
+    function frYm(sc) {
+      var r = visaResult("work_and_holiday", sc, m, w, x);
+      r.officialName = "France Working Holiday (vacances-travail)"; r.route = "fr_working_holiday";
+      return r;
+    }
+    var maxAge = FR_YM[nat];
+    if (!maxAge) {
+      w.push("France's working holiday agreements appear limited to 16 countries/territories, including Argentina, Brazil, Chile, Colombia, Ecuador, Mexico, Peru and Uruguay.");
+      x.push("passport");
+      return frYm(10);
+    }
+    score += 42; m.push("Your passport nationality has a working holiday agreement with France.");
+    score += scoreAge(p.age, 18, maxAge, 38);
+    if (p.age < 18 || p.age > maxAge) { x.push("maxAge"); }
+    else { m.push("Your age appears to be within the eligible range for this visa (18 to " + maxAge + ")."); }
+    w.push("The main purpose of the stay must be tourist and cultural discovery of France; work is complementary.");
+    finReq("You must meet the funds level set by your country's agreement. Check france-visas.gouv.fr.", w);
+    w.push("Apply at the competent visa centre in your country of nationality. Simulated guidance only.");
+    return frYm(score);
+  };
+
+  /* Irlanda — NO Schengen; ISD oficial (capturado 15-jul-2026):
+     WHA con AD AR AU CA CL HK JP NZ KR US TW · plazas limitadas · vía DFA ·
+     edades/cupos varían por país (no capturados) => sin puntuar edad, tope partial. */
+  var IE_YM = { AD:1, AR:1, AU:1, CA:1, CL:1, HK:1, JP:1, NZ:1, KR:1, US:1, TW:1 };
+  COUNTRY_RULES.IE = {
+    tourist: function (p) {
+      var m = [], w = [], x = [], score = 0, nat = p.nationality;
+      if (passportTier(nat) === 1) { score += 50; m.push("Your passport appears to provide strong global visa access."); }
+      else if (passportTier(nat) === 2) { score += 28; w.push("A visa may be required depending on bilateral agreements."); x.push("passport"); }
+      else { score += 10; w.push("A visa will likely be required for this destination."); x.push("passport"); }
+      w.push("Ireland is not part of the Schengen area and applies its own entry rules. Check official Irish sources for your nationality.");
+      finReq("You may need to show sufficient funds for your stay. Check the official visa requirements for this destination.", w);
+      var r = visaResult("tourist", clamp(score, 0, 68), m, w, x);
+      r.officialName = "Ireland short stay (own regime)"; r.route = "ie_short_stay";
+      return r;
+    },
+    work_and_holiday: function (p) {
+      var m = [], w = [], x = [], score = 0, nat = p.nationality;
+      function ieYm(sc) {
+        var r = visaResult("work_and_holiday", sc, m, w, x);
+        r.officialName = "Ireland Working Holiday Authorisation"; r.route = "ie_wha";
+        return r;
+      }
+      if (!IE_YM[nat]) {
+        w.push("Ireland's Working Holiday Authorisation appears limited to: Andorra, Argentina, Australia, Canada, Chile, Hong Kong, Japan, New Zealand, South Korea, Taiwan and the USA.");
+        x.push("passport");
+        return ieYm(10);
+      }
+      score += 42; m.push("Your passport nationality has a Working Holiday Authorisation agreement with Ireland.");
+      score += 26;  /* edades/cupos por país no capturados: sin puntuar edad; tope partial */
+      w.push("Age limits and annual quotas vary by country (e.g., 18-30 or 18-35) - check the Department of Foreign Affairs before applying.");
+      w.push("Places are limited and you cannot apply if you are already in Ireland.");
+      w.push("Applications are made through the Department of Foreign Affairs. Simulated guidance only.");
+      finReq("You may need to show sufficient funds for your stay.", w);
+      return ieYm(Math.min(score, 68));
+    },
+    student: makeSchengenRules("IE").student,
+    work: makeSchengenRules("IE").work,
+    digital_nomad: makeSchengenRules("IE").digital_nomad,
+  };
+
   /* =========================================================================
      GENERIC FALLBACK  (mock.js countries without COUNTRY_RULES)
   ========================================================================= */

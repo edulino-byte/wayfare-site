@@ -1091,6 +1091,28 @@ window.I18N = {
     "Digital nomad or remote-work permits require active remote work for a foreign employer or clients.": "Los permisos de nómada digital o trabajo remoto requieren trabajo remoto activo para un empleador o clientes extranjeros.",
     "Several European countries offer national digital nomad or remote-work permits; provisions vary by country and have not been verified for this destination yet. Check official national sources.": "Varios países europeos ofrecen permisos nacionales de nómada digital o trabajo remoto; varían por país y aún no han sido verificados para este destino. Consulta las fuentes oficiales nacionales.",
     "You may need to show sufficient funds. Check official work visa requirements for this destination.": "Puede que necesites demostrar fondos suficientes. Consulta los requisitos oficiales de la visa de trabajo de este destino.",
+
+    /* ── Tanda 2 Europa: DE/FR WHV + Irlanda (v1.20.0) ── */
+    "Germany's working holiday programmes appear limited to: Argentina, Australia, Brazil, Chile, Hong Kong, Israel, Japan, South Korea, New Zealand, Taiwan and Uruguay.": "Los programas working holiday de Alemania parecen limitados a: Argentina, Australia, Brasil, Chile, Hong Kong, Israel, Japón, Corea del Sur, Nueva Zelanda, Taiwán y Uruguay.",
+    "Your passport nationality has a working holiday programme with Germany.": "Tu nacionalidad de pasaporte tiene un programa working holiday con Alemania.",
+    "The programme allows stays of up to 12 months; holiday jobs may be accepted to help finance the stay.": "El programa permite estancias de hasta 12 meses; se pueden aceptar trabajos vacacionales para ayudar a financiar la estancia.",
+    "You may need to show sufficient funds for your stay. Check with the German mission in your country.": "Puede que necesites demostrar fondos suficientes para tu estancia. Consulta con la misión alemana de tu país.",
+    "Work allowances vary by nationality (e.g., limits on months worked or per employer). Verify current conditions with the German mission. Simulated guidance only.": "Los permisos de trabajo varían por nacionalidad (p. ej. límites de meses trabajados o por empleador). Verifica las condiciones vigentes con la misión alemana. Solo orientación simulada.",
+    "France's working holiday agreements appear limited to 16 countries/territories, including Argentina, Brazil, Chile, Colombia, Ecuador, Mexico, Peru and Uruguay.": "Los acuerdos working holiday de Francia parecen limitados a 16 países/territorios, incluidos Argentina, Brasil, Chile, Colombia, Ecuador, México, Perú y Uruguay.",
+    "Your passport nationality has a working holiday agreement with France.": "Tu nacionalidad de pasaporte tiene un acuerdo working holiday con Francia.",
+    "The main purpose of the stay must be tourist and cultural discovery of France; work is complementary.": "El propósito principal de la estancia debe ser el descubrimiento turístico y cultural de Francia; el trabajo es complementario.",
+    "You must meet the funds level set by your country's agreement. Check france-visas.gouv.fr.": "Debes cumplir el nivel de fondos fijado por el acuerdo de tu país. Consulta france-visas.gouv.fr.",
+    "Apply at the competent visa centre in your country of nationality. Simulated guidance only.": "Solicita en el centro de visados competente de tu país de nacionalidad. Solo orientación simulada.",
+    "Your age appears to be within the eligible range for this visa (18 to 35).": "Tu edad parece estar dentro del rango elegible para esta visa (18 a 35).",
+    "Ireland is not part of the Schengen area and applies its own entry rules. Check official Irish sources for your nationality.": "Irlanda no forma parte del espacio Schengen y aplica sus propias reglas de entrada. Consulta las fuentes oficiales irlandesas para tu nacionalidad.",
+    "Ireland's Working Holiday Authorisation appears limited to: Andorra, Argentina, Australia, Canada, Chile, Hong Kong, Japan, New Zealand, South Korea, Taiwan and the USA.": "La Working Holiday Authorisation de Irlanda parece limitada a: Andorra, Argentina, Australia, Canadá, Chile, Hong Kong, Japón, Nueva Zelanda, Corea del Sur, Taiwán y EE.UU.",
+    "Your passport nationality has a Working Holiday Authorisation agreement with Ireland.": "Tu nacionalidad de pasaporte tiene un acuerdo de Working Holiday Authorisation con Irlanda.",
+    "Age limits and annual quotas vary by country (e.g., 18-30 or 18-35) - check the Department of Foreign Affairs before applying.": "Los límites de edad y los cupos anuales varían por país (p. ej. 18-30 o 18-35) - consulta el Department of Foreign Affairs antes de aplicar.",
+    "Places are limited and you cannot apply if you are already in Ireland.": "Las plazas son limitadas y no puedes solicitar si ya estás en Irlanda.",
+    "Applications are made through the Department of Foreign Affairs. Simulated guidance only.": "Las solicitudes se hacen a través del Department of Foreign Affairs. Solo orientación simulada.",
+    "You may need to show sufficient funds for your stay.": "Puede que necesites demostrar fondos suficientes para tu estancia.",
+    "A visa may be required depending on bilateral agreements.": "Puede requerirse una visa según los acuerdos bilaterales.",
+    "You may need to show sufficient funds for your stay. Check the official visa requirements for this destination.": "Puede que necesites demostrar fondos suficientes para tu estancia. Consulta los requisitos oficiales de visado de este destino.",
   },
 };
 
