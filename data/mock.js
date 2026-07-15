@@ -58,6 +58,8 @@ window.VISA_DATA = (function () {
     "TR", "UA",
     /* Others */
     "US", "CA", "JP", "CN", "BR",
+    /* v1.23.0 — pasaportes que el motor ya modelaba pero el selector omitía */
+    "AU", "NZ", "KR", "TW", "HK", "IL", "RO", "SK", "SI", "MT", "AD", "LI",
   ];
 
   /* Passport tiers used by eligibility.js scoring (not official visa rules) */
@@ -72,6 +74,9 @@ window.VISA_DATA = (function () {
     VE:3, CU:3, GQ:3,
     GE:3, RS:3, UA:3, RU:3,
     TR:3, CN:4,
+    /* v1.23.0 — coherentes con PASSPORT.tier1/2 del motor (pendiente auditoría de tiers) */
+    AU:1, NZ:1, KR:1, RO:1, SK:1, SI:1, MT:1, LI:1,
+    TW:2, HK:2, IL:2, AD:2,
   };
 
   /* PASSPORTS — used by Questionnaire.jsx for the nationality selector

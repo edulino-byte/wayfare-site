@@ -734,7 +734,18 @@ function countryName(iso, lang) {
     PH: "Philippines",
     NG: "Nigeria",
     PK: "Pakistan",
-    EG: "Egypt"
+    EG: "Egypt",
+    /* v1.23.0 */
+    NZ: "New Zealand",
+    TW: "Taiwan",
+    HK: "Hong Kong",
+    IL: "Israel",
+    RO: "Romania",
+    SK: "Slovakia",
+    SI: "Slovenia",
+    MT: "Malta",
+    AD: "Andorra",
+    LI: "Liechtenstein"
   };
   return names[iso] || iso;
 }
