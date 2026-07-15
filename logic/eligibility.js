@@ -1591,6 +1591,144 @@ window.Eligibility = (function () {
   };
 
   /* =========================================================================
+     COREA DEL SUR — Wave 3 (v1.29.0). Evidencia oficial capturada 15-jul-2026
+     vía renderFetch/Playwright (los portales .go.kr sirven 200 pero pintan por
+     JavaScript; no hay muro anti-robots — política del proyecto respetada):
+     - K-ETA: 116 países/regiones elegibles con estancia permitida (k-eta.go.kr).
+     - Working holiday H-1: tabla oficial de 30 socios con edad y cupo 2025/26
+       (whic.mofa.go.kr, Overseas Koreans Agency).
+     - Estudiante D-2/D-4: studyinkorea.go.kr (fetch directo).
+     - Nómada digital (workation): sin fuente capturada aún => hedged + REVIEW.
+  ========================================================================= */
+  /* Elegibles K-ETA con estancia de 90 días / 3 meses (del selector) */
+  var KR_KETA_90 = ["AR","AT","AU","BE","BG","BR","CH","CL","CO","CR","CZ","DE","DK","DO","EC",
+    "EE","ES","FI","FR","GB","GR","GT","HK","HR","HU","IE","IL","IS","IT","JP","LI","LT","LU",
+    "LV","MT","MX","NI","NL","NO","NZ","PA","PE","PL","PT","RO","RS","SE","SI","SK","SV","TR",
+    "TW","US","UY","VE"];
+  /* Elegibles K-ETA con estancias más cortas */
+  var KR_KETA_SHORT = { AD: "30 days", CY: "30 days", HN: "30 days", PY: "30 days", RU: "60 days" };
+  /* Socios working holiday (H-1) presentes en el selector — edad y cupo anual */
+  var KR_WHV = {
+    AD: { min: 18, max: 30, quota: 50 },    AR: { min: 18, max: 34, quota: 200 },
+    AU: { min: 18, max: 30, quota: null },  AT: { min: 18, max: 30, quota: 300 },
+    BR: { min: 18, max: 34, quota: 300 },   BE: { min: 18, max: 30, quota: 200 },
+    CA: { min: 18, max: 35, quota: 12000 }, CL: { min: 18, max: 34, quota: 100 },
+    CZ: { min: 18, max: 30, quota: 300 },   DK: { min: 18, max: 34, quota: null },
+    FI: { min: 18, max: 35, quota: null },  FR: { min: 18, max: 30, quota: 2000 },
+    DE: { min: 18, max: 34, quota: null },  HK: { min: 18, max: 30, quota: 1000 },
+    HU: { min: 18, max: 30, quota: 100 },   IE: { min: 18, max: 34, quota: 800 },
+    IL: { min: 18, max: 30, quota: 200 },   IT: { min: 18, max: 30, quota: 500 },
+    JP: { min: 18, max: 25, quota: 10000 }, LV: { min: 18, max: 34, quota: 100 },
+    LU: { min: 18, max: 35, quota: 100 },   NL: { min: 18, max: 30, quota: 200 },
+    NZ: { min: 18, max: 30, quota: 3000 },  PL: { min: 18, max: 30, quota: 200 },
+    PT: { min: 18, max: 34, quota: 200 },   ES: { min: 18, max: 30, quota: 1000 },
+    SE: { min: 18, max: 30, quota: null },  TW: { min: 18, max: 34, quota: 800 },
+    GB: { min: 18, max: 35, quota: 5000 },  US: { min: 18, max: 30, quota: 2000 },
+  };
+
+  COUNTRY_RULES.KR = {
+
+    tourist: function (p) {
+      var m = [], w = [], x = [], score = 0, nat = p.nationality;
+      function krTourist(sc) {
+        var r = visaResult("tourist", sc, m, w, x);
+        r.officialName = "K-ETA / short-term visa-free entry"; r.route = "kr_keta";
+        return r;
+      }
+      if (nat === "CA") {
+        score += 55;
+        m.push("Canadian citizens appear to be eligible for K-ETA, with visa-free stays of up to 6 months.");
+        w.push("You must obtain K-ETA approval before boarding the flight or ship to Korea.");
+      } else if (inList(KR_KETA_90, nat)) {
+        score += 55;
+        m.push("Your passport nationality appears to be eligible for K-ETA: visa-free short stays of up to 90 days (3 months for some countries).");
+        w.push("You must obtain K-ETA approval before boarding the flight or ship to Korea.");
+      } else if (KR_KETA_SHORT[nat]) {
+        score += 52;
+        m.push("Your passport nationality appears to be eligible for K-ETA, with visa-free stays of up to " + KR_KETA_SHORT[nat] + ".");
+        w.push("You must obtain K-ETA approval before boarding the flight or ship to Korea.");
+      } else {
+        score += 10;
+        w.push("A short-term visa is likely required for your nationality. Check the Korean embassy or consulate in your country.");
+        x.push("passport");
+      }
+      w.push("You cannot work during a short-term stay; paid activities are not allowed.");
+      finReq("You may need to show sufficient funds for your stay and onward travel.", w);
+      w.push("This is simulated guidance only. Always verify with the official K-ETA portal (k-eta.go.kr).");
+      return krTourist(clamp(score, 0, 68));
+    },
+
+    work_and_holiday: function (p) {
+      var m = [], w = [], x = [], score = 0, nat = p.nationality;
+      var cfg = KR_WHV[nat];
+      function krYm(sc) {
+        var r = visaResult("work_and_holiday", sc, m, w, x);
+        r.officialName = "Korea Working Holiday (H-1)"; r.route = "kr_working_holiday";
+        return r;
+      }
+      if (!cfg) {
+        w.push("Korea has bilateral working holiday agreements with thirty countries/regions; your nationality does not appear to be among them.");
+        x.push("passport");
+        return krYm(10);
+      }
+      score += 42; m.push("Your passport nationality has a bilateral working holiday agreement with Korea (H-1 visa).");
+      score += scoreAge(p.age, cfg.min, cfg.max, 38);
+      if (p.age < cfg.min || p.age > cfg.max) { x.push("maxAge"); }
+      else { m.push("Your age appears to be within the eligible range for this visa (" + cfg.min + " to " + cfg.max + ")."); }
+      if (cfg.quota) {
+        w.push("This visa has a limited annual quota of about " + cfg.quota.toLocaleString("en-US") + " places, which can run out.");
+      }
+      w.push("The working holiday visa allows a one-year extended holiday in Korea, with short-term employment as a secondary part of your stay.");
+      w.push("You may generally work up to 25 hours per week with this visa.");
+      w.push("This is a one-time only visa; extensions or a second participation exist only in specific bilateral cases (e.g. Canada, Japan, the US and the UK).");
+      if (nat === "US") {
+        w.push("US participants must be bona fide post-secondary students or recent graduates (within 1 year after graduation).");
+      }
+      if (nat === "CA") {
+        w.push("Canadian participants may stay up to 24 months, participate twice, and are exempt from the 25-hour weekly limit.");
+      }
+      w.push("Language courses at private institutions are allowed; regular university degree courses require a study visa instead.");
+      finReq("You may need to show a return ticket (or funds to buy one) and reasonable funds for your initial stay.", w);
+      w.push("Verify current conditions with the Korean embassy or consulate in your country. Simulated guidance only.");
+      return krYm(score);
+    },
+
+    student: function (p) {
+      var m = [], w = [], x = [], score = 0;
+      var pt = passportTier(p.nationality);
+      if (pt <= 2) { score += 16; m.push("Your passport nationality is generally accepted for Korean student visa applications."); }
+      else         { score += 8;  w.push("Additional documentation requirements may apply for your passport nationality."); }
+      score += scoreEdu(p, "secondary", 24);
+      if (eduRank(p.education) < eduRank("secondary")) x.push("minEdu");
+      else m.push("Your education level appears to meet general requirements.");
+      score += scoreAge(p.age, 17, 65, 10);
+      w.push("For degree programmes at institutions offering associate degrees or higher, a D-2 visa is required; non-degree training uses the D-4 visa.");
+      finReq("You may need to show sufficient funds for tuition and living costs. Check official Korean student visa requirements.", w);
+      w.push("Admission to a Korean educational institution is required before the visa. Simulated guidance only.");
+      var r = visaResult("student", Math.min(score, 68), m, w, x);
+      r.officialName = "Korea Student Visa (D-2)"; r.route = "kr_student";
+      return r;
+    },
+
+    digital_nomad: function (p) {
+      var m = [], w = [], x = [], score = 0;
+      function krDnv(sc) {
+        var r = visaResult("digital_nomad", sc, m, w, x);
+        r.officialName = "Korea Digital Nomad (workation)"; r.route = "kr_digital_nomad";
+        return r;
+      }
+      if (!p.remoteWork) {
+        w.push("Korea's digital nomad (workation) visa requires active remote work for a foreign employer or clients.");
+        return krDnv(6);
+      }
+      score += 30; m.push("Your profile indicates remote work, which is the primary condition for this route.");
+      w.push("Korea introduced a digital nomad (workation) visa with income and insurance requirements - check the Korea Immigration Service or a Korean embassy for current requirements.");
+      w.push("This route could not be verified against a captured official source yet. Treat as preliminary guidance.");
+      return krDnv(clamp(score, 0, 45));
+    },
+  };
+
+  /* =========================================================================
      EUROPA SCHENGEN — Wave 2 ampliada (v1.19.0). Fábrica de reglas compartida
      para los 26 miembros Schengen sin modelo propio (ES/PT tienen el suyo;
      Irlanda NO es Schengen y queda para su propia fase).

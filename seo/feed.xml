@@ -7,6 +7,30 @@
   <updated>2026-07-15T09:00:00Z</updated>
 
   <entry>
+    <title>Wave 3: Corea del Sur, 37º destino verificado — y captura automatizada (renderFetch) (v1.29.0)</title>
+    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.29.0</id>
+    <updated>2026-07-15T09:00:00Z</updated>
+    <summary>**Infraestructura (petición del usuario: «todo automático»):** nueva pieza del pipeline `renderFetch.mjs` (Playwright + Chromium headless) para fuentes oficiales que sirven 200 pero pintan por JavaScript. POLÍTICA INTACTA: si un sitio deniega activamente (403/Akamai/captcha), renderFetch sale con código 2 y se respeta (vía navegador del usuario, como AU). El monitor semanal (detectDrift) ahora renderiza los dominios RENDER_DOMAINS (k-eta.go.kr, whic.mofa.go.kr) — Corea queda </summary>
+  </entry>
+
+  <entry>
+    <title>Parche: «Solo» → «Alone» en el cuestionario inglés (v1.28.1)</title>
+    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.28.1</id>
+    <updated>2026-07-15T09:00:00Z</updated>
+    <summary>**App:** la opción de situación del cuestionario decía «Solo» (español) en el modo inglés; ahora dice «Alone» (feedback del usuario). La tabla española queda igual («Solo/a»). Sin cambio de comportamiento: solo texto.</summary>
+  </entry>
+
+  <entry>
+    <title>Ideas #3, #7 y #5-parcial: comparador de destinos, changelog público y feed (v1.28.0)</title>
+    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.28.0</id>
+    <updated>2026-07-15T09:00:00Z</updated>
+    <summary>**App (idea #3):** botón «Comparar destinos» en el panel de país → vista lado a lado de dos destinos por tipo de visa (estado + puntuación + nombre oficial), con selector de destino B limitado a los 36 destinos con reglas reales. Los resultados se calculan al vuelo con el MISMO motor y el MISMO perfil (componente CompareView + findEvidence intactos). i18n cmp_* EN/ES. — **Web (idea #7):** seo/novedades.html — changelog público generado parseando VERSIONS.md (cada versión = no</summary>
+  </entry>
+
+  <entry>
     <title>Ideas #6, #4 y #2: metodología pública, semáforo de aperturas y checklist imprimible (v1.27.0)</title>
     <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
     <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.27.0</id>
@@ -140,29 +164,5 @@
     <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.11.0</id>
     <updated>2026-07-14T09:00:00Z</updated>
     <summary>**App:** `ui/Globe.jsx` — los países sintéticos (y los no listados) dejan de colorearse por elegibilidad simulada: ahora tinte neutro apagado. Solo AU/NZ/GB/CA/ES/PT (reglas modeladas reales) muestran verde/ámbar/terracota. Leyenda: nueva entrada "Aún sin datos" (EN/ES). Siguen siendo clicables (el panel ya mostraba su nota de simulación). Sin cambios de scoring. — **Motivo:** petición del usuario 14-jul-2026 — honestidad visual: que el color del mapa refleje solo lo que Wayf</summary>
-  </entry>
-
-  <entry>
-    <title>Analítica sin cookies (Fase 3 completada) (v1.10.0)</title>
-    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
-    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.10.0</id>
-    <updated>2026-07-14T09:00:00Z</updated>
-    <summary>**App:** `index.html` — contador GoatCounter (`edulino.goatcounter.com`), sin cookies ni datos personales; no cuenta visitas desde localhost. También en `demo.html` y en las 46 páginas de seo/ (vía generador). Sin cambios de lógica ni UI. — **Beta pública EN VIVO** desde v1.9.0: https://edulino-byte.github.io/wayfare-site/ (GitHub Pages; repo privado edulino-byte/wayfare como respaldo; deploy con guardia de tests vía `tools/deploy/deployPages.sh`). Fase 3 completada con esta </summary>
-  </entry>
-
-  <entry>
-    <title>Re-captura de Australia con navegador real (Fase 2) (v1.9.0)</title>
-    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
-    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.9.0</id>
-    <updated>2026-07-13T09:00:00Z</updated>
-    <summary>**Método:** Chrome del usuario vía extensión Claude (la web de AU bloquea robots: cascarón a curl, Access Denied a headless, archive.org hereda el cascarón). Sin evasión de defensas — sesión real. Evidencia: 4 páginas renderizadas (150KB texto) en `checkpoints/au-recapture-2026-07/pages/` (vía portapapeles; Chrome bloqueó descargas automatizadas). — **Verificación:** 67 hechos de las 4 rutas AU cotejados en vivo. — · **Tarifas subieron el 1-jul-2026** (drift de dinero real): </summary>
-  </entry>
-
-  <entry>
-    <title>Wave 1 NZ completa: las 33 nacionalidades WHV auditadas (Fase 2) (v1.8.0)</title>
-    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
-    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.8.0</id>
-    <updated>2026-07-13T09:00:00Z</updated>
-    <summary>**Datos:** +13 rutas NZ.whv (AT BR CA CL HR IE JP LU LV MX PT US UY) → **45 rutas**, hash `f05472d7…`. 232 hechos oficiales nuevos, cada uno con extracto VERBATIM de la página INZ y tokens appMatch validados contra la salida en vivo (doble puerta). Audit PASS con predicción exacta: MATCH 547→805, REVIEW 43→56, DEFERRED 70→99, 0-0-0. Cupos verificados número a número (AT 100, BR 300, CL 940, HR 100, LU 50, LV 100, MX 200, PT 50, UY 200); CA/IE/JP/US sin campo visible = NO_CAP </summary>
   </entry>
 </feed>

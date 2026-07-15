@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Novedades de reglas de visas — changelog público | Wayfare</title>
-<meta name="description" content="Registro público de cada cambio de datos y reglas de Wayfare: 27 versiones con fecha, qué cambió y por qué. Transparencia total." />
+<meta name="description" content="Registro público de cada cambio de datos y reglas de Wayfare: 30 versiones con fecha, qué cambió y por qué. Transparencia total." />
 <style>
   :root { --bg:#0c1a18; --card:#122622; --line:#1f3a35; --ink:#e8f1ee; --dim:#9db8b1; --acc:#39b48e; --amber:#d9b26a; }
   * { margin:0; box-sizing:border-box; }
@@ -74,6 +74,37 @@
   <h2>Historial completo</h2>
   <ul class="req">
         </ul>
+  <article class="nov">
+    <h2>Wave 3: Corea del Sur, 37º destino verificado — y captura automatizada (renderFetch) <span class="ver">v1.29.0 · 15 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>Infraestructura (petición del usuario: «todo automático»):</strong> nueva pieza del pipeline <code>renderFetch.mjs</code> (Playwright + Chromium headless) para fuentes oficiales que sirven 200 pero pintan por JavaScript. POLÍTICA INTACTA: si un sitio deniega activamente (403/Akamai/captcha), renderFetch sale con código 2 y se respeta (vía navegador del usuario, como AU). El monitor semanal (detectDrift) ahora renderiza los dominios RENDER_DOMAINS (k-eta.go.kr, whic.mofa.go.kr) — Corea queda vigilada sola, sin pasos manuales.</li>
+      <li><strong>App:</strong> COUNTRY_RULES.KR con 4 rutas basadas en evidencia capturada 15-jul-2026:</li>
+      <li>· <strong>Turista (kr_keta):</strong> KR_KETA_90 (55 nacionalidades del selector, 90 días/3 meses) + KR_KETA_SHORT (AD/CY/HN/PY 30 días, RU 60) + Canadá 6 meses. LatAm casi entera elegible; BO/CU/CN/UA/GE/GQ → visado. Fuente: lista oficial de 116 países en k-eta.go.kr.</li>
+      <li>· <strong>Working holiday H-1 (kr_working_holiday):</strong> tabla KR_WHV con los 30 socios oficiales 2025/26 (whic.mofa.go.kr, Overseas Koreans Agency): edades reales por país (AR/CL/PT 18-34, ES 18-30 con 1.000 plazas, GB 18-35…), cupos, 25 h/semana, visa de una sola vez, notas bilaterales US (solo estudiantes/recién graduados) y CA (24 meses × 2, sin tope horario).</li>
+      <li>· <strong>Estudiante D-2 (kr_student):</strong> studyinkorea.go.kr (fetch directo), D-2 titulación / D-4 formación, tope partial.</li>
+      <li>· <strong>Nómada digital (kr_digital_nomad):</strong> workation con redacción de cobertura — sin fuente capturable aún, REVIEW (mismo patrón que JP DNV).</li>
+      <li><strong>Datos:</strong> +4 rutas (95 total), +15 hechos con extracto verbatim verificado contra las capturas (wave3-kr/pages/). Audit PASS: MATCH 1012 (+22), 0 conflictos. Goldens 91→101 (+10 casos KR, los 91 existentes byte-idénticos). i18n: +28 líneas EN con ES (huecos 0).</li>
+      <li><strong>Nota de instalación:</strong> Playwright vive en node_modules (npm i playwright &amp;&amp; npx playwright install chromium en un clon nuevo).</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Parche: «Solo» → «Alone» en el cuestionario inglés <span class="ver">v1.28.1 · 15 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>App:</strong> la opción de situación del cuestionario decía «Solo» (español) en el modo inglés; ahora dice «Alone» (feedback del usuario). La tabla española queda igual («Solo/a»). Sin cambio de comportamiento: solo texto.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Ideas #3, #7 y #5-parcial: comparador de destinos, changelog público y feed <span class="ver">v1.28.0 · 15 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>App (idea #3):</strong> botón «Comparar destinos» en el panel de país → vista lado a lado de dos destinos por tipo de visa (estado + puntuación + nombre oficial), con selector de destino B limitado a los 36 destinos con reglas reales. Los resultados se calculan al vuelo con el MISMO motor y el MISMO perfil (componente CompareView + findEvidence intactos). i18n cmp_* EN/ES.</li>
+      <li><strong>Web (idea #7):</strong> seo/novedades.html — changelog público generado parseando VERSIONS.md (cada versión = noticia fechada con su badge). La transparencia interna, publicada tal cual.</li>
+      <li><strong>Web (idea #5, parcial):</strong> seo/feed.xml — feed Atom con las últimas 20 versiones, enlazado desde novedades y calendario («suscríbete al feed»). Las alertas por email necesitan backend: quedan para Fase 5.</li>
+      <li><strong>Estado:</strong> goldens 91 idénticos, audit PASS (MATCH 990), huecos ES 0. 68 páginas + feed.</li>
+    </ul>
+  </article>
+
   <article class="nov">
     <h2>Ideas #6, #4 y #2: metodología pública, semáforo de aperturas y checklist imprimible <span class="ver">v1.27.0 · 15 de julio de 2026</span></h2>
     <ul class="req">
@@ -364,7 +395,7 @@
   </article><ul class="req">
   </ul>
   <h2>¿Calificas tú?</h2>
-  <p>Wayfare simula tu elegibilidad para esta y otras 90 rutas auditadas según tu perfil.</p>
+  <p>Wayfare simula tu elegibilidad para esta y otras 94 rutas auditadas según tu perfil.</p>
   <a class="cta" href="../index.html">Probar el simulador →</a>
   <p class="disclaimer">Wayfare no es un asesor migratorio ni una agencia de inmigración. Esta página resume
   requisitos publicados por la fuente oficial y verificados en la fecha indicada; los montos, cupos y
