@@ -109,6 +109,9 @@ window.I18N = {
     g_profile: "Profile",
     g_simulated: "Simulated eligibility",
     g_verified_prefix: "Data checked against official government sources — last source check: ",
+    sa_eu_freedom: "Freedom of movement: as an EU/EEA citizen you can travel, live, work and study in this country without a visa.",
+    sa_trans_tasman: "Trans-Tasman arrangement: Australian and New Zealand citizens can visit, live and work in each other's country without applying for a visa in advance. Check official sources for conditions.",
+    sa_cta: "Common Travel Area: British and Irish citizens can live, work and study in each other's country without a visa.",
     g_verified_monitor: "weekly automatic monitoring",
     g_unverified_note: "Not yet audited against official sources — treat as demo guidance.",
     elg_load_error: "Eligibility engine failed to load. Please check eligibility.js.",
@@ -1112,7 +1115,11 @@ window.I18N = {
     "Applications are made through the Department of Foreign Affairs. Simulated guidance only.": "Las solicitudes se hacen a través del Department of Foreign Affairs. Solo orientación simulada.",
     "You may need to show sufficient funds for your stay.": "Puede que necesites demostrar fondos suficientes para tu estancia.",
     "A visa may be required depending on bilateral agreements.": "Puede requerirse una visa según los acuerdos bilaterales.",
+    sa_eu_freedom: "Libre circulación: como ciudadano UE/EEE puedes viajar, vivir, trabajar y estudiar en este país sin visado.",
+    sa_trans_tasman: "Acuerdo Trans-Tasman: los ciudadanos de Australia y Nueva Zelanda pueden visitar, vivir y trabajar en el país del otro sin solicitar visa por adelantado. Verifica las condiciones en fuentes oficiales.",
+    sa_cta: "Common Travel Area: los ciudadanos británicos e irlandeses pueden vivir, trabajar y estudiar en el país del otro sin visado.",
     "You may need to show sufficient funds for your stay. Check the official visa requirements for this destination.": "Puede que necesites demostrar fondos suficientes para tu estancia. Consulta los requisitos oficiales de visado de este destino.",
+
   },
 };
 

@@ -2102,11 +2102,26 @@ window.Eligibility = (function () {
      reales modeladas (COUNTRY_RULES)? Los demás usan reglas sintéticas. */
   function hasRealRules(iso) { return !!COUNTRY_RULES[iso]; }
 
+  /* v1.22.0 — convenios de acceso especial entre nacionalidad y destino.
+     Solo lectura para la UI (banner en el panel de país). Evidencia:
+     - eu_freedom: libre circulación UE/EEE (marco legal general, ya usado en el scoring).
+     - trans_tasman: INZ "Australian Resident Visa" (capturado 15-jul-2026):
+       "If you are an Australian citizen or permanent resident you can visit,
+       work and live in New Zealand". Recíproco (SCV 444) con redacción prudente.
+     - cta: Common Travel Area GB-IE (gov.uk, capturado 15-jul-2026). */
+  function specialAccess(nat, iso) {
+    if (!nat || !iso || nat === iso) return null;
+    if (inList(PASSPORT.euEea, nat) && inList(PASSPORT.euEea, iso)) return "eu_freedom";
+    if ((nat === "AU" && iso === "NZ") || (nat === "NZ" && iso === "AU")) return "trans_tasman";
+    if ((nat === "GB" && iso === "IE") || (nat === "IE" && iso === "GB")) return "cta";
+    return null;
+  }
+
   return {
     passportTier: passportTier, evaluateCountry: evaluateCountry,
     evaluateAll: evaluateAll, resolveCountry: resolveCountry,
     topRecommendations: topRecommendations, tally: tally,
-    hasRealRules: hasRealRules,
+    hasRealRules: hasRealRules, specialAccess: specialAccess,
   };
 
 })();
