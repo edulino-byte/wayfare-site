@@ -857,6 +857,7 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle }) {
   const [hoverIdx, setHoverIdx] = React.useState(null);
   const [hoverData, setHoverData] = React.useState(null);
   const [detailOpen, setDetailOpen] = React.useState(false);
+  const [compareIso, setCompareIso] = React.useState(null);
   const selRef = React.useRef(null);
   const hoverRef = React.useRef(null);
   const mousePosRef = React.useRef({ x: 0, y: 0 });
@@ -999,9 +1000,63 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle }) {
       globeRef.current.pointOfView({ lat: 20, lng: 10, altitude: 1.7 }, 900);
     }
   };
-  return /* @__PURE__ */ React.createElement("div", { className: "globe-stage" + (detailOpen ? " detail-open" : "") }, /* @__PURE__ */ React.createElement(GlobeStars, null), /* @__PURE__ */ React.createElement("div", { className: "globe-host" + (detailOpen ? " globe-host--shifted" : ""), ref: hostRef }), hoverData && !detailOpen ? /* @__PURE__ */ React.createElement("div", { className: "globe-tooltip", style: { left: hoverData.x, top: hoverData.y }, "aria-hidden": "true" }, /* @__PURE__ */ React.createElement("span", { className: "gt-flag" }, isoToFlag(hoverData.iso)), /* @__PURE__ */ React.createElement("span", { className: "gt-name" }, countryName(hoverData.iso, lang) || hoverData.name)) : null, !detailOpen ? eligError ? /* @__PURE__ */ React.createElement("div", { className: "globe-hint globe-hint--error" }, /* @__PURE__ */ React.createElement("span", { className: "pin pin--error" }), t("elg_load_error")) : !features ? /* @__PURE__ */ React.createElement("div", { className: "globe-hint" }, /* @__PURE__ */ React.createElement("span", { className: "pin" }), t("p_title"), "\u2026") : /* @__PURE__ */ React.createElement("div", { className: "globe-hint" }, /* @__PURE__ */ React.createElement("span", { className: "pin" }), t("g_click_hint")) : null, tally && !detailOpen ? /* @__PURE__ */ React.createElement("div", { className: "legend" }, /* @__PURE__ */ React.createElement("div", { className: "row" }, /* @__PURE__ */ React.createElement("span", { className: "sw", style: { background: statusColor("eligible", 1) } }), t("g_legend_eligible")), /* @__PURE__ */ React.createElement("div", { className: "row" }, /* @__PURE__ */ React.createElement("span", { className: "sw", style: { background: statusColor("partial", 1) } }), t("g_legend_partial")), /* @__PURE__ */ React.createElement("div", { className: "row" }, /* @__PURE__ */ React.createElement("span", { className: "sw", style: { background: statusColor("ineligible", 1) } }), t("g_legend_unlikely")), /* @__PURE__ */ React.createElement("div", { className: "row" }, /* @__PURE__ */ React.createElement("span", { className: "sw", style: { background: "rgba(148,163,160,0.55)" } }), t("g_legend_nodata"))) : null, selected && detailOpen ? /* @__PURE__ */ React.createElement("aside", { className: "detail-panel" }, /* @__PURE__ */ React.createElement("div", { className: "detail-panel-inner" }, /* @__PURE__ */ React.createElement("button", { className: "detail-panel-close", onClick: closeDetail, "aria-label": "Close" }, /* @__PURE__ */ React.createElement("svg", { width: "14", height: "14", viewBox: "0 0 24 24", fill: "none", "aria-hidden": "true", style: { pointerEvents: "none" } }, /* @__PURE__ */ React.createElement("path", { d: "M18 6L6 18M6 6l12 12", stroke: "currentColor", strokeWidth: "2.2", strokeLinecap: "round" }))), /* @__PURE__ */ React.createElement(CountryDetail, { t, lang, result: selected, profile }))) : null);
+  return /* @__PURE__ */ React.createElement("div", { className: "globe-stage" + (detailOpen ? " detail-open" : "") }, /* @__PURE__ */ React.createElement(GlobeStars, null), /* @__PURE__ */ React.createElement("div", { className: "globe-host" + (detailOpen ? " globe-host--shifted" : ""), ref: hostRef }), hoverData && !detailOpen ? /* @__PURE__ */ React.createElement("div", { className: "globe-tooltip", style: { left: hoverData.x, top: hoverData.y }, "aria-hidden": "true" }, /* @__PURE__ */ React.createElement("span", { className: "gt-flag" }, isoToFlag(hoverData.iso)), /* @__PURE__ */ React.createElement("span", { className: "gt-name" }, countryName(hoverData.iso, lang) || hoverData.name)) : null, !detailOpen ? eligError ? /* @__PURE__ */ React.createElement("div", { className: "globe-hint globe-hint--error" }, /* @__PURE__ */ React.createElement("span", { className: "pin pin--error" }), t("elg_load_error")) : !features ? /* @__PURE__ */ React.createElement("div", { className: "globe-hint" }, /* @__PURE__ */ React.createElement("span", { className: "pin" }), t("p_title"), "\u2026") : /* @__PURE__ */ React.createElement("div", { className: "globe-hint" }, /* @__PURE__ */ React.createElement("span", { className: "pin" }), t("g_click_hint")) : null, tally && !detailOpen ? /* @__PURE__ */ React.createElement("div", { className: "legend" }, /* @__PURE__ */ React.createElement("div", { className: "row" }, /* @__PURE__ */ React.createElement("span", { className: "sw", style: { background: statusColor("eligible", 1) } }), t("g_legend_eligible")), /* @__PURE__ */ React.createElement("div", { className: "row" }, /* @__PURE__ */ React.createElement("span", { className: "sw", style: { background: statusColor("partial", 1) } }), t("g_legend_partial")), /* @__PURE__ */ React.createElement("div", { className: "row" }, /* @__PURE__ */ React.createElement("span", { className: "sw", style: { background: statusColor("ineligible", 1) } }), t("g_legend_unlikely")), /* @__PURE__ */ React.createElement("div", { className: "row" }, /* @__PURE__ */ React.createElement("span", { className: "sw", style: { background: "rgba(148,163,160,0.55)" } }), t("g_legend_nodata"))) : null, selected && detailOpen ? /* @__PURE__ */ React.createElement("aside", { className: "detail-panel" }, /* @__PURE__ */ React.createElement("div", { className: "detail-panel-inner" }, /* @__PURE__ */ React.createElement("button", { className: "detail-panel-close", onClick: closeDetail, "aria-label": "Close" }, /* @__PURE__ */ React.createElement("svg", { width: "14", height: "14", viewBox: "0 0 24 24", fill: "none", "aria-hidden": "true", style: { pointerEvents: "none" } }, /* @__PURE__ */ React.createElement("path", { d: "M18 6L6 18M6 6l12 12", stroke: "currentColor", strokeWidth: "2.2", strokeLinecap: "round" }))), /* @__PURE__ */ React.createElement(
+    CountryDetail,
+    {
+      t,
+      lang,
+      result: selected,
+      profile,
+      onCompare: () => setCompareIso(selected.iso === "NZ" ? "AU" : "NZ")
+    }
+  ))) : null, selected && compareIso ? /* @__PURE__ */ React.createElement(
+    CompareView,
+    {
+      t,
+      lang,
+      profile,
+      isoA: selected.iso,
+      isoB: compareIso,
+      setIsoB: setCompareIso,
+      onClose: () => setCompareIso(null)
+    }
+  ) : null);
 }
-function CountryDetail({ t, lang, result, profile }) {
+function CompareView({ t, lang, profile, isoA, isoB, setIsoB, onClose }) {
+  const D = window.VISA_DATA;
+  const opciones = D.COUNTRIES.filter((c) => c.iso !== isoA && window.Eligibility.hasRealRules(c.iso)).map((c) => ({ iso: c.iso, nombre: countryName(c.iso, lang) || c.name })).sort((a, b) => a.nombre.localeCompare(b.nombre));
+  const res = window.Eligibility.evaluateAll(
+    [{ id: "a", iso: isoA, name: isoA }, { id: "b", iso: isoB, name: isoB }],
+    profile
+  );
+  const A = res.a, B = res.b;
+  const tipos = [];
+  for (const v of (A.visas || []).concat(B.visas || [])) {
+    if (!tipos.includes(v.type)) tipos.push(v.type);
+  }
+  const celda = (r, tipo) => {
+    const v = (r.visas || []).find((x) => x.type === tipo);
+    if (!v) return /* @__PURE__ */ React.createElement("div", { className: "cmp-cell cmp-cell--empty" }, "\u2014");
+    const sk = v.status === "eligible" ? "st_eligible" : v.status === "partial" ? "st_partial" : "st_ineligible";
+    return /* @__PURE__ */ React.createElement("div", { className: "cmp-cell" }, /* @__PURE__ */ React.createElement("span", { className: "cmp-pill", style: {
+      background: `rgba(${STATUS_RGB[v.status].join(",")},0.16)`,
+      color: statusColor(v.status, 1)
+    } }, /* @__PURE__ */ React.createElement("span", { className: "sw", style: { background: statusColor(v.status, 1) } }), t(sk), " \xB7 ", v.score), /* @__PURE__ */ React.createElement("span", { className: "cmp-name" }, v.officialName || t("vt_" + v.type)));
+  };
+  return /* @__PURE__ */ React.createElement("div", { className: "cmp-overlay", onClick: (e) => {
+    if (e.target === e.currentTarget) onClose();
+  } }, /* @__PURE__ */ React.createElement("div", { className: "cmp-card", role: "dialog", "aria-label": t("cmp_title") }, /* @__PURE__ */ React.createElement("button", { className: "detail-panel-close", onClick: onClose, "aria-label": "Close" }, /* @__PURE__ */ React.createElement("svg", { width: "14", height: "14", viewBox: "0 0 24 24", fill: "none", "aria-hidden": "true", style: { pointerEvents: "none" } }, /* @__PURE__ */ React.createElement("path", { d: "M18 6L6 18M6 6l12 12", stroke: "currentColor", strokeWidth: "2.2", strokeLinecap: "round" }))), /* @__PURE__ */ React.createElement("h2", { className: "cmp-title" }, t("cmp_title")), /* @__PURE__ */ React.createElement("div", { className: "cmp-grid" }, /* @__PURE__ */ React.createElement("div", { className: "cmp-head" }), /* @__PURE__ */ React.createElement("div", { className: "cmp-head" }, isoToFlag(isoA), " ", countryName(isoA, lang) || isoA), /* @__PURE__ */ React.createElement("div", { className: "cmp-head" }, /* @__PURE__ */ React.createElement(
+    "select",
+    {
+      className: "cmp-select",
+      value: isoB,
+      onChange: (e) => setIsoB(e.target.value),
+      "aria-label": t("cmp_choose")
+    },
+    opciones.map((o) => /* @__PURE__ */ React.createElement("option", { key: o.iso, value: o.iso }, isoToFlag(o.iso), " ", o.nombre))
+  )), tipos.map((tipo) => /* @__PURE__ */ React.createElement(React.Fragment, { key: tipo }, /* @__PURE__ */ React.createElement("div", { className: "cmp-row-label" }, /* @__PURE__ */ React.createElement("span", { className: "vc-icon" }, D.VISA_TYPES[tipo].icon), " ", t("vt_" + tipo)), celda(A, tipo), celda(B, tipo)))), /* @__PURE__ */ React.createElement("p", { className: "cmp-note" }, t("cmp_note"))));
+}
+function CountryDetail({ t, lang, result, profile, onCompare }) {
   function tx(value) {
     if (!value) return "";
     var translated = t(value);
@@ -1022,7 +1077,7 @@ function CountryDetail({ t, lang, result, profile }) {
     const sa = profile && window.Eligibility.specialAccess(profile.nationality, result.iso);
     if (!sa) return null;
     return /* @__PURE__ */ React.createElement("div", { className: "special-access-note" }, /* @__PURE__ */ React.createElement("svg", { width: "14", height: "14", viewBox: "0 0 24 24", fill: "none", style: { flexShrink: 0, marginTop: "2px" } }, /* @__PURE__ */ React.createElement("path", { d: "M5 12l5 5L19 7", stroke: "currentColor", strokeWidth: "2.6", strokeLinecap: "round", strokeLinejoin: "round" })), /* @__PURE__ */ React.createElement("span", null, t("sa_" + sa)));
-  })(), /* @__PURE__ */ React.createElement("div", { className: "sub-label" }, t("g_visas_here")), result.visas.map((v, i) => {
+  })(), onCompare ? /* @__PURE__ */ React.createElement("button", { type: "button", className: "cmp-open-btn", onClick: onCompare }, /* @__PURE__ */ React.createElement("svg", { width: "12", height: "12", viewBox: "0 0 24 24", fill: "none", "aria-hidden": "true" }, /* @__PURE__ */ React.createElement("path", { d: "M8 3v18M16 3v18M3 8h5M3 16h5M16 8h5M16 16h5", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round" })), t("cmp_btn")) : null, /* @__PURE__ */ React.createElement("div", { className: "sub-label" }, t("g_visas_here")), result.visas.map((v, i) => {
     const vStatusKey = v.status === "eligible" ? "st_eligible" : v.status === "partial" ? "st_partial" : "st_ineligible";
     return /* @__PURE__ */ React.createElement("div", { className: "visa-card", key: v.type + i }, /* @__PURE__ */ React.createElement("div", { className: "vc-head" }, /* @__PURE__ */ React.createElement("span", { className: "vc-icon" }, window.VISA_DATA.VISA_TYPES[v.type].icon), /* @__PURE__ */ React.createElement("span", { className: "vc-name" }, v.officialName ? tx(v.officialName) : t("vt_" + v.type)), /* @__PURE__ */ React.createElement("span", { className: "vc-stat", style: { background: statusColor(v.status, 1) } })), /* @__PURE__ */ React.createElement("div", { className: "vc-meta" }, /* @__PURE__ */ React.createElement("span", { className: "vc-meta-status", style: { color: statusColor(v.status, 1) } }, t(vStatusKey)), /* @__PURE__ */ React.createElement("span", { className: "vc-meta-score" }, t("g_score"), ": ", v.score)), v.matched && v.matched.length ? /* @__PURE__ */ React.createElement("details", { className: "vc-acc", open: secOpen("matched", v) }, /* @__PURE__ */ React.createElement("summary", { className: "vc-acc-sum" }, /* @__PURE__ */ React.createElement("span", { className: "vc-acc-label" }, t("g_matched")), /* @__PURE__ */ React.createElement("span", { className: "vc-acc-count" }, v.matched.length)), /* @__PURE__ */ React.createElement("div", { className: "vc-acc-body vc-matched" }, v.matched.map((m, mi) => /* @__PURE__ */ React.createElement(
       EvidenceRow,

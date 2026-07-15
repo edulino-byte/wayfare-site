@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Wayfare — novedades de reglas de visas</title>
+  <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
+  <link rel="self" href="https://edulino-byte.github.io/wayfare-site/seo/feed.xml"/>
+  <id>https://edulino-byte.github.io/wayfare-site/seo/feed.xml</id>
+  <updated>2026-07-15T09:00:00Z</updated>
+
+  <entry>
+    <title>Ideas #6, #4 y #2: metodología pública, semáforo de aperturas y checklist imprimible (v1.27.0)</title>
+    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.27.0</id>
+    <updated>2026-07-15T09:00:00Z</updated>
+    <summary>**Web (ideas #6/#4/#2 del backlog):** — · **«Cómo verificamos»** (seo/como-verificamos.html): pipeline de 7 pasos + números VIVOS leídos del propio audit al generar (91 rutas, 36 destinos, 811 hechos, MATCH 990, 0 conflictos, 59 en revisión) + sección honesta «lo que NO hacemos». — · **Calendario de aperturas** (seo/calendario-aperturas.html): semáforo generado desde los hechos opening_status capturados (solo fechas con fuente): PL 15-jul (abierta ya), AR 24-sep, PE 1-oct, BR</summary>
+  </entry>
+
+  <entry>
+    <title>"Modo evidencia" (idea #1): la auditoría, visible en la app (v1.26.0)</title>
+    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.26.0</id>
+    <updated>2026-07-15T09:00:00Z</updated>
+    <summary>**App:** cada requisito del panel de país que proviene de un hecho auditado muestra ahora un botoncito que despliega el EXTRACTO LITERAL de la página oficial capturada, el enlace a la fuente y la fecha de captura (y la marca «en revisión» si el hecho no está plenamente verificado). El casado línea↔hecho usa los MISMOS tokens appMatch que valida la auditoría. Nuevo componente EvidenceRow + findEvidence en ui/Globe.jsx; estilos ev-* en screens.css; claves i18n ev_* EN/ES. — **D</summary>
+  </entry>
+
+  <entry>
+    <title>Idea #20 CERRADA: Australia turista con listas oficiales eVisitor/ETA (v1.25.0)</title>
+    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.25.0</id>
+    <updated>2026-07-15T09:00:00Z</updated>
+    <summary>**App:** el turista de Australia deja el camino único "subclass 600 para todos" y distingue los TRES caminos oficiales con listas capturadas 15-jul-2026 vía navegador del usuario (immi.homeaffairs bloquea el fetch automatizado): AU_EVISITOR (36 pasaportes europeos, eVisitor 651 gratuita, 3 meses por entrada) y AU_ETA (añade BN CA HK JP MY MT SG KR TW US y GB-BNO, ETA 601 vía app). Nueva Zelanda: acuerdo Trans-Tasman (SCV 444 a la llegada) con redacción de cobertura — sin fuen</summary>
+  </entry>
+
+  <entry>
+    <title>Idea #20: los tiers de turista sustituidos por listas oficiales (NZ/GB/CA) (v1.24.0)</title>
+    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.24.0</id>
+    <updated>2026-07-15T09:00:00Z</updated>
+    <summary>**App:** los turistas de NZ, GB y CA dejan la estimación tier del prototipo y usan LISTAS OFICIALES capturadas 15-jul-2026: NZ_VISA_WAIVER (44, INZ), GB_VISA_NATIONALS (16 del selector + 7 heredados, gov.uk Appendix Visitor) y CA_ETA_EXEMPT/CONDITIONAL (40+6, canada.ca — incl. el matiz de la eTA condicionada de AR/BR/CR/MX/PA/UY por aire con visa previa). Casos especiales: AU→NZ (sin visa ni NZeTA) y US→CA (sin visa ni eTA). Corrección de banda: argentino→Canadá pasa de "inel</summary>
+  </entry>
+
+  <entry>
+    <title>12 pasaportes que faltaban en el selector (v1.23.0)</title>
+    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.23.0</id>
+    <updated>2026-07-15T09:00:00Z</updated>
+    <summary>**Hallazgo (pregunta del usuario "¿están todos los pasaportes?"):** el selector ofrecía 56 pasaportes pero omitía 12 que el motor YA modelaba: AU, NZ, KR, TW, HK, IL, RO, SK, SI, MT, AD, LI. Un australiano no podía ni elegir su pasaporte en la app que modela su Trans-Tasman. — **App:** añadidos a SUPPORTED_PROFILE_COUNTRY_CODES (`data/mock.js`) con tiers coherentes con el motor; nombres EN en el fallback del cuestionario y nombres ES completados en COUNTRY_NAMES (de paso: tod</summary>
+  </entry>
+
+  <entry>
+    <title>Banners de acceso especial (2ª ronda de feedback de usuarios) (v1.22.0)</title>
+    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.22.0</id>
+    <updated>2026-07-15T09:00:00Z</updated>
+    <summary>**App:** banner destacado en el panel de país cuando la nacionalidad tiene un convenio de acceso especial con el destino — 3 convenios: libre circulación UE/EEE, Trans-Tasman (AU↔NZ) y Common Travel Area (GB↔IE). Nuevo helper `Eligibility.specialAccess(nat, iso)` (solo lectura). — **Evidencia capturada:** INZ "Australian Resident Visa" ("you can visit, work and live in New Zealand", directo 200) y gov.uk CTA (directo 200) en checkpoints/wave2-europa/pages/. — **Sin cambios de</summary>
+  </entry>
+
+  <entry>
+    <title>Correcciones de usuarios reales (idea #12 en acción) (v1.21.0)</title>
+    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.21.0</id>
+    <updated>2026-07-15T09:00:00Z</updated>
+    <summary>**Feedback 1 — colores del globo poco visibles:** opacidades de los países subidas (base 0.42→0.62, hover 0.58→0.75, seleccionado 0.72→0.88) en `ui/Globe.jsx`. — **Feedback 2 — visas preseleccionadas confusas:** el cuestionario ahora muestra los tipos de visa SIN seleccionar (`visaTypes: []` por defecto en `ui/App.jsx`); el usuario elige. Si no elige ninguna, se evalúan todas (comportamiento del motor sin cambios). Pista actualizada bajo el selector (EN/ES). — **Sin cambios d</summary>
+  </entry>
+
+  <entry>
+    <title>Europa tanda 2: WHV reales de Alemania y Francia + Irlanda (36º destino) (v1.20.0)</title>
+    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.20.0</id>
+    <updated>2026-07-15T09:00:00Z</updated>
+    <summary>**Alemania** (FAQ oficial Auswärtiges Amt, directo 200): DE_YM con 11 socios (AR AU BR CL HK IL JP KR NZ TW UY), 18-30 (KR hasta 34), 12 meses. México NO está (verificado — la memoria engaña). — **Francia** (france-visas, snapshot archive.org oct-2025; directo 403): FR_YM con 16 socios, 8 latinoamericanos (AR BR CL CO EC MX PE UY), 18-30 (AR/AU/CA hasta 35), propósito turístico-cultural. — **Irlanda** (ISD oficial, directo 200): destino nuevo NO-Schengen — WHA con 11 países (</summary>
+  </entry>
+
+  <entry>
+    <title>EUROPA: los 27 miembros Schengen restantes como destinos (v1.19.0)</title>
+    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.19.0</id>
+    <updated>2026-07-15T09:00:00Z</updated>
+    <summary>**App:** fábrica `makeSchengenRules(iso)` para AT BE BG CH CZ DE DK EE FI FR GR HR HU IS IT LI LT LU LV MT NL NO PL RO SE SI SK — turista Schengen compartido (reutiliza el modelo auditado de ES: regla 90/180, fuente Comisión Europea), trabajo con libre circulación UE/EEE y patrocinio genérico para no comunitarios, student conservador (tope 68), working holiday y nómada digital con redacción prudente "aún no verificado" (sin negativas absolutas — lección PT). Irlanda queda FUE</summary>
+  </entry>
+
+  <entry>
+    <title>Wave 2 rematada: rutas de refuerzo JP student y US work (v1.18.0)</title>
+    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.18.0</id>
+    <updated>2026-07-14T09:00:00Z</updated>
+    <summary>**Datos:** +2 rutas de refuerzo — JP.student.coe (Study in Japan oficial: COE + evidencia de fondos) y US.work.temporary (travel.state.gov: petición aprobada + H-1B specialty occupation) → **61 rutas**, hash `0ca439bd…`. Audit PASS exacto: MATCH 878→886, APP_DECISION 72→74, 0-0-0. Sin cambios de app (la lógica ya emitía esas líneas; ahora tienen respaldo auditado). — **JP nómada digital:** intentadas TODAS las vías legítimas (curl 403, archive.org sin snapshot útil, save-now </summary>
+  </entry>
+
+  <entry>
+    <title>Wave 2: EE.UU. como destino nuevo (8º destino) (v1.17.0)</title>
+    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.17.0</id>
+    <updated>2026-07-14T09:00:00Z</updated>
+    <summary>**App:** nuevo `COUNTRY_RULES.US` — turista por Visa Waiver Program (41 países con ESTA y 90 días; Chile único LatAm) o visa B-1/B-2 con entrevista para el resto; F-1 con I-20 (SEVP), tope partial; trabajo con patrocinio/loterías (tope 60); sin working holiday (J-1 como alternativa señalada) y sin visa de nómada digital — afirmaciones negativas verdaderas para EE.UU., registradas como appDecision. — **Datos:** +2 rutas US → **59 rutas**, hash `044b0999…`. travel.state.gov res</summary>
+  </entry>
+
+  <entry>
+    <title>Wave 2: JAPÓN como destino nuevo (7º destino) (v1.16.0)</title>
+    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.16.0</id>
+    <updated>2026-07-14T09:00:00Z</updated>
+    <summary>**App:** nuevo `COUNTRY_RULES.JP` — working holiday con tabla oficial JP_WHV (30 socios del selector; cupos oficiales: ES 700, AR 400, CL 200, UY 100, CA 6.283, KR 10.000, GB 6.000…), turista por exención (74 países, 90 días; aviso ePassport a BR/PE/PY/PA/RS), student/work conservadores con COE (tope partial), nómada digital con cobertura y sin cifras (fuente ISA bloqueada y sin snapshot — REVIEW). Japón se colorea en el globo automáticamente (hasRealRules). — **Método nuevo:</summary>
+  </entry>
+
+  <entry>
+    <title>España auditada: LOS 6 DESTINOS COMPLETOS (Fase ES/PT cerrada) (v1.15.0)</title>
+    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.15.0</id>
+    <updated>2026-07-14T09:00:00Z</updated>
+    <summary>**CORRECCIÓN** (`logic/eligibility.js`): la app decía "España no opera Working Holiday" — FALSO. Evidencia oficial (Embajada en Tokio): programa con Japón desde 1-jul-2017 + acuerdos con Australia, Canadá y Nueva Zelanda. ES_YM = {JP, AU, CA, NZ}, 18-30, tope partial (fuente de 2017 y condiciones por país no capturadas); resto de nacionalidades: redacción prudente en vez del "no existe" absoluto. Corea/Argentina citados por terceros — REVIEW hasta fuente oficial. — **DNV con </summary>
+  </entry>
+
+  <entry>
+    <title>Portugal auditado: corrección mayor de youth mobility (Fase ES/PT) (v1.14.0)</title>
+    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.14.0</id>
+    <updated>2026-07-14T09:00:00Z</updated>
+    <summary>**CORRECCIÓN MAYOR** (`logic/eligibility.js`): la lista Working Holiday de Portugal del prototipo (AU CA NZ AR BR UY CO EC BO PY) era una suposición y estaba mal. Tabla oficial PT_YM con los 9 memorandos vigentes (vistos.mne.gov.pt, capturado 14-jul): AR 18-30/100 · AU 18-31/500 · CA 18-35/600 · CL 18-30 · JP 18-30 · NZ 18-30/50 · PE 18-31/400+grado · KR 18-34/200 · US piloto/400 (sin edad publicada → tope partial). Corrige 5 falsos negativos (CL JP PE KR US) y 6 falsos posit</summary>
+  </entry>
+
+  <entry>
+    <title>Inglés en niveles CEFR (A1–C2) (v1.13.0)</title>
+    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.13.0</id>
+    <updated>2026-07-14T09:00:00Z</updated>
+    <summary>**App:** el selector de inglés pasa de Básico/Intermedio/Avanzado/Nativo a los 6 niveles CEFR/MCER (A1–C2) con pista explicativa. `data/mock.js`: lista ENGLISH = a1..c2. `logic/eligibility.js`: escala interna intacta + normalizador conservador (a1/a2→basic, b1→intermediate, b2/c1→advanced, c2→native); los valores antiguos siguen aceptándose. Perfil por defecto: b2 (equivalente al antiguo "advanced"). — **Prueba de equivalencia:** los 6 pares CEFR↔escala antigua producen salid</summary>
+  </entry>
+
+  <entry>
+    <title>Cuestionario sin campos de dinero (v1.12.0)</title>
+    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.12.0</id>
+    <updated>2026-07-14T09:00:00Z</updated>
+    <summary>**App:** `ui/Questionnaire.jsx` — eliminados los deslizadores de ahorros e ingresos mensuales (el dinero no puntúa desde el motor v2.1; solo generaba avisos informativos). Se conserva "¿Trabajas en remoto?" porque sí condiciona las visas de nómada digital. `i18n/strings.js`: sección 03 renombrada a "Idioma y forma de trabajo" (EN/ES). — **Prueba de no-interferencia:** las 49 fotos doradas quedaron byte-idénticas — los resultados de visas no cambian. Petición del usuario confi</summary>
+  </entry>
+
+  <entry>
+    <title>Globo: solo los destinos con reglas reales van coloreados (v1.11.0)</title>
+    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.11.0</id>
+    <updated>2026-07-14T09:00:00Z</updated>
+    <summary>**App:** `ui/Globe.jsx` — los países sintéticos (y los no listados) dejan de colorearse por elegibilidad simulada: ahora tinte neutro apagado. Solo AU/NZ/GB/CA/ES/PT (reglas modeladas reales) muestran verde/ámbar/terracota. Leyenda: nueva entrada "Aún sin datos" (EN/ES). Siguen siendo clicables (el panel ya mostraba su nota de simulación). Sin cambios de scoring. — **Motivo:** petición del usuario 14-jul-2026 — honestidad visual: que el color del mapa refleje solo lo que Wayf</summary>
+  </entry>
+
+  <entry>
+    <title>Analítica sin cookies (Fase 3 completada) (v1.10.0)</title>
+    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.10.0</id>
+    <updated>2026-07-14T09:00:00Z</updated>
+    <summary>**App:** `index.html` — contador GoatCounter (`edulino.goatcounter.com`), sin cookies ni datos personales; no cuenta visitas desde localhost. También en `demo.html` y en las 46 páginas de seo/ (vía generador). Sin cambios de lógica ni UI. — **Beta pública EN VIVO** desde v1.9.0: https://edulino-byte.github.io/wayfare-site/ (GitHub Pages; repo privado edulino-byte/wayfare como respaldo; deploy con guardia de tests vía `tools/deploy/deployPages.sh`). Fase 3 completada con esta </summary>
+  </entry>
+
+  <entry>
+    <title>Re-captura de Australia con navegador real (Fase 2) (v1.9.0)</title>
+    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.9.0</id>
+    <updated>2026-07-13T09:00:00Z</updated>
+    <summary>**Método:** Chrome del usuario vía extensión Claude (la web de AU bloquea robots: cascarón a curl, Access Denied a headless, archive.org hereda el cascarón). Sin evasión de defensas — sesión real. Evidencia: 4 páginas renderizadas (150KB texto) en `checkpoints/au-recapture-2026-07/pages/` (vía portapapeles; Chrome bloqueó descargas automatizadas). — **Verificación:** 67 hechos de las 4 rutas AU cotejados en vivo. — · **Tarifas subieron el 1-jul-2026** (drift de dinero real): </summary>
+  </entry>
+
+  <entry>
+    <title>Wave 1 NZ completa: las 33 nacionalidades WHV auditadas (Fase 2) (v1.8.0)</title>
+    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.8.0</id>
+    <updated>2026-07-13T09:00:00Z</updated>
+    <summary>**Datos:** +13 rutas NZ.whv (AT BR CA CL HR IE JP LU LV MX PT US UY) → **45 rutas**, hash `f05472d7…`. 232 hechos oficiales nuevos, cada uno con extracto VERBATIM de la página INZ y tokens appMatch validados contra la salida en vivo (doble puerta). Audit PASS con predicción exacta: MATCH 547→805, REVIEW 43→56, DEFERRED 70→99, 0-0-0. Cupos verificados número a número (AT 100, BR 300, CL 940, HR 100, LU 50, LV 100, MX 200, PT 50, UY 200); CA/IE/JP/US sin campo visible = NO_CAP </summary>
+  </entry>
+</feed>

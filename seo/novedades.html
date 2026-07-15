@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Novedades de reglas de visas — changelog público | Wayfare</title>
+<meta name="description" content="Registro público de cada cambio de datos y reglas de Wayfare: 27 versiones con fecha, qué cambió y por qué. Transparencia total." />
+<style>
+  :root { --bg:#0c1a18; --card:#122622; --line:#1f3a35; --ink:#e8f1ee; --dim:#9db8b1; --acc:#39b48e; --amber:#d9b26a; }
+  * { margin:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--ink); font:16px/1.65 -apple-system,"Segoe UI",Roboto,sans-serif; }
+  main { max-width:760px; margin:0 auto; padding:48px 20px 80px; }
+  h1 { font-size:30px; line-height:1.25; margin-bottom:10px; }
+  h2 { font-size:19px; margin:36px 0 12px; color:var(--acc); }
+  .verified { display:inline-flex; gap:7px; align-items:center; background:rgba(57,180,142,.12);
+    border:1px solid rgba(57,180,142,.4); color:var(--acc); border-radius:999px; padding:5px 13px;
+    font-size:13px; font-weight:600; margin:14px 0 6px; }
+  .apertura { background:rgba(217,178,106,.1); border:1px solid rgba(217,178,106,.45); color:var(--amber);
+    border-radius:10px; padding:11px 15px; font-size:14.5px; margin:18px 0; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; margin:20px 0; }
+  .cell { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:13px 15px; }
+  .cell .k { font-size:11.5px; text-transform:uppercase; letter-spacing:.07em; color:var(--dim); }
+  .cell .v { font-size:17px; font-weight:700; margin-top:3px; }
+  ul.req { list-style:none; display:grid; gap:9px; }
+  ul.req li { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:11px 14px; font-size:14.5px; }
+  ul.req strong { color:var(--acc); font-weight:600; }
+  a { color:var(--acc); }
+  .cta { display:inline-block; background:var(--acc); color:#06231b; font-weight:700; text-decoration:none;
+    border-radius:10px; padding:12px 22px; margin-top:10px; }
+  .disclaimer { margin-top:40px; padding-top:18px; border-top:1px solid var(--line); color:var(--dim); font-size:13px; }
+  .print-btn { display:inline-block; margin-left:10px; background:transparent; border:1px solid var(--acc);
+    color:var(--acc); border-radius:999px; padding:5px 13px; font-size:13px; font-weight:600; cursor:pointer; }
+  .print-btn:hover { background:rgba(57,180,142,.12); }
+  table.cal { width:100%; border-collapse:collapse; margin:18px 0; font-size:14.5px; }
+  table.cal th { text-align:left; font-size:11.5px; text-transform:uppercase; letter-spacing:.07em;
+    color:var(--dim); padding:8px 10px; border-bottom:1px solid var(--line); }
+  table.cal td { padding:10px; border-bottom:1px solid var(--line); }
+  .sem { display:inline-block; padding:3px 10px; border-radius:999px; font-size:12.5px; font-weight:700; }
+  .sem-open { background:rgba(57,180,142,.15); color:var(--acc); border:1px solid rgba(57,180,142,.5); }
+  .sem-soon { background:rgba(217,178,106,.12); color:var(--amber); border:1px solid rgba(217,178,106,.5); }
+  .sem-later { background:rgba(157,184,177,.1); color:var(--dim); border:1px solid var(--line); }
+  ol.pipe { display:grid; gap:9px; margin:16px 0 6px 0; padding-left:0; counter-reset:paso; list-style:none; }
+  ol.pipe li { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:11px 14px;
+    font-size:14.5px; counter-increment:paso; }
+  ol.pipe li::before { content:counter(paso) ". "; color:var(--acc); font-weight:700; }
+  article.nov h2 { margin-top:30px; color:var(--ink); font-size:17px; }
+  article.nov .ver { display:inline-block; margin-left:8px; font-size:12px; font-weight:600;
+    color:var(--acc); background:rgba(57,180,142,.12); border:1px solid rgba(57,180,142,.4);
+    border-radius:999px; padding:2px 10px; vertical-align:2px; }
+  article.nov ul.req { margin-top:10px; }
+  article.nov ul.req li { font-size:13.5px; color:var(--dim); }
+  @media print {
+    :root { --bg:#fff; --card:#fff; --line:#bbb; --ink:#111; --dim:#444; --acc:#0a6b52; --amber:#7a5d18; }
+    body { background:#fff; }
+    .cta, .print-btn { display:none; }
+    main { padding:0; max-width:100%; }
+    ul.req li { break-inside:avoid; border-color:#bbb; }
+    ul.req li::before { content:"☐  "; color:#0a6b52; font-weight:700; }
+  }
+  .src { font-size:13.5px; color:var(--dim); }
+  .idx { list-style:none; display:grid; gap:8px; }
+  .idx li { background:var(--card); border:1px solid var(--line); border-radius:10px; }
+  .idx a { display:block; padding:11px 15px; text-decoration:none; }
+</style>
+</head>
+<body>
+<main>
+  <p class="src"><a href="index.html" style="text-decoration:none">Wayfare</a> · datos de visas verificados contra fuentes oficiales</p>
+  <h1>Novedades de reglas de visas</h1>
+  <p>Cada cambio de datos o de reglas queda registrado aquí con su versión y su fecha — el mismo registro interno que usamos para poder volver atrás, publicado tal cual. <a href="feed.xml">Suscríbete al feed</a> para enterarte cuando cambie una tarifa, un cupo o una fecha de apertura.</p>
+  <div class="verified">✓ Fuentes revisadas por última vez: 15 de julio de 2026</div><button class="print-btn" onclick="window.print()" title="Imprime o guarda como PDF tu checklist de esta ruta">🖨 Guardar checklist (PDF)</button>
+  
+  
+  <h2>Historial completo</h2>
+  <ul class="req">
+        </ul>
+  <article class="nov">
+    <h2>Ideas #6, #4 y #2: metodología pública, semáforo de aperturas y checklist imprimible <span class="ver">v1.27.0 · 15 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>Web (ideas #6/#4/#2 del backlog):</strong></li>
+      <li>· <strong>«Cómo verificamos»</strong> (seo/como-verificamos.html): pipeline de 7 pasos + números VIVOS leídos del propio audit al generar (91 rutas, 36 destinos, 811 hechos, MATCH 990, 0 conflictos, 59 en revisión) + sección honesta «lo que NO hacemos».</li>
+      <li>· <strong>Calendario de aperturas</strong> (seo/calendario-aperturas.html): semáforo generado desde los hechos opening_status capturados (solo fechas con fuente): PL 15-jul (abierta ya), AR 24-sep, PE 1-oct, BR 8-oct, CL 15-oct, UY 17-nov — cada fila con enlace a guía y fuente.</li>
+      <li>· <strong>Checklist imprimible</strong>: botón «🖨 Guardar checklist (PDF)» en todas las guías + hoja de estilos de impresión (fondo blanco, casillas ☐ por requisito, sin botones/CTA). Ambas páginas nuevas entran en el índice (grupo «Wayfare») y el sitemap (69 URLs).</li>
+      <li><strong>App:</strong> la nota «datos cotejados…» del panel enlaza ahora a «cómo verificamos» (i18n g_method_link EN/ES + estilo .method-link). Único cambio de app de esta versión.</li>
+      <li><strong>Estado:</strong> motor intacto (goldens 91 idénticos), audit PASS (MATCH 990), huecos ES 0.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>"Modo evidencia" (idea #1): la auditoría, visible en la app <span class="ver">v1.26.0 · 15 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>App:</strong> cada requisito del panel de país que proviene de un hecho auditado muestra ahora un botoncito que despliega el EXTRACTO LITERAL de la página oficial capturada, el enlace a la fuente y la fecha de captura (y la marca «en revisión» si el hecho no está plenamente verificado). El casado línea↔hecho usa los MISMOS tokens appMatch que valida la auditoría. Nuevo componente EvidenceRow + findEvidence en ui/Globe.jsx; estilos ev-* en screens.css; claves i18n ev_* EN/ES.</li>
+      <li><strong>Datos:</strong> nuevo data/evidence.js GENERADO por tools/build/genEvidence.mjs desde sources.json (59 rutas de la app, 816 hechos con extracto+URL+fecha, ~185 KB; NO editar a mano — se regenera en cada build). Rutas por-nacionalidad (NZ WHV) etiquetadas para no cruzar evidencia.</li>
+      <li><strong>Estado:</strong> motor intacto (goldens 91 idénticos), audit PASS sin cambios (MATCH 990). Convierte la disciplina de auditoría interna en argumento de confianza visible (idea #1).</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Idea #20 CERRADA: Australia turista con listas oficiales eVisitor/ETA <span class="ver">v1.25.0 · 15 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>App:</strong> el turista de Australia deja el camino único "subclass 600 para todos" y distingue los TRES caminos oficiales con listas capturadas 15-jul-2026 vía navegador del usuario (immi.homeaffairs bloquea el fetch automatizado): AU_EVISITOR (36 pasaportes europeos, eVisitor 651 gratuita, 3 meses por entrada) y AU_ETA (añade BN CA HK JP MY MT SG KR TW US y GB-BNO, ETA 601 vía app). Nueva Zelanda: acuerdo Trans-Tasman (SCV 444 a la llegada) con redacción de cobertura — sin fuente capturable, REVIEW. El resto: Visitor visa 600 (sin lista cerrada). Puntuaciones: NZ 62 · eVisitor 58 · ETA 56 · 600 48 (todas partial, tope 68 se mantiene). officialName → "eVisitor (651) / ETA (601) / Visitor visa (600)", ruta → au_visitor_entry.</li>
+      <li><strong>Datos:</strong> AU.tourist.subclass_600 con 4 hechos oficiales nuevos (listas verbatim + gratis/ 3 meses + app ETA), 1 uncertainFact (Trans-Tasman, REVIEW) y 5 probes (GB/ES/US/AR/NZ). Evidencia en tier-audit/pages/au-65*-eligible.txt. Apply con hash gate + backup.</li>
+      <li><strong>Estado:</strong> audit PASS — MATCH 990 (+4), REVIEW 59 (+1), 0 conflictos, 91 rutas. Goldens 91 regenerados (solo cambia full_AU_DE25 turista 65→58, sigue partial). Huecos ES: 0. Con esto la idea #20 queda cerrada: NINGÚN turista usa ya el tier del prototipo.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Idea #20: los tiers de turista sustituidos por listas oficiales (NZ/GB/CA) <span class="ver">v1.24.0 · 15 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>App:</strong> los turistas de NZ, GB y CA dejan la estimación tier del prototipo y usan LISTAS OFICIALES capturadas 15-jul-2026: NZ_VISA_WAIVER (44, INZ), GB_VISA_NATIONALS (16 del selector + 7 heredados, gov.uk Appendix Visitor) y CA_ETA_EXEMPT/CONDITIONAL (40+6, canada.ca — incl. el matiz de la eTA condicionada de AR/BR/CR/MX/PA/UY por aire con visa previa). Casos especiales: AU→NZ (sin visa ni NZeTA) y US→CA (sin visa ni eTA). Corrección de banda: argentino→Canadá pasa de "ineligible" a parcial (tiene vía real).</li>
+      <li><strong>Datos:</strong> 3 rutas de turista parcheadas (probes + hechos re-anclados; 3 REVIEWs históricos resueltos, incl. el eta_vs_trv de 10M) → hash <code>86efff96…</code>. Audit PASS: MATCH 982→986, REVIEW 61→58, 0-0-0.</li>
+      <li><strong>Suite:</strong> fotos regeneradas deliberadamente (12 casos de NZ/GB/CA con la línea turística nueva).</li>
+      <li><strong>Pendiente:</strong> AU turista sigue tier-based (immi bloqueado; documented). JP/US ya eran de lista.</li>
+      <li><strong>Volver aquí:</strong> <code>git checkout v1.24.0</code>.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>12 pasaportes que faltaban en el selector <span class="ver">v1.23.0 · 15 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>Hallazgo (pregunta del usuario "¿están todos los pasaportes?"):</strong> el selector ofrecía 56 pasaportes pero omitía 12 que el motor YA modelaba: AU, NZ, KR, TW, HK, IL, RO, SK, SI, MT, AD, LI. Un australiano no podía ni elegir su pasaporte en la app que modela su Trans-Tasman.</li>
+      <li><strong>App:</strong> añadidos a SUPPORTED_PROFILE_COUNTRY_CODES (<code>data/mock.js</code>) con tiers coherentes con el motor; nombres EN en el fallback del cuestionario y nombres ES completados en COUNTRY_NAMES (de paso: toda Europa/LatAm que faltaba en la tabla ES).</li>
+      <li><strong>Pendiente registrado:</strong> auditoría de las listas tier contra exenciones oficiales (NZeTA/eTA/ETA/GB) — los tiers siguen siendo estimación del prototipo.</li>
+      <li><strong>Sin cambios de scoring</strong> (el motor usa sus propias listas PASSPORT.tier1/2, intactas).</li>
+      <li><strong>Volver aquí:</strong> <code>git checkout v1.23.0</code>.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Banners de acceso especial (2ª ronda de feedback de usuarios) <span class="ver">v1.22.0 · 15 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>App:</strong> banner destacado en el panel de país cuando la nacionalidad tiene un convenio de acceso especial con el destino — 3 convenios: libre circulación UE/EEE, Trans-Tasman (AU↔NZ) y Common Travel Area (GB↔IE). Nuevo helper <code>Eligibility.specialAccess(nat, iso)</code> (solo lectura).</li>
+      <li><strong>Evidencia capturada:</strong> INZ "Australian Resident Visa" ("you can visit, work and live in New Zealand", directo 200) y gov.uk CTA (directo 200) en checkpoints/wave2-europa/pages/.</li>
+      <li><strong>Sin cambios de scoring</strong> — el banner es informativo; fotos doradas intactas.</li>
+      <li><strong>Volver aquí:</strong> <code>git checkout v1.22.0</code>.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Correcciones de usuarios reales (idea #12 en acción) <span class="ver">v1.21.0 · 15 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>Feedback 1 — colores del globo poco visibles:</strong> opacidades de los países subidas (base 0.42→0.62, hover 0.58→0.75, seleccionado 0.72→0.88) en <code>ui/Globe.jsx</code>.</li>
+      <li><strong>Feedback 2 — visas preseleccionadas confusas:</strong> el cuestionario ahora muestra los tipos de visa SIN seleccionar (<code>visaTypes: []</code> por defecto en <code>ui/App.jsx</code>); el usuario elige. Si no elige ninguna, se evalúan todas (comportamiento del motor sin cambios). Pista actualizada bajo el selector (EN/ES).</li>
+      <li><strong>Sin cambios de scoring</strong> — fotos doradas intactas (los tests usan perfiles explícitos).</li>
+      <li><strong>Volver aquí:</strong> <code>git checkout v1.21.0</code>.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Europa tanda 2: WHV reales de Alemania y Francia + Irlanda (36º destino) <span class="ver">v1.20.0 · 15 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>Alemania</strong> (FAQ oficial Auswärtiges Amt, directo 200): DE_YM con 11 socios (AR AU BR CL HK IL JP KR NZ TW UY), 18-30 (KR hasta 34), 12 meses. México NO está (verificado — la memoria engaña).</li>
+      <li><strong>Francia</strong> (france-visas, snapshot archive.org oct-2025; directo 403): FR_YM con 16 socios, 8 latinoamericanos (AR BR CL CO EC MX PE UY), 18-30 (AR/AU/CA hasta 35), propósito turístico-cultural.</li>
+      <li><strong>Irlanda</strong> (ISD oficial, directo 200): destino nuevo NO-Schengen — WHA con 11 países (AD AR AU CA CL HK JP NZ KR US TW), plazas limitadas, vía DFA; edades/cupos por país sin capturar → sin puntuar edad y tope partial. Turista con régimen propio (nota no-Schengen); resto conservador.</li>
+      <li><strong>Datos:</strong> +3 rutas WHV → <strong>91 rutas</strong>, hash <code>d83201d0…</code>. Audit PASS exacto: MATCH 967→982, APP_DECISION 101→102, 0-0-0.</li>
+      <li><strong>Suite:</strong> 83→91 casos dorados. SEO: +3 guías WHV → 63.</li>
+      <li><strong>Volver aquí:</strong> <code>git checkout v1.20.0</code>.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>EUROPA: los 27 miembros Schengen restantes como destinos <span class="ver">v1.19.0 · 15 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>App:</strong> fábrica <code>makeSchengenRules(iso)</code> para AT BE BG CH CZ DE DK EE FI FR GR HR HU IS IT LI LT LU LV MT NL NO PL RO SE SI SK — turista Schengen compartido (reutiliza el modelo auditado de ES: regla 90/180, fuente Comisión Europea), trabajo con libre circulación UE/EEE y patrocinio genérico para no comunitarios, student conservador (tope 68), working holiday y nómada digital con redacción prudente "aún no verificado" (sin negativas absolutas — lección PT). Irlanda queda FUERA (no es Schengen; tendrá fase propia con su WHV). <strong>Bug corregido de paso:</strong> evaluateAll mandaba los países fuera de la lista curada directo al generador sintético sin consultar COUNTRY_RULES (CH/PL salían sintéticos).</li>
+      <li><strong>Datos:</strong> +27 rutas {ISO}.tourist.schengen (misma fuente auditada, mvp:false) → <strong>88 rutas</strong>, hash <code>e66aa3ea…</code>. Audit PASS exacto: MATCH 886→967, APP_DECISION 74→101, 0-0-0.</li>
+      <li><strong>Globo:</strong> ~27 países europeos más se colorean (decisión del usuario 15-jul, supersede la opción A del 14-jul); panel dato-vivo verde por su ruta turística auditada.</li>
+      <li><strong>Suite:</strong> 76→83 casos dorados. Pendiente tanda 2: WHV reales de FR/DE + Irlanda completa.</li>
+      <li><strong>Volver aquí:</strong> <code>git checkout v1.19.0</code>.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Wave 2 rematada: rutas de refuerzo JP student y US work <span class="ver">v1.18.0 · 14 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>Datos:</strong> +2 rutas de refuerzo — JP.student.coe (Study in Japan oficial: COE + evidencia de fondos) y US.work.temporary (travel.state.gov: petición aprobada + H-1B specialty occupation) → <strong>61 rutas</strong>, hash <code>0ca439bd…</code>. Audit PASS exacto: MATCH 878→886, APP_DECISION 72→74, 0-0-0. Sin cambios de app (la lógica ya emitía esas líneas; ahora tienen respaldo auditado).</li>
+      <li><strong>JP nómada digital:</strong> intentadas TODAS las vías legítimas (curl 403, archive.org sin snapshot útil, save-now 523) — se queda con redacción prudente sin cifras y REVIEW. Documentado.</li>
+      <li><strong>SEO:</strong> +2 guías → 61. <code>data/verification.js</code>: JP y US con 3 rutas cada uno.</li>
+      <li><strong>Volver aquí:</strong> <code>git checkout v1.18.0</code>.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Wave 2: EE.UU. como destino nuevo (8º destino) <span class="ver">v1.17.0 · 14 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>App:</strong> nuevo <code>COUNTRY_RULES.US</code> — turista por Visa Waiver Program (41 países con ESTA y 90 días; Chile único LatAm) o visa B-1/B-2 con entrevista para el resto; F-1 con I-20 (SEVP), tope partial; trabajo con patrocinio/loterías (tope 60); sin working holiday (J-1 como alternativa señalada) y sin visa de nómada digital — afirmaciones negativas verdaderas para EE.UU., registradas como appDecision.</li>
+      <li><strong>Datos:</strong> +2 rutas US → <strong>59 rutas</strong>, hash <code>044b0999…</code>. travel.state.gov responde 200 a herramienta simple (¡fuente amable!). Audit PASS exacto: MATCH 871→878, APP_DECISION 68→72, 0-0-0.</li>
+      <li><strong>Suite:</strong> 72→76 casos dorados. SEO: +2 guías → 59.</li>
+      <li><strong>Volver aquí:</strong> <code>git checkout v1.17.0</code>.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Wave 2: JAPÓN como destino nuevo (7º destino) <span class="ver">v1.16.0 · 14 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>App:</strong> nuevo <code>COUNTRY_RULES.JP</code> — working holiday con tabla oficial JP_WHV (30 socios del selector; cupos oficiales: ES 700, AR 400, CL 200, UY 100, CA 6.283, KR 10.000, GB 6.000…), turista por exención (74 países, 90 días; aviso ePassport a BR/PE/PY/PA/RS), student/work conservadores con COE (tope partial), nómada digital con cobertura y sin cifras (fuente ISA bloqueada y sin snapshot — REVIEW). Japón se colorea en el globo automáticamente (hasRealRules).</li>
+      <li><strong>Método nuevo:</strong> mofa.go.jp responde 403 (como AU) pero es HTML estático → evidencia vía snapshots de archive.org (06-jul y 30-jun-2026), fechados en las rutas. El vigilante salta mofa.go.jp (skip manual como immi.homeaffairs).</li>
+      <li><strong>Datos:</strong> +2 rutas JP (working_holiday con 11 hechos + tourist con 3) → <strong>57 rutas</strong>, hash <code>5c40f9e2…</code>. Audit PASS exacto: MATCH 853→871, REVIEW 60→61, APP_DECISION 66→68, 0-0-0.</li>
+      <li><strong>Suite:</strong> 64→72 casos dorados (JP: ES CL AR UY MX BR CO + full DE); huecos ES = 0.</li>
+      <li><strong>SEO:</strong> +2 guías (working-holiday-japon, exencion-visado-japon) → 57.</li>
+      <li><strong>Volver aquí:</strong> <code>git checkout v1.16.0</code>.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>España auditada: LOS 6 DESTINOS COMPLETOS (Fase ES/PT cerrada) <span class="ver">v1.15.0 · 14 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>CORRECCIÓN</strong> (<code>logic/eligibility.js</code>): la app decía "España no opera Working Holiday" — FALSO. Evidencia oficial (Embajada en Tokio): programa con Japón desde 1-jul-2017 + acuerdos con Australia, Canadá y Nueva Zelanda. ES_YM = {JP, AU, CA, NZ}, 18-30, tope partial (fuente de 2017 y condiciones por país no capturadas); resto de nacionalidades: redacción prudente en vez del "no existe" absoluto. Corea/Argentina citados por terceros — REVIEW hasta fuente oficial.</li>
+      <li><strong>DNV con cifras oficiales:</strong> "200% del SMI vigente" (documento UGE, captura manual con Chrome) + SMI 2026 = 1.221 €/mes (BOE RD 126/2026) → ~2.450 €/mes (antes "~2.400 simulado"). Añadidos requisitos oficiales: relación 3 meses con empleador extranjero + titulación o 3 años de experiencia.</li>
+      <li><strong>Datos:</strong> +5 rutas ES → <strong>55 rutas</strong>, hash <code>d123840…</code>. Audit PASS con predicción exacta: MATCH 832→853, REVIEW 58→60, APP_DECISION 60→66, 0-0-0. officialName/route en las 5 visas ES. Evidencia: exteriores.gob.es + BOE (curl) + 2 capturas manuales del usuario (inclusion.gob.es bloqueado tipo AU; la página UGE y la hoja de estudios cargan por JS — solo títulos/PDF útiles).</li>
+      <li><strong>Suite:</strong> 59→64 casos dorados; huecos ES = 0. Panel dato-vivo: ES y PT en verde (14-jul-2026).</li>
+      <li><strong>Volver aquí:</strong> <code>git checkout v1.15.0</code>.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Portugal auditado: corrección mayor de youth mobility (Fase ES/PT) <span class="ver">v1.14.0 · 14 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>CORRECCIÓN MAYOR</strong> (<code>logic/eligibility.js</code>): la lista Working Holiday de Portugal del prototipo (AU CA NZ AR BR UY CO EC BO PY) era una suposición y estaba mal. Tabla oficial PT_YM con los 9 memorandos vigentes (vistos.mne.gov.pt, capturado 14-jul): AR 18-30/100 · AU 18-31/500 · CA 18-35/600 · CL 18-30 · JP 18-30 · NZ 18-30/50 · PE 18-31/400+grado · KR 18-34/200 · US piloto/400 (sin edad publicada → tope partial). Corrige 5 falsos negativos (CL JP PE KR US) y 6 falsos positivos (BR UY CO EC BO PY — sobrepromesa eliminada).</li>
+      <li><strong>Bug corregido:</strong> PT student delegaba en ES.student y hablaba de "institución española"; ahora función propia (espejo exacto de puntuación) con redacción portuguesa.</li>
+      <li><strong>Dinero actualizado:</strong> D8 ~3.040 → ~3.680 EUR/mes (salario mínimo PT 2026 = 920€, oficial).</li>
+      <li><strong>Datos:</strong> +5 rutas PT (youth_mobility, remote_work D8, study, schengen, subordinate) → <strong>50 rutas</strong>, hash <code>e0d4d06a…</code>. Audit: primer FAIL de la historia (probe D8 sin remoteWork) diagnosticado y corregido → PASS 832/58/60/99/0-0-0. officialName/route en las 5 visas PT.</li>
+      <li><strong>i18n:</strong> 26 cadenas nuevas/destapadas traducidas (huecos ES = 0). Suite: 49→59 casos dorados.</li>
+      <li><strong>Pendiente:</strong> España (fuentes bloqueadas 403 — captura con Chrome); páginas SEO de las rutas ES/PT tras completar España.</li>
+      <li><strong>Volver aquí:</strong> <code>git checkout v1.14.0</code>.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Inglés en niveles CEFR (A1–C2) <span class="ver">v1.13.0 · 14 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>App:</strong> el selector de inglés pasa de Básico/Intermedio/Avanzado/Nativo a los 6 niveles CEFR/MCER (A1–C2) con pista explicativa. <code>data/mock.js</code>: lista ENGLISH = a1..c2. <code>logic/eligibility.js</code>: escala interna intacta + normalizador conservador (a1/a2→basic, b1→intermediate, b2/c1→advanced, c2→native); los valores antiguos siguen aceptándose. Perfil por defecto: b2 (equivalente al antiguo "advanced").</li>
+      <li><strong>Prueba de equivalencia:</strong> los 6 pares CEFR↔escala antigua producen salidas IDÉNTICAS (6 destinos × perfil chileno); 49 fotos doradas intactas sin regenerar.</li>
+      <li><strong>Volver aquí:</strong> <code>git checkout v1.13.0</code>.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Cuestionario sin campos de dinero <span class="ver">v1.12.0 · 14 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>App:</strong> <code>ui/Questionnaire.jsx</code> — eliminados los deslizadores de ahorros e ingresos mensuales (el dinero no puntúa desde el motor v2.1; solo generaba avisos informativos). Se conserva "¿Trabajas en remoto?" porque sí condiciona las visas de nómada digital. <code>i18n/strings.js</code>: sección 03 renombrada a "Idioma y forma de trabajo" (EN/ES).</li>
+      <li><strong>Prueba de no-interferencia:</strong> las 49 fotos doradas quedaron byte-idénticas — los resultados de visas no cambian. Petición del usuario confirmada antes de aplicar.</li>
+      <li><strong>Volver aquí:</strong> <code>git checkout v1.12.0</code>.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Globo: solo los destinos con reglas reales van coloreados <span class="ver">v1.11.0 · 14 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>App:</strong> <code>ui/Globe.jsx</code> — los países sintéticos (y los no listados) dejan de colorearse por elegibilidad simulada: ahora tinte neutro apagado. Solo AU/NZ/GB/CA/ES/PT (reglas modeladas reales) muestran verde/ámbar/terracota. Leyenda: nueva entrada "Aún sin datos" (EN/ES). Siguen siendo clicables (el panel ya mostraba su nota de simulación). Sin cambios de scoring.</li>
+      <li><strong>Motivo:</strong> petición del usuario 14-jul-2026 — honestidad visual: que el color del mapa refleje solo lo que Wayfare tiene hecho de verdad.</li>
+      <li><strong>Volver aquí:</strong> <code>git checkout v1.11.0</code>.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Analítica sin cookies (Fase 3 completada) <span class="ver">v1.10.0 · 14 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>App:</strong> <code>index.html</code> — contador GoatCounter (<code>edulino.goatcounter.com</code>), sin cookies ni datos personales; no cuenta visitas desde localhost. También en <code>demo.html</code> y en las 46 páginas de seo/ (vía generador). Sin cambios de lógica ni UI.</li>
+      <li><strong>Beta pública EN VIVO</strong> desde v1.9.0: https://edulino-byte.github.io/wayfare-site/ (GitHub Pages; repo privado edulino-byte/wayfare como respaldo; deploy con guardia de tests vía <code>tools/deploy/deployPages.sh</code>). Fase 3 completada con esta versión.</li>
+      <li><strong>Volver aquí:</strong> <code>git checkout v1.10.0</code>.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Re-captura de Australia con navegador real (Fase 2) <span class="ver">v1.9.0 · 13 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>Método:</strong> Chrome del usuario vía extensión Claude (la web de AU bloquea robots: cascarón a curl, Access Denied a headless, archive.org hereda el cascarón). Sin evasión de defensas — sesión real. Evidencia: 4 páginas renderizadas (150KB texto) en <code>checkpoints/au-recapture-2026-07/pages/</code> (vía portapapeles; Chrome bloqueó descargas automatizadas).</li>
+      <li><strong>Verificación:</strong> 67 hechos de las 4 rutas AU cotejados en vivo.</li>
+      <li>· <strong>Tarifas subieron el 1-jul-2026</strong> (drift de dinero real): 417/462 First <strong>AUD670→840</strong> (Second/Third AUD1.000); Visitor 600 Tourist <strong>AUD200→250</strong> (+ concesiones Pacífico/Timor-Leste). El recuadro "Cost" desapareció de las páginas de visa; fuente ahora: Visa Pricing Table.</li>
+      <li>· <strong>Home Affairs reescribió redacciones</strong> (semántica intacta): ~17 extractos re-anclados (bullets nuevos en eligibility, "apply from outside Australia" sin "online" en 462, duración 600 ahora "generalmente 3 meses, hasta 12"). Student 500: 25/25 intactos (AUD29.710 ✓). Fondos WHV AUD5.000 y tabla de edades por país: sin cambios.</li>
+      <li><strong>Datos:</strong> 22 hechos actualizados (extractos/valores/fuentes) + lastSourceCheck 2026-07-13 en las 4 rutas AU → hash <code>a6e7b538…</code>. Audit PASS idéntico (805/56/99/55/0-0-0): los appMatch no cambiaron porque la app nunca mostró tarifas AU (dinero no puntuado — la convención nos protegió).</li>
+      <li><strong>App:</strong> <code>logic/eligibility.js</code> — solo el config muerto <code>costAUD</code> 670→840 (×2, no visible al usuario; higiene). <code>data/verification.js</code>: AU última revisión 2026-07-13. Fotos doradas byte-idénticas.</li>
+      <li><strong>Vigilante:</strong> aviso de edad AU (URGENT &gt;45 días) + sonda semanal de accesibilidad — el contador arranca de cero hoy.</li>
+      <li><strong>Volver aquí:</strong> <code>git checkout v1.9.0</code>.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Wave 1 NZ completa: las 33 nacionalidades WHV auditadas (Fase 2) <span class="ver">v1.8.0 · 13 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>Datos:</strong> +13 rutas NZ.whv (AT BR CA CL HR IE JP LU LV MX PT US UY) → <strong>45 rutas</strong>, hash <code>f05472d7…</code>. 232 hechos oficiales nuevos, cada uno con extracto VERBATIM de la página INZ y tokens appMatch validados contra la salida en vivo (doble puerta). Audit PASS con predicción exacta: MATCH 547→805, REVIEW 43→56, DEFERRED 70→99, 0-0-0. Cupos verificados número a número (AT 100, BR 300, CL 940, HR 100, LU 50, LV 100, MX 200, PT 50, UY 200); CA/IE/JP/US sin campo visible = NO_CAP (convención respetada). Hallazgos: página de Irlanda NO menciona seguro (app sobre-avisa, REVIEW); Japón redacción ligera de seguro; Austria estancia 6 meses; Canadá 12-o-23 meses.</li>
+      <li><strong>App:</strong> solo <code>data/verification.js</code> regenerado (NZ: 35 rutas / 654 hechos). Lógica intacta.</li>
+      <li><strong>Vigilante:</strong> 3 fechas críticas nuevas — BR abre 8-oct-2026, CL 15-oct-2026, UY 17-nov-2026 (banners "Closed... will open" capturados; registrados como deferred opening_status). Las 13 páginas entran automáticamente en la vigilancia semanal.</li>
+      <li><strong>Suite:</strong> 36→49 casos dorados (las 33 nacionalidades WHV cubiertas); PASS.</li>
+      <li><strong>Backups:</strong> <code>tools/visa-intelligence/checkpoints/nz-whv-batch3-{evidence,apply}/</code>.</li>
+      <li><strong>Volver aquí:</strong> <code>git checkout v1.8.0</code>.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Micro-ajuste CA: nombres oficiales de ruta (Fase 2 iniciada) <span class="ver">v1.7.0 · 13 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>App:</strong> <code>logic/eligibility.js</code> — las 3 funciones de Canadá ahora fijan <code>officialName</code>/<code>route</code> en sus resultados (Visitor visa / eTA · ca_visitor; Study permit · ca_study_permit; IEC Working Holiday · ca_iec_working_holiday), patrón NZ/GB. <strong>Sin cambio de scoring ni de textos de requisitos</strong> — las 36 fotos doradas quedaron intactas sin regenerar. <code>i18n/strings.js</code>: los 3 nombres en tablas EN/ES (ES: "Visa de visitante / eTA", "Permiso de estudios (Study permit)", "IEC Working Holiday").</li>
+      <li><strong>Audit:</strong> 6 REVIEW → MATCH exactos según lo previsto: MATCH 541→547, REVIEW 49→43, resto idéntico, PASS. Línea base regenerada deliberadamente.</li>
+      <li><strong>Backup:</strong> <code>tools/visa-intelligence/checkpoints/ca-microtweak/backups/</code>.</li>
+      <li><strong>Volver aquí:</strong> <code>git checkout v1.7.0</code>.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Dato vivo: panel de verificación + i18n legado (Fase 1) <span class="ver">v1.6.0 · 13 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>App:</strong></li>
+      <li>· Nuevo <code>data/verification.js</code> (GENERADO por <code>tools/build/genVerification.mjs</code> desde <code>sources.json</code> + el estado del vigilante semanal; no editar a mano). Criterio conservador: por destino se muestra la revisión más antigua de sus rutas, elevada a la fecha del monitor solo si ese destino está vigilado (NZ/GB/CA sí; AU no — su web bloquea robots).</li>
+      <li>· <code>ui/Globe.jsx</code>: componente <code>DataFreshness</code> en el panel de país — destinos auditados muestran "Datos cotejados con fuentes oficiales — última revisión {fecha}" (+ "vigilancia automática semanal" si aplica); destinos con reglas no auditadas (ES/PT) muestran "Aún no auditado contra fuentes oficiales". Los sintéticos conservan su nota de siempre. <code>screens.css</code>: <code>.verified-note</code>.</li>
+      <li>· <code>i18n/strings.js</code>: 3 claves nuevas del panel (EN/ES) + <strong>54 cadenas legadas traducidas al español</strong> (CA/ES/PT/AU/NZ genéricas que existían solo en inglés desde el prototipo). Cierra la deuda i18n de Fase 1; la línea base de huecos ES pasa de 54 a 0.</li>
+      <li>· <code>index.html</code>: carga <code>data/verification.js</code>.</li>
+      <li><strong>Sin cambios de reglas ni scoring</strong> — <code>logic/eligibility.js</code> intacto (hash <code>9cbe1829…</code>).</li>
+      <li><strong>Datos:</strong> sin cambios — hash <code>39a5c584…</code>, 32 rutas, audit PASS idéntico.</li>
+      <li><strong>Validación:</strong> suite completa PASS (36 casos dorados idénticos; línea base i18n regenerada deliberadamente a 0 huecos); verificado en navegador EN y ES, destino auditado y no auditado.</li>
+      <li><strong>Volver aquí:</strong> <code>git checkout v1.6.0</code>.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Build de producción + integridad de globe.gl (Fase 0 completada) <span class="ver">v1.5.0 · 13 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>App:</strong> <code>index.html</code> — añadido sello de integridad SRI al script de globe.gl (huella <code>sha384-boR1tzK+…</code> verificada por doble vía: descarga del CDN y copia npm, byte-idénticas). Si el CDN entregara un fichero alterado, el navegador lo rechaza. Sin cambios de reglas, scoring ni UI.</li>
+      <li><strong>Tooling:</strong> build de producción (<code>npm run build</code> → <code>dist/</code>): <code>tools/build/build.mjs</code> con esbuild — React 18.3.1 en modo producción + globe.gl 2.34.4 empaquetados localmente (<code>vendor.js</code>, sin CDN), JSX precompilado una sola vez (<code>app.js</code>, mismo orden y ámbito global que en desarrollo), y copias <strong>byte a byte verificadas</strong> de <code>version.js</code>/<code>data/</code>/<code>i18n/</code>/<code>logic/</code>/CSS (lo auditado es lo servido). Probado de extremo a extremo en navegador: cuestionario + globo interactivo, 0 errores de consola. Node.js v24.18.0 LTS local en <code>tools/node/</code> (huella SHA-256 verificada contra nodejs.org; fuera de git). Servidor de pruebas: <code>npm run serve</code> (http://localhost:4173).</li>
+      <li><strong>Nota:</strong> <code>dist/</code> es regenerable y NO está en git; el fuente sigue funcionando sin build (index.html con Babel) — el build es la vía de publicación, no un reemplazo del desarrollo.</li>
+      <li><strong>Datos:</strong> sin cambios — hash <code>39a5c584…</code>, 32 rutas, audit PASS idéntico.</li>
+      <li><strong>Validación:</strong> suite completa <code>zsh tools/tests/run.sh</code> → PASS (audit + metadatos + 36 casos dorados + i18n).</li>
+      <li><strong>Volver aquí:</strong> <code>git checkout v1.5.0</code>.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Badge de versión + drift automatizado + git (Fase 0 iniciada) <span class="ver">v1.4.0 · 12 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>App:</strong> nuevo <code>version.js</code> (fuente única de versión) + badge visible junto al logo en la barra superior (<code>ui/App.jsx</code>, <code>index.html</code>). Sin cambios de reglas ni scoring.</li>
+      <li><strong>Tooling:</strong> <code>tools/visa-intelligence/pipeline/detectDrift.py</code> — vigilancia automatizada de páginas oficiales (hash de contenido + verificación de extractos + banners de apertura), informe en <code>tools/visa-intelligence/drift-reports/</code>. Programado semanalmente vía launchd (<code>com.wayfare.drift</code>).</li>
+      <li><strong>Gestión:</strong> creado este archivo (<code>VERSIONS.md</code>), <code>IDEAS-BACKLOG.md</code>, <code>git init</code> + <code>.gitignore</code>.</li>
+      <li><strong>Datos:</strong> sin cambios — <code>sources.json</code> hash <code>39a5c584…</code>, 32 rutas, audit PASS (MATCH 541 / REVIEW 49 / DEFERRED 70 / APP_DECISION 55 / 0-0-0).</li>
+      <li><strong>Validación:</strong> audit idéntico; regresión de salidas AU/NZ/GB/CA/ES/PT byte-idéntica; el badge no afecta elegibilidad.</li>
+      <li><strong>Volver aquí:</strong> <code>git checkout v1.4.0</code>.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Tune-up del modelo de Canadá (Fase 10M) <span class="ver">v1.3.0 · 8 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>App:</strong> <code>logic/eligibility.js</code> (solo CA tourist/student/IEC) + <code>i18n/strings.js</code> (18 pares EN/ES). Único cambio de scoring: <strong>student CA capado a partial/68</strong> (antes eligible/74 — sobrepromesa). Warnings nuevos: visitante genuino, TRV $100/eTA $7, biometría $85/$170, PAL/TAL, fondos $22.895/año, fee $150, IEC $184.75 + $100, seguro, edad 30/35 por país, rondas dinámicas.</li>
+      <li><strong>Datos (10O, posterior):</strong> +3 rutas CA → 32 rutas, hash <code>39a5c584…</code>.</li>
+      <li><strong>Backups:</strong> <code>tools/visa-intelligence/checkpoints/ca-app-model-controlled-apply/backups/*.pre10m.bak</code>.</li>
+      <li><strong>Volver aquí:</strong> commit inicial de git (<code>git log --oneline</code> → <code>v1.3.0 — estado auditado inicial</code>).</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Reino Unido como destino real (Fase 10F) <span class="ver">v1.2.0 · 7 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>App:</strong> nuevo <code>COUNTRY_RULES.GB</code> (Youth Mobility / Standard Visitor / Student) + tabla <code>GB_YMS</code> (12 nacionalidades, ballot HK/TW, India excluida) + 48 pares EN/ES. Sustituyó el fallback sintético que mostraba una visa "work" inventada como eligible/72.</li>
+      <li><strong>Datos (10H, posterior):</strong> +3 rutas GB → 29 rutas, hash <code>3f2a352b…</code>.</li>
+      <li><strong>Backups:</strong> <code>tools/visa-intelligence/checkpoints/gb-app-model-apply/backups/*.pre10f.bak</code>.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Corrección del seguro GB→NZ (Fase 7F) <span class="ver">v1.1.0 · 26 de junio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>App:</strong> <code>logic/eligibility.js</code> — guard <code>if (!cfg.uk)</code> en el warning de seguro médico del WHV de Nueva Zelanda (los británicos están exentos oficialmente; era una sobrepromesa del app). Primer cambio de app en la historia del proyecto. Sin cambio de scoring.</li>
+      <li><strong>Backups:</strong> en checkpoints de fase 7F.</li>
+    </ul>
+  </article><ul class="req">
+  </ul>
+  <h2>¿Calificas tú?</h2>
+  <p>Wayfare simula tu elegibilidad para esta y otras 90 rutas auditadas según tu perfil.</p>
+  <a class="cta" href="../index.html">Probar el simulador →</a>
+  <p class="disclaimer">Wayfare no es un asesor migratorio ni una agencia de inmigración. Esta página resume
+  requisitos publicados por la fuente oficial y verificados en la fecha indicada; los montos, cupos y
+  fechas pueden cambiar sin aviso. No constituye asesoramiento legal ni garantiza la aprobación de ninguna
+  visa. Verifica siempre en la <a href="https://edulino-byte.github.io/wayfare-site/seo/como-verificamos.html" rel="noopener">página oficial</a> antes de aplicar.</p>
+</main>
+<script data-goatcounter="https://edulino.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+</body>
+</html>

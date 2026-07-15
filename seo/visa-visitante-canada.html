@@ -43,6 +43,12 @@
   ol.pipe li { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:11px 14px;
     font-size:14.5px; counter-increment:paso; }
   ol.pipe li::before { content:counter(paso) ". "; color:var(--acc); font-weight:700; }
+  article.nov h2 { margin-top:30px; color:var(--ink); font-size:17px; }
+  article.nov .ver { display:inline-block; margin-left:8px; font-size:12px; font-weight:600;
+    color:var(--acc); background:rgba(57,180,142,.12); border:1px solid rgba(57,180,142,.4);
+    border-radius:999px; padding:2px 10px; vertical-align:2px; }
+  article.nov ul.req { margin-top:10px; }
+  article.nov ul.req li { font-size:13.5px; color:var(--dim); }
   @media print {
     :root { --bg:#fff; --card:#fff; --line:#bbb; --ink:#111; --dim:#444; --acc:#0a6b52; --amber:#7a5d18; }
     body { background:#fff; }
