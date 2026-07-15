@@ -51,7 +51,7 @@ window.I18N = {
     reset: "Reset",
 
     /* situations */
-    sit_alone: "Solo",
+    sit_alone: "Alone",
     sit_partner: "With a partner",
     sit_family: "With family",
 
