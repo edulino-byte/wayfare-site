@@ -459,6 +459,8 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
   background: rgba(217,147,22,.16); padding: 4px 9px; border-radius: 7px; }
 .synthetic-note { font-size: 11.5px; color: var(--on-dark-2); margin-top: 6px; display: flex; align-items: center; gap: 6px; }
 .verified-note { font-size: 11.5px; color: #7fc8a9; margin-top: 10px; display: flex; align-items: flex-start; gap: 6px; line-height: 1.45; }
+.verified-note .method-link { color: #7fc8a9; font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
+.verified-note .method-link:hover { color: #a5e8cc; }
 .special-access-note { display: flex; gap: 9px; align-items: flex-start; margin: 14px 0 4px;
   padding: 11px 14px; border-radius: 11px; font-size: 13.5px; line-height: 1.5; font-weight: 500;
   color: #8fdcb8; background: rgba(56,180,140,0.13); border: 1px solid rgba(56,180,140,0.45); }

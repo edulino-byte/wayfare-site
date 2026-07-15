@@ -28,6 +28,29 @@
   .cta { display:inline-block; background:var(--acc); color:#06231b; font-weight:700; text-decoration:none;
     border-radius:10px; padding:12px 22px; margin-top:10px; }
   .disclaimer { margin-top:40px; padding-top:18px; border-top:1px solid var(--line); color:var(--dim); font-size:13px; }
+  .print-btn { display:inline-block; margin-left:10px; background:transparent; border:1px solid var(--acc);
+    color:var(--acc); border-radius:999px; padding:5px 13px; font-size:13px; font-weight:600; cursor:pointer; }
+  .print-btn:hover { background:rgba(57,180,142,.12); }
+  table.cal { width:100%; border-collapse:collapse; margin:18px 0; font-size:14.5px; }
+  table.cal th { text-align:left; font-size:11.5px; text-transform:uppercase; letter-spacing:.07em;
+    color:var(--dim); padding:8px 10px; border-bottom:1px solid var(--line); }
+  table.cal td { padding:10px; border-bottom:1px solid var(--line); }
+  .sem { display:inline-block; padding:3px 10px; border-radius:999px; font-size:12.5px; font-weight:700; }
+  .sem-open { background:rgba(57,180,142,.15); color:var(--acc); border:1px solid rgba(57,180,142,.5); }
+  .sem-soon { background:rgba(217,178,106,.12); color:var(--amber); border:1px solid rgba(217,178,106,.5); }
+  .sem-later { background:rgba(157,184,177,.1); color:var(--dim); border:1px solid var(--line); }
+  ol.pipe { display:grid; gap:9px; margin:16px 0 6px 0; padding-left:0; counter-reset:paso; list-style:none; }
+  ol.pipe li { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:11px 14px;
+    font-size:14.5px; counter-increment:paso; }
+  ol.pipe li::before { content:counter(paso) ". "; color:var(--acc); font-weight:700; }
+  @media print {
+    :root { --bg:#fff; --card:#fff; --line:#bbb; --ink:#111; --dim:#444; --acc:#0a6b52; --amber:#7a5d18; }
+    body { background:#fff; }
+    .cta, .print-btn { display:none; }
+    main { padding:0; max-width:100%; }
+    ul.req li { break-inside:avoid; border-color:#bbb; }
+    ul.req li::before { content:"☐  "; color:#0a6b52; font-weight:700; }
+  }
   .src { font-size:13.5px; color:var(--dim); }
   .idx { list-style:none; display:grid; gap:8px; }
   .idx li { background:var(--card); border:1px solid var(--line); border-radius:10px; }
@@ -39,7 +62,7 @@
   <p class="src"><a href="index.html" style="text-decoration:none">Wayfare</a> · datos de visas verificados contra fuentes oficiales</p>
   <h1>Working Holiday en Nueva Zelanda para argentinos</h1>
   <p>Requisitos de la <strong>Argentina Working Holiday Visa</strong> según <a href="https://www.immigration.govt.nz/visas/argentina-working-holiday-visa/" rel="noopener">Immigration New Zealand</a> (fuente oficial).</p>
-  <div class="verified">✓ Fuentes revisadas por última vez: 24 de junio de 2026</div>
+  <div class="verified">✓ Fuentes revisadas por última vez: 24 de junio de 2026</div><button class="print-btn" onclick="window.print()" title="Imprime o guarda como PDF tu checklist de esta ruta">🖨 Guardar checklist (PDF)</button>
   <div class="apertura">⏳ Cerrada — abre el 10:00 24 de septiembre de 2026 (NZST). Las fechas de apertura pueden cambiar — confírmalo en la página oficial.</div>
   <h2>Datos clave</h2><div class="grid"><div class="cell"><div class="k">Edad</div><div class="v">18–35 años</div></div><div class="cell"><div class="k">Cupo anual</div><div class="v">≈1.000</div></div><div class="cell"><div class="k">Fondos</div><div class="v">NZD $4.200</div></div><div class="cell"><div class="k">Tarifa</div><div class="v">desde NZD $770</div></div><div class="cell"><div class="k">Estancia</div><div class="v">hasta 12 meses</div></div></div>
   <h2>Requisitos (revisados el 24 de junio de 2026)</h2>
