@@ -45,7 +45,7 @@ window.I18N = {
     f_countries: "Countries you're curious about",
     f_visas: "Visa types that interest you",
     f_countries_hint: "Optional — pick any that excite you. We still scan the whole map.",
-    f_visas_hint: "Optional — we'll surface these first.",
+    f_visas_hint: "Optional — pick the ones that interest you; if you leave them all unselected we'll evaluate every type.",
 
     submit: "Map my options",
     reset: "Reset",
@@ -511,7 +511,7 @@ window.I18N = {
     f_countries: "Países que te interesan",
     f_visas: "Tipos de visa que te interesan",
     f_countries_hint: "Opcional — elige los que te llamen. Igual escaneamos todo el mapa.",
-    f_visas_hint: "Opcional — los mostraremos primero.",
+    f_visas_hint: "Opcional — elige las que te interesen; si no seleccionas ninguna, evaluamos todos los tipos.",
 
     submit: "Mapear mis opciones",
     reset: "Reiniciar",

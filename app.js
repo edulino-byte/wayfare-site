@@ -941,7 +941,7 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle }) {
       const isHov = hoverRef.current && d.__id === hoverRef.current.__id;
       const real = r && !r.synthetic && window.Eligibility.hasRealRules(d.__iso || r.iso);
       if (!real) return `rgba(148,163,160,${isSel ? 0.45 : isHov ? 0.32 : 0.1})`;
-      return statusColor(r.status, isSel ? 0.72 : isHov ? 0.58 : 0.42);
+      return statusColor(r.status, isSel ? 0.88 : isHov ? 0.75 : 0.62);
     }
     function selectFeature(d) {
       selRef.current = d;
@@ -1066,7 +1066,8 @@ function defaultProfile() {
     savings: 15e3,
     remoteWork: false,
     monthlyIncome: 0,
-    visaTypes: ["work_and_holiday", "student", "tourist", "digital_nomad"]
+    visaTypes: []
+    /* v1.21.0 — sin preselección (feedback de usuarios); vacío = se evalúan todas */
   };
 }
 function App() {
