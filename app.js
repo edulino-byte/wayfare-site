@@ -1024,8 +1024,58 @@ function CountryDetail({ t, lang, result, profile }) {
     return /* @__PURE__ */ React.createElement("div", { className: "special-access-note" }, /* @__PURE__ */ React.createElement("svg", { width: "14", height: "14", viewBox: "0 0 24 24", fill: "none", style: { flexShrink: 0, marginTop: "2px" } }, /* @__PURE__ */ React.createElement("path", { d: "M5 12l5 5L19 7", stroke: "currentColor", strokeWidth: "2.6", strokeLinecap: "round", strokeLinejoin: "round" })), /* @__PURE__ */ React.createElement("span", null, t("sa_" + sa)));
   })(), /* @__PURE__ */ React.createElement("div", { className: "sub-label" }, t("g_visas_here")), result.visas.map((v, i) => {
     const vStatusKey = v.status === "eligible" ? "st_eligible" : v.status === "partial" ? "st_partial" : "st_ineligible";
-    return /* @__PURE__ */ React.createElement("div", { className: "visa-card", key: v.type + i }, /* @__PURE__ */ React.createElement("div", { className: "vc-head" }, /* @__PURE__ */ React.createElement("span", { className: "vc-icon" }, window.VISA_DATA.VISA_TYPES[v.type].icon), /* @__PURE__ */ React.createElement("span", { className: "vc-name" }, v.officialName ? tx(v.officialName) : t("vt_" + v.type)), /* @__PURE__ */ React.createElement("span", { className: "vc-stat", style: { background: statusColor(v.status, 1) } })), /* @__PURE__ */ React.createElement("div", { className: "vc-meta" }, /* @__PURE__ */ React.createElement("span", { className: "vc-meta-status", style: { color: statusColor(v.status, 1) } }, t(vStatusKey)), /* @__PURE__ */ React.createElement("span", { className: "vc-meta-score" }, t("g_score"), ": ", v.score)), v.matched && v.matched.length ? /* @__PURE__ */ React.createElement("details", { className: "vc-acc", open: secOpen("matched", v) }, /* @__PURE__ */ React.createElement("summary", { className: "vc-acc-sum" }, /* @__PURE__ */ React.createElement("span", { className: "vc-acc-label" }, t("g_matched")), /* @__PURE__ */ React.createElement("span", { className: "vc-acc-count" }, v.matched.length)), /* @__PURE__ */ React.createElement("div", { className: "vc-acc-body vc-matched" }, v.matched.map((m, mi) => /* @__PURE__ */ React.createElement("div", { className: "vc-match-row", key: mi }, /* @__PURE__ */ React.createElement("svg", { width: "11", height: "11", viewBox: "0 0 24 24", fill: "none", style: { flexShrink: 0, marginTop: "1px" } }, /* @__PURE__ */ React.createElement("path", { d: "M5 12l5 5L19 7", stroke: "currentColor", strokeWidth: "2.4", strokeLinecap: "round", strokeLinejoin: "round" })), tx(m))))) : null, v.warnings && v.warnings.length ? /* @__PURE__ */ React.createElement("details", { className: "vc-acc", open: secOpen("warnings", v) }, /* @__PURE__ */ React.createElement("summary", { className: "vc-acc-sum" }, /* @__PURE__ */ React.createElement("span", { className: "vc-acc-label" }, t("g_warnings")), /* @__PURE__ */ React.createElement("span", { className: "vc-acc-count" }, v.warnings.length)), /* @__PURE__ */ React.createElement("div", { className: "vc-acc-body vc-warnings" }, v.warnings.map((w, wi) => /* @__PURE__ */ React.createElement("div", { className: "vc-warn-row", key: wi }, /* @__PURE__ */ React.createElement("svg", { width: "11", height: "11", viewBox: "0 0 24 24", fill: "none", style: { flexShrink: 0, marginTop: "1px" } }, /* @__PURE__ */ React.createElement("circle", { cx: "12", cy: "12", r: "9", stroke: "currentColor", strokeWidth: "2" }), /* @__PURE__ */ React.createElement("path", { d: "M12 8v4M12 15.5v.5", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round" })), tx(w))))) : null, v.missing && v.missing.length ? /* @__PURE__ */ React.createElement("details", { className: "vc-acc", open: secOpen("missing", v) }, /* @__PURE__ */ React.createElement("summary", { className: "vc-acc-sum" }, /* @__PURE__ */ React.createElement("span", { className: "vc-acc-label" }, t("g_missing")), /* @__PURE__ */ React.createElement("span", { className: "vc-acc-count" }, v.missing.length)), /* @__PURE__ */ React.createElement("div", { className: "vc-acc-body missing" }, /* @__PURE__ */ React.createElement("span", { className: "lbl" }, t("g_missing")), v.missing.map((m) => /* @__PURE__ */ React.createElement("span", { className: "miss-tag", key: m }, t("rq_" + m))))) : null);
+    return /* @__PURE__ */ React.createElement("div", { className: "visa-card", key: v.type + i }, /* @__PURE__ */ React.createElement("div", { className: "vc-head" }, /* @__PURE__ */ React.createElement("span", { className: "vc-icon" }, window.VISA_DATA.VISA_TYPES[v.type].icon), /* @__PURE__ */ React.createElement("span", { className: "vc-name" }, v.officialName ? tx(v.officialName) : t("vt_" + v.type)), /* @__PURE__ */ React.createElement("span", { className: "vc-stat", style: { background: statusColor(v.status, 1) } })), /* @__PURE__ */ React.createElement("div", { className: "vc-meta" }, /* @__PURE__ */ React.createElement("span", { className: "vc-meta-status", style: { color: statusColor(v.status, 1) } }, t(vStatusKey)), /* @__PURE__ */ React.createElement("span", { className: "vc-meta-score" }, t("g_score"), ": ", v.score)), v.matched && v.matched.length ? /* @__PURE__ */ React.createElement("details", { className: "vc-acc", open: secOpen("matched", v) }, /* @__PURE__ */ React.createElement("summary", { className: "vc-acc-sum" }, /* @__PURE__ */ React.createElement("span", { className: "vc-acc-label" }, t("g_matched")), /* @__PURE__ */ React.createElement("span", { className: "vc-acc-count" }, v.matched.length)), /* @__PURE__ */ React.createElement("div", { className: "vc-acc-body vc-matched" }, v.matched.map((m, mi) => /* @__PURE__ */ React.createElement(
+      EvidenceRow,
+      {
+        className: "vc-match-row",
+        key: mi,
+        t,
+        lang,
+        text: tx(m),
+        fact: findEvidence(result.iso, v.route, profile && profile.nationality, m),
+        icon: /* @__PURE__ */ React.createElement("svg", { width: "11", height: "11", viewBox: "0 0 24 24", fill: "none", style: { flexShrink: 0, marginTop: "1px" } }, /* @__PURE__ */ React.createElement("path", { d: "M5 12l5 5L19 7", stroke: "currentColor", strokeWidth: "2.4", strokeLinecap: "round", strokeLinejoin: "round" }))
+      }
+    )))) : null, v.warnings && v.warnings.length ? /* @__PURE__ */ React.createElement("details", { className: "vc-acc", open: secOpen("warnings", v) }, /* @__PURE__ */ React.createElement("summary", { className: "vc-acc-sum" }, /* @__PURE__ */ React.createElement("span", { className: "vc-acc-label" }, t("g_warnings")), /* @__PURE__ */ React.createElement("span", { className: "vc-acc-count" }, v.warnings.length)), /* @__PURE__ */ React.createElement("div", { className: "vc-acc-body vc-warnings" }, v.warnings.map((w, wi) => /* @__PURE__ */ React.createElement(
+      EvidenceRow,
+      {
+        className: "vc-warn-row",
+        key: wi,
+        t,
+        lang,
+        text: tx(w),
+        fact: findEvidence(result.iso, v.route, profile && profile.nationality, w),
+        icon: /* @__PURE__ */ React.createElement("svg", { width: "11", height: "11", viewBox: "0 0 24 24", fill: "none", style: { flexShrink: 0, marginTop: "1px" } }, /* @__PURE__ */ React.createElement("circle", { cx: "12", cy: "12", r: "9", stroke: "currentColor", strokeWidth: "2" }), /* @__PURE__ */ React.createElement("path", { d: "M12 8v4M12 15.5v.5", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round" }))
+      }
+    )))) : null, v.missing && v.missing.length ? /* @__PURE__ */ React.createElement("details", { className: "vc-acc", open: secOpen("missing", v) }, /* @__PURE__ */ React.createElement("summary", { className: "vc-acc-sum" }, /* @__PURE__ */ React.createElement("span", { className: "vc-acc-label" }, t("g_missing")), /* @__PURE__ */ React.createElement("span", { className: "vc-acc-count" }, v.missing.length)), /* @__PURE__ */ React.createElement("div", { className: "vc-acc-body missing" }, /* @__PURE__ */ React.createElement("span", { className: "lbl" }, t("g_missing")), v.missing.map((m) => /* @__PURE__ */ React.createElement("span", { className: "miss-tag", key: m }, t("rq_" + m))))) : null);
   }), result.synthetic ? /* @__PURE__ */ React.createElement("div", { className: "synthetic-note" }, /* @__PURE__ */ React.createElement("svg", { width: "13", height: "13", viewBox: "0 0 24 24", fill: "none" }, /* @__PURE__ */ React.createElement("circle", { cx: "12", cy: "12", r: "9", stroke: "currentColor", strokeWidth: "2" }), /* @__PURE__ */ React.createElement("path", { d: "M12 8v5M12 16.5v.5", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round" })), t("g_simulated")) : null, /* @__PURE__ */ React.createElement(DataFreshness, { t, lang, iso: result.iso, synthetic: result.synthetic }), /* @__PURE__ */ React.createElement("div", { className: "disclaimer-long" }, /* @__PURE__ */ React.createElement("svg", { width: "11", height: "11", viewBox: "0 0 24 24", fill: "none", style: { flexShrink: 0, marginTop: "1px" } }, /* @__PURE__ */ React.createElement("circle", { cx: "12", cy: "12", r: "9", stroke: "currentColor", strokeWidth: "2" }), /* @__PURE__ */ React.createElement("path", { d: "M12 8v5M12 16.5v.5", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round" })), t("disclaimer_long")));
+}
+function findEvidence(iso, route, natl, line) {
+  const facts = ((window.EVIDENCE || {}).routes || {})[iso + "|" + (route || "")];
+  if (!facts) return null;
+  for (const f of facts) {
+    if (f.n && f.n !== natl) continue;
+    if (f.m.some((tok) => line.indexOf(tok) !== -1)) return f;
+  }
+  return null;
+}
+function EvidenceRow({ t, lang, className, icon, text, fact }) {
+  const [open, setOpen] = React.useState(false);
+  if (!fact) return /* @__PURE__ */ React.createElement("div", { className }, icon, text);
+  const dateStr = fact.d ? (/* @__PURE__ */ new Date(fact.d + "T00:00:00")).toLocaleDateString(
+    lang === "es" ? "es-ES" : "en-GB",
+    { day: "numeric", month: "short", year: "numeric" }
+  ) : null;
+  return /* @__PURE__ */ React.createElement("div", { className: className + " ev-row" }, /* @__PURE__ */ React.createElement("div", { className: "ev-line" }, icon, /* @__PURE__ */ React.createElement("span", { className: "ev-text" }, text), /* @__PURE__ */ React.createElement(
+    "button",
+    {
+      type: "button",
+      className: "ev-btn" + (open ? " ev-btn--on" : ""),
+      title: t("ev_btn_title"),
+      "aria-expanded": open,
+      onClick: () => setOpen(!open)
+    },
+    /* @__PURE__ */ React.createElement("svg", { width: "10", height: "10", viewBox: "0 0 24 24", fill: "none" }, /* @__PURE__ */ React.createElement("path", { d: "M9 5h8a2 2 0 012 2v12a2 2 0 01-2 2H9a2 2 0 01-2-2V7a2 2 0 012-2z", stroke: "currentColor", strokeWidth: "2" }), /* @__PURE__ */ React.createElement("path", { d: "M7 17H6a2 2 0 01-2-2V4a2 2 0 012-2h8a2 2 0 012 2v1", stroke: "currentColor", strokeWidth: "2" }))
+  )), open ? /* @__PURE__ */ React.createElement("div", { className: "ev-panel" }, /* @__PURE__ */ React.createElement("div", { className: "ev-quote" }, "\u201C", fact.x, "\u201D"), /* @__PURE__ */ React.createElement("div", { className: "ev-meta" }, /* @__PURE__ */ React.createElement("a", { href: fact.u, target: "_blank", rel: "noopener noreferrer" }, t("ev_source"), " \u2197"), dateStr ? /* @__PURE__ */ React.createElement("span", null, " \xB7 ", t("ev_captured"), dateStr) : null, fact.r ? /* @__PURE__ */ React.createElement("span", { className: "ev-review" }, " \xB7 ", t("ev_review")) : null)) : null);
 }
 function DataFreshness({ t, lang, iso, synthetic }) {
   if (synthetic) return null;

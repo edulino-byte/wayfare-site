@@ -433,6 +433,25 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
 .vc-warnings { margin-top: 8px; display: flex; flex-direction: column; gap: 5px; }
 .vc-warn-row { display: flex; align-items: flex-start; gap: 7px;
   font-size: 12px; line-height: 1.4; color: var(--on-dark-2); opacity: 0.78; }
+
+/* Modo evidencia (v1.26.0, idea #1) — botón por requisito con extracto oficial */
+.ev-row { flex-direction: column; align-items: stretch; gap: 0; }
+.ev-row .ev-line { display: flex; align-items: flex-start; gap: 7px; }
+.ev-row .ev-text { flex: 1 1 auto; min-width: 0; }
+.ev-btn { flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center;
+  width: 18px; height: 18px; margin-top: -1px; padding: 0; border-radius: 5px; cursor: pointer;
+  color: inherit; opacity: 0.42; background: transparent; border: 1px solid currentColor;
+  transition: opacity .15s ease; }
+.ev-btn:hover, .ev-btn--on { opacity: 0.95; }
+.ev-panel { margin: 7px 0 4px 18px; padding: 9px 12px; border-radius: 9px;
+  background: rgba(255,255,255,0.045); border-left: 2px solid rgba(255,255,255,0.22);
+  animation: fadeUp .18s ease both; }
+.ev-quote { font-size: 11.5px; line-height: 1.55; color: var(--on-dark-2); font-style: italic; }
+.ev-meta { margin-top: 6px; font-size: 11px; color: var(--on-dark-2); opacity: 0.85; }
+.ev-meta a { color: #7fc8a9; font-weight: 600; text-decoration: none; }
+.ev-meta a:hover { text-decoration: underline; }
+.ev-review { color: var(--st-partial); font-weight: 600; }
+
 .visa-card .missing { margin-top: 11px; display: flex; flex-wrap: wrap; gap: 6px; }
 .visa-card .missing .lbl { font-size: 11px; color: var(--on-dark-2); font-weight: 700; text-transform: uppercase;
   letter-spacing: .06em; width: 100%; margin-bottom: 1px; }
