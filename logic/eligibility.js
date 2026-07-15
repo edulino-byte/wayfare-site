@@ -102,20 +102,36 @@ window.Eligibility = (function () {
   var COUNTRY_RULES = {};
 
   /* ── AUSTRALIA ─────────────────────────────────────────────────────────── */
+
+  /* Listas oficiales de entrada turística (idea #20, v1.25.0). Capturadas de
+     immi.homeaffairs.gov.au vía navegador del usuario 15-jul-2026 (evidencia:
+     checkpoints/tier-audit/pages/au-651-eligible.txt / au-601-eligible.txt).
+     eVisitor (subclass 651): gratuita, solo pasaportes europeos.
+     ETA (subclass 601): añade CA/US/JP/KR/SG/MY/BN/HK/TW.                    */
+  var AU_EVISITOR = ["AD","AT","BE","BG","HR","CY","CZ","DK","EE","FI","FR","DE","GR","HU",
+    "IS","IE","IT","LV","LI","LT","LU","MT","MC","NL","NO","PL","PT","RO","SM","SK","SI",
+    "ES","SE","CH","GB","VA"];
+  var AU_ETA = ["AD","AT","BE","BN","CA","DK","FI","FR","DE","GR","HK","IS","IE","IT","JP",
+    "LI","LU","MY","MT","MC","NO","PT","SM","SG","KR","ES","SE","CH","TW","NL","GB","US","VA"];
+
   COUNTRY_RULES.AU = {
 
     tourist: function (p) {
-      /* ── Visitor visa subclass 600 — Tourist stream, apply outside Australia
-         Data sourced from immi.homeaffairs.gov.au (simulated representation).
-         No closed passport eligibility list for this stream per official page.
+      /* ── Australia tourist entry — three official paths (lists captured
+         15-jul-2026 via user browser; immi blocks automated fetch):
+           eVisitor (subclass 651): free, European passports only
+           ETA (subclass 601): adds CA/US/JP/KR/SG/MY/BN/HK/TW
+           Visitor visa (subclass 600): everyone else (no closed list)
+         New Zealanders: Trans-Tasman Arrangement (no capturable source —
+         hedged wording, REVIEW).
          Core requirements (funds, genuine visitor intent, health/character,
          debt status, actual location at application) cannot be assessed from
          the current questionnaire. Score is capped at partial (<70).
       ─────────────────────────────────────────────────────────────────── */
       var S600 = {
         subclass:     "600",
-        route:        "subclass_600_tourist_outside",
-        officialName: "Visitor visa (subclass 600) — Tourist stream",
+        route:        "au_visitor_entry",
+        officialName: "eVisitor (651) / ETA (601) / Visitor visa (600)",
         notEvaluated: [
           "You must intend to visit Australia only, such as tourism, a cruise, or visiting family or friends.",
           "This tourist stream is not for business or medical treatment purposes.",
@@ -136,17 +152,34 @@ window.Eligibility = (function () {
         return r;
       }
 
-      var m = [], w = [], x = [], score = 0;
+      var m = [], w = [], x = [], score = 0, nat = p.nationality;
 
-      /* 1. Passport — no closed list for subclass 600 per official page */
-      m.push("This route does not appear to require a specific eligible passport list based on the captured official page.");
+      /* 1. Passport path — official eligible-passport lists (captured 15-jul-2026) */
+      if (nat === "NZ") {
+        score += 62;
+        S600.subclass = "444";
+        m.push("New Zealand citizens can usually enter Australia under the Trans-Tasman Travel Arrangement (Special Category visa granted on arrival).");
+        w.push("The Trans-Tasman arrangement could not be verified against a captured official source; check the Special Category visa (subclass 444) conditions before travelling.");
+      } else if (inList(AU_EVISITOR, nat)) {
+        score += 58;
+        S600.subclass = "651";
+        m.push("Your passport nationality appears to be on the eVisitor (subclass 651) eligible list: apply online for free and stay up to 3 months at a time.");
+        w.push("The eVisitor lets you visit as often as you wish in a 12-month period, staying up to 3 months each time you enter Australia.");
+      } else if (inList(AU_ETA, nat)) {
+        score += 56;
+        S600.subclass = "601";
+        m.push("Your passport nationality appears to be on the Electronic Travel Authority (subclass 601) eligible list: stays of up to 3 months at a time.");
+        w.push("You must apply for the ETA before travelling, normally through the Australian ETA app.");
+      } else {
+        score += 48;
+        w.push("Your passport nationality does not appear on the eVisitor or ETA eligible lists, so a full Visitor visa (subclass 600) application is likely required.");
+      }
 
       /* 2. Residence / application location */
       if (p.currentResidence === "AU") {
-        score += 55;
+        score -= 8;
         w.push("This tourist stream requires you to be outside Australia when you apply and when the visa is decided.");
       } else {
-        score += 65;
         m.push("Your current residence appears consistent with an outside-Australia tourist stream, but your actual location at application time must be checked.");
       }
 

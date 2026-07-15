@@ -13,7 +13,7 @@ window.VERIFICATION = {
     },
     "AU": {
       "routes": 4,
-      "facts": 44,
+      "facts": 49,
       "monitored": false,
       "lastCheck": "2026-07-13"
     },

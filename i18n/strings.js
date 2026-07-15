@@ -1130,6 +1130,15 @@ window.I18N = {
     "Your passport nationality is visa-exempt for Canada: you need an eTA (Electronic Travel Authorization) to fly, not a visitor visa.": "Tu nacionalidad de pasaporte está exenta de visado para Canadá: necesitas una eTA (autorización electrónica de viaje) para volar, no una visa de visitante.",
     "Canada requires a visitor visa for your nationality, but you may be eligible for an eTA instead if you travel by air and have held a Canadian visa in the last 10 years or hold a valid US visa.": "Canadá exige visa de visitante para tu nacionalidad, pero puedes optar a una eTA en su lugar si viajas por aire y has tenido una visa canadiense en los últimos 10 años o tienes una visa de EE.UU. vigente.",
 
+    /* ── Australia turista: listas oficiales eVisitor/ETA (v1.25.0, idea #20) ── */
+    "New Zealand citizens can usually enter Australia under the Trans-Tasman Travel Arrangement (Special Category visa granted on arrival).": "Los ciudadanos neozelandeses normalmente pueden entrar en Australia bajo el acuerdo Trans-Tasman (Special Category visa concedida a la llegada).",
+    "The Trans-Tasman arrangement could not be verified against a captured official source; check the Special Category visa (subclass 444) conditions before travelling.": "El acuerdo Trans-Tasman no se ha podido verificar contra una fuente oficial capturada; consulta las condiciones de la Special Category visa (subclase 444) antes de viajar.",
+    "Your passport nationality appears to be on the eVisitor (subclass 651) eligible list: apply online for free and stay up to 3 months at a time.": "Tu nacionalidad de pasaporte parece estar en la lista elegible de la eVisitor (subclase 651): se solicita en línea gratis y permite estancias de hasta 3 meses cada vez.",
+    "The eVisitor lets you visit as often as you wish in a 12-month period, staying up to 3 months each time you enter Australia.": "La eVisitor te permite visitar Australia tantas veces como quieras durante un periodo de 12 meses, con estancias de hasta 3 meses en cada entrada.",
+    "Your passport nationality appears to be on the Electronic Travel Authority (subclass 601) eligible list: stays of up to 3 months at a time.": "Tu nacionalidad de pasaporte parece estar en la lista elegible de la Electronic Travel Authority (subclase 601): estancias de hasta 3 meses cada vez.",
+    "You must apply for the ETA before travelling, normally through the Australian ETA app.": "Debes solicitar la ETA antes de viajar, normalmente a través de la app Australian ETA.",
+    "Your passport nationality does not appear on the eVisitor or ETA eligible lists, so a full Visitor visa (subclass 600) application is likely required.": "Tu nacionalidad de pasaporte no aparece en las listas elegibles de la eVisitor ni de la ETA, así que probablemente necesites una solicitud completa de Visitor visa (subclase 600).",
+
   },
 };
 
