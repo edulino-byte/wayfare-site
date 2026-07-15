@@ -1933,6 +1933,187 @@ window.Eligibility = (function () {
   };
 
   /* =========================================================================
+     TAILANDIA — Wave 3 sudeste asiático (v1.31.0). Evidencia 15-jul-2026:
+     - Exención de visado 60 días: PDF oficial MFA (93 países, rev. 16-jul-2024;
+       texto por OCR Vision, cotejado). AR y CL van por acuerdos bilaterales.
+     - EN TRANSICIÓN: el Gabinete tailandés aprobó (19-may-2026) recortar el
+       esquema a 30 días; pendiente de publicación en la Royal Gazette a fecha
+       de captura => aviso de transición en la app + REVIEW + vigilancia.
+     - DTV (nómada digital): sin fuente capturada aún => hedged + REVIEW.
+  ========================================================================= */
+  var TH_EXEMPT = ["AD","AU","AT","BE","BR","BG","CA","CN","CO","HR","CU","CY","CZ","DK","DO",
+    "EC","EE","FI","FR","GE","DE","GR","GT","HK","HU","IS","IL","IT","JP","KR","LI","LT","LU",
+    "MT","MX","NL","NZ","NO","PA","PE","PL","PT","RO","RU","SI","SK","ES","SE","CH","TW","TR",
+    "UA","GB","US","UY"];
+  var TH_BILATERAL = ["AR","CL"];
+
+  COUNTRY_RULES.TH = {
+
+    tourist: function (p) {
+      var m = [], w = [], x = [], score = 0, nat = p.nationality;
+      function thTourist(sc) {
+        var r = visaResult("tourist", sc, m, w, x);
+        r.officialName = "Thailand visa exemption / tourist visa"; r.route = "th_tourist";
+        return r;
+      }
+      if (inList(TH_EXEMPT, nat)) {
+        score += 55;
+        m.push("Your passport nationality appears on Thailand's visa exemption list: stays of up to 60 days for tourism, extendable once by up to 30 days.");
+      } else if (inList(TH_BILATERAL, nat)) {
+        score += 55;
+        m.push("Your passport nationality has a bilateral visa exemption agreement with Thailand; the period of stay is based on the respective agreement.");
+      } else {
+        score += 10;
+        w.push("A tourist visa is likely required for your nationality. Check the Royal Thai embassy or consulate in your country.");
+        x.push("passport");
+      }
+      w.push("Thailand approved changes to its visa exemption scheme in May 2026 (reducing stays for many nationalities); the change was pending official publication at capture time - verify before travelling.");
+      w.push("You cannot work during a visa-exempt stay; paid activities are not allowed.");
+      finReq("You may need to show sufficient funds for your stay and onward travel.", w);
+      w.push("This is simulated guidance only. Always verify with the Ministry of Foreign Affairs of Thailand (mfa.go.th).");
+      return thTourist(clamp(score, 0, 68));
+    },
+
+    work_and_holiday: function (p) {
+      var m = [], w = [], x = [], score = 5;
+      w.push("Thailand does not operate a working holiday programme.");
+      x.push("passport");
+      var r = visaResult("work_and_holiday", score, m, w, x);
+      r.officialName = "No working holiday programme"; r.route = "th_no_whv";
+      return r;
+    },
+
+    student: function (p) {
+      var m = [], w = [], x = [], score = 0;
+      var pt = passportTier(p.nationality);
+      if (pt <= 2) { score += 14; m.push("Your passport nationality is generally accepted for Thai education visa applications."); }
+      else         { score += 8;  w.push("Additional documentation requirements may apply for your passport nationality."); }
+      score += scoreEdu(p, "secondary", 24);
+      if (eduRank(p.education) < eduRank("secondary")) x.push("minEdu");
+      else m.push("Your education level appears to meet general requirements.");
+      score += scoreAge(p.age, 16, 65, 10);
+      w.push("Studying in Thailand requires admission to a recognised institution and a Non-Immigrant ED visa.");
+      finReq("You may need to show sufficient funds for tuition and living costs. Check official Thai requirements.", w);
+      w.push("This route could not be verified against a captured official source yet. Treat as preliminary guidance.");
+      var r = visaResult("student", Math.min(score, 58), m, w, x);
+      r.officialName = "Thailand Education Visa (Non-Immigrant ED)"; r.route = "th_student";
+      return r;
+    },
+
+    digital_nomad: function (p) {
+      var m = [], w = [], x = [], score = 0;
+      function thDnv(sc) {
+        var r = visaResult("digital_nomad", sc, m, w, x);
+        r.officialName = "Destination Thailand Visa (DTV)"; r.route = "th_dtv";
+        return r;
+      }
+      if (!p.remoteWork) {
+        w.push("Thailand's Destination Thailand Visa (DTV) is aimed at remote workers, freelancers and long-stay visitors with activities such as Thai soft-power programmes.");
+        return thDnv(6);
+      }
+      score += 30; m.push("Your profile indicates remote work, which is the primary condition for this route.");
+      w.push("Thailand introduced the Destination Thailand Visa (DTV) with financial requirements and multi-year validity - check the Royal Thai embassy or the official Thai e-Visa site for current conditions.");
+      w.push("This route could not be verified against a captured official source yet. Treat as preliminary guidance.");
+      return thDnv(clamp(score, 0, 45));
+    },
+  };
+
+  /* =========================================================================
+     SINGAPUR — Wave 3 sudeste asiático (v1.31.0). Evidencia 15-jul-2026:
+     - Visados (ICA, fetch directo): lista de países que SÍ requieren visa;
+       el resto entra sin visa con e-Pass a discreción del puesto fronterizo.
+     - Work Holiday Programme (MOM, fetch directo): 18-25, universitarios o
+       graduados de 10 países/regiones, hasta 6 meses, cupo 2.000.
+  ========================================================================= */
+  var SG_VISA_REQUIRED = ["GE","RU","UA"];
+  var SG_WHP = ["AU","FR","DE","HK","JP","NL","NZ","CH","GB","US"];
+
+  COUNTRY_RULES.SG = {
+
+    tourist: function (p) {
+      var m = [], w = [], x = [], score = 0, nat = p.nationality;
+      function sgTourist(sc) {
+        var r = visaResult("tourist", sc, m, w, x);
+        r.officialName = "Singapore visitor entry (visa-free / visa)"; r.route = "sg_tourist";
+        return r;
+      }
+      if (inList(SG_VISA_REQUIRED, nat)) {
+        score += 15;
+        w.push("Your travel document appears on Singapore's list of countries that require a valid entry visa before travelling.");
+        x.push("passport");
+      } else {
+        score += 55;
+        m.push("Your passport nationality does not appear on Singapore's visa-required lists: most visitors enter visa-free.");
+      }
+      w.push("The period of stay is determined by the Visit Pass (e-Pass) granted electronically at the checkpoint, not by the visa.");
+      w.push("You must submit the SG Arrival Card before entry; it is not a visa.");
+      w.push("You cannot work during a visitor stay; paid activities are not allowed.");
+      finReq("You may need to show sufficient funds for your stay and onward travel.", w);
+      w.push("This is simulated guidance only. Always verify with the Immigration & Checkpoints Authority (ica.gov.sg).");
+      return sgTourist(clamp(score, 0, 68));
+    },
+
+    work_and_holiday: function (p) {
+      var m = [], w = [], x = [], score = 0, nat = p.nationality;
+      function sgWhp(sc) {
+        var r = visaResult("work_and_holiday", sc, m, w, x);
+        r.officialName = "Singapore Work Holiday Pass (Work Holiday Programme)"; r.route = "sg_whp";
+        return r;
+      }
+      if (!inList(SG_WHP, nat)) {
+        w.push("Singapore's Work Holiday Programme covers university students and graduates from ten countries or regions; your nationality does not appear to be among them.");
+        x.push("passport");
+        return sgWhp(10);
+      }
+      score += 40; m.push("Your passport nationality is among the ten countries or regions covered by Singapore's Work Holiday Programme.");
+      score += scoreAge(p.age, 18, 25, 30);
+      if (p.age < 18 || p.age > 25) { x.push("maxAge"); }
+      else { m.push("Your age appears to be within the eligible range for this pass (18 to 25 at the time of application)."); }
+      w.push("You must be an undergraduate or graduate of a university in one of the ten eligible countries or regions, recognised by its government.");
+      w.push("The pass allows work and holiday in Singapore for up to 6 months.");
+      w.push("The Work Holiday Programme has a capacity of 2,000 pass holders at any one time.");
+      finReq("You may need to show proof of university enrolment or graduation and residence requirements.", w);
+      w.push("Verify current conditions with the Ministry of Manpower (mom.gov.sg). Simulated guidance only.");
+      return sgWhp(score);
+    },
+
+    student: function (p) {
+      var m = [], w = [], x = [], score = 0;
+      var pt = passportTier(p.nationality);
+      if (pt <= 2) { score += 14; m.push("Your passport nationality is generally accepted for Singapore student pass applications."); }
+      else         { score += 8;  w.push("Additional documentation requirements may apply for your passport nationality."); }
+      score += scoreEdu(p, "secondary", 24);
+      if (eduRank(p.education) < eduRank("secondary")) x.push("minEdu");
+      else m.push("Your education level appears to meet general requirements.");
+      score += scoreAge(p.age, 16, 65, 10);
+      w.push("Studying in Singapore requires admission to a registered institution and a Student's Pass (ICA).");
+      finReq("You may need to show sufficient funds for tuition and living costs. Check official Singapore requirements.", w);
+      w.push("This route could not be verified against a captured official source yet. Treat as preliminary guidance.");
+      var r = visaResult("student", Math.min(score, 58), m, w, x);
+      r.officialName = "Singapore Student's Pass"; r.route = "sg_student";
+      return r;
+    },
+
+    digital_nomad: function (p) {
+      var m = [], w = [], x = [], score = 0;
+      function sgDnv(sc) {
+        var r = visaResult("digital_nomad", sc, m, w, x);
+        r.officialName = "Singapore: no dedicated digital nomad visa"; r.route = "sg_digital_nomad";
+        return r;
+      }
+      if (!p.remoteWork) {
+        w.push("Working remotely from Singapore requires an active remote work relationship with an employer or clients abroad.");
+        return sgDnv(6);
+      }
+      score += 20;
+      m.push("Your profile indicates remote work, which is the primary condition for this route.");
+      w.push("Singapore has no dedicated digital nomad visa; short remote-work stays happen under visitor rules and longer stays require a work pass.");
+      w.push("This route could not be verified against a captured official source yet. Treat as preliminary guidance.");
+      return sgDnv(clamp(score, 0, 40));
+    },
+  };
+
+  /* =========================================================================
      EUROPA SCHENGEN — Wave 2 ampliada (v1.19.0). Fábrica de reglas compartida
      para los 26 miembros Schengen sin modelo propio (ES/PT tienen el suyo;
      Irlanda NO es Schengen y queda para su propia fase).

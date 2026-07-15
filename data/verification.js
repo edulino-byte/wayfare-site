@@ -238,6 +238,18 @@ window.VERIFICATION = {
       "facts": 3,
       "monitored": false,
       "lastCheck": "2026-07-15"
+    },
+    "TH": {
+      "routes": 1,
+      "facts": 3,
+      "monitored": false,
+      "lastCheck": "2026-07-15"
+    },
+    "SG": {
+      "routes": 2,
+      "facts": 7,
+      "monitored": false,
+      "lastCheck": "2026-07-15"
     }
   }
 };
