@@ -801,6 +801,20 @@ window.Eligibility = (function () {
   }
 
   /* ── NEW ZEALAND ───────────────────────────────────────────────────────── */
+
+  /* v1.24.0 — LISTAS OFICIALES de exención turística (idea #20; sustituyen
+     al tier del prototipo en NZ/GB/CA). Capturadas 15-jul-2026:
+     - NZ_VISA_WAIVER: immigration.govt.nz visa-waiver-countries-and-territories
+     - GB_VISA_NATIONALS: gov.uk Immigration Rules Appendix Visitor: Visa national list
+       (los listados NECESITAN visa de visitante)
+     - CA_ETA_EXEMPT / CA_ETA_CONDITIONAL: canada.ca entry-requirements-country
+       (condicionados: eTA en vez de visa solo por aire y con visa CA previa
+       en 10 años o visa US vigente). Cobertura: los 68 pasaportes del selector. */
+  var NZ_VISA_WAIVER = ["AD","AR","AT","BE","BG","BR","CA","CH","CL","CY","CZ","DE","DK","EE","ES","FI","FR","GB","GR","HR","HU","IE","IL","IS","IT","JP","KR","LI","LT","LU","LV","MT","MX","NL","NO","PL","PT","RO","SE","SI","SK","TW","US","UY"];
+  var GB_VISA_NATIONALS = ["BO","CN","CO","CU","DO","EC","GE","GQ","HN","NI","RS","RU","SV","TR","UA","VE","IN","PH","NG","PK","EG","TH","ZA"];  /* + códigos heredados no seleccionables, también en la lista oficial */
+  var CA_ETA_EXEMPT = ["AD","AT","AU","BE","BG","CH","CL","CY","CZ","DE","DK","EE","ES","FI","FR","GB","GR","HR","HU","IE","IL","IS","IT","JP","KR","LI","LT","LU","LV","MT","NL","NO","NZ","PL","PT","RO","SE","SI","SK","TW"];
+  var CA_ETA_CONDITIONAL = ["AR","BR","CR","MX","PA","UY"];
+
   COUNTRY_RULES.NZ = {
 
     tourist: function (p) {
@@ -815,8 +829,17 @@ window.Eligibility = (function () {
       ─────────────────────────────────────────────────────────────────── */
       var m = [], w = [], x = [], score = 50;
 
-      /* NZeTA vs visitor visa — informational only */
-      m.push("Some travellers can come to New Zealand on an NZeTA (Electronic Travel Authority) instead of a visitor visa; which one you need depends on your passport.");
+      /* v1.24.0 — exención por LISTA OFICIAL (antes línea genérica) */
+      if (p.nationality === "AU") {
+        score = 60;
+        m.push("Australian citizens do not need a visa or NZeTA to visit New Zealand.");
+      } else if (inList(NZ_VISA_WAIVER, p.nationality)) {
+        score = 55;
+        m.push("Your passport nationality is on New Zealand's visa waiver list: you do not need a visitor visa, but you must request an NZeTA (Electronic Travel Authority) before travelling.");
+      } else {
+        score = 42;
+        w.push("Your passport nationality is not on New Zealand's visa waiver list: you need a visitor visa before travelling.");
+      }
 
       /* Remote-work nuance (preserve digital-nomad fairness) */
       if (p.remoteWork) {
@@ -937,14 +960,16 @@ window.Eligibility = (function () {
 
     tourist: function (p) {
       var m = [], w = [], x = [], score = 0, nat = p.nationality;
-      var pt = passportTier(nat);
-      if (pt === 1) {
+      /* v1.24.0 — listas OFICIALES de canada.ca (antes tier del prototipo) */
+      if (nat === "US") {
+        score += 60;
+        m.push("US citizens do not need a visa or an eTA to visit Canada.");
+      } else if (inList(CA_ETA_EXEMPT, nat)) {
         score += 55;
-        m.push("Your passport nationality may be eligible for visa-free entry or an eTA (Electronic Travel Authorization) for Canada.");
-        w.push("An eTA may be required before travelling by air. Check the IRCC website to confirm.");
-      } else if (pt === 2) {
-        score += 30;
-        w.push("A Temporary Resident Visa (TRV) application may be required for your passport nationality.");
+        m.push("Your passport nationality is visa-exempt for Canada: you need an eTA (Electronic Travel Authorization) to fly, not a visitor visa.");
+      } else if (inList(CA_ETA_CONDITIONAL, nat)) {
+        score += 42;   /* vía real (eTA condicionada) => banda parcial, no "poco probable" */
+        w.push("Canada requires a visitor visa for your nationality, but you may be eligible for an eTA instead if you travel by air and have held a Canadian visa in the last 10 years or hold a valid US visa.");
         x.push("passport");
       } else {
         score += 8;
@@ -1889,8 +1914,14 @@ window.Eligibility = (function () {
     tourist: function (p) {
       var m = [], w = [], x = [], score = 50;
 
-      /* Visa vs ETA is nationality-dependent — informational only */
-      m.push("Depending on your passport, you either need a Standard Visitor visa before you travel or an Electronic Travel Authorisation (ETA); check GOV.UK to see which applies to you.");
+      /* v1.24.0 — visa-national list OFICIAL (antes línea genérica) */
+      if (inList(GB_VISA_NATIONALS, p.nationality)) {
+        score = 42;
+        w.push("Your nationality is on the UK visa national list: you must obtain a Standard Visitor visa before you travel.");
+      } else {
+        score = 55;
+        m.push("Your nationality is not on the UK visa national list: you can usually visit for up to 6 months without a visitor visa, but you may need an Electronic Travel Authorisation (ETA).");
+      }
 
       w.push("You can usually stay in the UK for up to 6 months as a Standard Visitor.");
       w.push("You must be a genuine visitor who will leave the UK at the end of your visit.");

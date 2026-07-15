@@ -1120,6 +1120,16 @@ window.I18N = {
     sa_cta: "Common Travel Area: los ciudadanos británicos e irlandeses pueden vivir, trabajar y estudiar en el país del otro sin visado.",
     "You may need to show sufficient funds for your stay. Check the official visa requirements for this destination.": "Puede que necesites demostrar fondos suficientes para tu estancia. Consulta los requisitos oficiales de visado de este destino.",
 
+    /* ── Listas oficiales de exención (v1.24.0, idea #20) ── */
+    "Australian citizens do not need a visa or NZeTA to visit New Zealand.": "Los ciudadanos australianos no necesitan visa ni NZeTA para visitar Nueva Zelanda.",
+    "Your passport nationality is on New Zealand's visa waiver list: you do not need a visitor visa, but you must request an NZeTA (Electronic Travel Authority) before travelling.": "Tu nacionalidad de pasaporte está en la lista de exención de visado de Nueva Zelanda: no necesitas visa de visitante, pero debes solicitar una NZeTA (autorización electrónica de viaje) antes de viajar.",
+    "Your passport nationality is not on New Zealand's visa waiver list: you need a visitor visa before travelling.": "Tu nacionalidad de pasaporte no está en la lista de exención de Nueva Zelanda: necesitas una visa de visitante antes de viajar.",
+    "Your nationality is on the UK visa national list: you must obtain a Standard Visitor visa before you travel.": "Tu nacionalidad está en la lista de países con visado del Reino Unido: debes obtener una Standard Visitor visa antes de viajar.",
+    "Your nationality is not on the UK visa national list: you can usually visit for up to 6 months without a visitor visa, but you may need an Electronic Travel Authorisation (ETA).": "Tu nacionalidad no está en la lista de países con visado del Reino Unido: normalmente puedes visitar hasta 6 meses sin visa de visitante, aunque puede que necesites una ETA (autorización electrónica de viaje).",
+    "US citizens do not need a visa or an eTA to visit Canada.": "Los ciudadanos estadounidenses no necesitan visa ni eTA para visitar Canadá.",
+    "Your passport nationality is visa-exempt for Canada: you need an eTA (Electronic Travel Authorization) to fly, not a visitor visa.": "Tu nacionalidad de pasaporte está exenta de visado para Canadá: necesitas una eTA (autorización electrónica de viaje) para volar, no una visa de visitante.",
+    "Canada requires a visitor visa for your nationality, but you may be eligible for an eTA instead if you travel by air and have held a Canadian visa in the last 10 years or hold a valid US visa.": "Canadá exige visa de visitante para tu nacionalidad, pero puedes optar a una eTA en su lugar si viajas por aire y has tenido una visa canadiense en los últimos 10 años o tienes una visa de EE.UU. vigente.",
+
   },
 };
 

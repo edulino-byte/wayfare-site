@@ -25,7 +25,7 @@ window.VERIFICATION = {
     },
     "CA": {
       "routes": 3,
-      "facts": 29,
+      "facts": 30,
       "monitored": true,
       "lastCheck": "2026-07-12"
     },
