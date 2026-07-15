@@ -226,6 +226,18 @@ window.VERIFICATION = {
       "facts": 15,
       "monitored": true,
       "lastCheck": "2026-07-15"
+    },
+    "AR": {
+      "routes": 3,
+      "facts": 7,
+      "monitored": false,
+      "lastCheck": "2026-07-15"
+    },
+    "MX": {
+      "routes": 1,
+      "facts": 3,
+      "monitored": false,
+      "lastCheck": "2026-07-15"
     }
   }
 };

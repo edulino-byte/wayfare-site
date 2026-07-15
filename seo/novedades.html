@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Novedades de reglas de visas — changelog público | Wayfare</title>
-<meta name="description" content="Registro público de cada cambio de datos y reglas de Wayfare: 30 versiones con fecha, qué cambió y por qué. Transparencia total." />
+<meta name="description" content="Registro público de cada cambio de datos y reglas de Wayfare: 31 versiones con fecha, qué cambió y por qué. Transparencia total." />
 <style>
   :root { --bg:#0c1a18; --card:#122622; --line:#1f3a35; --ink:#e8f1ee; --dim:#9db8b1; --acc:#39b48e; --amber:#d9b26a; }
   * { margin:0; box-sizing:border-box; }
@@ -74,6 +74,19 @@
   <h2>Historial completo</h2>
   <ul class="req">
         </ul>
+  <article class="nov">
+    <h2>Wave 3 tanda LatAm: Argentina y México, destinos 38º y 39º — y OCR nativo para PDFs oficiales <span class="ver">v1.30.0 · 15 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>Infraestructura:</strong> los PDFs oficiales escaneados ya no son un muro — OCR con Vision (nativo de macOS, vía JXA: scratchpad ocr_pdf.js) para la lista mexicana «no requieren visa» (PDF imagen de gob.mx). El texto OCR se coteja y archiva junto al PDF original.</li>
+      <li><strong>Argentina (3 rutas):</strong></li>
+      <li>· Turista (ar_tourist): matriz oficial del Régimen de Visas (migraciones.gob.ar) — 61 nacionalidades del selector sin visa; CN/CU/DO/GQ/TW requieren. Estancia 3 meses + prórroga.</li>
+      <li>· Vacaciones y Trabajo (ar_working_holiday): 19 socios oficiales a ene-2026 con cupos (ES 500, FR 1.200 hasta 2027, AU 3.400, DE/SE ilimitado, NZ sin cupo publicado…). Edades varían por acuerdo → 18-30 típico declarado abiertamente.</li>
+      <li>· Nómada digital (ar_digital_nomad): Disposición 758/2022, 180 días prorrogables, solo nacionalidades sin visa de turista + trabajo remoto al exterior.</li>
+      <li><strong>México (1 ruta auditada + 3 funciones):</strong> turista (mx_tourist) con la lista oficial del INM — 49 del selector sin visa (¡Bolivia y Colombia SÍ!; Brasil, Perú, Ecuador, Venezuela y SV/GT/HN/NI requieren) + estancia 180 días + ALTERNATIVA clave: visa/residencia de EEUU/Canadá/Japón/UK/Schengen sustituye la visa mexicana (PE→MX partial 40, no ineligible). Sin working holiday; nómada digital sin visa dedicada (hedged REVIEW); estudiante hedged.</li>
+      <li><strong>Estado:</strong> 99 rutas, audit PASS (MATCH 1030, +18; 0 conflictos). Goldens 101→114 (+13 LatAm, existentes intactos). i18n +35 líneas con ES (huecos 0). +4 guías SEO (75 páginas).</li>
+    </ul>
+  </article>
+
   <article class="nov">
     <h2>Wave 3: Corea del Sur, 37º destino verificado — y captura automatizada (renderFetch) <span class="ver">v1.29.0 · 15 de julio de 2026</span></h2>
     <ul class="req">
@@ -395,7 +408,7 @@
   </article><ul class="req">
   </ul>
   <h2>¿Calificas tú?</h2>
-  <p>Wayfare simula tu elegibilidad para esta y otras 94 rutas auditadas según tu perfil.</p>
+  <p>Wayfare simula tu elegibilidad para esta y otras 98 rutas auditadas según tu perfil.</p>
   <a class="cta" href="../index.html">Probar el simulador →</a>
   <p class="disclaimer">Wayfare no es un asesor migratorio ni una agencia de inmigración. Esta página resume
   requisitos publicados por la fuente oficial y verificados en la fecha indicada; los montos, cupos y

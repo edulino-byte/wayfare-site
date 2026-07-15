@@ -7,6 +7,14 @@
   <updated>2026-07-15T09:00:00Z</updated>
 
   <entry>
+    <title>Wave 3 tanda LatAm: Argentina y México, destinos 38º y 39º — y OCR nativo para PDFs oficiales (v1.30.0)</title>
+    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.30.0</id>
+    <updated>2026-07-15T09:00:00Z</updated>
+    <summary>**Infraestructura:** los PDFs oficiales escaneados ya no son un muro — OCR con Vision (nativo de macOS, vía JXA: scratchpad ocr_pdf.js) para la lista mexicana «no requieren visa» (PDF imagen de gob.mx). El texto OCR se coteja y archiva junto al PDF original. — **Argentina (3 rutas):** — · Turista (ar_tourist): matriz oficial del Régimen de Visas (migraciones.gob.ar) — 61 nacionalidades del selector sin visa; CN/CU/DO/GQ/TW requieren. Estancia 3 meses + prórroga.</summary>
+  </entry>
+
+  <entry>
     <title>Wave 3: Corea del Sur, 37º destino verificado — y captura automatizada (renderFetch) (v1.29.0)</title>
     <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
     <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.29.0</id>
@@ -156,13 +164,5 @@
     <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.12.0</id>
     <updated>2026-07-14T09:00:00Z</updated>
     <summary>**App:** `ui/Questionnaire.jsx` — eliminados los deslizadores de ahorros e ingresos mensuales (el dinero no puntúa desde el motor v2.1; solo generaba avisos informativos). Se conserva "¿Trabajas en remoto?" porque sí condiciona las visas de nómada digital. `i18n/strings.js`: sección 03 renombrada a "Idioma y forma de trabajo" (EN/ES). — **Prueba de no-interferencia:** las 49 fotos doradas quedaron byte-idénticas — los resultados de visas no cambian. Petición del usuario confi</summary>
-  </entry>
-
-  <entry>
-    <title>Globo: solo los destinos con reglas reales van coloreados (v1.11.0)</title>
-    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
-    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.11.0</id>
-    <updated>2026-07-14T09:00:00Z</updated>
-    <summary>**App:** `ui/Globe.jsx` — los países sintéticos (y los no listados) dejan de colorearse por elegibilidad simulada: ahora tinte neutro apagado. Solo AU/NZ/GB/CA/ES/PT (reglas modeladas reales) muestran verde/ámbar/terracota. Leyenda: nueva entrada "Aún sin datos" (EN/ES). Siguen siendo clicables (el panel ya mostraba su nota de simulación). Sin cambios de scoring. — **Motivo:** petición del usuario 14-jul-2026 — honestidad visual: que el color del mapa refleje solo lo que Wayf</summary>
   </entry>
 </feed>

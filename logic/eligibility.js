@@ -1729,6 +1729,210 @@ window.Eligibility = (function () {
   };
 
   /* =========================================================================
+     ARGENTINA — Wave 3 tanda LatAm (v1.30.0). Evidencia capturada 15-jul-2026
+     (todas por fetch directo; fuentes server-rendered):
+     - Régimen de visas: matriz oficial por país (migraciones.gob.ar).
+     - Turista: hasta 3 meses prorrogables (argentina.gob.ar/migraciones/turistas).
+     - Nómades digitales: Disposición 758/2022, para nacionales sin visa de
+       turista, 180 días (eirla.cancilleria.gob.ar).
+     - Vacaciones y Trabajo: 19 socios con cupos (cancilleria.gob.ar) — edades
+       varían por acuerdo (no capturadas por país => redacción con cobertura).
+  ========================================================================= */
+  /* Sin visa de turista (matriz oficial; columna Pasaporte Ordinario) */
+  var AR_NOVISA = ["AD","AT","AU","BE","BG","BO","BR","CA","CH","CL","CO","CR","CY","CZ","DE",
+    "DK","EC","EE","ES","FI","FR","GB","GE","GR","GT","HK","HN","HR","HU","IE","IL","IS","IT",
+    "JP","KR","LI","LT","LU","LV","MT","MX","NI","NL","NO","NZ","PA","PE","PL","PT","PY","RO",
+    "RS","RU","SE","SI","SK","SV","TR","UA","US","UY","VE"];
+  /* Vacaciones y Trabajo: 19 socios oficiales (cupo null = ilimitado / no publicado) */
+  var AR_WHV = {
+    DE: { quota: null },  AU: { quota: 3400 }, AT: { quota: 200 },  KR: { quota: 200 },
+    SK: { quota: 100 },   SI: { quota: 900 },  DK: { quota: 150 },  ES: { quota: 500 },
+    FR: { quota: 1200 },  HU: { quota: 200 },  IE: { quota: 200 },  JP: { quota: 200 },
+    NO: { quota: 300 },   NZ: { quota: null }, NL: { quota: 100 },  PL: { quota: 400 },
+    PT: { quota: 100 },   SE: { quota: null },
+  };
+
+  COUNTRY_RULES.AR = {
+
+    tourist: function (p) {
+      var m = [], w = [], x = [], score = 0, nat = p.nationality;
+      function arTourist(sc) {
+        var r = visaResult("tourist", sc, m, w, x);
+        r.officialName = "Argentina tourist entry (visa-free / visa)"; r.route = "ar_tourist";
+        return r;
+      }
+      if (inList(AR_NOVISA, nat)) {
+        score += 55;
+        m.push("Your passport nationality appears on Argentina's visa-free list for tourism (ordinary passport).");
+        w.push("Tourist stays are authorised for up to 3 months, extendable once for a similar period.");
+      } else {
+        score += 10;
+        w.push("A tourist visa is likely required for your nationality. Check the Argentine consulate in your country.");
+        x.push("passport");
+      }
+      w.push("You cannot work during a tourist stay; paid activities are not allowed.");
+      finReq("You may need to show sufficient funds for your stay and onward travel.", w);
+      w.push("This is simulated guidance only. Always verify with the Dirección Nacional de Migraciones (migraciones.gob.ar).");
+      return arTourist(clamp(score, 0, 68));
+    },
+
+    work_and_holiday: function (p) {
+      var m = [], w = [], x = [], score = 0, nat = p.nationality;
+      var cfg = AR_WHV[nat];
+      function arYm(sc) {
+        var r = visaResult("work_and_holiday", sc, m, w, x);
+        r.officialName = "Argentina Working Holiday (Vacaciones y Trabajo)"; r.route = "ar_working_holiday";
+        return r;
+      }
+      if (!cfg) {
+        w.push("Argentina has working holiday agreements with nineteen countries; your nationality does not appear to be among them.");
+        x.push("passport");
+        return arYm(10);
+      }
+      score += 42; m.push("Your passport nationality has a working holiday agreement with Argentina (Vacaciones y Trabajo).");
+      score += scoreAge(p.age, 18, 30, 38);
+      if (p.age < 18 || p.age > 30) { x.push("maxAge"); }
+      else { m.push("Your age appears to be within the typical range for this visa (18 to 30 - some agreements vary)."); }
+      if (cfg.quota) {
+        w.push("This visa has a limited annual quota of about " + cfg.quota.toLocaleString("en-US") + " places, which can run out.");
+      }
+      w.push("Stays are for up to 12 months, non-renewable; work must be incidental to the holiday purpose.");
+      w.push("Requirements vary by bilateral agreement - check the procedure for your nationality on cancilleria.gob.ar.");
+      finReq("You may need a return ticket (or funds to buy one), medical insurance covering the stay, and funds for your initial expenses.", w);
+      w.push("Meeting the requirements does not guarantee the visa; approval is a prerogative of the Argentine State. Simulated guidance only.");
+      return arYm(score);
+    },
+
+    student: function (p) {
+      var m = [], w = [], x = [], score = 0;
+      var pt = passportTier(p.nationality);
+      if (pt <= 2) { score += 16; m.push("Your passport nationality is generally accepted for Argentine student residence applications."); }
+      else         { score += 8;  w.push("Additional documentation requirements may apply for your passport nationality."); }
+      score += scoreEdu(p, "secondary", 24);
+      if (eduRank(p.education) < eduRank("secondary")) x.push("minEdu");
+      else m.push("Your education level appears to meet general requirements.");
+      score += scoreAge(p.age, 16, 65, 10);
+      w.push("Studying in Argentina requires admission to a recognised institution and a student residence (residencia transitoria o temporaria como estudiante).");
+      finReq("You may need to show sufficient funds for tuition and living costs. Check official Argentine migration requirements.", w);
+      w.push("This route could not be verified against a captured official source yet. Treat as preliminary guidance.");
+      var r = visaResult("student", Math.min(score, 60), m, w, x);
+      r.officialName = "Argentina Student Residence"; r.route = "ar_student";
+      return r;
+    },
+
+    digital_nomad: function (p) {
+      var m = [], w = [], x = [], score = 0, nat = p.nationality;
+      function arDnv(sc) {
+        var r = visaResult("digital_nomad", sc, m, w, x);
+        r.officialName = "Argentina Digital Nomad (residencia transitoria, Disp. 758/2022)"; r.route = "ar_digital_nomad";
+        return r;
+      }
+      if (!p.remoteWork) {
+        w.push("Argentina's digital nomad residence requires providing remote services for persons or companies domiciled abroad.");
+        return arDnv(6);
+      }
+      if (!inList(AR_NOVISA, nat)) {
+        w.push("Argentina's digital nomad residence is aimed at nationals of countries that do not require a tourist visa; your nationality appears to need one.");
+        x.push("passport");
+        return arDnv(15);
+      }
+      score += 55;
+      m.push("Your profile indicates remote work, which is the primary condition for this route.");
+      m.push("Your passport nationality appears eligible: the digital nomad residence is aimed at nationals of countries that do not require a tourist visa for Argentina.");
+      w.push("The transitory residence for digital nomads (Disposición 758/2022) is granted for up to 180 days, extendable once.");
+      w.push("You will need a request note, a brief CV, a valid passport and documentation proving your remote work relationship.");
+      w.push("Verify current conditions with the Dirección Nacional de Migraciones. Simulated guidance only.");
+      return arDnv(clamp(score, 0, 65));
+    },
+  };
+
+  /* =========================================================================
+     MÉXICO — Wave 3 tanda LatAm (v1.30.0). Evidencia capturada 15-jul-2026:
+     - Lista oficial «no requieren visa» (PDF oficial gob.mx/INM, texto por OCR
+       Vision de macOS, cotejado a mano).
+     - Requisitos y alternativas (inm.gob.mx, fetch directo): 180 días máx.;
+       visa/residencia válida de EEUU, Canadá, Japón, Reino Unido o Schengen
+       (y residencia Alianza del Pacífico) sustituye a la visa mexicana.
+     Sin programa working holiday. Sin visa de nómada digital dedicada.
+  ========================================================================= */
+  var MX_NOVISA = ["AD","AR","AT","AU","BE","BG","BO","CA","CH","CL","CO","CR","CY","CZ","DE",
+    "DK","EE","ES","FI","FR","GB","GR","HK","HR","HU","IE","IL","IS","IT","JP","KR","LI","LT",
+    "LU","LV","MT","NL","NO","NZ","PA","PL","PT","PY","RO","SE","SI","SK","US","UY"];
+
+  COUNTRY_RULES.MX = {
+
+    tourist: function (p) {
+      var m = [], w = [], x = [], score = 0, nat = p.nationality;
+      function mxTourist(sc) {
+        var r = visaResult("tourist", sc, m, w, x);
+        r.officialName = "Mexico visitor entry (visa-free / visa)"; r.route = "mx_tourist";
+        return r;
+      }
+      if (inList(MX_NOVISA, nat)) {
+        score += 55;
+        m.push("Your passport nationality appears on Mexico's official list of countries that do not require a visa (visitor without paid activities).");
+        w.push("Visitor stays cannot exceed 180 days.");
+      } else {
+        score += 40;
+        w.push("A Mexican visitor visa is likely required for your nationality - or, as an alternative, a valid visa or permanent residence of the US, Canada, Japan, the UK or a Schengen country.");
+        w.push("Visitor stays cannot exceed 180 days.");
+      }
+      w.push("You cannot work during a visitor stay; paid activities are not allowed.");
+      finReq("The migration authority may ask for hotel bookings, return tickets and proof of your travel purpose.", w);
+      w.push("This is simulated guidance only. Always verify with the Instituto Nacional de Migración (inm.gob.mx).");
+      return mxTourist(clamp(score, 0, 68));
+    },
+
+    work_and_holiday: function (p) {
+      var m = [], w = [], x = [], score = 5;
+      w.push("Mexico does not operate a working holiday programme.");
+      x.push("passport");
+      var r = visaResult("work_and_holiday", score, m, w, x);
+      r.officialName = "No working holiday programme"; r.route = "mx_no_whv";
+      return r;
+    },
+
+    student: function (p) {
+      var m = [], w = [], x = [], score = 0;
+      var pt = passportTier(p.nationality);
+      if (pt <= 2) { score += 16; m.push("Your passport nationality is generally accepted for Mexican student residence applications."); }
+      else         { score += 8;  w.push("Additional documentation requirements may apply for your passport nationality."); }
+      score += scoreEdu(p, "secondary", 24);
+      if (eduRank(p.education) < eduRank("secondary")) x.push("minEdu");
+      else m.push("Your education level appears to meet general requirements.");
+      score += scoreAge(p.age, 16, 65, 10);
+      w.push("Studies over 180 days require the residente temporal estudiante condition, with an acceptance letter from a Mexican institution.");
+      finReq("You may need to show sufficient funds for tuition and living costs. Check official Mexican requirements.", w);
+      w.push("Courses of up to 180 days can be done as a visitor with an acceptance letter. Simulated guidance only.");
+      var r = visaResult("student", Math.min(score, 62), m, w, x);
+      r.officialName = "Mexico Student Residence (residente temporal estudiante)"; r.route = "mx_student";
+      return r;
+    },
+
+    digital_nomad: function (p) {
+      var m = [], w = [], x = [], score = 0, nat = p.nationality;
+      function mxDnv(sc) {
+        var r = visaResult("digital_nomad", sc, m, w, x);
+        r.officialName = "Mexico: no dedicated digital nomad visa"; r.route = "mx_digital_nomad";
+        return r;
+      }
+      if (!p.remoteWork) {
+        w.push("Working remotely from Mexico requires an active remote work relationship with an employer or clients abroad.");
+        return mxDnv(6);
+      }
+      score += 25;
+      m.push("Your profile indicates remote work, which is the primary condition for this route.");
+      if (inList(MX_NOVISA, nat)) {
+        score += 15;
+        m.push("For stays of up to 180 days, your nationality can enter as a visitor without a Mexican visa.");
+      }
+      w.push("Mexico has no dedicated digital nomad visa; remote workers commonly use the visitor condition (up to 180 days) or the temporary resident route (economic solvency requirements).");
+      w.push("This route could not be verified against a captured official source yet. Treat as preliminary guidance.");
+      return mxDnv(clamp(score, 0, 45));
+    },
+  };
+
+  /* =========================================================================
      EUROPA SCHENGEN — Wave 2 ampliada (v1.19.0). Fábrica de reglas compartida
      para los 26 miembros Schengen sin modelo propio (ES/PT tienen el suyo;
      Irlanda NO es Schengen y queda para su propia fase).
