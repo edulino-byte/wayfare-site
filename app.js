@@ -775,6 +775,11 @@ window.Processing = Processing;
 
 /* ===== ui/Globe.jsx ===== */
 const GEOJSON_URL = "https://raw.githubusercontent.com/vasturiano/globe.gl/master/example/datasets/ne_110m_admin_0_countries.geojson";
+const MICRO_DEST_COORDS = {
+  SG: { lat: 1.35, lng: 103.82 },
+  MT: { lat: 35.94, lng: 14.38 },
+  LI: { lat: 47.16, lng: 9.55 }
+};
 const GLOBE_TEXTURES = {
   textured: "https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg",
   night: "https://unpkg.com/three-globe/example/img/earth-night.jpg",
@@ -852,6 +857,7 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle }) {
   const globeRef = React.useRef(null);
   const [features, setFeatures] = React.useState(null);
   const [results, setResults] = React.useState(null);
+  const [micros, setMicros] = React.useState([]);
   const [eligError, setEligError] = React.useState(false);
   const [selected, setSelected] = React.useState(null);
   const [hoverIdx, setHoverIdx] = React.useState(null);
@@ -881,6 +887,16 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle }) {
         f.__id = i;
         f.__iso = geoList[i].iso;
       });
+      const microIsos = Object.keys(MICRO_DEST_COORDS).filter((iso) => window.Eligibility.hasRealRules(iso) && !feats.some((f) => f.__iso === iso));
+      const microRes = window.Eligibility.evaluateAll(
+        microIsos.map((iso) => ({ id: "micro_" + iso, iso, name: countryName(iso, "en") || iso })),
+        profile
+      );
+      setMicros(microIsos.map((iso) => Object.assign(
+        { iso },
+        MICRO_DEST_COORDS[iso],
+        { r: microRes["micro_" + iso] }
+      )));
       setFeatures(feats);
       setResults(res);
     }).catch((e) => console.error("GeoJSON load failed", e));
@@ -909,7 +925,27 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle }) {
       } else {
         setHoverData(null);
       }
-    }).onPolygonClick((d) => selectFeature(d));
+    }).onPolygonClick((d) => selectFeature(d)).labelsData(micros).labelLat((d) => d.lat).labelLng((d) => d.lng).labelText((d) => countryName(d.iso, lang) || d.iso).labelSize(0.65).labelDotRadius(0.42).labelAltitude(8e-3).labelResolution(2).labelColor((d) => d.r && !d.r.synthetic ? statusColor(d.r.status, 0.95) : "rgba(148,163,160,0.85)").onLabelHover((d) => {
+      host.style.cursor = d ? "pointer" : "grab";
+      if (d) {
+        setHoverData({
+          name: countryName(d.iso, lang) || d.iso,
+          iso: d.iso,
+          status: d.r ? d.r.status : null,
+          x: mousePosRef.current.x,
+          y: mousePosRef.current.y
+        });
+      } else {
+        setHoverData(null);
+      }
+    }).onLabelClick((d) => {
+      if (!d.r) return;
+      selRef.current = null;
+      setSelected(Object.assign({}, d.r, { iso: d.iso }));
+      setDetailOpen(true);
+      world.controls().autoRotate = false;
+      world.pointOfView({ lat: d.lat, lng: d.lng - 12, altitude: 1.2 }, 900);
+    });
     world.controls().autoRotate = true;
     world.controls().autoRotateSpeed = 0.45;
     world.controls().enableZoom = true;
