@@ -468,6 +468,10 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
   border-radius: 999px; padding: 8px 16px; font-size: 13px; font-weight: 600; cursor: pointer;
   transition: background .15s ease; }
 .q-back-btn:hover { background: rgba(127,200,169,0.16); }
+.q-back-wrap { margin-bottom: 18px; }
+.q-back-wrap .q-back-btn { margin-bottom: 0; }
+.q-back-hint { margin-top: 8px; font-size: 12px; line-height: 1.5; color: var(--st-partial, #d99316);
+  max-width: 520px; }
 
 /* Comparador de destinos (v1.28.0, idea #3) */
 .cmp-open-btn { display: inline-flex; align-items: center; gap: 7px; margin: 14px 0 2px;
