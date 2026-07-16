@@ -1194,7 +1194,7 @@ function EvidenceRow({ t, lang, className, icon, text, fact }) {
       "aria-expanded": open,
       onClick: () => setOpen(!open)
     },
-    /* @__PURE__ */ React.createElement("svg", { width: "10", height: "10", viewBox: "0 0 24 24", fill: "none" }, /* @__PURE__ */ React.createElement("path", { d: "M9 5h8a2 2 0 012 2v12a2 2 0 01-2 2H9a2 2 0 01-2-2V7a2 2 0 012-2z", stroke: "currentColor", strokeWidth: "2" }), /* @__PURE__ */ React.createElement("path", { d: "M7 17H6a2 2 0 01-2-2V4a2 2 0 012-2h8a2 2 0 012 2v1", stroke: "currentColor", strokeWidth: "2" }))
+    /* @__PURE__ */ React.createElement("svg", { width: "11", height: "11", viewBox: "0 0 24 24", fill: "none" }, /* @__PURE__ */ React.createElement("path", { d: "M2 4h6a4 4 0 014 4v13a3 3 0 00-3-3H2V4z", stroke: "currentColor", strokeWidth: "2", strokeLinejoin: "round" }), /* @__PURE__ */ React.createElement("path", { d: "M22 4h-6a4 4 0 00-4 4v13a3 3 0 013-3h7V4z", stroke: "currentColor", strokeWidth: "2", strokeLinejoin: "round" }))
   )), open ? /* @__PURE__ */ React.createElement("div", { className: "ev-panel" }, /* @__PURE__ */ React.createElement("div", { className: "ev-quote" }, "\u201C", fact.x, "\u201D"), /* @__PURE__ */ React.createElement("div", { className: "ev-meta" }, /* @__PURE__ */ React.createElement("a", { href: fact.u, target: "_blank", rel: "noopener noreferrer" }, t("ev_source"), " \u2197"), dateStr ? /* @__PURE__ */ React.createElement("span", null, " \xB7 ", t("ev_captured"), dateStr) : null, fact.r ? /* @__PURE__ */ React.createElement("span", { className: "ev-review" }, " \xB7 ", t("ev_review")) : null)) : null);
 }
 function DataFreshness({ t, lang, iso, synthetic }) {
