@@ -470,6 +470,10 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
 .q-back-btn:hover { background: rgba(127,200,169,0.16); }
 .q-back-btn:disabled { opacity: 0.38; cursor: not-allowed; }
 .q-back-btn:disabled:hover { background: rgba(127,200,169,0.08); }
+.q-reset-link { margin-top: 10px; background: none; border: none; padding: 0; cursor: pointer;
+  font-size: 12px; color: var(--on-dark-2); opacity: 0.65; text-decoration: underline;
+  text-underline-offset: 2px; }
+.q-reset-link:hover { opacity: 0.95; }
 .q-back-wrap { margin-bottom: 18px; }
 .q-back-wrap .q-back-btn { margin-bottom: 0; }
 .q-back-hint { margin-top: 8px; font-size: 12px; line-height: 1.5; color: var(--st-partial, #d99316);

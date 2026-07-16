@@ -16,7 +16,7 @@ window.I18N = {
 
     /* questionnaire */
     q_title: "Build your mobility profile",
-    q_sub: "Answer a few questions and we'll map every country against your eligibility. Nothing here is stored — it's a prototype with simulated rules.",
+    q_sub: "Answer a few questions and we'll map every country against your eligibility. Your answers are saved only on this device (your browser) — nothing is sent to any server.",
     sec_identity: "About you",
     sec_identity_sub: "The essentials that shape what you qualify for.",
     sec_education: "Education",
@@ -120,6 +120,7 @@ window.I18N = {
     ev_review: "pending review",
     g_method_link: "how we verify",
     q_back_map: "Back to my map (without re-evaluating)",
+    q_reset: "Reset and start from scratch (clears your saved profile)",
     q_back_dirty: "You've changed your answers - submit the questionnaire again to update your map.",
     cmp_btn: "Compare destinations",
     cmp_title: "Side-by-side comparison",
@@ -496,7 +497,7 @@ window.I18N = {
     lang_label: "ES",
 
     q_title: "Crea tu perfil de movilidad",
-    q_sub: "Responde unas preguntas y compararemos cada país con tu elegibilidad. No guardamos nada — es un prototipo con reglas simuladas.",
+    q_sub: "Responde unas preguntas y compararemos cada país con tu elegibilidad. Tus respuestas se guardan solo en este dispositivo (tu navegador) — nada se envía a ningún servidor.",
     sec_identity: "Sobre ti",
     sec_identity_sub: "Lo esencial que define a qué puedes optar.",
     sec_education: "Educación",
@@ -591,6 +592,7 @@ window.I18N = {
     ev_review: "en revisión",
     g_method_link: "cómo verificamos",
     q_back_map: "Volver a mi mapa (sin recalcular)",
+    q_reset: "Restablecer y empezar de cero (borra tu perfil guardado)",
     q_back_dirty: "Has cambiado tus respuestas: envía el cuestionario de nuevo para actualizar tu mapa.",
     cmp_btn: "Comparar destinos",
     cmp_title: "Comparación lado a lado",

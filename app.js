@@ -614,7 +614,7 @@ function BackgroundGlobe() {
 window.BackgroundGlobe = BackgroundGlobe;
 
 /* ===== ui/Questionnaire.jsx ===== */
-function Questionnaire({ t, lang, profile, setProfile, onSubmit, onBack, dirty }) {
+function Questionnaire({ t, lang, profile, setProfile, onSubmit, onBack, dirty, onReset }) {
   const D = window.VISA_DATA;
   const set = (k, v) => setProfile((p) => Object.assign({}, p, { [k]: v }));
   const toggleIn = (k, v) => setProfile((p) => {
@@ -666,7 +666,7 @@ function Questionnaire({ t, lang, profile, setProfile, onSubmit, onBack, dirty }
         { value: "no", label: t("remote_no") }
       ]
     }
-  )))), /* @__PURE__ */ React.createElement("section", { className: "section" }, /* @__PURE__ */ React.createElement("div", { className: "section-head" }, /* @__PURE__ */ React.createElement("span", { className: "section-num" }, "04"), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h2", null, t("sec_intent")), /* @__PURE__ */ React.createElement("p", null, t("sec_intent_sub")))), /* @__PURE__ */ React.createElement("div", { className: "grid" }, /* @__PURE__ */ React.createElement(Field, { label: t("f_visas"), hint: t("f_visas_hint"), full: true }, /* @__PURE__ */ React.createElement(Chips, { selected: profile.visaTypes, onToggle: (v) => toggleIn("visaTypes", v), options: visaOpts })))), /* @__PURE__ */ React.createElement("div", { className: "submitbar" }, /* @__PURE__ */ React.createElement("button", { className: "btn-primary", onClick: onSubmit }, t("submit"), /* @__PURE__ */ React.createElement("svg", { className: "arr", width: "18", height: "18", viewBox: "0 0 24 24", fill: "none" }, /* @__PURE__ */ React.createElement("path", { d: "M5 12h14M13 6l6 6-6 6", stroke: "currentColor", strokeWidth: "2.2", strokeLinecap: "round", strokeLinejoin: "round" }))), /* @__PURE__ */ React.createElement("p", { className: "disclaimer-short" }, t("disclaimer_short")))));
+  )))), /* @__PURE__ */ React.createElement("section", { className: "section" }, /* @__PURE__ */ React.createElement("div", { className: "section-head" }, /* @__PURE__ */ React.createElement("span", { className: "section-num" }, "04"), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h2", null, t("sec_intent")), /* @__PURE__ */ React.createElement("p", null, t("sec_intent_sub")))), /* @__PURE__ */ React.createElement("div", { className: "grid" }, /* @__PURE__ */ React.createElement(Field, { label: t("f_visas"), hint: t("f_visas_hint"), full: true }, /* @__PURE__ */ React.createElement(Chips, { selected: profile.visaTypes, onToggle: (v) => toggleIn("visaTypes", v), options: visaOpts })))), /* @__PURE__ */ React.createElement("div", { className: "submitbar" }, /* @__PURE__ */ React.createElement("button", { className: "btn-primary", onClick: onSubmit }, t("submit"), /* @__PURE__ */ React.createElement("svg", { className: "arr", width: "18", height: "18", viewBox: "0 0 24 24", fill: "none" }, /* @__PURE__ */ React.createElement("path", { d: "M5 12h14M13 6l6 6-6 6", stroke: "currentColor", strokeWidth: "2.2", strokeLinecap: "round", strokeLinejoin: "round" }))), /* @__PURE__ */ React.createElement("p", { className: "disclaimer-short" }, t("disclaimer_short")), onReset ? /* @__PURE__ */ React.createElement("button", { type: "button", className: "q-reset-link", onClick: onReset }, t("q_reset")) : null)));
 }
 function countryName(iso, lang) {
   if (lang === "es" && window.COUNTRY_NAMES && window.COUNTRY_NAMES.es && window.COUNTRY_NAMES.es[iso]) {
@@ -1236,12 +1236,46 @@ function defaultProfile() {
     /* v1.21.0 — sin preselección (feedback de usuarios); vacío = se evalúan todas */
   };
 }
+const STORE_PROFILE = "wayfare_profile_v1";
+const STORE_SUBMITTED = "wayfare_submitted_v1";
+function loadStored(key) {
+  try {
+    const s = localStorage.getItem(key);
+    return s ? JSON.parse(s) : null;
+  } catch (e) {
+    return null;
+  }
+}
+function saveStored(key, value) {
+  try {
+    if (value == null) localStorage.removeItem(key);
+    else localStorage.setItem(key, JSON.stringify(value));
+  } catch (e) {
+  }
+}
 function App() {
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
   const [lang, setLang] = React.useState("en");
   const [screen, setScreen] = React.useState("questionnaire");
-  const [profile, setProfile] = React.useState(defaultProfile);
-  const [submitted, setSubmitted] = React.useState(null);
+  const [profile, setProfile] = React.useState(() => Object.assign(defaultProfile(), loadStored(STORE_PROFILE) || {}));
+  const [submitted, setSubmitted] = React.useState(() => {
+    const s = loadStored(STORE_SUBMITTED);
+    return s && s.profile && s.version ? s : null;
+  });
+  React.useEffect(() => {
+    saveStored(STORE_PROFILE, profile);
+  }, [profile]);
+  React.useEffect(() => {
+    saveStored(STORE_SUBMITTED, submitted);
+  }, [submitted]);
+  const resetAll = React.useCallback(() => {
+    saveStored(STORE_PROFILE, null);
+    saveStored(STORE_SUBMITTED, null);
+    setProfile(defaultProfile());
+    setSubmitted(null);
+    setScreen("questionnaire");
+    window.scrollTo(0, 0);
+  }, []);
   const backToMap = React.useCallback(() => {
     setScreen("globe");
     setTimeout(() => window.dispatchEvent(new Event("resize")), 50);
@@ -1290,7 +1324,8 @@ function App() {
         setScreen("processing");
       },
       onBack: submitted ? backToMap : null,
-      dirty: submitted ? JSON.stringify(profile) !== JSON.stringify(submitted.profile) : false
+      dirty: submitted ? JSON.stringify(profile) !== JSON.stringify(submitted.profile) : false,
+      onReset: resetAll
     }
   ), screen === "processing" && /* @__PURE__ */ React.createElement(Processing, { t: tr, onDone: () => setScreen("globe") }), submitted && screen !== "processing" && /* @__PURE__ */ React.createElement("div", { style: { display: screen === "globe" ? "contents" : "none" } }, /* @__PURE__ */ React.createElement(
     GlobeView,
