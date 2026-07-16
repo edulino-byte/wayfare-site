@@ -516,6 +516,21 @@ function Chips({ selected, onToggle, options }) {
     o.label
   )));
 }
+function destroyGlobe(world, host) {
+  try {
+    if (world && typeof world._destructor === "function") {
+      world._destructor();
+    } else if (world && typeof world.pauseAnimation === "function") {
+      world.pauseAnimation();
+      if (world.renderer && world.renderer() && world.renderer().dispose) world.renderer().dispose();
+      if (world.controls && world.controls() && world.controls().dispose) world.controls().dispose();
+    }
+  } catch (e) {
+  }
+  if (host) {
+    while (host.firstChild) host.removeChild(host.firstChild);
+  }
+}
 Object.assign(window, {
   isoToFlag,
   fmt,
@@ -524,7 +539,8 @@ Object.assign(window, {
   TextControl,
   Segmented,
   Slider,
-  Chips
+  Chips,
+  destroyGlobe
 });
 
 /* ===== ui/BackgroundGlobe.jsx ===== */
@@ -593,6 +609,7 @@ function BackgroundGlobe() {
     window.addEventListener("resize", onResize, { passive: true });
     return () => {
       window.removeEventListener("resize", onResize);
+      destroyGlobe(world, host);
       globeRef.current = null;
     };
   }, []);
@@ -1019,6 +1036,8 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle }) {
     return () => {
       host.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("resize", onResize);
+      destroyGlobe(world, host);
+      globeRef.current = null;
     };
   }, [features, results]);
   React.useEffect(() => {
