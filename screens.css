@@ -408,6 +408,21 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
 .rec .cnt { font-size: 12px; font-weight: 700; color: var(--st-eligible);
   background: rgba(31,157,87,.16); padding: 4px 9px; border-radius: 999px; flex: 0 0 auto; }
 
+/* Cabecera con bandera traslúcida (v1.38.0, diseño del usuario): a sangre
+   completa arriba del panel, desenfocada y fundida en degradado hacia abajo. */
+.detail-flag-banner { position: absolute; top: 0; left: 0; right: 0; height: 165px; z-index: 0;
+  background-size: cover; background-position: center 30%; opacity: 0.58;
+  filter: blur(2px) saturate(1.05) brightness(1);
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.7) 50%, transparent 100%);
+  mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.7) 50%, transparent 100%);
+  pointer-events: none; }
+.detail-head, .special-access-note { position: relative; z-index: 1; }
+/* protección de lectura sobre la bandera más presente */
+.detail-head .nm { text-shadow: 0 1px 14px rgba(0,0,0,0.65), 0 1px 3px rgba(0,0,0,0.5); }
+.detail-head .rg { text-shadow: 0 1px 10px rgba(0,0,0,0.6); }
+.detail-head .status-pill { backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 2px 14px rgba(0,0,0,0.28); }
+
 .detail-head { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 18px; }
 .detail-head .flag { font-size: 40px; line-height: 1; }
 .detail-head .nm { font-family: var(--font-display); font-weight: 600; font-size: 24px; letter-spacing: -.02em; }

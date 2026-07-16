@@ -1135,7 +1135,14 @@ function CountryDetail({ t, lang, result, profile, onCompare }) {
   }
   const statusKey = result.status === "eligible" ? "st_eligible" : result.status === "partial" ? "st_partial" : "st_ineligible";
   const pillColor = STATUS_RGB[result.status];
-  return /* @__PURE__ */ React.createElement("div", { style: { animation: "fadeUp .3s ease both" } }, /* @__PURE__ */ React.createElement("div", { className: "detail-head" }, /* @__PURE__ */ React.createElement("span", { className: "flag" }, isoToFlag(result.iso)), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "nm" }, countryName(result.iso, lang) || result.name), /* @__PURE__ */ React.createElement("div", { className: "rg" }, t("rg_" + (result.region || "other"))), /* @__PURE__ */ React.createElement("span", { className: "status-pill", style: {
+  return /* @__PURE__ */ React.createElement("div", { style: { animation: "fadeUp .3s ease both" } }, /* @__PURE__ */ React.createElement(
+    "div",
+    {
+      className: "detail-flag-banner",
+      "aria-hidden": "true",
+      style: { backgroundImage: "url(assets/flags/" + String(result.iso || "").toLowerCase() + ".svg)" }
+    }
+  ), /* @__PURE__ */ React.createElement("div", { className: "detail-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "nm" }, countryName(result.iso, lang) || result.name), /* @__PURE__ */ React.createElement("div", { className: "rg" }, t("rg_" + (result.region || "other"))), /* @__PURE__ */ React.createElement("span", { className: "status-pill", style: {
     background: `rgba(${pillColor[0]},${pillColor[1]},${pillColor[2]},0.16)`,
     color: statusColor(result.status, 1)
   } }, /* @__PURE__ */ React.createElement("span", { className: "sw", style: { background: statusColor(result.status, 1) } }), t(statusKey)))), (() => {
