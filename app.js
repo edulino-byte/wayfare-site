@@ -614,7 +614,7 @@ function BackgroundGlobe() {
 window.BackgroundGlobe = BackgroundGlobe;
 
 /* ===== ui/Questionnaire.jsx ===== */
-function Questionnaire({ t, lang, profile, setProfile, onSubmit }) {
+function Questionnaire({ t, lang, profile, setProfile, onSubmit, onBack }) {
   const D = window.VISA_DATA;
   const set = (k, v) => setProfile((p) => Object.assign({}, p, { [k]: v }));
   const toggleIn = (k, v) => setProfile((p) => {
@@ -637,7 +637,7 @@ function Questionnaire({ t, lang, profile, setProfile, onSubmit }) {
     label: t("vt_" + id),
     vt: D.VISA_TYPES[id].icon
   }));
-  return /* @__PURE__ */ React.createElement("div", { className: "q-scroll" }, /* @__PURE__ */ React.createElement(BackgroundGlobe, null), /* @__PURE__ */ React.createElement("div", { className: "q-wrap" }, /* @__PURE__ */ React.createElement("div", { className: "q-head" }, /* @__PURE__ */ React.createElement("span", { className: "q-eyebrow" }, /* @__PURE__ */ React.createElement("span", { className: "dot" }), t("g_simulated")), /* @__PURE__ */ React.createElement("h1", null, t("q_title")), /* @__PURE__ */ React.createElement("p", null, t("q_sub"))), /* @__PURE__ */ React.createElement("section", { className: "section" }, /* @__PURE__ */ React.createElement("div", { className: "section-head" }, /* @__PURE__ */ React.createElement("span", { className: "section-num" }, "01"), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h2", null, t("sec_identity")), /* @__PURE__ */ React.createElement("p", null, t("sec_identity_sub")))), /* @__PURE__ */ React.createElement("div", { className: "grid" }, /* @__PURE__ */ React.createElement(Field, { label: t("f_nationality") }, /* @__PURE__ */ React.createElement(SelectControl, { value: profile.nationality, onChange: (v) => set("nationality", v), options: passportOpts })), /* @__PURE__ */ React.createElement(Field, { label: t("f_residence") }, /* @__PURE__ */ React.createElement(SelectControl, { value: profile.currentResidence, onChange: (v) => set("currentResidence", v), options: residenceOpts })), /* @__PURE__ */ React.createElement(Field, { label: t("f_age") }, /* @__PURE__ */ React.createElement(
+  return /* @__PURE__ */ React.createElement("div", { className: "q-scroll" }, /* @__PURE__ */ React.createElement(BackgroundGlobe, null), /* @__PURE__ */ React.createElement("div", { className: "q-wrap" }, /* @__PURE__ */ React.createElement("div", { className: "q-head" }, onBack ? /* @__PURE__ */ React.createElement("button", { type: "button", className: "q-back-btn", onClick: onBack }, /* @__PURE__ */ React.createElement("svg", { width: "13", height: "13", viewBox: "0 0 24 24", fill: "none", "aria-hidden": "true" }, /* @__PURE__ */ React.createElement("path", { d: "M19 12H5M11 18l-6-6 6-6", stroke: "currentColor", strokeWidth: "2.2", strokeLinecap: "round", strokeLinejoin: "round" })), t("q_back_map")) : null, /* @__PURE__ */ React.createElement("span", { className: "q-eyebrow" }, /* @__PURE__ */ React.createElement("span", { className: "dot" }), t("g_simulated")), /* @__PURE__ */ React.createElement("h1", null, t("q_title")), /* @__PURE__ */ React.createElement("p", null, t("q_sub"))), /* @__PURE__ */ React.createElement("section", { className: "section" }, /* @__PURE__ */ React.createElement("div", { className: "section-head" }, /* @__PURE__ */ React.createElement("span", { className: "section-num" }, "01"), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h2", null, t("sec_identity")), /* @__PURE__ */ React.createElement("p", null, t("sec_identity_sub")))), /* @__PURE__ */ React.createElement("div", { className: "grid" }, /* @__PURE__ */ React.createElement(Field, { label: t("f_nationality") }, /* @__PURE__ */ React.createElement(SelectControl, { value: profile.nationality, onChange: (v) => set("nationality", v), options: passportOpts })), /* @__PURE__ */ React.createElement(Field, { label: t("f_residence") }, /* @__PURE__ */ React.createElement(SelectControl, { value: profile.currentResidence, onChange: (v) => set("currentResidence", v), options: residenceOpts })), /* @__PURE__ */ React.createElement(Field, { label: t("f_age") }, /* @__PURE__ */ React.createElement(
     Slider,
     {
       value: profile.age,
@@ -869,7 +869,7 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle }) {
   const mousePosRef = React.useRef({ x: 0, y: 0 });
   React.useEffect(() => {
     let alive = true;
-    fetch(GEOJSON_URL).then((r) => r.json()).then((gj) => {
+    (window.__WAYFARE_GEOJSON ? Promise.resolve(window.__WAYFARE_GEOJSON) : fetch(GEOJSON_URL).then((r) => r.json()).then((gj) => window.__WAYFARE_GEOJSON = gj)).then((gj) => {
       if (!alive) return;
       if (!window.Eligibility || typeof window.Eligibility.evaluateAll !== "function") {
         console.error("[Wayfare] window.Eligibility.evaluateAll is not available. Check eligibility.js for syntax errors.");
@@ -1231,6 +1231,11 @@ function App() {
   const [lang, setLang] = React.useState("en");
   const [screen, setScreen] = React.useState("questionnaire");
   const [profile, setProfile] = React.useState(defaultProfile);
+  const [submitted, setSubmitted] = React.useState(null);
+  const backToMap = React.useCallback(() => {
+    setScreen("globe");
+    setTimeout(() => window.dispatchEvent(new Event("resize")), 50);
+  }, []);
   const tr = React.useCallback((key) => {
     const tbl = window.I18N[lang] || window.I18N.en;
     return tbl[key] != null ? tbl[key] : key;
@@ -1271,19 +1276,22 @@ function App() {
       setProfile,
       onSubmit: () => {
         window.scrollTo(0, 0);
+        setSubmitted({ profile: Object.assign({}, profile), version: (submitted ? submitted.version : 0) + 1 });
         setScreen("processing");
-      }
+      },
+      onBack: submitted ? backToMap : null
     }
-  ), screen === "processing" && /* @__PURE__ */ React.createElement(Processing, { t: tr, onDone: () => setScreen("globe") }), screen === "globe" && /* @__PURE__ */ React.createElement(
+  ), screen === "processing" && /* @__PURE__ */ React.createElement(Processing, { t: tr, onDone: () => setScreen("globe") }), submitted && screen !== "processing" && /* @__PURE__ */ React.createElement("div", { style: { display: screen === "globe" ? "contents" : "none" } }, /* @__PURE__ */ React.createElement(
     GlobeView,
     {
+      key: submitted.version,
       t: tr,
       lang,
-      profile,
+      profile: submitted.profile,
       globeStyle: t.globeStyle,
       onEditProfile: () => setScreen("questionnaire")
     }
-  )), /* @__PURE__ */ React.createElement(TweaksPanel, null, /* @__PURE__ */ React.createElement(TweakSection, { label: "Brand" }), /* @__PURE__ */ React.createElement(
+  ))), /* @__PURE__ */ React.createElement(TweaksPanel, null, /* @__PURE__ */ React.createElement(TweakSection, { label: "Brand" }), /* @__PURE__ */ React.createElement(
     TweakColor,
     {
       label: "Accent",
