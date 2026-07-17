@@ -419,7 +419,7 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
 .detail-head, .special-access-note { position: relative; z-index: 1; }
 /* protección de lectura sobre la bandera más presente */
 .detail-head .nm { text-shadow: 0 1px 14px rgba(0,0,0,0.65), 0 1px 3px rgba(0,0,0,0.5); }
-.detail-head .rg { text-shadow: 0 1px 10px rgba(0,0,0,0.6); }
+.detail-head .rg { text-shadow: 0 1px 10px rgba(0,0,0,0.6); color: rgba(232,241,238,0.82); }
 .detail-head .status-pill { backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
   box-shadow: 0 2px 14px rgba(0,0,0,0.28); }
 

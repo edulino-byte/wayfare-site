@@ -1140,10 +1140,10 @@ function CountryDetail({ t, lang, result, profile, onCompare }) {
     {
       className: "detail-flag-banner",
       "aria-hidden": "true",
-      style: { backgroundImage: "url(assets/flags/" + String(result.iso || "").toLowerCase() + ".svg)" }
+      style: { backgroundImage: "linear-gradient(to right, rgba(8,16,14,0.94) 0%, rgba(8,16,14,0.62) 42%, rgba(8,16,14,0.12) 78%, rgba(8,16,14,0) 100%),url(assets/flags/" + String(result.iso || "").toLowerCase() + ".svg)" }
     }
   ), /* @__PURE__ */ React.createElement("div", { className: "detail-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "nm" }, countryName(result.iso, lang) || result.name), /* @__PURE__ */ React.createElement("div", { className: "rg" }, t("rg_" + (result.region || "other"))), /* @__PURE__ */ React.createElement("span", { className: "status-pill", style: {
-    background: `rgba(${pillColor[0]},${pillColor[1]},${pillColor[2]},0.16)`,
+    background: `linear-gradient(rgba(${pillColor[0]},${pillColor[1]},${pillColor[2]},0.20), rgba(${pillColor[0]},${pillColor[1]},${pillColor[2]},0.20)), rgba(8,16,14,0.78)`,
     color: statusColor(result.status, 1)
   } }, /* @__PURE__ */ React.createElement("span", { className: "sw", style: { background: statusColor(result.status, 1) } }), t(statusKey)))), (() => {
     const sa = profile && window.Eligibility.specialAccess(profile.nationality, result.iso);
