@@ -780,7 +780,21 @@ Object.assign(window, { Questionnaire, countryName });
 
 /* ===== ui/Processing.jsx ===== */
 function Processing({ t, onDone }) {
-  const steps = ["p_step1", "p_step2", "p_step3", "p_step4"];
+  const steps = React.useMemo(() => {
+    const dest = (window.VERIFICATION || {}).destinations || {};
+    let rutas = 0, hechos = 0;
+    Object.values(dest).forEach((d) => {
+      rutas += d.routes || 0;
+      hechos += d.facts || 0;
+    });
+    const destinos = Object.keys(dest).length;
+    return [
+      t("p_step1"),
+      t("p_live_routes").replace("%N%", rutas || "\u2026"),
+      t("p_live_facts").replace("%N%", (hechos || 0).toLocaleString()),
+      t("p_live_dest").replace("%N%", destinos || "\u2026")
+    ];
+  }, [t]);
   const [active, setActive] = React.useState(0);
   React.useEffect(() => {
     const per = 620;
@@ -795,7 +809,7 @@ function Processing({ t, onDone }) {
   }, []);
   return /* @__PURE__ */ React.createElement("div", { className: "processing" }, /* @__PURE__ */ React.createElement("div", { className: "proc-card" }, /* @__PURE__ */ React.createElement("div", { className: "proc-orbit" }, /* @__PURE__ */ React.createElement("div", { className: "ring" }), /* @__PURE__ */ React.createElement("div", { className: "ring r2" }), /* @__PURE__ */ React.createElement("div", { className: "sat" }), /* @__PURE__ */ React.createElement("div", { className: "core" })), /* @__PURE__ */ React.createElement("h2", null, t("p_title")), /* @__PURE__ */ React.createElement("div", { className: "proc-steps" }, steps.map((s, i) => {
     const cls = i < active ? "done" : i === active ? "active" : "";
-    return /* @__PURE__ */ React.createElement("div", { key: s, className: "proc-step " + cls }, /* @__PURE__ */ React.createElement("span", { className: "tick" }, /* @__PURE__ */ React.createElement("svg", { viewBox: "0 0 24 24", fill: "none" }, /* @__PURE__ */ React.createElement("path", { d: "M5 12l5 5L19 7", stroke: "#fff", strokeWidth: "2.6", strokeLinecap: "round", strokeLinejoin: "round" }))), t(s));
+    return /* @__PURE__ */ React.createElement("div", { key: i, className: "proc-step " + cls }, /* @__PURE__ */ React.createElement("span", { className: "tick" }, /* @__PURE__ */ React.createElement("svg", { viewBox: "0 0 24 24", fill: "none" }, /* @__PURE__ */ React.createElement("path", { d: "M5 12l5 5L19 7", stroke: "#fff", strokeWidth: "2.6", strokeLinecap: "round", strokeLinejoin: "round" }))), s);
   }))));
 }
 window.Processing = Processing;
@@ -890,6 +904,8 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle }) {
   const [hoverIdx, setHoverIdx] = React.useState(null);
   const [hoverData, setHoverData] = React.useState(null);
   const [detailOpen, setDetailOpen] = React.useState(false);
+  const revealRef = React.useRef(1.01);
+  const [revealNum, setRevealNum] = React.useState(null);
   const [compareIso, setCompareIso] = React.useState(null);
   const selRef = React.useRef(null);
   const hoverRef = React.useRef(null);
@@ -983,6 +999,49 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle }) {
       world.controls().autoRotate = false;
     };
     host.addEventListener("pointerdown", stop, { once: true });
+    let revealTimer = null;
+    {
+      const home = features.find((f) => f.__iso === profile.nationality);
+      const hc = home && featureCentroid(home) || [10, 20];
+      let maxD = 1;
+      features.forEach((f) => {
+        const c = featureCentroid(f) || hc;
+        let dx = Math.abs(c[0] - hc[0]);
+        if (dx > 180) dx = 360 - dx;
+        const d = Math.hypot(dx, c[1] - hc[1]);
+        f.__revDist = d;
+        if (d > maxD) maxD = d;
+      });
+      features.forEach((f) => {
+        f.__rev = f.__revDist / maxD;
+      });
+      revealRef.current = 0;
+      const t0 = performance.now(), DUR = 2600;
+      const tick = () => {
+        const p = Math.min(1, (performance.now() - t0) / DUR);
+        revealRef.current = p * p * (3 - 2 * p);
+        world.polygonCapColor(capColor);
+        let eligible = 0, partial = 0;
+        features.forEach((f) => {
+          if (f.__rev <= revealRef.current) {
+            const r = results[f.__id];
+            if (r && !r.synthetic) {
+              if (r.status === "eligible") eligible++;
+              else if (r.status === "partial") partial++;
+            }
+          }
+        });
+        setRevealNum({ eligible, partial, done: p >= 1 });
+        if (p < 1) {
+          revealTimer = setTimeout(tick, 90);
+        } else {
+          revealRef.current = 1.01;
+          world.polygonCapColor(capColor);
+          revealTimer = setTimeout(() => setRevealNum(null), 4500);
+        }
+      };
+      tick();
+    }
     globeRef.current = world;
     globeRef.current.__select = (d) => selectFeature(d);
     globeRef.current.__byIso = (iso) => features.find((f) => f.__iso === iso);
@@ -1011,6 +1070,9 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle }) {
       return isSel ? "rgba(200,228,242,0.85)" : isHov ? "rgba(200,228,242,0.50)" : "rgba(200,228,242,0.22)";
     }
     function capColor(d) {
+      if (d.__rev !== void 0 && d.__rev > revealRef.current) {
+        return "rgba(148,163,160,0.10)";
+      }
       const r = results[d.__id];
       const isSel = selRef.current && d.__id === selRef.current.__id;
       const isHov = hoverRef.current && d.__id === hoverRef.current.__id;
@@ -1036,6 +1098,7 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle }) {
     return () => {
       host.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("resize", onResize);
+      if (revealTimer) clearTimeout(revealTimer);
       destroyGlobe(world, host);
       globeRef.current = null;
     };
@@ -1065,7 +1128,7 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle }) {
       globeRef.current.pointOfView({ lat: 20, lng: 10, altitude: 1.7 }, 900);
     }
   };
-  return /* @__PURE__ */ React.createElement("div", { className: "globe-stage" + (detailOpen ? " detail-open" : "") }, /* @__PURE__ */ React.createElement(GlobeStars, null), /* @__PURE__ */ React.createElement("div", { className: "globe-host" + (detailOpen ? " globe-host--shifted" : ""), ref: hostRef }), hoverData && !detailOpen ? /* @__PURE__ */ React.createElement("div", { className: "globe-tooltip", style: { left: hoverData.x, top: hoverData.y }, "aria-hidden": "true" }, /* @__PURE__ */ React.createElement("span", { className: "gt-flag" }, isoToFlag(hoverData.iso)), /* @__PURE__ */ React.createElement("span", { className: "gt-name" }, countryName(hoverData.iso, lang) || hoverData.name)) : null, !detailOpen ? eligError ? /* @__PURE__ */ React.createElement("div", { className: "globe-hint globe-hint--error" }, /* @__PURE__ */ React.createElement("span", { className: "pin pin--error" }), t("elg_load_error")) : !features ? /* @__PURE__ */ React.createElement("div", { className: "globe-hint" }, /* @__PURE__ */ React.createElement("span", { className: "pin" }), t("p_title"), "\u2026") : /* @__PURE__ */ React.createElement("div", { className: "globe-hint" }, /* @__PURE__ */ React.createElement("span", { className: "pin" }), t("g_click_hint")) : null, tally && !detailOpen ? /* @__PURE__ */ React.createElement("div", { className: "legend" }, /* @__PURE__ */ React.createElement("div", { className: "row" }, /* @__PURE__ */ React.createElement("span", { className: "sw", style: { background: statusColor("eligible", 1) } }), t("g_legend_eligible")), /* @__PURE__ */ React.createElement("div", { className: "row" }, /* @__PURE__ */ React.createElement("span", { className: "sw", style: { background: statusColor("partial", 1) } }), t("g_legend_partial")), /* @__PURE__ */ React.createElement("div", { className: "row" }, /* @__PURE__ */ React.createElement("span", { className: "sw", style: { background: statusColor("ineligible", 1) } }), t("g_legend_unlikely")), /* @__PURE__ */ React.createElement("div", { className: "row" }, /* @__PURE__ */ React.createElement("span", { className: "sw", style: { background: "rgba(148,163,160,0.55)" } }), t("g_legend_nodata"))) : null, selected && detailOpen ? /* @__PURE__ */ React.createElement("aside", { className: "detail-panel" }, /* @__PURE__ */ React.createElement("div", { className: "detail-panel-inner" }, /* @__PURE__ */ React.createElement("button", { className: "detail-panel-close", onClick: closeDetail, "aria-label": "Close" }, /* @__PURE__ */ React.createElement("svg", { width: "14", height: "14", viewBox: "0 0 24 24", fill: "none", "aria-hidden": "true", style: { pointerEvents: "none" } }, /* @__PURE__ */ React.createElement("path", { d: "M18 6L6 18M6 6l12 12", stroke: "currentColor", strokeWidth: "2.2", strokeLinecap: "round" }))), /* @__PURE__ */ React.createElement(
+  return /* @__PURE__ */ React.createElement("div", { className: "globe-stage" + (detailOpen ? " detail-open" : "") }, /* @__PURE__ */ React.createElement(GlobeStars, null), /* @__PURE__ */ React.createElement("div", { className: "globe-host" + (detailOpen ? " globe-host--shifted" : ""), ref: hostRef }), hoverData && !detailOpen ? /* @__PURE__ */ React.createElement("div", { className: "globe-tooltip", style: { left: hoverData.x, top: hoverData.y }, "aria-hidden": "true" }, /* @__PURE__ */ React.createElement("span", { className: "gt-flag" }, isoToFlag(hoverData.iso)), /* @__PURE__ */ React.createElement("span", { className: "gt-name" }, countryName(hoverData.iso, lang) || hoverData.name)) : null, revealNum && !detailOpen ? /* @__PURE__ */ React.createElement("div", { className: "reveal-counter" + (revealNum.done ? " reveal-counter--done" : "") }, revealNum.eligible > 0 ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("span", { className: "rc-num" }, revealNum.eligible), " ", t("rv_eligible")) : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("span", { className: "rc-num" }, revealNum.partial), " ", t("rv_partial"))) : null, !detailOpen ? eligError ? /* @__PURE__ */ React.createElement("div", { className: "globe-hint globe-hint--error" }, /* @__PURE__ */ React.createElement("span", { className: "pin pin--error" }), t("elg_load_error")) : !features ? /* @__PURE__ */ React.createElement("div", { className: "globe-hint" }, /* @__PURE__ */ React.createElement("span", { className: "pin" }), t("p_title"), "\u2026") : /* @__PURE__ */ React.createElement("div", { className: "globe-hint" }, /* @__PURE__ */ React.createElement("span", { className: "pin" }), t("g_click_hint")) : null, tally && !detailOpen ? /* @__PURE__ */ React.createElement("div", { className: "legend" }, /* @__PURE__ */ React.createElement("div", { className: "row" }, /* @__PURE__ */ React.createElement("span", { className: "sw", style: { background: statusColor("eligible", 1) } }), t("g_legend_eligible")), /* @__PURE__ */ React.createElement("div", { className: "row" }, /* @__PURE__ */ React.createElement("span", { className: "sw", style: { background: statusColor("partial", 1) } }), t("g_legend_partial")), /* @__PURE__ */ React.createElement("div", { className: "row" }, /* @__PURE__ */ React.createElement("span", { className: "sw", style: { background: statusColor("ineligible", 1) } }), t("g_legend_unlikely")), /* @__PURE__ */ React.createElement("div", { className: "row" }, /* @__PURE__ */ React.createElement("span", { className: "sw", style: { background: "rgba(148,163,160,0.55)" } }), t("g_legend_nodata"))) : null, selected && detailOpen ? /* @__PURE__ */ React.createElement("aside", { className: "detail-panel" }, /* @__PURE__ */ React.createElement("div", { className: "detail-panel-inner" }, /* @__PURE__ */ React.createElement("button", { className: "detail-panel-close", onClick: closeDetail, "aria-label": "Close" }, /* @__PURE__ */ React.createElement("svg", { width: "14", height: "14", viewBox: "0 0 24 24", fill: "none", "aria-hidden": "true", style: { pointerEvents: "none" } }, /* @__PURE__ */ React.createElement("path", { d: "M18 6L6 18M6 6l12 12", stroke: "currentColor", strokeWidth: "2.2", strokeLinecap: "round" }))), /* @__PURE__ */ React.createElement(
     CountryDetail,
     {
       t,
@@ -1135,46 +1198,52 @@ function CountryDetail({ t, lang, result, profile, onCompare }) {
   }
   const statusKey = result.status === "eligible" ? "st_eligible" : result.status === "partial" ? "st_partial" : "st_ineligible";
   const pillColor = STATUS_RGB[result.status];
-  return /* @__PURE__ */ React.createElement("div", { style: { animation: "fadeUp .3s ease both" } }, /* @__PURE__ */ React.createElement(
-    "div",
-    {
-      className: "detail-flag-banner",
-      "aria-hidden": "true",
-      style: { backgroundImage: "linear-gradient(to right, rgba(8,16,14,0.94) 0%, rgba(8,16,14,0.62) 42%, rgba(8,16,14,0.12) 78%, rgba(8,16,14,0) 100%),url(assets/flags/" + String(result.iso || "").toLowerCase() + ".svg)" }
-    }
-  ), /* @__PURE__ */ React.createElement("div", { className: "detail-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "nm" }, countryName(result.iso, lang) || result.name), /* @__PURE__ */ React.createElement("div", { className: "rg" }, t("rg_" + (result.region || "other"))), /* @__PURE__ */ React.createElement("span", { className: "status-pill", style: {
-    background: `linear-gradient(rgba(${pillColor[0]},${pillColor[1]},${pillColor[2]},0.20), rgba(${pillColor[0]},${pillColor[1]},${pillColor[2]},0.20)), rgba(8,16,14,0.78)`,
-    color: statusColor(result.status, 1)
-  } }, /* @__PURE__ */ React.createElement("span", { className: "sw", style: { background: statusColor(result.status, 1) } }), t(statusKey)))), (() => {
-    const sa = profile && window.Eligibility.specialAccess(profile.nationality, result.iso);
-    if (!sa) return null;
-    return /* @__PURE__ */ React.createElement("div", { className: "special-access-note" }, /* @__PURE__ */ React.createElement("svg", { width: "14", height: "14", viewBox: "0 0 24 24", fill: "none", style: { flexShrink: 0, marginTop: "2px" } }, /* @__PURE__ */ React.createElement("path", { d: "M5 12l5 5L19 7", stroke: "currentColor", strokeWidth: "2.6", strokeLinecap: "round", strokeLinejoin: "round" })), /* @__PURE__ */ React.createElement("span", null, t("sa_" + sa)));
-  })(), onCompare ? /* @__PURE__ */ React.createElement("button", { type: "button", className: "cmp-open-btn", onClick: onCompare }, /* @__PURE__ */ React.createElement("svg", { width: "12", height: "12", viewBox: "0 0 24 24", fill: "none", "aria-hidden": "true" }, /* @__PURE__ */ React.createElement("path", { d: "M8 3v18M16 3v18M3 8h5M3 16h5M16 8h5M16 16h5", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round" })), t("cmp_btn")) : null, /* @__PURE__ */ React.createElement("div", { className: "sub-label" }, t("g_visas_here")), result.visas.map((v, i) => {
-    const vStatusKey = v.status === "eligible" ? "st_eligible" : v.status === "partial" ? "st_partial" : "st_ineligible";
-    return /* @__PURE__ */ React.createElement("div", { className: "visa-card", key: v.type + i }, /* @__PURE__ */ React.createElement("div", { className: "vc-head" }, /* @__PURE__ */ React.createElement("span", { className: "vc-icon" }, window.VISA_DATA.VISA_TYPES[v.type].icon), /* @__PURE__ */ React.createElement("span", { className: "vc-name" }, v.officialName ? tx(v.officialName) : t("vt_" + v.type)), /* @__PURE__ */ React.createElement("span", { className: "vc-stat", style: { background: statusColor(v.status, 1) } })), /* @__PURE__ */ React.createElement("div", { className: "vc-meta" }, /* @__PURE__ */ React.createElement("span", { className: "vc-meta-status", style: { color: statusColor(v.status, 1) } }, t(vStatusKey)), /* @__PURE__ */ React.createElement("span", { className: "vc-meta-score" }, t("g_score"), ": ", v.score)), v.matched && v.matched.length ? /* @__PURE__ */ React.createElement("details", { className: "vc-acc", open: secOpen("matched", v) }, /* @__PURE__ */ React.createElement("summary", { className: "vc-acc-sum" }, /* @__PURE__ */ React.createElement("span", { className: "vc-acc-label" }, t("g_matched")), /* @__PURE__ */ React.createElement("span", { className: "vc-acc-count" }, v.matched.length)), /* @__PURE__ */ React.createElement("div", { className: "vc-acc-body vc-matched" }, v.matched.map((m, mi) => /* @__PURE__ */ React.createElement(
-      EvidenceRow,
+  return (
+    /* v1.39.0 — pulso de celebración cuando el destino es «probablemente elegible» */
+    /* @__PURE__ */ React.createElement("div", { className: "cd-root" + (result.status === "eligible" ? " detail-celebrate" : "") }, /* @__PURE__ */ React.createElement(
+      "div",
       {
-        className: "vc-match-row",
-        key: mi,
-        t,
-        lang,
-        text: tx(m),
-        fact: findEvidence(result.iso, v.route, profile && profile.nationality, m),
-        icon: /* @__PURE__ */ React.createElement("svg", { width: "11", height: "11", viewBox: "0 0 24 24", fill: "none", style: { flexShrink: 0, marginTop: "1px" } }, /* @__PURE__ */ React.createElement("path", { d: "M5 12l5 5L19 7", stroke: "currentColor", strokeWidth: "2.4", strokeLinecap: "round", strokeLinejoin: "round" }))
+        className: "detail-flag-banner",
+        "aria-hidden": "true",
+        style: { backgroundImage: "linear-gradient(to right, rgba(8,16,14,0.94) 0%, rgba(8,16,14,0.62) 42%, rgba(8,16,14,0.12) 78%, rgba(8,16,14,0) 100%),url(assets/flags/" + String(result.iso || "").toLowerCase() + ".svg)" }
       }
-    )))) : null, v.warnings && v.warnings.length ? /* @__PURE__ */ React.createElement("details", { className: "vc-acc", open: secOpen("warnings", v) }, /* @__PURE__ */ React.createElement("summary", { className: "vc-acc-sum" }, /* @__PURE__ */ React.createElement("span", { className: "vc-acc-label" }, t("g_warnings")), /* @__PURE__ */ React.createElement("span", { className: "vc-acc-count" }, v.warnings.length)), /* @__PURE__ */ React.createElement("div", { className: "vc-acc-body vc-warnings" }, v.warnings.map((w, wi) => /* @__PURE__ */ React.createElement(
-      EvidenceRow,
-      {
-        className: "vc-warn-row",
-        key: wi,
-        t,
-        lang,
-        text: tx(w),
-        fact: findEvidence(result.iso, v.route, profile && profile.nationality, w),
-        icon: /* @__PURE__ */ React.createElement("svg", { width: "11", height: "11", viewBox: "0 0 24 24", fill: "none", style: { flexShrink: 0, marginTop: "1px" } }, /* @__PURE__ */ React.createElement("circle", { cx: "12", cy: "12", r: "9", stroke: "currentColor", strokeWidth: "2" }), /* @__PURE__ */ React.createElement("path", { d: "M12 8v4M12 15.5v.5", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round" }))
-      }
-    )))) : null, v.missing && v.missing.length ? /* @__PURE__ */ React.createElement("details", { className: "vc-acc", open: secOpen("missing", v) }, /* @__PURE__ */ React.createElement("summary", { className: "vc-acc-sum" }, /* @__PURE__ */ React.createElement("span", { className: "vc-acc-label" }, t("g_missing")), /* @__PURE__ */ React.createElement("span", { className: "vc-acc-count" }, v.missing.length)), /* @__PURE__ */ React.createElement("div", { className: "vc-acc-body missing" }, /* @__PURE__ */ React.createElement("span", { className: "lbl" }, t("g_missing")), v.missing.map((m) => /* @__PURE__ */ React.createElement("span", { className: "miss-tag", key: m }, t("rq_" + m))))) : null);
-  }), result.synthetic ? /* @__PURE__ */ React.createElement("div", { className: "synthetic-note" }, /* @__PURE__ */ React.createElement("svg", { width: "13", height: "13", viewBox: "0 0 24 24", fill: "none" }, /* @__PURE__ */ React.createElement("circle", { cx: "12", cy: "12", r: "9", stroke: "currentColor", strokeWidth: "2" }), /* @__PURE__ */ React.createElement("path", { d: "M12 8v5M12 16.5v.5", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round" })), t("g_simulated")) : null, /* @__PURE__ */ React.createElement(DataFreshness, { t, lang, iso: result.iso, synthetic: result.synthetic }), /* @__PURE__ */ React.createElement("div", { className: "disclaimer-long" }, /* @__PURE__ */ React.createElement("svg", { width: "11", height: "11", viewBox: "0 0 24 24", fill: "none", style: { flexShrink: 0, marginTop: "1px" } }, /* @__PURE__ */ React.createElement("circle", { cx: "12", cy: "12", r: "9", stroke: "currentColor", strokeWidth: "2" }), /* @__PURE__ */ React.createElement("path", { d: "M12 8v5M12 16.5v.5", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round" })), t("disclaimer_long")));
+    ), /* @__PURE__ */ React.createElement("div", { className: "detail-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "nm" }, countryName(result.iso, lang) || result.name), /* @__PURE__ */ React.createElement("div", { className: "rg" }, t("rg_" + (result.region || "other"))), /* @__PURE__ */ React.createElement("span", { className: "status-pill", style: {
+      background: `linear-gradient(rgba(${pillColor[0]},${pillColor[1]},${pillColor[2]},0.20), rgba(${pillColor[0]},${pillColor[1]},${pillColor[2]},0.20)), rgba(8,16,14,0.78)`,
+      color: statusColor(result.status, 1)
+    } }, /* @__PURE__ */ React.createElement("span", { className: "sw", style: { background: statusColor(result.status, 1) } }), t(statusKey)))), (() => {
+      const sa = profile && window.Eligibility.specialAccess(profile.nationality, result.iso);
+      if (!sa) return null;
+      return /* @__PURE__ */ React.createElement("div", { className: "special-access-note" }, /* @__PURE__ */ React.createElement("svg", { width: "14", height: "14", viewBox: "0 0 24 24", fill: "none", style: { flexShrink: 0, marginTop: "2px" } }, /* @__PURE__ */ React.createElement("path", { d: "M5 12l5 5L19 7", stroke: "currentColor", strokeWidth: "2.6", strokeLinecap: "round", strokeLinejoin: "round" })), /* @__PURE__ */ React.createElement("span", null, t("sa_" + sa)));
+    })(), onCompare ? /* @__PURE__ */ React.createElement("button", { type: "button", className: "cmp-open-btn", onClick: onCompare }, /* @__PURE__ */ React.createElement("svg", { width: "12", height: "12", viewBox: "0 0 24 24", fill: "none", "aria-hidden": "true" }, /* @__PURE__ */ React.createElement("path", { d: "M8 3v18M16 3v18M3 8h5M3 16h5M16 8h5M16 16h5", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round" })), t("cmp_btn")) : null, /* @__PURE__ */ React.createElement("div", { className: "sub-label" }, t("g_visas_here")), result.visas.map((v, i) => {
+      const vStatusKey = v.status === "eligible" ? "st_eligible" : v.status === "partial" ? "st_partial" : "st_ineligible";
+      return (
+        /* v1.39.0 — entrada escalonada de las tarjetas */
+        /* @__PURE__ */ React.createElement("div", { className: "visa-card", key: v.type + i, style: { animationDelay: i * 80 + "ms" } }, /* @__PURE__ */ React.createElement("div", { className: "vc-head" }, /* @__PURE__ */ React.createElement("span", { className: "vc-icon" }, window.VISA_DATA.VISA_TYPES[v.type].icon), /* @__PURE__ */ React.createElement("span", { className: "vc-name" }, v.officialName ? tx(v.officialName) : t("vt_" + v.type)), /* @__PURE__ */ React.createElement("span", { className: "vc-stat", style: { background: statusColor(v.status, 1) } })), /* @__PURE__ */ React.createElement("div", { className: "vc-meta" }, /* @__PURE__ */ React.createElement("span", { className: "vc-meta-status", style: { color: statusColor(v.status, 1) } }, t(vStatusKey)), /* @__PURE__ */ React.createElement("span", { className: "vc-meta-score" }, t("g_score"), ": ", v.score)), v.matched && v.matched.length ? /* @__PURE__ */ React.createElement("details", { className: "vc-acc", open: secOpen("matched", v) }, /* @__PURE__ */ React.createElement("summary", { className: "vc-acc-sum" }, /* @__PURE__ */ React.createElement("span", { className: "vc-acc-label" }, t("g_matched")), /* @__PURE__ */ React.createElement("span", { className: "vc-acc-count" }, v.matched.length)), /* @__PURE__ */ React.createElement("div", { className: "vc-acc-body vc-matched" }, v.matched.map((m, mi) => /* @__PURE__ */ React.createElement(
+          EvidenceRow,
+          {
+            className: "vc-match-row",
+            key: mi,
+            t,
+            lang,
+            text: tx(m),
+            fact: findEvidence(result.iso, v.route, profile && profile.nationality, m),
+            icon: /* @__PURE__ */ React.createElement("svg", { width: "11", height: "11", viewBox: "0 0 24 24", fill: "none", style: { flexShrink: 0, marginTop: "1px" } }, /* @__PURE__ */ React.createElement("path", { d: "M5 12l5 5L19 7", stroke: "currentColor", strokeWidth: "2.4", strokeLinecap: "round", strokeLinejoin: "round" }))
+          }
+        )))) : null, v.warnings && v.warnings.length ? /* @__PURE__ */ React.createElement("details", { className: "vc-acc", open: secOpen("warnings", v) }, /* @__PURE__ */ React.createElement("summary", { className: "vc-acc-sum" }, /* @__PURE__ */ React.createElement("span", { className: "vc-acc-label" }, t("g_warnings")), /* @__PURE__ */ React.createElement("span", { className: "vc-acc-count" }, v.warnings.length)), /* @__PURE__ */ React.createElement("div", { className: "vc-acc-body vc-warnings" }, v.warnings.map((w, wi) => /* @__PURE__ */ React.createElement(
+          EvidenceRow,
+          {
+            className: "vc-warn-row",
+            key: wi,
+            t,
+            lang,
+            text: tx(w),
+            fact: findEvidence(result.iso, v.route, profile && profile.nationality, w),
+            icon: /* @__PURE__ */ React.createElement("svg", { width: "11", height: "11", viewBox: "0 0 24 24", fill: "none", style: { flexShrink: 0, marginTop: "1px" } }, /* @__PURE__ */ React.createElement("circle", { cx: "12", cy: "12", r: "9", stroke: "currentColor", strokeWidth: "2" }), /* @__PURE__ */ React.createElement("path", { d: "M12 8v4M12 15.5v.5", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round" }))
+          }
+        )))) : null, v.missing && v.missing.length ? /* @__PURE__ */ React.createElement("details", { className: "vc-acc", open: secOpen("missing", v) }, /* @__PURE__ */ React.createElement("summary", { className: "vc-acc-sum" }, /* @__PURE__ */ React.createElement("span", { className: "vc-acc-label" }, t("g_missing")), /* @__PURE__ */ React.createElement("span", { className: "vc-acc-count" }, v.missing.length)), /* @__PURE__ */ React.createElement("div", { className: "vc-acc-body missing" }, /* @__PURE__ */ React.createElement("span", { className: "lbl" }, t("g_missing")), v.missing.map((m) => /* @__PURE__ */ React.createElement("span", { className: "miss-tag", key: m }, t("rq_" + m))))) : null)
+      );
+    }), result.synthetic ? /* @__PURE__ */ React.createElement("div", { className: "synthetic-note" }, /* @__PURE__ */ React.createElement("svg", { width: "13", height: "13", viewBox: "0 0 24 24", fill: "none" }, /* @__PURE__ */ React.createElement("circle", { cx: "12", cy: "12", r: "9", stroke: "currentColor", strokeWidth: "2" }), /* @__PURE__ */ React.createElement("path", { d: "M12 8v5M12 16.5v.5", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round" })), t("g_simulated")) : null, /* @__PURE__ */ React.createElement(DataFreshness, { t, lang, iso: result.iso, synthetic: result.synthetic }), /* @__PURE__ */ React.createElement("div", { className: "disclaimer-long" }, /* @__PURE__ */ React.createElement("svg", { width: "11", height: "11", viewBox: "0 0 24 24", fill: "none", style: { flexShrink: 0, marginTop: "1px" } }, /* @__PURE__ */ React.createElement("circle", { cx: "12", cy: "12", r: "9", stroke: "currentColor", strokeWidth: "2" }), /* @__PURE__ */ React.createElement("path", { d: "M12 8v5M12 16.5v.5", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round" })), t("disclaimer_long")))
+  );
 }
 function findEvidence(iso, route, natl, line) {
   const facts = ((window.EVIDENCE || {}).routes || {})[iso + "|" + (route || "")];
