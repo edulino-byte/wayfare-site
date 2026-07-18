@@ -55,6 +55,9 @@
 
 html, body {
   margin: 0; height: 100%;
+  /* v1.44.2 — red de seguridad: nada puede sacar la app del marco en
+     horizontal, sea cual sea el tamaño de pantalla */
+  overflow-x: hidden;
   background: var(--space-0);   /* fallback while bg-stars canvas loads      */
   color: var(--on-dark);
   font-family: var(--font-body);
@@ -130,6 +133,16 @@ input, select, button { font-family: inherit; }
 .on-stage .lang button { color: var(--on-dark-2); }
 .lang button.active { background: rgba(255,255,255,0.14); color: var(--on-dark); box-shadow: var(--shadow-sm); }
 .on-stage .lang button.active { background: rgba(255,255,255,0.92); color: #10201c; }
+
+/* v1.44.2 — topbar compacta en móviles: en el globo «Edit profile» + EN/ES
+   se salían del marco. El botón de editar queda solo con su icono (el texto
+   sigue en el DOM para lectores de pantalla) y el badge de versión se oculta. */
+@media (max-width: 480px) {
+  .topbar { padding: 0 12px; }
+  .version-badge { display: none; }
+  .btn-edit-topbar { font-size: 0; gap: 0; padding: 8px 9px; }
+  .btn-edit-topbar svg { width: 16px; height: 16px; }
+}
 
 /* fade/slide screen transitions */
 .screen { flex: 1 1 auto; min-height: 0; position: relative; }
