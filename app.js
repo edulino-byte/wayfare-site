@@ -922,29 +922,6 @@ function GlobeStars() {
     "aria-hidden": "true"
   });
 }
-function pointInRing(lng, lat, ring) {
-  let dentro = false;
-  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
-    const xi = ring[i][0], yi = ring[i][1], xj = ring[j][0], yj = ring[j][1];
-    if (yi > lat !== yj > lat && lng < (xj - xi) * (lat - yi) / (yj - yi) + xi) {
-      dentro = !dentro;
-    }
-  }
-  return dentro;
-}
-function pointInCountry(f, lat, lng) {
-  const g = f.geometry;
-  const polys = g.type === "Polygon" ? [g.coordinates] : g.type === "MultiPolygon" ? g.coordinates : [];
-  for (const poly of polys) {
-    if (pointInRing(lng, lat, poly[0])) {
-      for (let k = 1; k < poly.length; k++) {
-        if (pointInRing(lng, lat, poly[k])) return false;
-      }
-      return true;
-    }
-  }
-  return false;
-}
 function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
   const hostRef = React.useRef(null);
   const globeRef = React.useRef(null);
@@ -1003,6 +980,13 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
     const host = hostRef.current;
     const G = window.Globe;
     const microPills = [];
+    const pillData = features.filter((f) => {
+      const r = results[f.__id];
+      return r && !r.synthetic && window.Eligibility.hasRealRules(f.__iso);
+    }).map((f) => {
+      const c = featureCentroid(f) || [0, 0];
+      return { iso: f.__iso, lat: c[1], lng: c[0], r: results[f.__id], f };
+    }).concat(micros.map((m) => ({ iso: m.iso, lat: m.lat, lng: m.lng, r: m.r, micro: true })));
     const world = G(window.WAYFARE_PERF.globeConfig)(host).width(host.clientWidth).height(host.clientHeight).backgroundColor("rgba(0,0,0,0)").globeImageUrl(GLOBE_TEXTURES[globeStyle] || GLOBE_TEXTURES.textured).bumpImageUrl(BUMP_URL).showAtmosphere(true).atmosphereColor("#7ab8d4").atmosphereAltitude(0.26).polygonsData(features).polygonCapColor(capColor).polygonSideColor(() => "rgba(0,0,0,0.06)").polygonStrokeColor(strokeColor).polygonAltitude(altOf).polygonsTransitionDuration(220).onPolygonHover((d) => {
       hoverRef.current = d;
       setHoverIdx(d ? d.__id : null);
@@ -1037,7 +1021,7 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
           setHoverData(null);
         }
       }
-    }).onLabelClick((d) => abrirMicro(d)).htmlElementsData(micros).htmlLat((d) => d.lat).htmlLng((d) => d.lng).htmlAltitude(0.012).htmlElement((d) => {
+    }).onLabelClick((d) => abrirMicro(d)).htmlElementsData(pillData).htmlLat((d) => d.lat).htmlLng((d) => d.lng).htmlAltitude(0.012).htmlElement((d) => {
       const el = document.createElement("button");
       el.type = "button";
       el.className = "micro-pill";
@@ -1053,10 +1037,12 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
       el.appendChild(sw);
       el.addEventListener("click", (ev) => {
         ev.stopPropagation();
-        abrirMicro(d);
+        if (d.f) selectFeature(d.f);
+        else abrirMicro(d);
       });
       el.__wfLat = d.lat;
       el.__wfLng = d.lng;
+      el.__wfMicro = !!d.micro;
       microPills.push(el);
       return el;
     });
@@ -1068,9 +1054,15 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
       world.controls().autoRotate = false;
       world.pointOfView({ lat: d.lat, lng: d.lng - 12, altitude: 1.2 }, 900);
     }
+    let ultimaPasadaPills = 0;
     const actualizarMicroPills = () => {
+      const ahora = performance.now();
+      if (ahora - ultimaPasadaPills < 150) return;
+      ultimaPasadaPills = ahora;
       const pov = world.pointOfView();
-      const cerca = pov.altitude < 1.5;
+      const alt = pov.altitude;
+      const K = 16 + Math.max(0, 1.55 - alt) * 34;
+      const candidatas = [];
       microPills.forEach((el) => {
         let dl = Math.abs(el.__wfLng - pov.lng);
         if (dl > 180) dl = 360 - dl;
@@ -1078,51 +1070,29 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
           el.__wfLat - pov.lat,
           dl * Math.cos(pov.lat * Math.PI / 180)
         );
-        el.classList.toggle("micro-pill--on", cerca && ang < 55);
+        el.__wfAng = ang;
+        const dentro = el.__wfMicro ? alt < 1.5 && ang < 55 : alt < 1.55 && ang < K;
+        if (dentro) candidatas.push(el);
+        else el.classList.remove("micro-pill--on");
+      });
+      candidatas.sort((a, b) => a.__wfAng - b.__wfAng);
+      const aceptadas = [];
+      candidatas.forEach((el, i) => {
+        let ok = i < 8;
+        if (ok) {
+          const r = el.getBoundingClientRect();
+          if (r.width) {
+            ok = !aceptadas.some((q) => !(r.right < q.left - 4 || r.left > q.right + 4 || r.bottom < q.top - 4 || r.top > q.bottom + 4));
+            if (ok) aceptadas.push(r);
+          }
+        }
+        el.classList.toggle("micro-pill--on", ok);
       });
     };
     world.controls().addEventListener("change", actualizarMicroPills);
     const pillTimer = setTimeout(actualizarMicroPills, 700);
     window.WAYFARE_PERF.tune(world);
     window.__WAYFARE_WORLD = world;
-    let centerTimer = null;
-    if (window.WAYFARE_PERF.lite && typeof world.pointOfView === "function") {
-      let ultimoIso = null;
-      const probe = window.__WAYFARE_CENTER_PROBE = { ticks: 0, coords: null, iso: null };
-      centerTimer = setInterval(() => {
-        probe.ticks++;
-        if (document.hidden || world.__wayfarePaused) return;
-        if (document.querySelector(".detail-panel")) {
-          if (ultimoIso !== null) {
-            ultimoIso = null;
-            setHoverData(null);
-          }
-          return;
-        }
-        const rect = host.getBoundingClientRect();
-        if (!rect.width) return;
-        const cx = rect.width / 2, cy = rect.height / 2;
-        const coords = world.pointOfView();
-        probe.coords = coords ? { lat: coords.lat, lng: coords.lng } : null;
-        const f = coords ? features.find((ft) => pointInCountry(ft, coords.lat, coords.lng)) : null;
-        probe.iso = f ? f.__iso : null;
-        if (f) {
-          if (f.__iso === ultimoIso) return;
-          ultimoIso = f.__iso;
-          const r = results[f.__id];
-          setHoverData({
-            name: featName(f.properties),
-            iso: f.__iso,
-            status: r ? r.status : null,
-            x: rect.left + cx,
-            y: rect.top + cy
-          });
-        } else if (ultimoIso !== null) {
-          ultimoIso = null;
-          setHoverData(null);
-        }
-      }, 350);
-    }
     world.controls().autoRotate = true;
     world.controls().autoRotateSpeed = 0.45;
     world.controls().enableZoom = true;
@@ -1221,7 +1191,6 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
       host.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("resize", onResize);
       if (revealTimer) clearTimeout(revealTimer);
-      if (centerTimer) clearInterval(centerTimer);
       clearTimeout(pillTimer);
       try {
         world.controls().removeEventListener("change", actualizarMicroPills);

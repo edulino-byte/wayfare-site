@@ -329,10 +329,9 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
   .globe-host canvas { filter: none; }
   .section { backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
   .detail-panel-inner { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
-  /* v1.45.0 — en táctil el bocadillo lo gobierna la MIRILLA CENTRAL (muestra
-     el país que pasa por el centro de la pantalla): centrado y flotando un
-     poco por encima del punto central, nunca cortado */
-  .globe-tooltip { transform: translate(-50%, -170%); }
+  /* v1.47.0 — sin bocadillo de hover en táctil: la identificación vive en
+     las chapitas de destinos (aparecen al acercarse) */
+  .globe-tooltip { display: none; }
 }
 
 .globe-hint { position: absolute; left: 50%; bottom: 26px; transform: translateX(-50%);
