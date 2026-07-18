@@ -183,8 +183,11 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
 }
 .submitbar button { pointer-events: auto; }
 
-/* v1.41.1 — ambos botones «al mapa» juntos, mismo formato de píldora */
-.submit-row { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 12px; }
+/* v1.41.3 — la fila ocupa todo el ancho del cuestionario: volver/descartar
+   pegado al extremo izquierdo, enviar al derecho (petición del usuario) */
+.submit-row { display: flex; flex-wrap: wrap; justify-content: space-between;
+  gap: 12px; width: 100%; }
+.submit-row .btn-primary { margin-left: auto; } /* a la derecha aun sin botón de volver */
 .btn-map-back {
   display: inline-flex; align-items: center; gap: 10px; cursor: pointer;
   font-family: var(--font-display); font-weight: 600; font-size: 16px; letter-spacing: -0.01em;
