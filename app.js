@@ -895,7 +895,6 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle }) {
   const [hoverData, setHoverData] = React.useState(null);
   const [detailOpen, setDetailOpen] = React.useState(false);
   const revealRef = React.useRef(1.01);
-  const [revealNum, setRevealNum] = React.useState(null);
   const [compareIso, setCompareIso] = React.useState(null);
   const selRef = React.useRef(null);
   const hoverRef = React.useRef(null);
@@ -1011,23 +1010,11 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle }) {
         const p = Math.min(1, (performance.now() - t0) / DUR);
         revealRef.current = p * p * (3 - 2 * p);
         world.polygonCapColor(capColor);
-        let eligible = 0, partial = 0;
-        features.forEach((f) => {
-          if (f.__rev <= revealRef.current) {
-            const r = results[f.__id];
-            if (r && !r.synthetic) {
-              if (r.status === "eligible") eligible++;
-              else if (r.status === "partial") partial++;
-            }
-          }
-        });
-        setRevealNum({ eligible, partial, done: p >= 1 });
         if (p < 1) {
           revealTimer = setTimeout(tick, 90);
         } else {
           revealRef.current = 1.01;
           world.polygonCapColor(capColor);
-          revealTimer = setTimeout(() => setRevealNum(null), 4500);
         }
       };
       tick();
@@ -1154,7 +1141,7 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle }) {
       globeRef.current.pointOfView({ lat: 20, lng: 10, altitude: 1.7 }, 900);
     }
   };
-  return /* @__PURE__ */ React.createElement("div", { className: "globe-stage" + (detailOpen ? " detail-open" : "") }, /* @__PURE__ */ React.createElement(GlobeStars, null), /* @__PURE__ */ React.createElement("div", { className: "globe-host" + (detailOpen ? " globe-host--shifted" : ""), ref: hostRef }), hoverData && !detailOpen ? /* @__PURE__ */ React.createElement("div", { className: "globe-tooltip", style: { left: hoverData.x, top: hoverData.y }, "aria-hidden": "true" }, /* @__PURE__ */ React.createElement("span", { className: "gt-flag" }, isoToFlag(hoverData.iso)), /* @__PURE__ */ React.createElement("span", { className: "gt-name" }, countryName(hoverData.iso, lang) || hoverData.name)) : null, revealNum && !detailOpen ? /* @__PURE__ */ React.createElement("div", { className: "reveal-counter" + (revealNum.done ? " reveal-counter--done" : "") }, revealNum.eligible > 0 ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("span", { className: "rc-num" }, revealNum.eligible), " ", t("rv_eligible")) : /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("span", { className: "rc-num" }, revealNum.partial), " ", t("rv_partial"))) : null, !detailOpen ? eligError ? /* @__PURE__ */ React.createElement("div", { className: "globe-hint globe-hint--error" }, /* @__PURE__ */ React.createElement("span", { className: "pin pin--error" }), t("elg_load_error")) : !features ? /* @__PURE__ */ React.createElement("div", { className: "globe-hint" }, /* @__PURE__ */ React.createElement("span", { className: "pin" }), t("p_title"), "\u2026") : /* @__PURE__ */ React.createElement("div", { className: "globe-hint" }, /* @__PURE__ */ React.createElement("span", { className: "pin" }), t("g_click_hint")) : null, tally && !detailOpen ? /* @__PURE__ */ React.createElement("div", { className: "legend" }, ["eligible", "partial", "ineligible"].map((st) => {
+  return /* @__PURE__ */ React.createElement("div", { className: "globe-stage" + (detailOpen ? " detail-open" : "") }, /* @__PURE__ */ React.createElement(GlobeStars, null), /* @__PURE__ */ React.createElement("div", { className: "globe-host" + (detailOpen ? " globe-host--shifted" : ""), ref: hostRef }), hoverData && !detailOpen ? /* @__PURE__ */ React.createElement("div", { className: "globe-tooltip", style: { left: hoverData.x, top: hoverData.y }, "aria-hidden": "true" }, /* @__PURE__ */ React.createElement("span", { className: "gt-flag" }, isoToFlag(hoverData.iso)), /* @__PURE__ */ React.createElement("span", { className: "gt-name" }, countryName(hoverData.iso, lang) || hoverData.name)) : null, !detailOpen ? eligError ? /* @__PURE__ */ React.createElement("div", { className: "globe-hint globe-hint--error" }, /* @__PURE__ */ React.createElement("span", { className: "pin pin--error" }), t("elg_load_error")) : !features ? /* @__PURE__ */ React.createElement("div", { className: "globe-hint" }, /* @__PURE__ */ React.createElement("span", { className: "pin" }), t("p_title"), "\u2026") : /* @__PURE__ */ React.createElement("div", { className: "globe-hint" }, /* @__PURE__ */ React.createElement("span", { className: "pin" }), t("g_click_hint")) : null, tally && !detailOpen ? /* @__PURE__ */ React.createElement("div", { className: "legend" }, ["eligible", "partial", "ineligible"].map((st) => {
     const lista = grupos && grupos[st] || [];
     const abierto = openGroup === st;
     const label = st === "eligible" ? "g_legend_eligible" : st === "partial" ? "g_legend_partial" : "g_legend_unlikely";

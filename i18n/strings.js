@@ -93,8 +93,6 @@ window.I18N = {
     p_live_routes: "Checking %N% official visa routes",
     p_live_facts: "Cross-checking %N% verified facts",
     p_live_dest: "Reviewing %N% audited destinations",
-    rv_eligible: "countries where you likely qualify",
-    rv_partial: "countries with a partial path",
 
     /* globe + results */
     g_overview: "Your results",
@@ -575,8 +573,6 @@ window.I18N = {
     p_live_routes: "Consultando %N% rutas de visa oficiales",
     p_live_facts: "Cotejando %N% hechos verificados",
     p_live_dest: "Revisando %N% destinos auditados",
-    rv_eligible: "países donde probablemente calificas",
-    rv_partial: "países con camino parcial",
 
     g_overview: "Tus resultados",
     g_eligible_count: "compatibles",
