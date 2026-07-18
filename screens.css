@@ -176,6 +176,25 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
   display: flex; flex-direction: column; align-items: flex-end; gap: 10px;
 }
 
+/* v1.41.1 — ambos botones «al mapa» fijos abajo, mismo formato de píldora */
+.submit-row { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 12px; }
+.btn-map-back {
+  display: inline-flex; align-items: center; gap: 10px; cursor: pointer;
+  font-family: var(--font-display); font-weight: 600; font-size: 16px; letter-spacing: -0.01em;
+  padding: 14px 25px; border-radius: 999px;
+  border: 1px solid rgba(127,200,169,0.55); color: #7fc8a9;
+  background: rgba(10,24,20,0.72); backdrop-filter: blur(8px);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.35); transition: .16s;
+}
+.btn-map-back:hover { background: rgba(127,200,169,0.16); transform: translateY(-1px); }
+.btn-map-back:active { transform: none; }
+.btn-map-discard { border-color: rgba(217,178,106,0.6); color: #d9b26a; }
+.btn-map-discard:hover { background: rgba(217,178,106,0.15); }
+@media (max-width: 700px) {
+  .submit-row { flex-direction: column; align-items: stretch; }
+  .submit-row .btn-map-back, .submit-row .btn-primary { justify-content: center; }
+}
+
 /* Short disclaimer â€” below the CTA button, right-aligned to match */
 .disclaimer-short {
   margin: 0;
@@ -518,23 +537,12 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
   box-shadow: 0 0 0 1px rgba(255,255,255,0.15); flex: 0 0 auto; }
 .lg-empty { color: rgba(232,241,238,0.4); font-size: 12px; padding: 4px 8px; }
 
-/* Volver al mapa desde el cuestionario (v1.33.0, feedback de usuarios) */
-.q-back-btn { display: inline-flex; align-items: center; gap: 7px; margin-bottom: 18px;
-  background: rgba(127,200,169,0.08); border: 1px solid rgba(127,200,169,0.5); color: #7fc8a9;
-  border-radius: 999px; padding: 8px 16px; font-size: 13px; font-weight: 600; cursor: pointer;
-  transition: background .15s ease; }
-.q-back-btn:hover { background: rgba(127,200,169,0.16); }
-.q-discard-btn { border-color: rgba(217,178,106,0.55); color: #d9b26a;
-  background: rgba(217,178,106,0.07); }
-.q-discard-btn:hover { background: rgba(217,178,106,0.15); }
+/* v1.41.1 — los botones de volver al mapa viven ahora en .submit-row
+   (barra fija inferior); las píldoras pequeñas de cabecera se retiraron. */
 .q-reset-link { margin-top: 10px; background: none; border: none; padding: 0; cursor: pointer;
   font-size: 12px; color: var(--on-dark-2); opacity: 0.65; text-decoration: underline;
   text-underline-offset: 2px; }
 .q-reset-link:hover { opacity: 0.95; }
-.q-back-wrap { margin-bottom: 18px; }
-.q-back-wrap .q-back-btn { margin-bottom: 0; }
-.q-back-hint { margin-top: 8px; font-size: 12px; line-height: 1.5; color: var(--st-partial, #d99316);
-  max-width: 520px; }
 
 /* Comparador de destinos (v1.28.0, idea #3) */
 .cmp-open-btn { display: inline-flex; align-items: center; gap: 7px; margin: 14px 0 2px;
