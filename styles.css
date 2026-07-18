@@ -147,31 +147,32 @@ input, select, button { font-family: inherit; }
   :root {
     color-scheme: light;
 
-    --bg: #e9f0ed;
+    /* v1.42.1 — de día es CIELO, no papel: azules celestes con luz cálida */
+    --bg: #c3dcee;
     --surface: rgba(255,255,255,0.85);
-    --surface-2: rgba(20,35,30,0.05);
+    --surface-2: rgba(23,48,60,0.05);
 
-    --ink: #14231e;
-    --ink-2: #3a544d;
-    --ink-3: #5f7a73;
+    --ink: #17303c;
+    --ink-2: #3c5866;
+    --ink-3: #5f7d8c;
 
-    --line: rgba(20,35,30,0.16);
-    --line-2: rgba(20,35,30,0.09);
+    --line: rgba(23,48,60,0.16);
+    --line-2: rgba(23,48,60,0.09);
 
-    --space-0: #dfe9e5;   /* cielo de día: borde                             */
-    --space-1: #f4f9f7;   /* cielo de día: centro luminoso                   */
+    --space-0: #aecfe8;   /* cielo de día: azul del cénit                    */
+    --space-1: #eaf4fa;   /* cielo de día: horizonte luminoso                */
     --glass: rgba(255,255,255,0.72);
-    --glass-line: rgba(20,35,30,0.13);
-    --on-dark: #14231e;
-    --on-dark-2: #47615a;
+    --glass-line: rgba(23,48,60,0.14);
+    --on-dark: #17303c;
+    --on-dark-2: #46626f;
 
-    --shadow-sm: 0 1px 2px rgba(20,35,30,0.08), 0 1px 3px rgba(20,35,30,0.06);
-    --shadow-md: 0 4px 16px rgba(20,35,30,0.12), 0 1px 4px rgba(20,35,30,0.08);
-    --shadow-lg: 0 18px 48px rgba(20,35,30,0.20);
+    --shadow-sm: 0 1px 2px rgba(23,48,60,0.08), 0 1px 3px rgba(23,48,60,0.06);
+    --shadow-md: 0 4px 16px rgba(23,48,60,0.12), 0 1px 4px rgba(23,48,60,0.08);
+    --shadow-lg: 0 18px 48px rgba(23,48,60,0.22);
   }
-  .topbar { border-bottom-color: rgba(20,35,30,0.09); }
-  .btn-edit-topbar:hover { border-color: rgba(20,35,30,0.28); background: rgba(20,35,30,0.07); }
-  .on-stage .lang { background: rgba(20,35,30,0.06); }
-  .lang button.active { background: rgba(20,35,30,0.09); }
-  .on-stage .lang button.active { background: rgba(20,35,30,0.85); color: #f2f7f5; }
+  .topbar { border-bottom-color: rgba(23,48,60,0.10); }
+  .btn-edit-topbar:hover { border-color: rgba(23,48,60,0.28); background: rgba(23,48,60,0.07); }
+  .on-stage .lang { background: rgba(23,48,60,0.06); }
+  .lang button.active { background: rgba(23,48,60,0.09); }
+  .on-stage .lang button.active { background: rgba(23,48,60,0.85); color: #f2f7fa; }
 }
