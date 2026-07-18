@@ -669,3 +669,110 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
   /* label already shown in the accordion header on mobile */
   .vc-acc-body.missing .lbl { display: none; }
 }
+
+/* =============================================================================
+   v1.42.0 — TEMA DÍA (claro): anulaciones puntuales sobre la base oscura.
+   Solo cambian colores; la estructura y el tema noche quedan intactos.
+   Los tokens (--glass, --on-dark…) ya se re-declaran en styles.css; aquí van
+   únicamente los valores que estaban «cosidos» en oscuro.
+   ========================================================================== */
+@media (prefers-color-scheme: light) {
+
+  /* cielo de día: estrellas apagadas; degradado claro en los escenarios */
+  .bg-stars, .globe-stars { display: none; }
+  .q-scroll, .globe-stage {
+    background: radial-gradient(120% 90% at 50% 30%, var(--space-1), var(--space-0));
+  }
+  /* el globo decorativo del cuestionario, como marca de agua: a plena
+     intensidad se comía la tinta oscura del título */
+  .bg-globe-host { opacity: 0.30; filter: brightness(1.12) saturate(0.9); }
+
+  /* tarjetas del cuestionario: sombra suave de día */
+  .section { box-shadow: 0 8px 32px rgba(20,35,30,0.10), 0 2px 8px rgba(20,35,30,0.05); }
+
+  /* controles del formulario */
+  .control select, .control input[type="text"], .control input[type="number"] {
+    background: rgba(20,35,30,0.05); }
+  .control select:hover, .control input:hover {
+    background: rgba(20,35,30,0.08); border-color: rgba(20,35,30,0.28); }
+  .control select:focus, .control input:focus { background: rgba(20,35,30,0.06); }
+  .control select option { background: #ffffff; color: #14231e; }
+  .seg { background: rgba(20,35,30,0.05); }
+  .seg button.active { background: #ffffff; box-shadow: 0 1px 4px rgba(20,35,30,0.18); }
+  .seg button:hover:not(.active) { background: rgba(20,35,30,0.06); }
+  input[type=range] { background: rgba(20,35,30,0.20); }
+  .chip { background: rgba(20,35,30,0.05); }
+  .chip:hover { background: rgba(20,35,30,0.09); }
+
+  /* barra fija inferior */
+  .submitbar { background: linear-gradient(to top, rgba(233,240,237,0.95) 45%, rgba(233,240,237,0)); }
+  .btn-map-back { background: rgba(255,255,255,0.85); color: #1c6b52;
+    border-color: rgba(28,107,82,0.45); box-shadow: 0 4px 20px rgba(20,35,30,0.14); }
+  .btn-map-back:hover { background: rgba(28,107,82,0.10); }
+  .btn-map-discard { color: #8a5a08; border-color: rgba(138,90,8,0.5); }
+  .btn-map-discard:hover { background: rgba(138,90,8,0.10); }
+  .disclaimer-short { color: rgba(20,35,30,0.50); }
+  .btn-ghost:hover { border-color: rgba(20,35,30,0.30); }
+
+  /* pantalla de procesado */
+  .proc-orbit .ring { border-color: rgba(20,35,30,0.14); }
+  .proc-orbit .sat::before { background: var(--accent-deep);
+    box-shadow: 0 0 14px 2px rgba(21,107,96,0.55); }
+  .proc-step .tick { border-color: rgba(20,35,30,0.25); }
+
+  /* escenario del globo */
+  .globe-hint { background: rgba(255,255,255,0.62); }
+  .globe-tooltip { box-shadow: 0 4px 16px rgba(20,35,30,0.20); }
+  .reveal-counter { background: rgba(255,255,255,0.82); border-color: rgba(28,107,82,0.4);
+    color: #2c463f; }
+  .reveal-counter .rc-num { color: #178a4c; }
+
+  /* panel de país */
+  .detail-panel-inner { box-shadow: -24px 0 60px rgba(20,35,30,0.16); }
+  .detail-panel-inner::-webkit-scrollbar-thumb { background: rgba(20,35,30,0.25); }
+  .detail-panel-close { background: rgba(20,35,30,0.06); }
+  .detail-panel-close:hover { background: rgba(20,35,30,0.13); }
+  .stat { background: rgba(20,35,30,0.04); }
+  .rec { background: rgba(20,35,30,0.035); }
+  .rec:hover { background: rgba(20,35,30,0.08); border-color: rgba(20,35,30,0.22); }
+  .visa-card { background: rgba(20,35,30,0.03); }
+  .vc-match-row { color: #1a7a46; }
+  .ev-panel { background: rgba(20,35,30,0.04); border-left-color: rgba(20,35,30,0.25); }
+  .ev-meta a { color: var(--accent-deep); }
+  .verified-note, .verified-note .method-link { color: var(--accent-deep); }
+  .verified-note .method-link:hover { color: #0e4a3f; }
+
+  /* cabecera de bandera: mantiene su velo oscuro propio → texto claro SIEMPRE
+     encima de ella, también de día (si no, tinta oscura sobre velo oscuro) */
+  .detail-panel .detail-head .nm { color: #f2f7f5; }
+
+  /* leyenda interactiva */
+  .lg-item { color: rgba(20,35,30,0.82); }
+  .lg-item:hover { background: rgba(20,35,30,0.07); color: #0c1714; }
+  .lg-empty { color: rgba(20,35,30,0.45); }
+  .lg-flag { box-shadow: 0 0 0 1px rgba(20,35,30,0.20); }
+  .lg-list::-webkit-scrollbar-thumb { background: rgba(20,35,30,0.25); }
+
+  /* comparador de destinos */
+  .cmp-open-btn { color: var(--accent-deep); border-color: rgba(28,107,82,0.45); }
+  .cmp-open-btn:hover { background: rgba(28,107,82,0.10); }
+  .cmp-card { background: #ffffff; border-color: rgba(28,107,82,0.28);
+    box-shadow: 0 24px 80px rgba(20,35,30,0.25); }
+  .cmp-title, .cmp-head { color: #14231e; }
+  .cmp-select { background: #ffffff; color: #14231e; border-color: rgba(28,107,82,0.4); }
+  .cmp-row-label { color: rgba(20,35,30,0.78); border-top-color: rgba(28,107,82,0.16); }
+  .cmp-cell { color: rgba(20,35,30,0.85); border-top-color: rgba(28,107,82,0.16); }
+  .cmp-cell--empty { color: rgba(20,35,30,0.45); }
+  .cmp-name { color: rgba(20,35,30,0.62); }
+  .cmp-note { color: rgba(20,35,30,0.55); }
+  .btn-edit { background: rgba(20,35,30,0.05); }
+  .btn-edit:hover { background: rgba(20,35,30,0.10); }
+
+  /* hoja inferior móvil */
+  @media (max-width: 560px) {
+    .detail-panel-inner { box-shadow: 0 -22px 60px rgba(20,35,30,0.22); }
+    .detail-panel-inner::before { background: rgba(20,35,30,0.28); }
+    .vc-acc > .vc-acc-sum { background: rgba(20,35,30,0.04); }
+    .vc-acc-count { background: rgba(20,35,30,0.07); }
+  }
+}
