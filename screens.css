@@ -585,6 +585,11 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
 @media (max-width: 560px) {
   .cmp-grid { grid-template-columns: 1fr 1fr; }
   .cmp-row-label { grid-column: 1 / -1; border-bottom: none; padding-bottom: 2px; }
+  /* v1.44.1 — la celda-esquina vacía de la cabecera (columna de etiquetas en
+     escritorio) empujaba a cada país a una fila distinta en móvil: fuera.
+     Así ambos países quedan alineados, lado a lado, en la misma fila. */
+  .cmp-grid .cmp-head:first-child { display: none; }
+  .cmp-head { align-items: flex-end; }
 }
 .special-access-note { display: flex; gap: 9px; align-items: flex-start; margin: 14px 0 4px;
   padding: 11px 14px; border-radius: 11px; font-size: 13.5px; line-height: 1.5; font-weight: 500;
