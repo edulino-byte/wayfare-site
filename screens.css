@@ -329,6 +329,10 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
   .globe-host canvas { filter: none; }
   .section { backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
   .detail-panel-inner { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+  /* v1.44.4 — el tooltip de hover (bandera + nombre) es cosa de ratón: en
+     táctil no hay posición de cursor y salía cortado en la esquina; al tocar
+     ya se abre el panel completo, así que sobra */
+  .globe-tooltip { display: none; }
 }
 
 .globe-hint { position: absolute; left: 50%; bottom: 26px; transform: translateX(-50%);

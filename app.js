@@ -984,7 +984,7 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
       setHoverIdx(d ? d.__id : null);
       host.style.cursor = d ? "pointer" : "grab";
       world.polygonAltitude(altOf).polygonCapColor(capColor).polygonStrokeColor(strokeColor);
-      if (d) {
+      if (d && !window.WAYFARE_PERF.lite) {
         const r = results[d.__id];
         setHoverData({
           name: featName(d.properties),
@@ -998,7 +998,7 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
       }
     }).onPolygonClick((d) => selectFeature(d)).labelsData(micros).labelLat((d) => d.lat).labelLng((d) => d.lng).labelText((d) => countryName(d.iso, lang) || d.iso).labelSize(0.65).labelDotRadius(0.42).labelAltitude(8e-3).labelResolution(2).labelColor((d) => d.r && !d.r.synthetic ? statusColor(d.r.status, 0.95) : "rgba(148,163,160,0.85)").onLabelHover((d) => {
       host.style.cursor = d ? "pointer" : "grab";
-      if (d) {
+      if (d && !window.WAYFARE_PERF.lite) {
         setHoverData({
           name: countryName(d.iso, lang) || d.iso,
           iso: d.iso,
