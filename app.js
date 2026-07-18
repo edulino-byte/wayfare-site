@@ -922,6 +922,29 @@ function GlobeStars() {
     "aria-hidden": "true"
   });
 }
+function pointInRing(lng, lat, ring) {
+  let dentro = false;
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const xi = ring[i][0], yi = ring[i][1], xj = ring[j][0], yj = ring[j][1];
+    if (yi > lat !== yj > lat && lng < (xj - xi) * (lat - yi) / (yj - yi) + xi) {
+      dentro = !dentro;
+    }
+  }
+  return dentro;
+}
+function pointInCountry(f, lat, lng) {
+  const g = f.geometry;
+  const polys = g.type === "Polygon" ? [g.coordinates] : g.type === "MultiPolygon" ? g.coordinates : [];
+  for (const poly of polys) {
+    if (pointInRing(lng, lat, poly[0])) {
+      for (let k = 1; k < poly.length; k++) {
+        if (pointInRing(lng, lat, poly[k])) return false;
+      }
+      return true;
+    }
+  }
+  return false;
+}
 function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
   const hostRef = React.useRef(null);
   const globeRef = React.useRef(null);
@@ -984,30 +1007,34 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
       setHoverIdx(d ? d.__id : null);
       host.style.cursor = d ? "pointer" : "grab";
       world.polygonAltitude(altOf).polygonCapColor(capColor).polygonStrokeColor(strokeColor);
-      if (d && !window.WAYFARE_PERF.lite) {
-        const r = results[d.__id];
-        setHoverData({
-          name: featName(d.properties),
-          iso: d.__iso,
-          status: r ? r.status : null,
-          x: mousePosRef.current.x,
-          y: mousePosRef.current.y
-        });
-      } else {
-        setHoverData(null);
+      if (!window.WAYFARE_PERF.lite) {
+        if (d) {
+          const r = results[d.__id];
+          setHoverData({
+            name: featName(d.properties),
+            iso: d.__iso,
+            status: r ? r.status : null,
+            x: mousePosRef.current.x,
+            y: mousePosRef.current.y
+          });
+        } else {
+          setHoverData(null);
+        }
       }
     }).onPolygonClick((d) => selectFeature(d)).labelsData(micros).labelLat((d) => d.lat).labelLng((d) => d.lng).labelText((d) => countryName(d.iso, lang) || d.iso).labelSize(0.65).labelDotRadius(0.42).labelAltitude(8e-3).labelResolution(2).labelColor((d) => d.r && !d.r.synthetic ? statusColor(d.r.status, 0.95) : "rgba(148,163,160,0.85)").onLabelHover((d) => {
       host.style.cursor = d ? "pointer" : "grab";
-      if (d && !window.WAYFARE_PERF.lite) {
-        setHoverData({
-          name: countryName(d.iso, lang) || d.iso,
-          iso: d.iso,
-          status: d.r ? d.r.status : null,
-          x: mousePosRef.current.x,
-          y: mousePosRef.current.y
-        });
-      } else {
-        setHoverData(null);
+      if (!window.WAYFARE_PERF.lite) {
+        if (d) {
+          setHoverData({
+            name: countryName(d.iso, lang) || d.iso,
+            iso: d.iso,
+            status: d.r ? d.r.status : null,
+            x: mousePosRef.current.x,
+            y: mousePosRef.current.y
+          });
+        } else {
+          setHoverData(null);
+        }
       }
     }).onLabelClick((d) => {
       if (!d.r) return;
@@ -1019,6 +1046,44 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
     });
     window.WAYFARE_PERF.tune(world);
     window.__WAYFARE_WORLD = world;
+    let centerTimer = null;
+    if (window.WAYFARE_PERF.lite && typeof world.pointOfView === "function") {
+      let ultimoIso = null;
+      const probe = window.__WAYFARE_CENTER_PROBE = { ticks: 0, coords: null, iso: null };
+      centerTimer = setInterval(() => {
+        probe.ticks++;
+        if (document.hidden || world.__wayfarePaused) return;
+        if (document.querySelector(".detail-panel")) {
+          if (ultimoIso !== null) {
+            ultimoIso = null;
+            setHoverData(null);
+          }
+          return;
+        }
+        const rect = host.getBoundingClientRect();
+        if (!rect.width) return;
+        const cx = rect.width / 2, cy = rect.height / 2;
+        const coords = world.pointOfView();
+        probe.coords = coords ? { lat: coords.lat, lng: coords.lng } : null;
+        const f = coords ? features.find((ft) => pointInCountry(ft, coords.lat, coords.lng)) : null;
+        probe.iso = f ? f.__iso : null;
+        if (f) {
+          if (f.__iso === ultimoIso) return;
+          ultimoIso = f.__iso;
+          const r = results[f.__id];
+          setHoverData({
+            name: featName(f.properties),
+            iso: f.__iso,
+            status: r ? r.status : null,
+            x: rect.left + cx,
+            y: rect.top + cy
+          });
+        } else if (ultimoIso !== null) {
+          ultimoIso = null;
+          setHoverData(null);
+        }
+      }, 350);
+    }
     world.controls().autoRotate = true;
     world.controls().autoRotateSpeed = 0.45;
     world.controls().enableZoom = true;
@@ -1117,6 +1182,7 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
       host.removeEventListener("mousemove", onMouseMove);
       window.removeEventListener("resize", onResize);
       if (revealTimer) clearTimeout(revealTimer);
+      if (centerTimer) clearInterval(centerTimer);
       destroyGlobe(world, host);
       globeRef.current = null;
     };
@@ -1203,7 +1269,10 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
       globeRef.current.pointOfView({ lat: 20, lng: 10, altitude: 1.7 }, 900);
     }
   };
-  return /* @__PURE__ */ React.createElement("div", { className: "globe-stage" + (detailOpen ? " detail-open" : "") }, /* @__PURE__ */ React.createElement(GlobeStars, null), /* @__PURE__ */ React.createElement("div", { className: "globe-host" + (detailOpen ? " globe-host--shifted" : ""), ref: hostRef }), hoverData && !detailOpen ? /* @__PURE__ */ React.createElement("div", { className: "globe-tooltip", style: { left: hoverData.x, top: hoverData.y }, "aria-hidden": "true" }, /* @__PURE__ */ React.createElement("span", { className: "gt-flag" }, isoToFlag(hoverData.iso)), /* @__PURE__ */ React.createElement("span", { className: "gt-name" }, countryName(hoverData.iso, lang) || hoverData.name)) : null, !detailOpen ? eligError ? /* @__PURE__ */ React.createElement("div", { className: "globe-hint globe-hint--error" }, /* @__PURE__ */ React.createElement("span", { className: "pin pin--error" }), t("elg_load_error")) : !features ? /* @__PURE__ */ React.createElement("div", { className: "globe-hint" }, /* @__PURE__ */ React.createElement("span", { className: "pin" }), t("p_title"), "\u2026") : /* @__PURE__ */ React.createElement("div", { className: "globe-hint" }, /* @__PURE__ */ React.createElement("span", { className: "pin" }), t("g_click_hint")) : null, tally && !detailOpen ? /* @__PURE__ */ React.createElement("div", { className: "legend" }, ["eligible", "partial", "ineligible"].map((st) => {
+  return /* @__PURE__ */ React.createElement("div", { className: "globe-stage" + (detailOpen ? " detail-open" : "") }, /* @__PURE__ */ React.createElement(GlobeStars, null), /* @__PURE__ */ React.createElement("div", { className: "globe-host" + (detailOpen ? " globe-host--shifted" : ""), ref: hostRef }), hoverData && !detailOpen ? /* @__PURE__ */ React.createElement("div", { className: "globe-tooltip", style: { left: hoverData.x, top: hoverData.y }, "aria-hidden": "true" }, /* @__PURE__ */ React.createElement("span", { className: "gt-flag" }, isoToFlag(hoverData.iso)), /* @__PURE__ */ React.createElement("span", { className: "gt-name" }, (() => {
+    const n = countryName(hoverData.iso, lang);
+    return n && n !== hoverData.iso ? n : hoverData.name || n;
+  })())) : null, !detailOpen ? eligError ? /* @__PURE__ */ React.createElement("div", { className: "globe-hint globe-hint--error" }, /* @__PURE__ */ React.createElement("span", { className: "pin pin--error" }), t("elg_load_error")) : !features ? /* @__PURE__ */ React.createElement("div", { className: "globe-hint" }, /* @__PURE__ */ React.createElement("span", { className: "pin" }), t("p_title"), "\u2026") : /* @__PURE__ */ React.createElement("div", { className: "globe-hint" }, /* @__PURE__ */ React.createElement("span", { className: "pin" }), t("g_click_hint")) : null, tally && !detailOpen ? /* @__PURE__ */ React.createElement("div", { className: "legend" }, ["eligible", "partial", "ineligible"].map((st) => {
     const lista = grupos && grupos[st] || [];
     const abierto = openGroup === st;
     const label = st === "eligible" ? "g_legend_eligible" : st === "partial" ? "g_legend_partial" : "g_legend_unlikely";
