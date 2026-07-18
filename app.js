@@ -980,6 +980,13 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
     const host = hostRef.current;
     const G = window.Globe;
     const microPills = [];
+    const pillData = features.filter((f) => {
+      const r = results[f.__id];
+      return r && !r.synthetic && window.Eligibility.hasRealRules(f.__iso);
+    }).map((f) => {
+      const c = featureCentroid(f) || [0, 0];
+      return { iso: f.__iso, lat: c[1], lng: c[0], r: results[f.__id], f };
+    }).concat(micros.map((m) => ({ iso: m.iso, lat: m.lat, lng: m.lng, r: m.r, micro: true })));
     const world = G(window.WAYFARE_PERF.globeConfig)(host).width(host.clientWidth).height(host.clientHeight).backgroundColor("rgba(0,0,0,0)").globeImageUrl(GLOBE_TEXTURES[globeStyle] || GLOBE_TEXTURES.textured).bumpImageUrl(BUMP_URL).showAtmosphere(true).atmosphereColor("#7ab8d4").atmosphereAltitude(0.26).polygonsData(features).polygonCapColor(capColor).polygonSideColor(() => "rgba(0,0,0,0.06)").polygonStrokeColor(strokeColor).polygonAltitude(altOf).polygonsTransitionDuration(220).onPolygonHover((d) => {
       hoverRef.current = d;
       setHoverIdx(d ? d.__id : null);
@@ -1014,7 +1021,7 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
           setHoverData(null);
         }
       }
-    }).onLabelClick((d) => abrirMicro(d)).htmlElementsData(micros).htmlLat((d) => d.lat).htmlLng((d) => d.lng).htmlAltitude(0.012).htmlElement((d) => {
+    }).onLabelClick((d) => abrirMicro(d)).htmlElementsData(pillData).htmlLat((d) => d.lat).htmlLng((d) => d.lng).htmlAltitude(0.012).htmlElement((d) => {
       const el = document.createElement("button");
       el.type = "button";
       el.className = "micro-flag";
@@ -1031,10 +1038,12 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
       el.appendChild(nm);
       el.addEventListener("click", (ev) => {
         ev.stopPropagation();
-        abrirMicro(d);
+        if (d.f) selectFeature(d.f);
+        else abrirMicro(d);
       });
       el.__wfLat = d.lat;
       el.__wfLng = d.lng;
+      el.__wfMicro = !!d.micro;
       microPills.push(el);
       return el;
     });
@@ -1053,6 +1062,7 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
       ultimaPasadaPills = ahora;
       const pov = world.pointOfView();
       const alt = pov.altitude;
+      const candidatos = [];
       microPills.forEach((el) => {
         let dl = Math.abs(el.__wfLng - pov.lng);
         if (dl > 180) dl = 360 - dl;
@@ -1060,8 +1070,36 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
           el.__wfLat - pov.lat,
           dl * Math.cos(pov.lat * Math.PI / 180)
         );
-        el.classList.toggle("micro-flag--on", alt < 1.5 && ang < 55);
-        el.classList.toggle("micro-flag--near", alt < 0.95 && ang < 25);
+        const verBandera = alt < (el.__wfMicro ? 1.5 : 1.25) && ang < 45;
+        el.classList.toggle("micro-flag--on", verBandera);
+        if (verBandera) {
+          el.__wfAng = ang;
+          candidatos.push(el);
+        } else el.classList.remove("micro-flag--near");
+      });
+      const conNombre = alt < 0.9;
+      const cajasNombres = [];
+      candidatos.sort((a, b) => a.__wfAng - b.__wfAng);
+      candidatos.forEach((el) => {
+        let ok = conNombre && el.__wfAng < 30;
+        if (ok) {
+          const r = el.getBoundingClientRect();
+          if (!r.width) {
+            ok = false;
+          } else {
+            const cx = (r.left + r.right) / 2, cy = (r.top + r.bottom) / 2;
+            const w = 34 + el.title.length * 6.4, h = 26;
+            const caja = {
+              left: cx - w / 2,
+              right: cx + w / 2,
+              top: cy - h / 2,
+              bottom: cy + h / 2
+            };
+            ok = !cajasNombres.some((q) => !(caja.right < q.left - 4 || caja.left > q.right + 4 || caja.bottom < q.top - 4 || caja.top > q.bottom + 4));
+            if (ok) cajasNombres.push(caja);
+          }
+        }
+        el.classList.toggle("micro-flag--near", ok);
       });
     };
     world.controls().addEventListener("change", actualizarMicroPills);
@@ -1230,14 +1268,6 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
     Object.values(g).forEach((a) => a.sort((x, y) => x.name.localeCompare(y.name)));
     return g;
   }, [features, results, micros, lang]);
-  const [searchOpen, setSearchOpen] = React.useState(false);
-  const [busca, setBusca] = React.useState("");
-  const sinAcentos = (s) => (s || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-  const destinos = React.useMemo(() => {
-    if (!grupos) return [];
-    return ["eligible", "partial", "ineligible"].flatMap((st) => (grupos[st] || []).map((c) => ({ iso: c.iso, name: c.name, status: st })));
-  }, [grupos]);
-  const filtrados = busca ? destinos.filter((d) => sinAcentos(d.name).includes(sinAcentos(busca)) || sinAcentos(d.iso) === sinAcentos(busca)) : destinos;
   const irA = (iso) => {
     setOpenGroup(null);
     const f = globeRef.current && globeRef.current.__byIso && globeRef.current.__byIso(iso);
@@ -1268,59 +1298,7 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
   return /* @__PURE__ */ React.createElement("div", { className: "globe-stage" + (detailOpen ? " detail-open" : "") }, /* @__PURE__ */ React.createElement(GlobeStars, null), /* @__PURE__ */ React.createElement("div", { className: "globe-host" + (detailOpen ? " globe-host--shifted" : ""), ref: hostRef }), hoverData && !detailOpen ? /* @__PURE__ */ React.createElement("div", { className: "globe-tooltip", style: { left: hoverData.x, top: hoverData.y }, "aria-hidden": "true" }, /* @__PURE__ */ React.createElement("span", { className: "gt-flag" }, isoToFlag(hoverData.iso)), /* @__PURE__ */ React.createElement("span", { className: "gt-name" }, (() => {
     const n = countryName(hoverData.iso, lang);
     return n && n !== hoverData.iso ? n : hoverData.name || n;
-  })())) : null, !detailOpen ? eligError ? /* @__PURE__ */ React.createElement("div", { className: "globe-hint globe-hint--error" }, /* @__PURE__ */ React.createElement("span", { className: "pin pin--error" }), t("elg_load_error")) : !features ? /* @__PURE__ */ React.createElement("div", { className: "globe-hint" }, /* @__PURE__ */ React.createElement("span", { className: "pin" }), t("p_title"), "\u2026") : /* @__PURE__ */ React.createElement("div", { className: "globe-hint" }, /* @__PURE__ */ React.createElement("span", { className: "pin" }), t("g_click_hint")) : null, /* @__PURE__ */ React.createElement(
-    "button",
-    {
-      type: "button",
-      className: "search-fab",
-      "aria-label": t("search_label"),
-      onClick: () => {
-        setBusca("");
-        setSearchOpen(true);
-      }
-    },
-    /* @__PURE__ */ React.createElement("svg", { width: "17", height: "17", viewBox: "0 0 24 24", fill: "none", "aria-hidden": "true" }, /* @__PURE__ */ React.createElement("circle", { cx: "11", cy: "11", r: "7", stroke: "currentColor", strokeWidth: "2.2" }), /* @__PURE__ */ React.createElement("path", { d: "M20.5 20.5l-4.3-4.3", stroke: "currentColor", strokeWidth: "2.2", strokeLinecap: "round" }))
-  ), searchOpen ? /* @__PURE__ */ React.createElement(
-    "div",
-    {
-      className: "search-overlay",
-      onClick: (e) => {
-        if (e.target === e.currentTarget) setSearchOpen(false);
-      }
-    },
-    /* @__PURE__ */ React.createElement("div", { className: "search-card" }, /* @__PURE__ */ React.createElement("div", { className: "search-head" }, /* @__PURE__ */ React.createElement(
-      "input",
-      {
-        autoFocus: true,
-        value: busca,
-        placeholder: t("search_ph"),
-        onChange: (e) => setBusca(e.target.value)
-      }
-    ), /* @__PURE__ */ React.createElement(
-      "button",
-      {
-        type: "button",
-        className: "search-close",
-        "aria-label": "\u2715",
-        onClick: () => setSearchOpen(false)
-      },
-      /* @__PURE__ */ React.createElement("svg", { width: "14", height: "14", viewBox: "0 0 24 24", fill: "none", "aria-hidden": "true" }, /* @__PURE__ */ React.createElement("path", { d: "M6 6l12 12M18 6L6 18", stroke: "currentColor", strokeWidth: "2.2", strokeLinecap: "round" }))
-    )), /* @__PURE__ */ React.createElement("div", { className: "search-list" }, filtrados.map((d) => /* @__PURE__ */ React.createElement(
-      "button",
-      {
-        type: "button",
-        key: d.iso,
-        className: "search-item",
-        onClick: () => {
-          setSearchOpen(false);
-          irA(d.iso);
-        }
-      },
-      /* @__PURE__ */ React.createElement("img", { className: "lg-flag", alt: "", src: "assets/flags/" + d.iso.toLowerCase() + ".svg" }),
-      /* @__PURE__ */ React.createElement("span", { className: "si-name" }, d.name),
-      /* @__PURE__ */ React.createElement("span", { className: "si-dot", style: { background: statusColor(d.status, 1) } })
-    )), filtrados.length === 0 ? /* @__PURE__ */ React.createElement("div", { className: "search-empty" }, t("search_empty")) : null))
-  ) : null, tally && !detailOpen ? /* @__PURE__ */ React.createElement("div", { className: "legend" }, ["eligible", "partial", "ineligible"].map((st) => {
+  })())) : null, !detailOpen ? eligError ? /* @__PURE__ */ React.createElement("div", { className: "globe-hint globe-hint--error" }, /* @__PURE__ */ React.createElement("span", { className: "pin pin--error" }), t("elg_load_error")) : !features ? /* @__PURE__ */ React.createElement("div", { className: "globe-hint" }, /* @__PURE__ */ React.createElement("span", { className: "pin" }), t("p_title"), "\u2026") : /* @__PURE__ */ React.createElement("div", { className: "globe-hint" }, /* @__PURE__ */ React.createElement("span", { className: "pin" }), t("g_click_hint")) : null, tally && !detailOpen ? /* @__PURE__ */ React.createElement("div", { className: "legend" }, ["eligible", "partial", "ineligible"].map((st) => {
     const lista = grupos && grupos[st] || [];
     const abierto = openGroup === st;
     const label = st === "eligible" ? "g_legend_eligible" : st === "partial" ? "g_legend_partial" : "g_legend_unlikely";
