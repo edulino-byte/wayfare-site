@@ -1002,6 +1002,7 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
     if (!features || !results || !hostRef.current || globeRef.current) return;
     const host = hostRef.current;
     const G = window.Globe;
+    const microPills = [];
     const world = G(window.WAYFARE_PERF.globeConfig)(host).width(host.clientWidth).height(host.clientHeight).backgroundColor("rgba(0,0,0,0)").globeImageUrl(GLOBE_TEXTURES[globeStyle] || GLOBE_TEXTURES.textured).bumpImageUrl(BUMP_URL).showAtmosphere(true).atmosphereColor("#7ab8d4").atmosphereAltitude(0.26).polygonsData(features).polygonCapColor(capColor).polygonSideColor(() => "rgba(0,0,0,0.06)").polygonStrokeColor(strokeColor).polygonAltitude(altOf).polygonsTransitionDuration(220).onPolygonHover((d) => {
       hoverRef.current = d;
       setHoverIdx(d ? d.__id : null);
@@ -1021,7 +1022,7 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
           setHoverData(null);
         }
       }
-    }).onPolygonClick((d) => selectFeature(d)).labelsData(micros).labelLat((d) => d.lat).labelLng((d) => d.lng).labelText((d) => countryName(d.iso, lang) || d.iso).labelSize(0.65).labelDotRadius(0.42).labelAltitude(8e-3).labelResolution(2).labelColor((d) => d.r && !d.r.synthetic ? statusColor(d.r.status, 0.95) : "rgba(148,163,160,0.85)").onLabelHover((d) => {
+    }).onPolygonClick((d) => selectFeature(d)).labelsData(micros).labelLat((d) => d.lat).labelLng((d) => d.lng).labelText(() => "").labelSize(0.65).labelDotRadius(0.42).labelAltitude(8e-3).labelResolution(2).labelColor((d) => d.r && !d.r.synthetic ? statusColor(d.r.status, 0.95) : "rgba(148,163,160,0.85)").onLabelHover((d) => {
       host.style.cursor = d ? "pointer" : "grab";
       if (!window.WAYFARE_PERF.lite) {
         if (d) {
@@ -1036,14 +1037,52 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
           setHoverData(null);
         }
       }
-    }).onLabelClick((d) => {
+    }).onLabelClick((d) => abrirMicro(d)).htmlElementsData(micros).htmlLat((d) => d.lat).htmlLng((d) => d.lng).htmlAltitude(0.012).htmlElement((d) => {
+      const el = document.createElement("button");
+      el.type = "button";
+      el.className = "micro-pill";
+      const img = document.createElement("img");
+      img.className = "mp-flag";
+      img.alt = "";
+      img.src = "assets/flags/" + d.iso.toLowerCase() + ".svg";
+      el.appendChild(img);
+      el.appendChild(document.createTextNode(countryName(d.iso, lang) || d.iso));
+      const sw = document.createElement("span");
+      sw.className = "mp-dot";
+      if (d.r && !d.r.synthetic) sw.style.background = statusColor(d.r.status, 1);
+      el.appendChild(sw);
+      el.addEventListener("click", (ev) => {
+        ev.stopPropagation();
+        abrirMicro(d);
+      });
+      el.__wfLat = d.lat;
+      el.__wfLng = d.lng;
+      microPills.push(el);
+      return el;
+    });
+    function abrirMicro(d) {
       if (!d.r) return;
       selRef.current = null;
       setSelected(Object.assign({}, d.r, { iso: d.iso }));
       setDetailOpen(true);
       world.controls().autoRotate = false;
       world.pointOfView({ lat: d.lat, lng: d.lng - 12, altitude: 1.2 }, 900);
-    });
+    }
+    const actualizarMicroPills = () => {
+      const pov = world.pointOfView();
+      const cerca = pov.altitude < 1.5;
+      microPills.forEach((el) => {
+        let dl = Math.abs(el.__wfLng - pov.lng);
+        if (dl > 180) dl = 360 - dl;
+        const ang = Math.hypot(
+          el.__wfLat - pov.lat,
+          dl * Math.cos(pov.lat * Math.PI / 180)
+        );
+        el.classList.toggle("micro-pill--on", cerca && ang < 55);
+      });
+    };
+    world.controls().addEventListener("change", actualizarMicroPills);
+    const pillTimer = setTimeout(actualizarMicroPills, 700);
     window.WAYFARE_PERF.tune(world);
     window.__WAYFARE_WORLD = world;
     let centerTimer = null;
@@ -1183,6 +1222,11 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
       window.removeEventListener("resize", onResize);
       if (revealTimer) clearTimeout(revealTimer);
       if (centerTimer) clearInterval(centerTimer);
+      clearTimeout(pillTimer);
+      try {
+        world.controls().removeEventListener("change", actualizarMicroPills);
+      } catch (e) {
+      }
       destroyGlobe(world, host);
       globeRef.current = null;
     };
