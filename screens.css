@@ -209,10 +209,23 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
 .btn-map-back:active { transform: none; }
 .btn-map-discard { border-color: rgba(217,178,106,0.6); color: #d9b26a; }
 .btn-map-discard:hover { background: rgba(217,178,106,0.15); }
+/* v1.44.3 — barra móvil elegante: ambos botones a ancho completo y misma
+   altura, el principal ARRIBA (más visible y a mano del pulgar), textos
+   legales centrados y barra más esbelta. margin-left:auto era de escritorio
+   y en columna encogía el botón verde (foto de un probador). */
 @media (max-width: 700px) {
-  .submit-row { flex-direction: column; align-items: stretch; width: 100%; }
-  .submit-row .btn-map-back, .submit-row .btn-primary { justify-content: center; }
-  .q-wrap { padding-bottom: 300px; }
+  .submitbar { padding-top: 26px; padding-bottom: 10px; gap: 8px; }
+  .submit-row { flex-direction: column-reverse; align-items: stretch; width: 100%; gap: 9px; }
+  .submit-row .btn-map-back, .submit-row .btn-primary {
+    justify-content: center; margin-left: 0; font-size: 15.5px; }
+  .submit-row .btn-primary { padding: 14px 20px; }
+  .submit-row .btn-map-back { padding: 13px 20px; }
+  /* .submitbar delante: la regla base (text-align right) va después en el
+     archivo y ganaría el empate de especificidad */
+  .submitbar .disclaimer-short { max-width: none; width: 100%; text-align: center;
+    font-size: 10.5px; }
+  .q-reset-link { width: 100%; text-align: center; margin-top: 0; }
+  .q-wrap { padding-bottom: 260px; }
 }
 
 /* Short disclaimer â€” below the CTA button, right-aligned to match */
