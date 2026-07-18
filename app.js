@@ -631,7 +631,7 @@ function BackgroundGlobe() {
 window.BackgroundGlobe = BackgroundGlobe;
 
 /* ===== ui/Questionnaire.jsx ===== */
-function Questionnaire({ t, lang, profile, setProfile, onSubmit, onBack, dirty, onReset }) {
+function Questionnaire({ t, lang, profile, setProfile, onSubmit, onBack, onDiscard, dirty, onReset }) {
   const D = window.VISA_DATA;
   const set = (k, v) => setProfile((p) => Object.assign({}, p, { [k]: v }));
   const toggleIn = (k, v) => setProfile((p) => {
@@ -654,17 +654,7 @@ function Questionnaire({ t, lang, profile, setProfile, onSubmit, onBack, dirty, 
     label: t("vt_" + id),
     vt: D.VISA_TYPES[id].icon
   }));
-  return /* @__PURE__ */ React.createElement("div", { className: "q-scroll" }, /* @__PURE__ */ React.createElement(BackgroundGlobe, null), /* @__PURE__ */ React.createElement("div", { className: "q-wrap" }, /* @__PURE__ */ React.createElement("div", { className: "q-head" }, onBack ? /* @__PURE__ */ React.createElement("div", { className: "q-back-wrap" }, /* @__PURE__ */ React.createElement(
-    "button",
-    {
-      type: "button",
-      className: "q-back-btn",
-      disabled: dirty,
-      onClick: dirty ? void 0 : onBack
-    },
-    /* @__PURE__ */ React.createElement("svg", { width: "13", height: "13", viewBox: "0 0 24 24", fill: "none", "aria-hidden": "true" }, /* @__PURE__ */ React.createElement("path", { d: "M19 12H5M11 18l-6-6 6-6", stroke: "currentColor", strokeWidth: "2.2", strokeLinecap: "round", strokeLinejoin: "round" })),
-    t("q_back_map")
-  ), dirty ? /* @__PURE__ */ React.createElement("p", { className: "q-back-hint" }, t("q_back_dirty")) : null) : null, /* @__PURE__ */ React.createElement("span", { className: "q-eyebrow" }, /* @__PURE__ */ React.createElement("span", { className: "dot" }), t("g_simulated")), /* @__PURE__ */ React.createElement("h1", null, t("q_title")), /* @__PURE__ */ React.createElement("p", null, t("q_sub"))), /* @__PURE__ */ React.createElement("section", { className: "section" }, /* @__PURE__ */ React.createElement("div", { className: "section-head" }, /* @__PURE__ */ React.createElement("span", { className: "section-num" }, "01"), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h2", null, t("sec_identity")), /* @__PURE__ */ React.createElement("p", null, t("sec_identity_sub")))), /* @__PURE__ */ React.createElement("div", { className: "grid" }, /* @__PURE__ */ React.createElement(Field, { label: t("f_nationality") }, /* @__PURE__ */ React.createElement(SelectControl, { value: profile.nationality, onChange: (v) => set("nationality", v), options: passportOpts })), /* @__PURE__ */ React.createElement(Field, { label: t("f_residence") }, /* @__PURE__ */ React.createElement(SelectControl, { value: profile.currentResidence, onChange: (v) => set("currentResidence", v), options: residenceOpts })), /* @__PURE__ */ React.createElement(Field, { label: t("f_age") }, /* @__PURE__ */ React.createElement(
+  return /* @__PURE__ */ React.createElement("div", { className: "q-scroll" }, /* @__PURE__ */ React.createElement(BackgroundGlobe, null), /* @__PURE__ */ React.createElement("div", { className: "q-wrap" }, /* @__PURE__ */ React.createElement("div", { className: "q-head" }, onBack ? /* @__PURE__ */ React.createElement("div", { className: "q-back-wrap" }, !dirty ? /* @__PURE__ */ React.createElement("button", { type: "button", className: "q-back-btn", onClick: onBack }, /* @__PURE__ */ React.createElement("svg", { width: "13", height: "13", viewBox: "0 0 24 24", fill: "none", "aria-hidden": "true" }, /* @__PURE__ */ React.createElement("path", { d: "M19 12H5M11 18l-6-6 6-6", stroke: "currentColor", strokeWidth: "2.2", strokeLinecap: "round", strokeLinejoin: "round" })), t("q_back_map")) : /* @__PURE__ */ React.createElement("button", { type: "button", className: "q-back-btn q-discard-btn", onClick: onDiscard }, /* @__PURE__ */ React.createElement("svg", { width: "13", height: "13", viewBox: "0 0 24 24", fill: "none", "aria-hidden": "true" }, /* @__PURE__ */ React.createElement("path", { d: "M9 14l-4-4 4-4M5 10h9a5 5 0 015 5v3", stroke: "currentColor", strokeWidth: "2.2", strokeLinecap: "round", strokeLinejoin: "round" })), t("q_discard"))) : null, /* @__PURE__ */ React.createElement("span", { className: "q-eyebrow" }, /* @__PURE__ */ React.createElement("span", { className: "dot" }), t("g_simulated")), /* @__PURE__ */ React.createElement("h1", null, t("q_title")), /* @__PURE__ */ React.createElement("p", null, t("q_sub"))), /* @__PURE__ */ React.createElement("section", { className: "section" }, /* @__PURE__ */ React.createElement("div", { className: "section-head" }, /* @__PURE__ */ React.createElement("span", { className: "section-num" }, "01"), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h2", null, t("sec_identity")), /* @__PURE__ */ React.createElement("p", null, t("sec_identity_sub")))), /* @__PURE__ */ React.createElement("div", { className: "grid" }, /* @__PURE__ */ React.createElement(Field, { label: t("f_nationality") }, /* @__PURE__ */ React.createElement(SelectControl, { value: profile.nationality, onChange: (v) => set("nationality", v), options: passportOpts })), /* @__PURE__ */ React.createElement(Field, { label: t("f_residence") }, /* @__PURE__ */ React.createElement(SelectControl, { value: profile.currentResidence, onChange: (v) => set("currentResidence", v), options: residenceOpts })), /* @__PURE__ */ React.createElement(Field, { label: t("f_age") }, /* @__PURE__ */ React.createElement(
     Slider,
     {
       value: profile.age,
@@ -683,7 +673,7 @@ function Questionnaire({ t, lang, profile, setProfile, onSubmit, onBack, dirty, 
         { value: "no", label: t("remote_no") }
       ]
     }
-  )))), /* @__PURE__ */ React.createElement("section", { className: "section" }, /* @__PURE__ */ React.createElement("div", { className: "section-head" }, /* @__PURE__ */ React.createElement("span", { className: "section-num" }, "04"), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h2", null, t("sec_intent")), /* @__PURE__ */ React.createElement("p", null, t("sec_intent_sub")))), /* @__PURE__ */ React.createElement("div", { className: "grid" }, /* @__PURE__ */ React.createElement(Field, { label: t("f_visas"), hint: t("f_visas_hint"), full: true }, /* @__PURE__ */ React.createElement(Chips, { selected: profile.visaTypes, onToggle: (v) => toggleIn("visaTypes", v), options: visaOpts })))), /* @__PURE__ */ React.createElement("div", { className: "submitbar" }, /* @__PURE__ */ React.createElement("button", { className: "btn-primary", onClick: onSubmit }, t("submit"), /* @__PURE__ */ React.createElement("svg", { className: "arr", width: "18", height: "18", viewBox: "0 0 24 24", fill: "none" }, /* @__PURE__ */ React.createElement("path", { d: "M5 12h14M13 6l6 6-6 6", stroke: "currentColor", strokeWidth: "2.2", strokeLinecap: "round", strokeLinejoin: "round" }))), /* @__PURE__ */ React.createElement("p", { className: "disclaimer-short" }, t("disclaimer_short")), onReset ? /* @__PURE__ */ React.createElement("button", { type: "button", className: "q-reset-link", onClick: onReset }, t("q_reset")) : null)));
+  )))), /* @__PURE__ */ React.createElement("section", { className: "section" }, /* @__PURE__ */ React.createElement("div", { className: "section-head" }, /* @__PURE__ */ React.createElement("span", { className: "section-num" }, "04"), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h2", null, t("sec_intent")), /* @__PURE__ */ React.createElement("p", null, t("sec_intent_sub")))), /* @__PURE__ */ React.createElement("div", { className: "grid" }, /* @__PURE__ */ React.createElement(Field, { label: t("f_visas"), hint: t("f_visas_hint"), full: true }, /* @__PURE__ */ React.createElement(Chips, { selected: profile.visaTypes, onToggle: (v) => toggleIn("visaTypes", v), options: visaOpts })))), /* @__PURE__ */ React.createElement("div", { className: "submitbar" }, /* @__PURE__ */ React.createElement("button", { className: "btn-primary", onClick: onSubmit }, onBack && dirty ? t("submit_update") : t("submit"), /* @__PURE__ */ React.createElement("svg", { className: "arr", width: "18", height: "18", viewBox: "0 0 24 24", fill: "none" }, /* @__PURE__ */ React.createElement("path", { d: "M5 12h14M13 6l6 6-6 6", stroke: "currentColor", strokeWidth: "2.2", strokeLinecap: "round", strokeLinejoin: "round" }))), /* @__PURE__ */ React.createElement("p", { className: "disclaimer-short" }, t("disclaimer_short")), onReset ? /* @__PURE__ */ React.createElement("button", { type: "button", className: "q-reset-link", onClick: onReset }, t("q_reset")) : null)));
 }
 function countryName(iso, lang) {
   if (lang === "es" && window.COUNTRY_NAMES && window.COUNTRY_NAMES.es && window.COUNTRY_NAMES.es[iso]) {
@@ -1432,6 +1422,10 @@ function App() {
     setScreen("globe");
     setTimeout(() => window.dispatchEvent(new Event("resize")), 50);
   }, []);
+  const discardAndBack = React.useCallback(() => {
+    if (submitted) setProfile(Object.assign({}, submitted.profile));
+    backToMap();
+  }, [submitted, backToMap]);
   const tr = React.useCallback((key) => {
     const tbl = window.I18N[lang] || window.I18N.en;
     return tbl[key] != null ? tbl[key] : key;
@@ -1476,6 +1470,7 @@ function App() {
         setScreen("processing");
       },
       onBack: submitted ? backToMap : null,
+      onDiscard: submitted ? discardAndBack : null,
       dirty: submitted ? JSON.stringify(profile) !== JSON.stringify(submitted.profile) : false,
       onReset: resetAll
     }
