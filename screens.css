@@ -33,7 +33,8 @@
 .q-wrap {
   max-width: var(--maxw);
   margin: 0 auto;
-  padding: 48px 24px 140px;
+  /* v1.41.2 — aire extra abajo: la barra de botones es fija y tapa ~180px */
+  padding: 48px 24px 220px;
   animation: fadeUp .5s ease both;
   position: relative;
   z-index: 3;
@@ -170,13 +171,19 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
 .chip .flag { font-size: 16px; line-height: 1; }
 
 /* â”€â”€ Submit bar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* v1.41.2 — barra SIEMPRE clavada abajo (fixed, no sube con el scroll);
+   degradado oscuro para que los botones se lean sobre cualquier contenido */
 .submitbar {
-  position: sticky; bottom: 0; margin-top: 26px; padding: 16px 0 4px;
-  background: transparent;
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 6;
   display: flex; flex-direction: column; align-items: flex-end; gap: 10px;
+  padding: 34px max(24px, calc((100% - var(--maxw)) / 2 + 24px)) 14px;
+  background: linear-gradient(to top, rgba(3,9,7,0.94) 45%, rgba(3,9,7,0));
+  pointer-events: none;
+  animation: fadeIn .5s ease both;
 }
+.submitbar button { pointer-events: auto; }
 
-/* v1.41.1 — ambos botones «al mapa» fijos abajo, mismo formato de píldora */
+/* v1.41.1 — ambos botones «al mapa» juntos, mismo formato de píldora */
 .submit-row { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 12px; }
 .btn-map-back {
   display: inline-flex; align-items: center; gap: 10px; cursor: pointer;
@@ -191,8 +198,9 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
 .btn-map-discard { border-color: rgba(217,178,106,0.6); color: #d9b26a; }
 .btn-map-discard:hover { background: rgba(217,178,106,0.15); }
 @media (max-width: 700px) {
-  .submit-row { flex-direction: column; align-items: stretch; }
+  .submit-row { flex-direction: column; align-items: stretch; width: 100%; }
   .submit-row .btn-map-back, .submit-row .btn-primary { justify-content: center; }
+  .q-wrap { padding-bottom: 300px; }
 }
 
 /* Short disclaimer â€” below the CTA button, right-aligned to match */
