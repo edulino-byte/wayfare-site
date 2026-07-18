@@ -300,6 +300,14 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
   display: block;
   filter: brightness(1.18) contrast(0.96);
 }
+/* v1.44.0 — modo ligero móvil: el filtro a pantalla completa obliga a una
+   pasada extra de composición en CADA fotograma (calor en móviles viejos),
+   y los desenfoques de cristal son caros sobre un canvas animado */
+@media (pointer: coarse) {
+  .globe-host canvas { filter: none; }
+  .section { backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+  .detail-panel-inner { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+}
 
 .globe-hint { position: absolute; left: 50%; bottom: 26px; transform: translateX(-50%);
   color: var(--on-dark-2); font-size: 13px; font-weight: 600; letter-spacing: .01em;

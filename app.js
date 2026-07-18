@@ -516,6 +516,28 @@ function Chips({ selected, onToggle, options }) {
     o.label
   )));
 }
+const WAYFARE_PERF = (() => {
+  let lite = false;
+  try {
+    lite = window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
+    if (/[?&]lite=1/.test(window.location.search)) lite = true;
+    if (/[?&]lite=0/.test(window.location.search)) lite = false;
+  } catch (e) {
+  }
+  return {
+    lite,
+    globeConfig: lite ? { rendererConfig: { antialias: false, powerPreference: "low-power" } } : void 0,
+    tune(world, esFondo) {
+      if (!this.lite) return;
+      try {
+        world.renderer().setPixelRatio(
+          esFondo ? 1 : Math.min(window.devicePixelRatio || 1, 1.5)
+        );
+      } catch (e) {
+      }
+    }
+  };
+})();
 function destroyGlobe(world, host) {
   try {
     if (world && typeof world._destructor === "function") {
@@ -540,7 +562,8 @@ Object.assign(window, {
   Segmented,
   Slider,
   Chips,
-  destroyGlobe
+  destroyGlobe,
+  WAYFARE_PERF
 });
 
 /* ===== ui/BackgroundGlobe.jsx ===== */
@@ -595,7 +618,8 @@ function BackgroundGlobe() {
   React.useEffect(() => {
     const host = hostRef.current;
     if (!host || globeRef.current) return;
-    const world = window.Globe()(host).width(host.clientWidth).height(host.clientHeight).backgroundColor("rgba(0,0,0,0)").globeImageUrl(BG_GLOBE_TEXTURE).bumpImageUrl(BG_BUMP_URL).showAtmosphere(true).atmosphereColor("#4a8c80").atmosphereAltitude(0.22);
+    const world = window.Globe(window.WAYFARE_PERF.globeConfig)(host).width(host.clientWidth).height(host.clientHeight).backgroundColor("rgba(0,0,0,0)").globeImageUrl(BG_GLOBE_TEXTURE).bumpImageUrl(BG_BUMP_URL).showAtmosphere(true).atmosphereColor("#4a8c80").atmosphereAltitude(0.22);
+    window.WAYFARE_PERF.tune(world, true);
     world.controls().autoRotate = true;
     world.controls().autoRotateSpeed = 0.35;
     world.controls().enableZoom = false;
@@ -603,12 +627,27 @@ function BackgroundGlobe() {
     world.controls().enablePan = false;
     world.pointOfView({ lat: 20, lng: 10, altitude: 1.1 }, 0);
     globeRef.current = world;
+    let freezeTimer = null;
+    if (window.WAYFARE_PERF.lite) {
+      freezeTimer = setTimeout(() => {
+        world.controls().autoRotate = false;
+        world.pauseAnimation();
+        world.__wayfareFrozen = true;
+      }, 2600);
+    }
+    const onVis = () => {
+      if (document.hidden) world.pauseAnimation();
+      else if (!world.__wayfareFrozen) world.resumeAnimation();
+    };
+    document.addEventListener("visibilitychange", onVis);
     const onResize = () => {
       world.width(host.clientWidth).height(host.clientHeight);
     };
     window.addEventListener("resize", onResize, { passive: true });
     return () => {
       window.removeEventListener("resize", onResize);
+      document.removeEventListener("visibilitychange", onVis);
+      if (freezeTimer) clearTimeout(freezeTimer);
       destroyGlobe(world, host);
       globeRef.current = null;
     };
@@ -883,7 +922,7 @@ function GlobeStars() {
     "aria-hidden": "true"
   });
 }
-function GlobeView({ t, lang, profile, onEditProfile, globeStyle }) {
+function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
   const hostRef = React.useRef(null);
   const globeRef = React.useRef(null);
   const [features, setFeatures] = React.useState(null);
@@ -940,7 +979,7 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle }) {
     if (!features || !results || !hostRef.current || globeRef.current) return;
     const host = hostRef.current;
     const G = window.Globe;
-    const world = G()(host).width(host.clientWidth).height(host.clientHeight).backgroundColor("rgba(0,0,0,0)").globeImageUrl(GLOBE_TEXTURES[globeStyle] || GLOBE_TEXTURES.textured).bumpImageUrl(BUMP_URL).showAtmosphere(true).atmosphereColor("#7ab8d4").atmosphereAltitude(0.26).polygonsData(features).polygonCapColor(capColor).polygonSideColor(() => "rgba(0,0,0,0.06)").polygonStrokeColor(strokeColor).polygonAltitude(altOf).polygonsTransitionDuration(220).onPolygonHover((d) => {
+    const world = G(window.WAYFARE_PERF.globeConfig)(host).width(host.clientWidth).height(host.clientHeight).backgroundColor("rgba(0,0,0,0)").globeImageUrl(GLOBE_TEXTURES[globeStyle] || GLOBE_TEXTURES.textured).bumpImageUrl(BUMP_URL).showAtmosphere(true).atmosphereColor("#7ab8d4").atmosphereAltitude(0.26).polygonsData(features).polygonCapColor(capColor).polygonSideColor(() => "rgba(0,0,0,0.06)").polygonStrokeColor(strokeColor).polygonAltitude(altOf).polygonsTransitionDuration(220).onPolygonHover((d) => {
       hoverRef.current = d;
       setHoverIdx(d ? d.__id : null);
       host.style.cursor = d ? "pointer" : "grab";
@@ -978,6 +1017,8 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle }) {
       world.controls().autoRotate = false;
       world.pointOfView({ lat: d.lat, lng: d.lng - 12, altitude: 1.2 }, 900);
     });
+    window.WAYFARE_PERF.tune(world);
+    window.__WAYFARE_WORLD = world;
     world.controls().autoRotate = true;
     world.controls().autoRotateSpeed = 0.45;
     world.controls().enableZoom = true;
@@ -1085,6 +1126,27 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle }) {
       globeRef.current.globeImageUrl(GLOBE_TEXTURES[globeStyle] || GLOBE_TEXTURES.textured);
     }
   }, [globeStyle]);
+  React.useEffect(() => {
+    const w = globeRef.current;
+    if (!w) return;
+    if (visible === false) {
+      w.pauseAnimation();
+      w.__wayfarePaused = true;
+    } else if (w.__wayfarePaused) {
+      w.resumeAnimation();
+      w.__wayfarePaused = false;
+    }
+  }, [visible, features, results]);
+  React.useEffect(() => {
+    const onVis = () => {
+      const w = globeRef.current;
+      if (!w) return;
+      if (document.hidden) w.pauseAnimation();
+      else if (!w.__wayfarePaused) w.resumeAnimation();
+    };
+    document.addEventListener("visibilitychange", onVis);
+    return () => document.removeEventListener("visibilitychange", onVis);
+  }, []);
   React.useEffect(() => {
     if (globeRef.current && results) {
       globeRef.current.polygonCapColor(globeRef.current.polygonCapColor());
@@ -1469,6 +1531,7 @@ function App() {
       lang,
       profile: submitted.profile,
       globeStyle: t.globeStyle,
+      visible: screen === "globe",
       onEditProfile: () => setScreen("questionnaire")
     }
   ))), /* @__PURE__ */ React.createElement(TweaksPanel, null, /* @__PURE__ */ React.createElement(TweakSection, { label: "Brand" }), /* @__PURE__ */ React.createElement(
