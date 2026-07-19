@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 92" width="300" height="92">
+  <rect width="300" height="92" rx="16" fill="#05090b"></rect>
+  <g transform="translate(22,23) scale(0.48)"><path d="M22,30 L35,72 L50,46 L65,72 L78,30" fill="none" stroke="#7E84F5" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"></path><polygon points="50,8 53,19 64,22 53,25 50,40 47,25 36,22 47,19" fill="#7E84F5"></polygon></g>
+  <text x="86" y="58" font-family="&#39;Space Grotesk&#39;,sans-serif" font-size="34" font-weight="700" letter-spacing="-0.5" fill="#eef3f1">Wayfare</text>
+</svg>

@@ -5,10 +5,12 @@
 
 :root {
   color-scheme: dark;
-  /* accent â€” teal, overridable by TweaksPanel */
-  --accent: #1f9d8f;
-  --accent-deep: #156b60;
-  --accent-tint: rgba(31,157,143,0.14);
+  /* accent — «Índigo Horizonte» (rebranding v1.54.0): brillante de noche,
+     base de día; --accent-ink es el texto/símbolo QUE VA ENCIMA del acento */
+  --accent: #7E84F5;
+  --accent-ink: #05090b;
+  --accent-deep: #5B62E0;
+  --accent-tint: rgba(126,132,245,0.14);
 
   /* dark stage palette â€” used by questionnaire, processing, and globe       */
   --bg: #05090b;
@@ -70,7 +72,7 @@ html, body {
 h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 600; letter-spacing: -0.02em; margin: 0; }
 button { font-family: inherit; cursor: pointer; }
 input, select, button { font-family: inherit; }
-::selection { background: var(--accent); color: #fff; }
+::selection { background: var(--accent); color: var(--accent-ink); }
 
 /* ---- app frame -------------------------------------------------------- */
 .app { height: 100%; display: flex; flex-direction: column; overflow: hidden; }
@@ -91,13 +93,10 @@ input, select, button { font-family: inherit; }
 }
 .brand { display: flex; align-items: center; gap: 10px; font-family: var(--font-display);
   font-weight: 600; font-size: 18px; letter-spacing: -0.02em; color: var(--on-dark); }
+/* v1.54.0 — insignia «W-Ruta» (rebranding): SVG oficial en assets/brand/ */
 .brand-mark {
-  width: 26px; height: 26px; border-radius: 8px;
-  background: var(--accent); display: grid; place-items: center; position: relative;
-}
-.brand-mark::after {
-  content: ""; width: 11px; height: 11px; border-radius: 50%;
-  border: 2px solid #fff; border-right-color: transparent; transform: rotate(-30deg);
+  width: 26px; height: 26px;
+  background: url(assets/brand/wayfare-mark-color.svg) center / contain no-repeat;
 }
 
 /* topbar right-side control group: Edit profile + lang switcher inline     */
@@ -159,6 +158,12 @@ input, select, button { font-family: inherit; }
 @media (prefers-color-scheme: light) {
   :root {
     color-scheme: light;
+
+    /* acento índigo con flip de luminosidad: base sobre cielo claro (AA) */
+    --accent: #5B62E0;
+    --accent-ink: #ffffff;
+    --accent-deep: #3F46C9;
+    --accent-tint: rgba(91,98,224,0.12);
 
     /* v1.42.1 — de día es CIELO, no papel: azules celestes con luz cálida */
     --bg: #c3dcee;

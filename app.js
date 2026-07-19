@@ -618,7 +618,7 @@ function BackgroundGlobe() {
   React.useEffect(() => {
     const host = hostRef.current;
     if (!host || globeRef.current) return;
-    const world = window.Globe(window.WAYFARE_PERF.globeConfig)(host).width(host.clientWidth).height(host.clientHeight).backgroundColor("rgba(0,0,0,0)").globeImageUrl(BG_GLOBE_TEXTURE).bumpImageUrl(BG_BUMP_URL).showAtmosphere(true).atmosphereColor("#4a8c80").atmosphereAltitude(0.22);
+    const world = window.Globe(window.WAYFARE_PERF.globeConfig)(host).width(host.clientWidth).height(host.clientHeight).backgroundColor("rgba(0,0,0,0)").globeImageUrl(BG_GLOBE_TEXTURE).bumpImageUrl(BG_BUMP_URL).showAtmosphere(true).atmosphereColor("#6b71ea").atmosphereAltitude(0.22);
     window.WAYFARE_PERF.tune(world, true);
     world.controls().autoRotate = true;
     world.controls().autoRotateSpeed = 0.35;
@@ -1563,12 +1563,10 @@ Object.assign(window, { GlobeView });
 const TWEAK_DEFAULTS = (
   /*EDITMODE-BEGIN*/
   {
-    "accent": "#1f6f63",
     "globeStyle": "textured",
     "autoRotate": true
   }
 );
-const ACCENTS = ["#1f6f63", "#2a6fdb", "#5b54e6", "#c2410c", "#0e7490"];
 function defaultProfile() {
   return {
     nationality: "ES",
@@ -1636,12 +1634,6 @@ function App() {
     const tbl = window.I18N[lang] || window.I18N.en;
     return tbl[key] != null ? tbl[key] : key;
   }, [lang]);
-  React.useEffect(() => {
-    const root = document.documentElement;
-    root.style.setProperty("--accent", t.accent);
-    root.style.setProperty("--accent-deep", shade(t.accent, -0.22));
-    root.style.setProperty("--accent-tint", tint(t.accent, 0.9));
-  }, [t.accent]);
   const onStage = screen === "globe" || screen === "processing";
   return /* @__PURE__ */ React.createElement("div", { className: "app" }, /* @__PURE__ */ React.createElement("header", { className: "topbar" + (onStage ? " on-stage" : "") }, /* @__PURE__ */ React.createElement("div", { className: "brand" }, /* @__PURE__ */ React.createElement("span", { className: "brand-mark" }), tr("brand"), /* @__PURE__ */ React.createElement(
     "span",
@@ -1691,15 +1683,7 @@ function App() {
       visible: screen === "globe",
       onEditProfile: () => setScreen("questionnaire")
     }
-  ))), /* @__PURE__ */ React.createElement(TweaksPanel, null, /* @__PURE__ */ React.createElement(TweakSection, { label: "Brand" }), /* @__PURE__ */ React.createElement(
-    TweakColor,
-    {
-      label: "Accent",
-      value: t.accent,
-      options: ACCENTS,
-      onChange: (v) => setTweak("accent", v)
-    }
-  ), /* @__PURE__ */ React.createElement(TweakSection, { label: "Globe" }), /* @__PURE__ */ React.createElement(
+  ))), /* @__PURE__ */ React.createElement(TweaksPanel, null, /* @__PURE__ */ React.createElement(TweakSection, { label: "Globe" }), /* @__PURE__ */ React.createElement(
     TweakRadio,
     {
       label: "Texture",
