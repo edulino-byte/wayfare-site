@@ -458,11 +458,38 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
    Desktop: compact summary hidden, accordion headers hidden, and every
    <details> is rendered open (see secOpen in Globe.jsx) so section bodies
    show exactly as before. Mobile rules below turn them into real accordions. */
-.vc-meta { display: none; }
-.vc-acc { border: 0; margin: 0; }
-.vc-acc > .vc-acc-sum { display: none; }
+/* v1.51.0 — resumen compacto + secciones plegables TAMBIÉN en escritorio
+   (petición del usuario: menos texto de primeras; se abre lo que interese) */
+.vc-meta { display: flex; align-items: center; gap: 12px; margin-top: 8px; font-size: 12.5px; }
+.vc-meta-status { font-weight: 700; }
+.vc-meta-score { color: var(--on-dark-2); font-weight: 600; }
+.vc-acc { border: 0; margin: 10px 0 0; }
 .vc-acc-sum { list-style: none; }
 .vc-acc-sum::-webkit-details-marker { display: none; }
+.vc-acc > .vc-acc-sum {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+  padding: 9px 11px;
+  border: 1px solid var(--glass-line); border-radius: 10px;
+  background: rgba(255,255,255,0.04);
+  font-size: 12.5px; font-weight: 700; color: var(--on-dark);
+}
+.vc-acc > .vc-acc-sum:hover { background: rgba(255,255,255,0.07); }
+.vc-acc-label { display: flex; align-items: center; gap: 9px; }
+.vc-acc-label::before {
+  content: ""; flex: 0 0 auto; width: 6px; height: 6px;
+  border-right: 2px solid var(--on-dark-2); border-bottom: 2px solid var(--on-dark-2);
+  transform: rotate(-45deg); transition: transform .15s ease;
+}
+.vc-acc[open] > .vc-acc-sum .vc-acc-label::before { transform: rotate(45deg); }
+.vc-acc-count {
+  min-width: 20px; text-align: center; padding: 1px 8px;
+  background: rgba(255,255,255,0.08); border-radius: 999px;
+  font-size: 11px; font-weight: 600; color: var(--on-dark-2);
+}
+.vc-acc > .vc-acc-body { margin-top: 8px; }
+/* la etiqueta ya se ve en la cabecera del desplegable */
+.vc-acc-body.missing .lbl { display: none; }
 
 /* Old floating card â€” hidden (replaced by detail-panel)                    */
 .country-card, .country-card-close, .country-card-scroll { display: none; }
@@ -563,13 +590,31 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
 .verified-note .method-link { color: #7fc8a9; font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
 .verified-note .method-link:hover { color: #a5e8cc; }
 
-/* v1.50.0 — enlace al directorio de asesores verificados (idea #21) */
-.advisors-link { display: flex; align-items: center; gap: 8px; margin-top: 12px; padding: 10px 13px;
-  border: 1px solid rgba(127,200,169,.35); border-radius: 11px; background: rgba(57,180,142,.08);
-  color: #7fc8a9; font-size: 12.5px; font-weight: 600; text-decoration: none; line-height: 1.4;
-  transition: background .15s ease, border-color .15s ease; }
-.advisors-link:hover { background: rgba(57,180,142,.15); border-color: rgba(127,200,169,.55); }
-.advisors-link .arr { margin-left: auto; }
+/* v1.51.0 — fichas de asesores verificados dentro del panel (idea #21) */
+.adv-card-app .adv-acc { margin-top: 0; }
+.adv-list { display: grid; gap: 8px; }
+.adv-mini { border: 1px solid var(--glass-line); border-radius: 10px; padding: 10px 12px;
+  background: rgba(255,255,255,0.03); }
+.adv-demo-note { font-size: 11px; line-height: 1.5; color: #d9b26a; background: rgba(217,178,106,.08);
+  border: 1px solid rgba(217,178,106,.35); border-radius: 9px; padding: 8px 11px; }
+.adv-mini-head { display: flex; align-items: center; gap: 10px; }
+.adv-ava { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; flex: 0 0 auto;
+  border: 1px solid var(--glass-line); }
+.adv-ava-txt { display: flex; align-items: center; justify-content: center;
+  background: rgba(57,180,142,.15); color: #7fc8a9; font-size: 13px; font-weight: 700; }
+.adv-mini-name { font-size: 13px; font-weight: 700; }
+.adv-mini-firm { font-size: 11.5px; color: var(--on-dark-2); margin-top: 1px; }
+.adv-mini-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 7px; }
+.adv-mini-lic { font-size: 11px; font-weight: 600; color: #7fc8a9; background: rgba(57,180,142,.1);
+  border: 1px solid rgba(127,200,169,.35); border-radius: 999px; padding: 3px 9px; text-decoration: none; }
+.adv-mini-lic:hover { background: rgba(57,180,142,.18); }
+.adv-mini-web { font-size: 11px; font-weight: 600; color: var(--on-dark); border: 1px solid var(--glass-line);
+  border-radius: 999px; padding: 3px 9px; text-decoration: none; }
+.adv-mini-web:hover { background: rgba(255,255,255,0.08); }
+.adv-mini-langs { font-size: 11px; color: var(--on-dark-2); margin-top: 6px; }
+.adv-all { display: inline-block; margin-top: 2px; font-size: 12px; font-weight: 600; color: #7fc8a9;
+  text-decoration: underline; text-underline-offset: 2px; }
+.adv-all:hover { color: #a5e8cc; }
 
 /* ── Entretenimiento visual (v1.39.0): revelado, celebración, stagger ─────
    v1.43.0 — el contador flotante del revelado se retiró (petición del
@@ -617,6 +662,14 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
   border-radius: 999px; padding: 6px 14px; font-size: 12.5px; font-weight: 600; cursor: pointer;
   transition: background .15s ease; }
 .cmp-open-btn:hover { background: rgba(127,200,169,0.12); }
+/* v1.51.1 — chip de acceso a los asesores, junto a comparar (arriba del panel) */
+.adv-chip { display: inline-flex; align-items: center; gap: 7px; margin: 14px 0 2px 8px;
+  background: rgba(57,180,142,0.1); border: 1px solid rgba(127,200,169,0.5); color: #7fc8a9;
+  border-radius: 999px; padding: 6px 14px; font-size: 12.5px; font-weight: 600; cursor: pointer;
+  transition: background .15s ease; }
+.adv-chip:hover { background: rgba(57,180,142,0.2); }
+.adv-chip-n { min-width: 18px; text-align: center; padding: 0 6px;
+  background: rgba(127,200,169,0.18); border-radius: 999px; font-size: 11px; font-weight: 700; }
 .cmp-overlay { position: fixed; inset: 0; z-index: 60; background: rgba(5,14,12,0.72);
   backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center;
   padding: 20px; animation: fadeUp .18s ease both; }
@@ -697,38 +750,8 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
   /* easier tap target for the close button */
   .detail-panel-close { width: 36px; height: 36px; }
 
-  /* ── Visa panel: compact summary + collapsible sections (mobile only) ──── */
-  .detail-panel .vc-meta {
-    display: flex; align-items: center; gap: 12px;
-    margin-top: 8px; font-size: 12.5px;
-  }
-  .vc-meta-status { font-weight: 700; }
-  .vc-meta-score { color: var(--on-dark-2); font-weight: 600; }
-
-  .vc-acc { margin-top: 10px; }
-  .vc-acc > .vc-acc-sum {
-    display: flex; align-items: center; justify-content: space-between; gap: 8px;
-    cursor: pointer; -webkit-tap-highlight-color: transparent;
-    padding: 9px 11px;
-    border: 1px solid var(--glass-line); border-radius: 10px;
-    background: rgba(255,255,255,0.04);
-    font-size: 12.5px; font-weight: 700; color: var(--on-dark);
-  }
-  .vc-acc-label { display: flex; align-items: center; gap: 9px; }
-  .vc-acc-label::before {
-    content: ""; flex: 0 0 auto; width: 6px; height: 6px;
-    border-right: 2px solid var(--on-dark-2); border-bottom: 2px solid var(--on-dark-2);
-    transform: rotate(-45deg); transition: transform .15s ease;
-  }
-  .vc-acc[open] > .vc-acc-sum .vc-acc-label::before { transform: rotate(45deg); }
-  .vc-acc-count {
-    min-width: 20px; text-align: center; padding: 1px 8px;
-    background: rgba(255,255,255,0.08); border-radius: 999px;
-    font-size: 11px; font-weight: 600; color: var(--on-dark-2);
-  }
-  .vc-acc > .vc-acc-body { margin-top: 8px; }
-  /* label already shown in the accordion header on mobile */
-  .vc-acc-body.missing .lbl { display: none; }
+  /* (v1.51.0: los desplegables de visa pasaron a estilos base — valen
+     para móvil y escritorio; aquí ya no hace falta nada) */
 }
 
 /* =============================================================================
@@ -814,8 +837,13 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
   .ev-meta a { color: var(--accent-deep); }
   .verified-note, .verified-note .method-link { color: var(--accent-deep); }
   .verified-note .method-link:hover { color: #0e4a3f; }
-  .advisors-link { color: var(--accent-deep); border-color: rgba(10,107,82,.35); background: rgba(10,107,82,.06); }
-  .advisors-link:hover { background: rgba(10,107,82,.12); border-color: rgba(10,107,82,.5); }
+  .adv-mini { background: rgba(20,35,30,0.03); }
+  .adv-ava-txt { background: rgba(10,107,82,.1); color: var(--accent-deep); }
+  .adv-demo-note { color: #7a5d18; background: rgba(122,93,24,.06); border-color: rgba(122,93,24,.3); }
+  .adv-mini-lic, .adv-all { color: var(--accent-deep); }
+  .adv-mini-lic { background: rgba(10,107,82,.06); border-color: rgba(10,107,82,.35); }
+  .adv-all:hover { color: #0e4a3f; }
+  .adv-mini-web:hover { background: rgba(20,35,30,0.08); }
 
   /* cabecera de bandera: mantiene su velo oscuro propio → texto claro SIEMPRE
      encima de ella, también de día (si no, tinta oscura sobre velo oscuro) */
@@ -831,6 +859,9 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
   /* comparador de destinos */
   .cmp-open-btn { color: var(--accent-deep); border-color: rgba(28,107,82,0.45); }
   .cmp-open-btn:hover { background: rgba(28,107,82,0.10); }
+  .adv-chip { color: var(--accent-deep); border-color: rgba(28,107,82,0.45); background: rgba(10,107,82,0.07); }
+  .adv-chip:hover { background: rgba(10,107,82,0.14); }
+  .adv-chip-n { background: rgba(10,107,82,0.14); }
   .cmp-card { background: #ffffff; border-color: rgba(28,107,82,0.28);
     box-shadow: 0 24px 80px rgba(20,35,30,0.25); }
   .cmp-title, .cmp-head { color: #14231e; }

@@ -7,6 +7,14 @@
   <updated>2026-07-19T09:00:00Z</updated>
 
   <entry>
+    <title>Panel plegable en escritorio + sección de asesores (demo con perfiles ficticios) (v1.51.0)</title>
+    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.51.0</id>
+    <updated>2026-07-19T09:00:00Z</updated>
+    <summary>**Panel del país rediseñado (escritorio):** cada visa muestra ahora un resumen compacto (nombre + estado + puntuación) con secciones plegables «lo que ya cumples» / «requisitos y avisos», igual que en móvil — se acabó el muro de texto; abres solo lo que te interesa. En móvil, comportamiento intacto. CSS de acordeones movido de la media query móvil a base. — **Sección de asesores verificados en la app:** chip «🧑‍💼 Asesores · N» arriba del panel (junto a comparar) que baja y </summary>
+  </entry>
+
+  <entry>
     <title>Directorio de asesores (infraestructura, opt-in) + arreglo «undefined» en 9 guías (v1.50.0)</title>
     <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
     <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.50.0</id>
@@ -156,13 +164,5 @@
     <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.41.0</id>
     <updated>2026-07-16T09:00:00Z</updated>
     <summary>**App (petición del usuario):** el flujo editar-perfil queda con caminos claros y con nombres que se explican solos: — · Sin cambios: «Volver a mi mapa» (antes llevaba la coletilla «sin recalcular»). — · Con cambios: el botón se convierte en «Descartar mis cambios y volver a mi mapa» (ámbar, icono de deshacer) — restaura el formulario a la última configuración ENVIADA y vuelve al mapa al instante, sin re-escribir nada a mano. Sustituye al botón desactivado + aviso de v1.35 (m</summary>
-  </entry>
-
-  <entry>
-    <title>Parche: el destello se dispara SIEMPRE al cambiar de país (v1.40.1)</title>
-    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
-    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.40.1</id>
-    <updated>2026-07-16T09:00:00Z</updated>
-    <summary>**App (fallo reportado):** con el panel abierto, al clicar otro país el contenido cambiaba pero el destello no se repetía (React reutilizaba el mismo nodo y la animación CSS no se re-disparaba). Arreglo: key por país en CountryDetail — cada cambio remonta el contenido y el destello, la bandera y la cascada de tarjetas entran de nuevo, siempre.</summary>
   </entry>
 </feed>

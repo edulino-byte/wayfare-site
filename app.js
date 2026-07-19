@@ -850,7 +850,7 @@ const MICRO_DEST_COORDS = {
   MT: { lat: 35.94, lng: 14.38 },
   LI: { lat: 47.16, lng: 9.55 }
 };
-const ADVISOR_ANCHORS = {};
+const ADVISORS_APP = window.ADVISORS_APP || {};
 const GLOBE_TEXTURES = {
   textured: "https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg",
   night: "https://unpkg.com/three-globe/example/img/earth-night.jpg",
@@ -1369,12 +1369,24 @@ function CountryDetail({ t, lang, result, profile, onCompare }) {
   }
   var isMobile = typeof window !== "undefined" && typeof window.matchMedia === "function" ? window.matchMedia("(max-width: 560px)").matches : false;
   function secOpen(kind, v) {
-    if (!isMobile) return true;
+    if (!isMobile) return false;
     if (kind === "missing") return !!(v.missing && v.missing.length);
     return false;
   }
   const statusKey = result.status === "eligible" ? "st_eligible" : result.status === "partial" ? "st_partial" : "st_ineligible";
   const pillColor = STATUS_RGB[result.status];
+  const advInfo = ADVISORS_APP[result.iso];
+  const advRef = React.useRef(null);
+  const openAdvisors = () => {
+    const el = advRef.current;
+    if (!el) return;
+    el.open = true;
+    el.scrollIntoView({ behavior: "smooth", block: "center" });
+    try {
+      if (window.goatcounter) window.goatcounter.count({ path: "adv-open-" + result.iso, event: true });
+    } catch (e) {
+    }
+  };
   return (
     /* v1.40.0 — pulso al entrar en CUALQUIER país, del color de su estado */
     /* @__PURE__ */ React.createElement(
@@ -1401,6 +1413,7 @@ function CountryDetail({ t, lang, result, profile, onCompare }) {
         return /* @__PURE__ */ React.createElement("div", { className: "special-access-note" }, /* @__PURE__ */ React.createElement("svg", { width: "14", height: "14", viewBox: "0 0 24 24", fill: "none", style: { flexShrink: 0, marginTop: "2px" } }, /* @__PURE__ */ React.createElement("path", { d: "M5 12l5 5L19 7", stroke: "currentColor", strokeWidth: "2.6", strokeLinecap: "round", strokeLinejoin: "round" })), /* @__PURE__ */ React.createElement("span", null, t("sa_" + sa)));
       })(),
       onCompare ? /* @__PURE__ */ React.createElement("button", { type: "button", className: "cmp-open-btn", onClick: onCompare }, /* @__PURE__ */ React.createElement("svg", { width: "12", height: "12", viewBox: "0 0 24 24", fill: "none", "aria-hidden": "true" }, /* @__PURE__ */ React.createElement("path", { d: "M8 3v18M16 3v18M3 8h5M3 16h5M16 8h5M16 16h5", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round" })), t("cmp_btn")) : null,
+      advInfo && advInfo.advisors.length ? /* @__PURE__ */ React.createElement("button", { type: "button", className: "adv-chip", onClick: openAdvisors }, "\u{1F9D1}\u200D\u{1F4BC} ", t("adv_section"), /* @__PURE__ */ React.createElement("span", { className: "adv-chip-n" }, advInfo.advisors.length)) : null,
       /* @__PURE__ */ React.createElement("div", { className: "sub-label" }, t("g_visas_here")),
       result.visas.map((v, i) => {
         const vStatusKey = v.status === "eligible" ? "st_eligible" : v.status === "partial" ? "st_partial" : "st_ineligible";
@@ -1431,26 +1444,40 @@ function CountryDetail({ t, lang, result, profile, onCompare }) {
           )))) : null, v.missing && v.missing.length ? /* @__PURE__ */ React.createElement("details", { className: "vc-acc", open: secOpen("missing", v) }, /* @__PURE__ */ React.createElement("summary", { className: "vc-acc-sum" }, /* @__PURE__ */ React.createElement("span", { className: "vc-acc-label" }, t("g_missing")), /* @__PURE__ */ React.createElement("span", { className: "vc-acc-count" }, v.missing.length)), /* @__PURE__ */ React.createElement("div", { className: "vc-acc-body missing" }, /* @__PURE__ */ React.createElement("span", { className: "lbl" }, t("g_missing")), v.missing.map((m) => /* @__PURE__ */ React.createElement("span", { className: "miss-tag", key: m }, t("rq_" + m))))) : null)
         );
       }),
+      (() => {
+        const adv = advInfo;
+        if (!adv || !adv.advisors || !adv.advisors.length) return null;
+        return /* @__PURE__ */ React.createElement("div", { className: "visa-card adv-card-app" }, /* @__PURE__ */ React.createElement("details", { className: "vc-acc adv-acc", ref: advRef }, /* @__PURE__ */ React.createElement("summary", { className: "vc-acc-sum" }, /* @__PURE__ */ React.createElement("span", { className: "vc-acc-label" }, "\u{1F9D1}\u200D\u{1F4BC} ", t("adv_section")), /* @__PURE__ */ React.createElement("span", { className: "vc-acc-count" }, adv.advisors.length)), /* @__PURE__ */ React.createElement("div", { className: "vc-acc-body adv-list" }, window.ADVISORS_APP_DEMO ? /* @__PURE__ */ React.createElement("div", { className: "adv-demo-note" }, "\u26A0 ", t("adv_demo_note")) : null, adv.advisors.map((a) => /* @__PURE__ */ React.createElement("div", { className: "adv-mini", key: a.slug }, /* @__PURE__ */ React.createElement("div", { className: "adv-mini-head" }, a.photo ? /* @__PURE__ */ React.createElement("img", { className: "adv-ava", src: a.photo, alt: "", loading: "lazy" }) : /* @__PURE__ */ React.createElement("div", { className: "adv-ava adv-ava-txt", "aria-hidden": "true" }, a.name.split(/\s+/).slice(0, 2).map((w) => w[0]).join("").toUpperCase()), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "adv-mini-name" }, a.name), a.firm || a.city ? /* @__PURE__ */ React.createElement("div", { className: "adv-mini-firm" }, [a.firm, a.city].filter(Boolean).join(" \xB7 ")) : null)), /* @__PURE__ */ React.createElement("div", { className: "adv-mini-row" }, /* @__PURE__ */ React.createElement(
+          "a",
+          {
+            className: "adv-mini-lic",
+            href: a.licenseUrl,
+            target: "_blank",
+            rel: "noopener noreferrer",
+            title: t("adv_lic_title")
+          },
+          "\u2713 ",
+          a.license,
+          " \u2197"
+        ), a.web ? /* @__PURE__ */ React.createElement(
+          "a",
+          {
+            className: "adv-mini-web",
+            href: a.web,
+            target: "_blank",
+            rel: "noopener noreferrer nofollow",
+            onClick: () => {
+              try {
+                if (window.goatcounter) window.goatcounter.count({ path: "adv-app-" + result.iso + "-" + a.slug, event: true });
+              } catch (e) {
+              }
+            }
+          },
+          t("adv_web")
+        ) : null), a.langs && a.langs.length ? /* @__PURE__ */ React.createElement("div", { className: "adv-mini-langs" }, t("adv_langs"), a.langs.join(", ")) : null)), /* @__PURE__ */ React.createElement("a", { className: "adv-all", href: "seo/asesores.html#" + adv.anchor, target: "_blank", rel: "noopener noreferrer" }, t("adv_view_all")))));
+      })(),
       result.synthetic ? /* @__PURE__ */ React.createElement("div", { className: "synthetic-note" }, /* @__PURE__ */ React.createElement("svg", { width: "13", height: "13", viewBox: "0 0 24 24", fill: "none" }, /* @__PURE__ */ React.createElement("circle", { cx: "12", cy: "12", r: "9", stroke: "currentColor", strokeWidth: "2" }), /* @__PURE__ */ React.createElement("path", { d: "M12 8v5M12 16.5v.5", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round" })), t("g_simulated")) : null,
       /* @__PURE__ */ React.createElement(DataFreshness, { t, lang, iso: result.iso, synthetic: result.synthetic }),
-      ADVISOR_ANCHORS[result.iso] ? /* @__PURE__ */ React.createElement(
-        "a",
-        {
-          className: "advisors-link",
-          target: "_blank",
-          rel: "noopener noreferrer",
-          href: "seo/asesores.html#" + ADVISOR_ANCHORS[result.iso],
-          onClick: () => {
-            try {
-              if (window.goatcounter) window.goatcounter.count({ path: "adv-app-" + result.iso, event: true });
-            } catch (e) {
-            }
-          }
-        },
-        /* @__PURE__ */ React.createElement("svg", { width: "13", height: "13", viewBox: "0 0 24 24", fill: "none", "aria-hidden": "true", style: { flexShrink: 0 } }, /* @__PURE__ */ React.createElement("circle", { cx: "12", cy: "8", r: "4", stroke: "currentColor", strokeWidth: "2" }), /* @__PURE__ */ React.createElement("path", { d: "M4 20c1.4-3.6 4.4-5.5 8-5.5s6.6 1.9 8 5.5", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round" })),
-        /* @__PURE__ */ React.createElement("span", null, t("adv_btn")),
-        /* @__PURE__ */ React.createElement("span", { className: "arr", "aria-hidden": "true" }, "\u2192")
-      ) : null,
       /* @__PURE__ */ React.createElement("div", { className: "disclaimer-long" }, /* @__PURE__ */ React.createElement("svg", { width: "11", height: "11", viewBox: "0 0 24 24", fill: "none", style: { flexShrink: 0, marginTop: "1px" } }, /* @__PURE__ */ React.createElement("circle", { cx: "12", cy: "12", r: "9", stroke: "currentColor", strokeWidth: "2" }), /* @__PURE__ */ React.createElement("path", { d: "M12 8v5M12 16.5v.5", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round" })), t("disclaimer_long"))
     )
   );

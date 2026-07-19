@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Novedades de reglas de visas — changelog público | Wayfare</title>
-<meta name="description" content="Registro público de cada cambio de datos y reglas de Wayfare: 64 versiones con fecha, qué cambió y por qué. Transparencia total." />
+<meta name="description" content="Registro público de cada cambio de datos y reglas de Wayfare: 65 versiones con fecha, qué cambió y por qué. Transparencia total." />
 <style>
   :root { --bg:#0c1a18; --card:#122622; --line:#1f3a35; --ink:#e8f1ee; --dim:#9db8b1; --acc:#39b48e; --amber:#d9b26a; }
   * { margin:0; box-sizing:border-box; }
@@ -65,6 +65,10 @@
   .adv-reg { font-size:13.5px; color:var(--dim); margin:-4px 0 4px; }
   .adv-grid { display:grid; gap:12px; margin:14px 0 8px; }
   .adv-card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px 18px; }
+  .adv-head { display:flex; align-items:center; gap:12px; }
+  .adv-ava { width:52px; height:52px; border-radius:50%; object-fit:cover; flex:0 0 auto; border:1px solid var(--line); }
+  .adv-ava-txt { display:flex; align-items:center; justify-content:center; background:rgba(57,180,142,.14);
+    color:var(--acc); font-size:17px; font-weight:700; }
   .adv-name { font-size:16.5px; font-weight:700; }
   .adv-firm { color:var(--dim); font-size:13.5px; margin-top:2px; }
   .adv-lic { display:inline-flex; align-items:center; gap:6px; margin-top:10px; margin-right:8px; font-size:12.5px;
@@ -87,6 +91,18 @@
   <h2>Historial completo</h2>
   <ul class="req">
         </ul>
+  <article class="nov">
+    <h2>Panel plegable en escritorio + sección de asesores (demo con perfiles ficticios) <span class="ver">v1.51.0 · 19 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>Panel del país rediseñado (escritorio):</strong> cada visa muestra ahora un resumen compacto (nombre + estado + puntuación) con secciones plegables «lo que ya cumples» / «requisitos y avisos», igual que en móvil — se acabó el muro de texto; abres solo lo que te interesa. En móvil, comportamiento intacto. CSS de acordeones movido de la media query móvil a base.</li>
+      <li><strong>Sección de asesores verificados en la app:</strong> chip «🧑‍💼 Asesores · N» arriba del panel (junto a comparar) que baja y despliega la sección de fichas: avatar (foto o iniciales), licencia enlazada al registro oficial del gobierno, idiomas y web. Página del directorio (<code>seo/asesores.html</code>) con tarjetas equivalentes. Clics medidos con GoatCounter.</li>
+      <li><strong>EN DEMO A PROPÓSITO:</strong> los perfiles visibles son FICTICIOS (nombres tipo «Valentina Ejemplo», licencias 0000001, banner de aviso en página y nota ámbar en la app, noindex) para recoger opiniones de los probadores mientras incorporamos a los profesionales reales ya cotejados (20 en cola, pendientes de su permiso). <code>demoFallback</code> en advisors.json: el primer asesor real con opt-in desplaza la demo automáticamente en el siguiente build.</li>
+      <li>Generadores: genAdvisorsMeta.mjs emite data/advisors-meta.js (fichas + bandera demo); genSeoPages.mjs genera la página solo con optIn (o demo si no hay ninguno) y la retira si no procede. Campo <code>photo</code> opcional (assets/advisors/). i18n adv_* EN/ES.</li>
+      <li>Datos: sources.json intacto (misma auditoría, MATCH 1045 / 0 conflictos).</li>
+      <li>Volver aquí: <code>git checkout v1.51.0</code>.</li>
+    </ul>
+  </article>
+
   <article class="nov">
     <h2>Directorio de asesores (infraestructura, opt-in) + arreglo «undefined» en 9 guías <span class="ver">v1.50.0 · 19 de julio de 2026</span></h2>
     <ul class="req">
