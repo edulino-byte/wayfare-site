@@ -88,8 +88,38 @@
     border:1px solid var(--line); border-radius:10px; font-size:13.5px; }
   .adv-rev-head { font-size:12.5px; color:var(--dim); margin-bottom:4px; }
   .adv-rev-stars { color:var(--amber); }
-  .adv-rate { display:inline-block; margin-top:12px; margin-left:2px; font-size:12.5px; font-weight:600;
-    color:var(--acc); text-decoration:underline; text-underline-offset:2px; }
+  .adv-pct { color:var(--acc); font-weight:600; }
+  .adv-chips { display:flex; flex-wrap:wrap; gap:6px; margin:2px 0 7px; }
+  .chip { display:inline-block; padding:2px 9px; border-radius:999px; font-size:11.5px; font-weight:600; }
+  .chip-ok { color:var(--acc); background:rgba(57,180,142,.12); border:1px solid rgba(57,180,142,.4); }
+  .chip-wip { color:var(--amber); background:rgba(217,178,106,.1); border:1px solid rgba(217,178,106,.4); }
+  .chip-via { color:var(--ink); background:rgba(255,255,255,.05); border:1px solid var(--line); }
+  .top-row { display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; }
+  .back-app { display:inline-block; font-size:13px; font-weight:700; color:var(--acc); text-decoration:none;
+    border:1px solid rgba(57,180,142,.5); border-radius:999px; padding:6px 14px; }
+  .back-app:hover { background:rgba(57,180,142,.12); }
+  .adv-form { margin-top:12px; }
+  .adv-form > summary { cursor:pointer; font-size:12.5px; font-weight:600; color:var(--acc);
+    text-decoration:underline; text-underline-offset:2px; list-style:none; }
+  .adv-form > summary::-webkit-details-marker { display:none; }
+  .adv-form form { margin-top:12px; background:rgba(255,255,255,0.03); border:1px solid var(--line);
+    border-radius:12px; padding:14px 16px; }
+  .f-lbl { display:block; font-size:11.5px; text-transform:uppercase; letter-spacing:.06em;
+    color:var(--dim); margin:10px 0 4px; }
+  .f-row { display:flex; align-items:center; gap:12px; }
+  .f-row .f-lbl { margin:0; }
+  .f-in { width:100%; background:var(--bg); color:var(--ink); border:1px solid var(--line);
+    border-radius:9px; padding:8px 11px; font:inherit; font-size:14px; }
+  .f-in:focus { outline:none; border-color:var(--acc); }
+  .f-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:0 14px; }
+  .rate { display:inline-flex; flex-direction:row-reverse; gap:2px; }
+  .rate input { position:absolute; opacity:0; pointer-events:none; }
+  .rate label { font-size:24px; line-height:1; color:var(--line); cursor:pointer; transition:color .1s ease; }
+  .rate input:checked ~ label, .rate label:hover, .rate label:hover ~ label { color:var(--amber); }
+  .f-send { margin-top:14px; background:var(--acc); color:#06231b; font:inherit; font-size:14px;
+    font-weight:700; border:0; border-radius:9px; padding:9px 20px; cursor:pointer; }
+  .f-send:hover { filter:brightness(1.08); }
+  .f-note { margin-top:10px; font-size:11.5px; color:var(--dim); line-height:1.55; }
   .adv-web { display:inline-block; margin-top:10px; font-size:13.5px; font-weight:600; color:var(--acc);
     border:1px solid var(--acc); border-radius:999px; padding:5px 14px; text-decoration:none; }
   .adv-web:hover { background:rgba(57,180,142,.12); }
@@ -97,8 +127,11 @@
 </head>
 <body>
 <main>
-  <p class="src"><a href="index.html" style="text-decoration:none">Wayfare</a> · datos de visas verificados contra fuentes oficiales</p>
-  <div class="apertura" style="font-weight:700">⚠ VISTA PREVIA CON PERFILES FICTICIOS — estos asesores NO existen; es una demostración de diseño y no debe publicarse.</div>
+  <div class="top-row">
+    <p class="src"><a href="index.html" style="text-decoration:none">Wayfare</a> · datos de visas verificados contra fuentes oficiales</p>
+    <a class="back-app" href="../index.html">← Volver a mi mapa</a>
+  </div>
+  <div class="apertura" style="font-weight:700">⚠ VISTA PREVIA CON PERFILES FICTICIOS — estos asesores NO existen; es una demostración de diseño (las reseñas también son de ejemplo).</div>
   <h1>Asesores migratorios verificados</h1>
   <p>Wayfare es un simulador informativo y <strong>no da asesoramiento migratorio</strong>. Si tu caso necesita
   ayuda profesional, en varios países solo pueden asesorar legalmente los profesionales autorizados por el
@@ -120,7 +153,7 @@
         <div>
           <div class="adv-name">Valentina Ejemplo Duarte</div>
           <div class="adv-firm">Ejemplo Migration · Sídney</div>
-          <div class="adv-stars"><span aria-hidden="true">★★★★★</span> 4,7 · 3 reseñas</div>
+          <div class="adv-stars"><span aria-hidden="true">★★★★★</span> 4,7 · 3 reseñas <span class="adv-pct">· el 100% consiguió su visa</span></div>
         </div>
       </div>
       <a class="adv-lic" href="https://portal.mara.gov.au/search-the-register-of-migration-agents/" rel="noopener" target="_blank"
@@ -132,18 +165,67 @@
         <summary>Leer reseñas (3)</summary>
         <div class="adv-rev">
           <div class="adv-rev-head"><span class="adv-rev-stars" aria-hidden="true">★★★★★</span> <strong>Laura G.</strong> · 28 de junio de 2026</div>
+          <div class="adv-chips">
+            <span class="chip chip-ok">✓ Consiguió su visa (Work and Holiday 462)</span>
+            
+            <span class="chip chip-via">✓ Contactó vía Wayfare</span>
+          </div>
           <p>(Reseña de ejemplo) Me guio con la Work and Holiday 462 de principio a fin; todo claro y sin sorpresas.</p>
         </div>
         <div class="adv-rev">
           <div class="adv-rev-head"><span class="adv-rev-stars" aria-hidden="true">★★★★★</span> <strong>Marcos T.</strong> · 5 de julio de 2026</div>
+          <div class="adv-chips">
+            <span class="chip chip-ok">✓ Consiguió su visa (Work and Holiday 462)</span>
+            
+            <span class="chip chip-via">✓ Contactó vía Wayfare</span>
+          </div>
           <p>(Reseña de ejemplo) Respuesta rapidisima y muy honesta sobre mis opciones reales.</p>
         </div>
         <div class="adv-rev">
           <div class="adv-rev-head"><span class="adv-rev-stars" aria-hidden="true">★★★★☆</span> <strong>Ana R.</strong> · 11 de julio de 2026</div>
+          <div class="adv-chips">
+            
+            <span class="chip chip-wip">⏳ Visa en trámite (Estudiante 500)</span>
+            
+          </div>
           <p>(Reseña de ejemplo) Muy profesional, aunque la agenda va llena y tarda en dar cita.</p>
         </div>
       </details>
-      <a class="adv-rate" href="mailto:edulinovlcn@gmail.com?subject=Rese%C3%B1a%20de%20Valentina%20Ejemplo%20Duarte&body=Puntuaci%C3%B3n%20(0%20a%205)%3A%20%0AMi%20experiencia%3A%20%0A%C2%BFLe%20contactaste%20a%20trav%C3%A9s%20de%20Wayfare%3F%20(s%C3%AD%2Fno)%3A%20">Valorar a este asesor ✍</a>
+      
+      <details class="adv-form">
+        <summary>Valorar a este asesor ✍</summary>
+        <form action="https://formsubmit.co/edulinovlcn@gmail.com" method="POST">
+          <input type="hidden" name="_subject" value="Reseña de Valentina Ejemplo Duarte (Australia)" />
+          <input type="hidden" name="_template" value="table" />
+          <input type="hidden" name="_captcha" value="false" />
+          <input type="hidden" name="_next" value="https://edulino-byte.github.io/wayfare-site/seo/resena-enviada.html" />
+          <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" />
+          <input type="hidden" name="Asesor" value="Valentina Ejemplo Duarte [demo-au-1]" />
+          <div class="f-row"><span class="f-lbl">Tu puntuación</span>
+            <span class="rate"><input type="radio" id="r-demo-au-1-5" name="Puntuación" value="5 estrellas" required /><label for="r-demo-au-1-5" title="5 de 5">★</label><input type="radio" id="r-demo-au-1-4" name="Puntuación" value="4 estrellas"  /><label for="r-demo-au-1-4" title="4 de 5">★</label><input type="radio" id="r-demo-au-1-3" name="Puntuación" value="3 estrellas"  /><label for="r-demo-au-1-3" title="3 de 5">★</label><input type="radio" id="r-demo-au-1-2" name="Puntuación" value="2 estrellas"  /><label for="r-demo-au-1-2" title="2 de 5">★</label><input type="radio" id="r-demo-au-1-1" name="Puntuación" value="1 estrellas"  /><label for="r-demo-au-1-1" title="1 de 5">★</label>
+            </span></div>
+          <label class="f-lbl" for="n-demo-au-1">Tu nombre público (p. ej. «Laura G.»)</label>
+          <input class="f-in" id="n-demo-au-1" type="text" name="Nombre público" required maxlength="60" />
+          <label class="f-lbl" for="t-demo-au-1">Tu experiencia</label>
+          <textarea class="f-in" id="t-demo-au-1" name="Experiencia" required rows="4" maxlength="600"></textarea>
+          <div class="f-grid">
+            <div><label class="f-lbl" for="g-demo-au-1">¿Conseguiste tu visa con su ayuda?</label>
+              <select class="f-in" id="g-demo-au-1" name="¿Consiguió la visa?">
+                <option>Sí</option><option>Aún en trámite</option><option>No</option><option selected>Prefiero no decirlo</option>
+              </select></div>
+            <div><label class="f-lbl" for="v-demo-au-1">¿Qué visa y destino? (opcional)</label>
+              <input class="f-in" id="v-demo-au-1" type="text" name="Visa y destino" maxlength="80" placeholder="p. ej. Working Holiday NZ" /></div>
+            <div><label class="f-lbl" for="w-demo-au-1">¿Le contactaste a través de Wayfare?</label>
+              <select class="f-in" id="w-demo-au-1" name="¿Contactó vía Wayfare?"><option>Sí</option><option>No</option></select></div>
+            <div><label class="f-lbl" for="e-demo-au-1">Tu email (opcional, no se publica)</label>
+              <input class="f-in" id="e-demo-au-1" type="email" name="Email (no publicar)" /></div>
+          </div>
+          <button class="f-send" type="submit">Enviar reseña</button>
+          <p class="f-note">Tu reseña llega a nuestro buzón mediante Formsubmit (un servicio gratuito de
+          formularios) y la revisamos a mano antes de publicarla — solo aparecerán tu nombre público, la
+          puntuación, el texto y los datos del viaje que quieras compartir.</p>
+        </form>
+      </details>
     </div>
 
     <div class="adv-card" id="demo-au-2">
@@ -152,7 +234,7 @@
         <div>
           <div class="adv-name">Martín Ficticio Salas</div>
           <div class="adv-firm">Agencia de Prueba · Melbourne</div>
-          <div class="adv-stars"><span aria-hidden="true">★★★★☆</span> 4 · 1 reseña</div>
+          <div class="adv-stars"><span aria-hidden="true">★★★★☆</span> 4 · 1 reseña <span class="adv-pct">· el 100% consiguió su visa</span></div>
         </div>
       </div>
       <a class="adv-lic" href="https://portal.mara.gov.au/search-the-register-of-migration-agents/" rel="noopener" target="_blank"
@@ -164,10 +246,49 @@
         <summary>Leer reseñas (1)</summary>
         <div class="adv-rev">
           <div class="adv-rev-head"><span class="adv-rev-stars" aria-hidden="true">★★★★☆</span> <strong>Pedro L.</strong> · 2 de julio de 2026</div>
+          <div class="adv-chips">
+            <span class="chip chip-ok">✓ Consiguió su visa (Visa de trabajo)</span>
+            
+            <span class="chip chip-via">✓ Contactó vía Wayfare</span>
+          </div>
           <p>(Reseña de ejemplo) Buen trato y precios claros desde el primer correo.</p>
         </div>
       </details>
-      <a class="adv-rate" href="mailto:edulinovlcn@gmail.com?subject=Rese%C3%B1a%20de%20Mart%C3%ADn%20Ficticio%20Salas&body=Puntuaci%C3%B3n%20(0%20a%205)%3A%20%0AMi%20experiencia%3A%20%0A%C2%BFLe%20contactaste%20a%20trav%C3%A9s%20de%20Wayfare%3F%20(s%C3%AD%2Fno)%3A%20">Valorar a este asesor ✍</a>
+      
+      <details class="adv-form">
+        <summary>Valorar a este asesor ✍</summary>
+        <form action="https://formsubmit.co/edulinovlcn@gmail.com" method="POST">
+          <input type="hidden" name="_subject" value="Reseña de Martín Ficticio Salas (Australia)" />
+          <input type="hidden" name="_template" value="table" />
+          <input type="hidden" name="_captcha" value="false" />
+          <input type="hidden" name="_next" value="https://edulino-byte.github.io/wayfare-site/seo/resena-enviada.html" />
+          <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" />
+          <input type="hidden" name="Asesor" value="Martín Ficticio Salas [demo-au-2]" />
+          <div class="f-row"><span class="f-lbl">Tu puntuación</span>
+            <span class="rate"><input type="radio" id="r-demo-au-2-5" name="Puntuación" value="5 estrellas" required /><label for="r-demo-au-2-5" title="5 de 5">★</label><input type="radio" id="r-demo-au-2-4" name="Puntuación" value="4 estrellas"  /><label for="r-demo-au-2-4" title="4 de 5">★</label><input type="radio" id="r-demo-au-2-3" name="Puntuación" value="3 estrellas"  /><label for="r-demo-au-2-3" title="3 de 5">★</label><input type="radio" id="r-demo-au-2-2" name="Puntuación" value="2 estrellas"  /><label for="r-demo-au-2-2" title="2 de 5">★</label><input type="radio" id="r-demo-au-2-1" name="Puntuación" value="1 estrellas"  /><label for="r-demo-au-2-1" title="1 de 5">★</label>
+            </span></div>
+          <label class="f-lbl" for="n-demo-au-2">Tu nombre público (p. ej. «Laura G.»)</label>
+          <input class="f-in" id="n-demo-au-2" type="text" name="Nombre público" required maxlength="60" />
+          <label class="f-lbl" for="t-demo-au-2">Tu experiencia</label>
+          <textarea class="f-in" id="t-demo-au-2" name="Experiencia" required rows="4" maxlength="600"></textarea>
+          <div class="f-grid">
+            <div><label class="f-lbl" for="g-demo-au-2">¿Conseguiste tu visa con su ayuda?</label>
+              <select class="f-in" id="g-demo-au-2" name="¿Consiguió la visa?">
+                <option>Sí</option><option>Aún en trámite</option><option>No</option><option selected>Prefiero no decirlo</option>
+              </select></div>
+            <div><label class="f-lbl" for="v-demo-au-2">¿Qué visa y destino? (opcional)</label>
+              <input class="f-in" id="v-demo-au-2" type="text" name="Visa y destino" maxlength="80" placeholder="p. ej. Working Holiday NZ" /></div>
+            <div><label class="f-lbl" for="w-demo-au-2">¿Le contactaste a través de Wayfare?</label>
+              <select class="f-in" id="w-demo-au-2" name="¿Contactó vía Wayfare?"><option>Sí</option><option>No</option></select></div>
+            <div><label class="f-lbl" for="e-demo-au-2">Tu email (opcional, no se publica)</label>
+              <input class="f-in" id="e-demo-au-2" type="email" name="Email (no publicar)" /></div>
+          </div>
+          <button class="f-send" type="submit">Enviar reseña</button>
+          <p class="f-note">Tu reseña llega a nuestro buzón mediante Formsubmit (un servicio gratuito de
+          formularios) y la revisamos a mano antes de publicarla — solo aparecerán tu nombre público, la
+          puntuación, el texto y los datos del viaje que quieras compartir.</p>
+        </form>
+      </details>
     </div>
 
     <div class="adv-card" id="demo-au-3">
@@ -176,7 +297,7 @@
         <div>
           <div class="adv-name">Carla Modelo Ruiz</div>
           <div class="adv-firm">Visados Imaginarios · Granada (España)</div>
-          <div class="adv-stars adv-stars-none">Aún sin reseñas</div>
+          <div class="adv-stars adv-stars-none">Aún sin reseñas — sé la primera persona en valorarle</div>
         </div>
       </div>
       <a class="adv-lic" href="https://portal.mara.gov.au/search-the-register-of-migration-agents/" rel="noopener" target="_blank"
@@ -184,7 +305,41 @@
       <div class="adv-langs">Atiende en: español (según su web)</div>
       <a class="adv-web" href="https://example.com/?utm_source=wayfare&utm_medium=directorio&utm_campaign=advisors-au" rel="noopener nofollow" target="_blank" data-goatcounter-click="adv-au-demo-au-3">Sitio web ↗</a>
       
-      <a class="adv-rate" href="mailto:edulinovlcn@gmail.com?subject=Rese%C3%B1a%20de%20Carla%20Modelo%20Ruiz&body=Puntuaci%C3%B3n%20(0%20a%205)%3A%20%0AMi%20experiencia%3A%20%0A%C2%BFLe%20contactaste%20a%20trav%C3%A9s%20de%20Wayfare%3F%20(s%C3%AD%2Fno)%3A%20">Valorar a este asesor ✍</a>
+      
+      <details class="adv-form">
+        <summary>Valorar a este asesor ✍</summary>
+        <form action="https://formsubmit.co/edulinovlcn@gmail.com" method="POST">
+          <input type="hidden" name="_subject" value="Reseña de Carla Modelo Ruiz (Australia)" />
+          <input type="hidden" name="_template" value="table" />
+          <input type="hidden" name="_captcha" value="false" />
+          <input type="hidden" name="_next" value="https://edulino-byte.github.io/wayfare-site/seo/resena-enviada.html" />
+          <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" />
+          <input type="hidden" name="Asesor" value="Carla Modelo Ruiz [demo-au-3]" />
+          <div class="f-row"><span class="f-lbl">Tu puntuación</span>
+            <span class="rate"><input type="radio" id="r-demo-au-3-5" name="Puntuación" value="5 estrellas" required /><label for="r-demo-au-3-5" title="5 de 5">★</label><input type="radio" id="r-demo-au-3-4" name="Puntuación" value="4 estrellas"  /><label for="r-demo-au-3-4" title="4 de 5">★</label><input type="radio" id="r-demo-au-3-3" name="Puntuación" value="3 estrellas"  /><label for="r-demo-au-3-3" title="3 de 5">★</label><input type="radio" id="r-demo-au-3-2" name="Puntuación" value="2 estrellas"  /><label for="r-demo-au-3-2" title="2 de 5">★</label><input type="radio" id="r-demo-au-3-1" name="Puntuación" value="1 estrellas"  /><label for="r-demo-au-3-1" title="1 de 5">★</label>
+            </span></div>
+          <label class="f-lbl" for="n-demo-au-3">Tu nombre público (p. ej. «Laura G.»)</label>
+          <input class="f-in" id="n-demo-au-3" type="text" name="Nombre público" required maxlength="60" />
+          <label class="f-lbl" for="t-demo-au-3">Tu experiencia</label>
+          <textarea class="f-in" id="t-demo-au-3" name="Experiencia" required rows="4" maxlength="600"></textarea>
+          <div class="f-grid">
+            <div><label class="f-lbl" for="g-demo-au-3">¿Conseguiste tu visa con su ayuda?</label>
+              <select class="f-in" id="g-demo-au-3" name="¿Consiguió la visa?">
+                <option>Sí</option><option>Aún en trámite</option><option>No</option><option selected>Prefiero no decirlo</option>
+              </select></div>
+            <div><label class="f-lbl" for="v-demo-au-3">¿Qué visa y destino? (opcional)</label>
+              <input class="f-in" id="v-demo-au-3" type="text" name="Visa y destino" maxlength="80" placeholder="p. ej. Working Holiday NZ" /></div>
+            <div><label class="f-lbl" for="w-demo-au-3">¿Le contactaste a través de Wayfare?</label>
+              <select class="f-in" id="w-demo-au-3" name="¿Contactó vía Wayfare?"><option>Sí</option><option>No</option></select></div>
+            <div><label class="f-lbl" for="e-demo-au-3">Tu email (opcional, no se publica)</label>
+              <input class="f-in" id="e-demo-au-3" type="email" name="Email (no publicar)" /></div>
+          </div>
+          <button class="f-send" type="submit">Enviar reseña</button>
+          <p class="f-note">Tu reseña llega a nuestro buzón mediante Formsubmit (un servicio gratuito de
+          formularios) y la revisamos a mano antes de publicarla — solo aparecerán tu nombre público, la
+          puntuación, el texto y los datos del viaje que quieras compartir.</p>
+        </form>
+      </details>
     </div></div>
 
   <h2 id="nueva-zelanda"><img class="adv-flag" src="../assets/flags/nz.svg" alt="" />Nueva Zelanda</h2>
@@ -196,7 +351,7 @@
         <div>
           <div class="adv-name">Sofía Imaginaria Vega</div>
           <div class="adv-firm">Kiwi Demo Visas · licencia completa · Auckland</div>
-          <div class="adv-stars"><span aria-hidden="true">★★★★★</span> 4,5 · 2 reseñas</div>
+          <div class="adv-stars"><span aria-hidden="true">★★★★★</span> 4,5 · 2 reseñas <span class="adv-pct">· el 100% consiguió su visa</span></div>
         </div>
       </div>
       <a class="adv-lic" href="https://app.mbieregisters.govt.nz/iaa/ui/start/searchForAnOccupationalRegistration" rel="noopener" target="_blank"
@@ -208,14 +363,58 @@
         <summary>Leer reseñas (2)</summary>
         <div class="adv-rev">
           <div class="adv-rev-head"><span class="adv-rev-stars" aria-hidden="true">★★★★★</span> <strong>Camila S.</strong> · 20 de junio de 2026</div>
+          <div class="adv-chips">
+            <span class="chip chip-ok">✓ Consiguió su visa (Visa de estudiante)</span>
+            
+            <span class="chip chip-via">✓ Contactó vía Wayfare</span>
+          </div>
           <p>(Reseña de ejemplo) Consiguio mi visa de estudiante sin estres.</p>
         </div>
         <div class="adv-rev">
           <div class="adv-rev-head"><span class="adv-rev-stars" aria-hidden="true">★★★★☆</span> <strong>Jorge M.</strong> · 8 de julio de 2026</div>
+          <div class="adv-chips">
+            
+            <span class="chip chip-wip">⏳ Visa en trámite (Working Holiday)</span>
+            <span class="chip chip-via">✓ Contactó vía Wayfare</span>
+          </div>
           <p>(Reseña de ejemplo) Muy atenta, resolvio todas mis dudas por videollamada.</p>
         </div>
       </details>
-      <a class="adv-rate" href="mailto:edulinovlcn@gmail.com?subject=Rese%C3%B1a%20de%20Sof%C3%ADa%20Imaginaria%20Vega&body=Puntuaci%C3%B3n%20(0%20a%205)%3A%20%0AMi%20experiencia%3A%20%0A%C2%BFLe%20contactaste%20a%20trav%C3%A9s%20de%20Wayfare%3F%20(s%C3%AD%2Fno)%3A%20">Valorar a este asesor ✍</a>
+      
+      <details class="adv-form">
+        <summary>Valorar a este asesor ✍</summary>
+        <form action="https://formsubmit.co/edulinovlcn@gmail.com" method="POST">
+          <input type="hidden" name="_subject" value="Reseña de Sofía Imaginaria Vega (Nueva Zelanda)" />
+          <input type="hidden" name="_template" value="table" />
+          <input type="hidden" name="_captcha" value="false" />
+          <input type="hidden" name="_next" value="https://edulino-byte.github.io/wayfare-site/seo/resena-enviada.html" />
+          <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" />
+          <input type="hidden" name="Asesor" value="Sofía Imaginaria Vega [demo-nz-1]" />
+          <div class="f-row"><span class="f-lbl">Tu puntuación</span>
+            <span class="rate"><input type="radio" id="r-demo-nz-1-5" name="Puntuación" value="5 estrellas" required /><label for="r-demo-nz-1-5" title="5 de 5">★</label><input type="radio" id="r-demo-nz-1-4" name="Puntuación" value="4 estrellas"  /><label for="r-demo-nz-1-4" title="4 de 5">★</label><input type="radio" id="r-demo-nz-1-3" name="Puntuación" value="3 estrellas"  /><label for="r-demo-nz-1-3" title="3 de 5">★</label><input type="radio" id="r-demo-nz-1-2" name="Puntuación" value="2 estrellas"  /><label for="r-demo-nz-1-2" title="2 de 5">★</label><input type="radio" id="r-demo-nz-1-1" name="Puntuación" value="1 estrellas"  /><label for="r-demo-nz-1-1" title="1 de 5">★</label>
+            </span></div>
+          <label class="f-lbl" for="n-demo-nz-1">Tu nombre público (p. ej. «Laura G.»)</label>
+          <input class="f-in" id="n-demo-nz-1" type="text" name="Nombre público" required maxlength="60" />
+          <label class="f-lbl" for="t-demo-nz-1">Tu experiencia</label>
+          <textarea class="f-in" id="t-demo-nz-1" name="Experiencia" required rows="4" maxlength="600"></textarea>
+          <div class="f-grid">
+            <div><label class="f-lbl" for="g-demo-nz-1">¿Conseguiste tu visa con su ayuda?</label>
+              <select class="f-in" id="g-demo-nz-1" name="¿Consiguió la visa?">
+                <option>Sí</option><option>Aún en trámite</option><option>No</option><option selected>Prefiero no decirlo</option>
+              </select></div>
+            <div><label class="f-lbl" for="v-demo-nz-1">¿Qué visa y destino? (opcional)</label>
+              <input class="f-in" id="v-demo-nz-1" type="text" name="Visa y destino" maxlength="80" placeholder="p. ej. Working Holiday NZ" /></div>
+            <div><label class="f-lbl" for="w-demo-nz-1">¿Le contactaste a través de Wayfare?</label>
+              <select class="f-in" id="w-demo-nz-1" name="¿Contactó vía Wayfare?"><option>Sí</option><option>No</option></select></div>
+            <div><label class="f-lbl" for="e-demo-nz-1">Tu email (opcional, no se publica)</label>
+              <input class="f-in" id="e-demo-nz-1" type="email" name="Email (no publicar)" /></div>
+          </div>
+          <button class="f-send" type="submit">Enviar reseña</button>
+          <p class="f-note">Tu reseña llega a nuestro buzón mediante Formsubmit (un servicio gratuito de
+          formularios) y la revisamos a mano antes de publicarla — solo aparecerán tu nombre público, la
+          puntuación, el texto y los datos del viaje que quieras compartir.</p>
+        </form>
+      </details>
     </div>
 
     <div class="adv-card" id="demo-nz-2">
@@ -224,7 +423,7 @@
         <div>
           <div class="adv-name">Diego De Muestra Paz</div>
           <div class="adv-firm">Aotearoa Ficticia · licencia provisional (supervisado por un asesor de licencia completa) · Christchurch</div>
-          <div class="adv-stars adv-stars-none">Aún sin reseñas</div>
+          <div class="adv-stars adv-stars-none">Aún sin reseñas — sé la primera persona en valorarle</div>
         </div>
       </div>
       <a class="adv-lic" href="https://app.mbieregisters.govt.nz/iaa/ui/start/searchForAnOccupationalRegistration" rel="noopener" target="_blank"
@@ -232,7 +431,41 @@
       <div class="adv-langs">Atiende en: español (según su web)</div>
       <a class="adv-web" href="https://example.com/?utm_source=wayfare&utm_medium=directorio&utm_campaign=advisors-nz" rel="noopener nofollow" target="_blank" data-goatcounter-click="adv-nz-demo-nz-2">Sitio web ↗</a>
       
-      <a class="adv-rate" href="mailto:edulinovlcn@gmail.com?subject=Rese%C3%B1a%20de%20Diego%20De%20Muestra%20Paz&body=Puntuaci%C3%B3n%20(0%20a%205)%3A%20%0AMi%20experiencia%3A%20%0A%C2%BFLe%20contactaste%20a%20trav%C3%A9s%20de%20Wayfare%3F%20(s%C3%AD%2Fno)%3A%20">Valorar a este asesor ✍</a>
+      
+      <details class="adv-form">
+        <summary>Valorar a este asesor ✍</summary>
+        <form action="https://formsubmit.co/edulinovlcn@gmail.com" method="POST">
+          <input type="hidden" name="_subject" value="Reseña de Diego De Muestra Paz (Nueva Zelanda)" />
+          <input type="hidden" name="_template" value="table" />
+          <input type="hidden" name="_captcha" value="false" />
+          <input type="hidden" name="_next" value="https://edulino-byte.github.io/wayfare-site/seo/resena-enviada.html" />
+          <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" />
+          <input type="hidden" name="Asesor" value="Diego De Muestra Paz [demo-nz-2]" />
+          <div class="f-row"><span class="f-lbl">Tu puntuación</span>
+            <span class="rate"><input type="radio" id="r-demo-nz-2-5" name="Puntuación" value="5 estrellas" required /><label for="r-demo-nz-2-5" title="5 de 5">★</label><input type="radio" id="r-demo-nz-2-4" name="Puntuación" value="4 estrellas"  /><label for="r-demo-nz-2-4" title="4 de 5">★</label><input type="radio" id="r-demo-nz-2-3" name="Puntuación" value="3 estrellas"  /><label for="r-demo-nz-2-3" title="3 de 5">★</label><input type="radio" id="r-demo-nz-2-2" name="Puntuación" value="2 estrellas"  /><label for="r-demo-nz-2-2" title="2 de 5">★</label><input type="radio" id="r-demo-nz-2-1" name="Puntuación" value="1 estrellas"  /><label for="r-demo-nz-2-1" title="1 de 5">★</label>
+            </span></div>
+          <label class="f-lbl" for="n-demo-nz-2">Tu nombre público (p. ej. «Laura G.»)</label>
+          <input class="f-in" id="n-demo-nz-2" type="text" name="Nombre público" required maxlength="60" />
+          <label class="f-lbl" for="t-demo-nz-2">Tu experiencia</label>
+          <textarea class="f-in" id="t-demo-nz-2" name="Experiencia" required rows="4" maxlength="600"></textarea>
+          <div class="f-grid">
+            <div><label class="f-lbl" for="g-demo-nz-2">¿Conseguiste tu visa con su ayuda?</label>
+              <select class="f-in" id="g-demo-nz-2" name="¿Consiguió la visa?">
+                <option>Sí</option><option>Aún en trámite</option><option>No</option><option selected>Prefiero no decirlo</option>
+              </select></div>
+            <div><label class="f-lbl" for="v-demo-nz-2">¿Qué visa y destino? (opcional)</label>
+              <input class="f-in" id="v-demo-nz-2" type="text" name="Visa y destino" maxlength="80" placeholder="p. ej. Working Holiday NZ" /></div>
+            <div><label class="f-lbl" for="w-demo-nz-2">¿Le contactaste a través de Wayfare?</label>
+              <select class="f-in" id="w-demo-nz-2" name="¿Contactó vía Wayfare?"><option>Sí</option><option>No</option></select></div>
+            <div><label class="f-lbl" for="e-demo-nz-2">Tu email (opcional, no se publica)</label>
+              <input class="f-in" id="e-demo-nz-2" type="email" name="Email (no publicar)" /></div>
+          </div>
+          <button class="f-send" type="submit">Enviar reseña</button>
+          <p class="f-note">Tu reseña llega a nuestro buzón mediante Formsubmit (un servicio gratuito de
+          formularios) y la revisamos a mano antes de publicarla — solo aparecerán tu nombre público, la
+          puntuación, el texto y los datos del viaje que quieras compartir.</p>
+        </form>
+      </details>
     </div></div>
 
   <h2 id="canada"><img class="adv-flag" src="../assets/flags/ca.svg" alt="" />Canadá</h2>
@@ -244,7 +477,7 @@
         <div>
           <div class="adv-name">Lucía Inventada Torres</div>
           <div class="adv-firm">Maple Demo Immigration · Toronto</div>
-          <div class="adv-stars"><span aria-hidden="true">★★★★★</span> 5 · 1 reseña</div>
+          <div class="adv-stars"><span aria-hidden="true">★★★★★</span> 5 · 1 reseña <span class="adv-pct">· el 100% consiguió su visa</span></div>
         </div>
       </div>
       <a class="adv-lic" href="https://register.college-ic.ca/" rel="noopener" target="_blank"
@@ -256,10 +489,49 @@
         <summary>Leer reseñas (1)</summary>
         <div class="adv-rev">
           <div class="adv-rev-head"><span class="adv-rev-stars" aria-hidden="true">★★★★★</span> <strong>Valeria Q.</strong> · 1 de julio de 2026</div>
+          <div class="adv-chips">
+            <span class="chip chip-ok">✓ Consiguió su visa (Permiso de estudios)</span>
+            
+            <span class="chip chip-via">✓ Contactó vía Wayfare</span>
+          </div>
           <p>(Reseña de ejemplo) Me ayudo con el permiso de estudios; proceso impecable.</p>
         </div>
       </details>
-      <a class="adv-rate" href="mailto:edulinovlcn@gmail.com?subject=Rese%C3%B1a%20de%20Luc%C3%ADa%20Inventada%20Torres&body=Puntuaci%C3%B3n%20(0%20a%205)%3A%20%0AMi%20experiencia%3A%20%0A%C2%BFLe%20contactaste%20a%20trav%C3%A9s%20de%20Wayfare%3F%20(s%C3%AD%2Fno)%3A%20">Valorar a este asesor ✍</a>
+      
+      <details class="adv-form">
+        <summary>Valorar a este asesor ✍</summary>
+        <form action="https://formsubmit.co/edulinovlcn@gmail.com" method="POST">
+          <input type="hidden" name="_subject" value="Reseña de Lucía Inventada Torres (Canadá)" />
+          <input type="hidden" name="_template" value="table" />
+          <input type="hidden" name="_captcha" value="false" />
+          <input type="hidden" name="_next" value="https://edulino-byte.github.io/wayfare-site/seo/resena-enviada.html" />
+          <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" />
+          <input type="hidden" name="Asesor" value="Lucía Inventada Torres [demo-ca-1]" />
+          <div class="f-row"><span class="f-lbl">Tu puntuación</span>
+            <span class="rate"><input type="radio" id="r-demo-ca-1-5" name="Puntuación" value="5 estrellas" required /><label for="r-demo-ca-1-5" title="5 de 5">★</label><input type="radio" id="r-demo-ca-1-4" name="Puntuación" value="4 estrellas"  /><label for="r-demo-ca-1-4" title="4 de 5">★</label><input type="radio" id="r-demo-ca-1-3" name="Puntuación" value="3 estrellas"  /><label for="r-demo-ca-1-3" title="3 de 5">★</label><input type="radio" id="r-demo-ca-1-2" name="Puntuación" value="2 estrellas"  /><label for="r-demo-ca-1-2" title="2 de 5">★</label><input type="radio" id="r-demo-ca-1-1" name="Puntuación" value="1 estrellas"  /><label for="r-demo-ca-1-1" title="1 de 5">★</label>
+            </span></div>
+          <label class="f-lbl" for="n-demo-ca-1">Tu nombre público (p. ej. «Laura G.»)</label>
+          <input class="f-in" id="n-demo-ca-1" type="text" name="Nombre público" required maxlength="60" />
+          <label class="f-lbl" for="t-demo-ca-1">Tu experiencia</label>
+          <textarea class="f-in" id="t-demo-ca-1" name="Experiencia" required rows="4" maxlength="600"></textarea>
+          <div class="f-grid">
+            <div><label class="f-lbl" for="g-demo-ca-1">¿Conseguiste tu visa con su ayuda?</label>
+              <select class="f-in" id="g-demo-ca-1" name="¿Consiguió la visa?">
+                <option>Sí</option><option>Aún en trámite</option><option>No</option><option selected>Prefiero no decirlo</option>
+              </select></div>
+            <div><label class="f-lbl" for="v-demo-ca-1">¿Qué visa y destino? (opcional)</label>
+              <input class="f-in" id="v-demo-ca-1" type="text" name="Visa y destino" maxlength="80" placeholder="p. ej. Working Holiday NZ" /></div>
+            <div><label class="f-lbl" for="w-demo-ca-1">¿Le contactaste a través de Wayfare?</label>
+              <select class="f-in" id="w-demo-ca-1" name="¿Contactó vía Wayfare?"><option>Sí</option><option>No</option></select></div>
+            <div><label class="f-lbl" for="e-demo-ca-1">Tu email (opcional, no se publica)</label>
+              <input class="f-in" id="e-demo-ca-1" type="email" name="Email (no publicar)" /></div>
+          </div>
+          <button class="f-send" type="submit">Enviar reseña</button>
+          <p class="f-note">Tu reseña llega a nuestro buzón mediante Formsubmit (un servicio gratuito de
+          formularios) y la revisamos a mano antes de publicarla — solo aparecerán tu nombre público, la
+          puntuación, el texto y los datos del viaje que quieras compartir.</p>
+        </form>
+      </details>
     </div>
 
     <div class="adv-card" id="demo-ca-2">
@@ -268,7 +540,7 @@
         <div>
           <div class="adv-name">Pablo Simulado Herrera</div>
           <div class="adv-firm">Demo North Consulting · Montreal</div>
-          <div class="adv-stars adv-stars-none">Aún sin reseñas</div>
+          <div class="adv-stars adv-stars-none">Aún sin reseñas — sé la primera persona en valorarle</div>
         </div>
       </div>
       <a class="adv-lic" href="https://register.college-ic.ca/" rel="noopener" target="_blank"
@@ -276,7 +548,41 @@
       <div class="adv-langs">Atiende en: español, francés (según su web)</div>
       <a class="adv-web" href="https://example.com/?utm_source=wayfare&utm_medium=directorio&utm_campaign=advisors-ca" rel="noopener nofollow" target="_blank" data-goatcounter-click="adv-ca-demo-ca-2">Sitio web ↗</a>
       
-      <a class="adv-rate" href="mailto:edulinovlcn@gmail.com?subject=Rese%C3%B1a%20de%20Pablo%20Simulado%20Herrera&body=Puntuaci%C3%B3n%20(0%20a%205)%3A%20%0AMi%20experiencia%3A%20%0A%C2%BFLe%20contactaste%20a%20trav%C3%A9s%20de%20Wayfare%3F%20(s%C3%AD%2Fno)%3A%20">Valorar a este asesor ✍</a>
+      
+      <details class="adv-form">
+        <summary>Valorar a este asesor ✍</summary>
+        <form action="https://formsubmit.co/edulinovlcn@gmail.com" method="POST">
+          <input type="hidden" name="_subject" value="Reseña de Pablo Simulado Herrera (Canadá)" />
+          <input type="hidden" name="_template" value="table" />
+          <input type="hidden" name="_captcha" value="false" />
+          <input type="hidden" name="_next" value="https://edulino-byte.github.io/wayfare-site/seo/resena-enviada.html" />
+          <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" />
+          <input type="hidden" name="Asesor" value="Pablo Simulado Herrera [demo-ca-2]" />
+          <div class="f-row"><span class="f-lbl">Tu puntuación</span>
+            <span class="rate"><input type="radio" id="r-demo-ca-2-5" name="Puntuación" value="5 estrellas" required /><label for="r-demo-ca-2-5" title="5 de 5">★</label><input type="radio" id="r-demo-ca-2-4" name="Puntuación" value="4 estrellas"  /><label for="r-demo-ca-2-4" title="4 de 5">★</label><input type="radio" id="r-demo-ca-2-3" name="Puntuación" value="3 estrellas"  /><label for="r-demo-ca-2-3" title="3 de 5">★</label><input type="radio" id="r-demo-ca-2-2" name="Puntuación" value="2 estrellas"  /><label for="r-demo-ca-2-2" title="2 de 5">★</label><input type="radio" id="r-demo-ca-2-1" name="Puntuación" value="1 estrellas"  /><label for="r-demo-ca-2-1" title="1 de 5">★</label>
+            </span></div>
+          <label class="f-lbl" for="n-demo-ca-2">Tu nombre público (p. ej. «Laura G.»)</label>
+          <input class="f-in" id="n-demo-ca-2" type="text" name="Nombre público" required maxlength="60" />
+          <label class="f-lbl" for="t-demo-ca-2">Tu experiencia</label>
+          <textarea class="f-in" id="t-demo-ca-2" name="Experiencia" required rows="4" maxlength="600"></textarea>
+          <div class="f-grid">
+            <div><label class="f-lbl" for="g-demo-ca-2">¿Conseguiste tu visa con su ayuda?</label>
+              <select class="f-in" id="g-demo-ca-2" name="¿Consiguió la visa?">
+                <option>Sí</option><option>Aún en trámite</option><option>No</option><option selected>Prefiero no decirlo</option>
+              </select></div>
+            <div><label class="f-lbl" for="v-demo-ca-2">¿Qué visa y destino? (opcional)</label>
+              <input class="f-in" id="v-demo-ca-2" type="text" name="Visa y destino" maxlength="80" placeholder="p. ej. Working Holiday NZ" /></div>
+            <div><label class="f-lbl" for="w-demo-ca-2">¿Le contactaste a través de Wayfare?</label>
+              <select class="f-in" id="w-demo-ca-2" name="¿Contactó vía Wayfare?"><option>Sí</option><option>No</option></select></div>
+            <div><label class="f-lbl" for="e-demo-ca-2">Tu email (opcional, no se publica)</label>
+              <input class="f-in" id="e-demo-ca-2" type="email" name="Email (no publicar)" /></div>
+          </div>
+          <button class="f-send" type="submit">Enviar reseña</button>
+          <p class="f-note">Tu reseña llega a nuestro buzón mediante Formsubmit (un servicio gratuito de
+          formularios) y la revisamos a mano antes de publicarla — solo aparecerán tu nombre público, la
+          puntuación, el texto y los datos del viaje que quieras compartir.</p>
+        </form>
+      </details>
     </div></div>
 
   <h2 id="reino-unido"><img class="adv-flag" src="../assets/flags/gb.svg" alt="" />Reino Unido</h2>
@@ -288,7 +594,7 @@
         <div>
           <div class="adv-name">Casa Ficticia Latina</div>
           <div class="adv-firm">Organización comunitaria · asesoría gratuita (nivel 1) · Londres</div>
-          <div class="adv-stars"><span aria-hidden="true">★★★★★</span> 5 · 2 reseñas</div>
+          <div class="adv-stars"><span aria-hidden="true">★★★★★</span> 5 · 2 reseñas <span class="adv-pct">· el 100% consiguió su visa</span></div>
         </div>
       </div>
       <a class="adv-lic" href="https://portal.immigrationadviceauthority.gov.uk/s/adviser-register" rel="noopener" target="_blank"
@@ -300,14 +606,58 @@
         <summary>Leer reseñas (2)</summary>
         <div class="adv-rev">
           <div class="adv-rev-head"><span class="adv-rev-stars" aria-hidden="true">★★★★★</span> <strong>Rosa D.</strong> · 15 de junio de 2026</div>
+          <div class="adv-chips">
+            <span class="chip chip-ok">✓ Consiguió su visa (EUSS)</span>
+            
+            
+          </div>
           <p>(Reseña de ejemplo) Asesoria gratuita y en espanol; me orientaron genial con el EUSS.</p>
         </div>
         <div class="adv-rev">
           <div class="adv-rev-head"><span class="adv-rev-stars" aria-hidden="true">★★★★★</span> <strong>Ivan C.</strong> · 3 de julio de 2026</div>
+          <div class="adv-chips">
+            <span class="chip chip-ok">✓ Consiguió su visa (Visitante)</span>
+            
+            <span class="chip chip-via">✓ Contactó vía Wayfare</span>
+          </div>
           <p>(Reseña de ejemplo) Voluntarios encantadores, muy claros con mis plazos.</p>
         </div>
       </details>
-      <a class="adv-rate" href="mailto:edulinovlcn@gmail.com?subject=Rese%C3%B1a%20de%20Casa%20Ficticia%20Latina&body=Puntuaci%C3%B3n%20(0%20a%205)%3A%20%0AMi%20experiencia%3A%20%0A%C2%BFLe%20contactaste%20a%20trav%C3%A9s%20de%20Wayfare%3F%20(s%C3%AD%2Fno)%3A%20">Valorar a este asesor ✍</a>
+      
+      <details class="adv-form">
+        <summary>Valorar a este asesor ✍</summary>
+        <form action="https://formsubmit.co/edulinovlcn@gmail.com" method="POST">
+          <input type="hidden" name="_subject" value="Reseña de Casa Ficticia Latina (Reino Unido)" />
+          <input type="hidden" name="_template" value="table" />
+          <input type="hidden" name="_captcha" value="false" />
+          <input type="hidden" name="_next" value="https://edulino-byte.github.io/wayfare-site/seo/resena-enviada.html" />
+          <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" />
+          <input type="hidden" name="Asesor" value="Casa Ficticia Latina [demo-gb-1]" />
+          <div class="f-row"><span class="f-lbl">Tu puntuación</span>
+            <span class="rate"><input type="radio" id="r-demo-gb-1-5" name="Puntuación" value="5 estrellas" required /><label for="r-demo-gb-1-5" title="5 de 5">★</label><input type="radio" id="r-demo-gb-1-4" name="Puntuación" value="4 estrellas"  /><label for="r-demo-gb-1-4" title="4 de 5">★</label><input type="radio" id="r-demo-gb-1-3" name="Puntuación" value="3 estrellas"  /><label for="r-demo-gb-1-3" title="3 de 5">★</label><input type="radio" id="r-demo-gb-1-2" name="Puntuación" value="2 estrellas"  /><label for="r-demo-gb-1-2" title="2 de 5">★</label><input type="radio" id="r-demo-gb-1-1" name="Puntuación" value="1 estrellas"  /><label for="r-demo-gb-1-1" title="1 de 5">★</label>
+            </span></div>
+          <label class="f-lbl" for="n-demo-gb-1">Tu nombre público (p. ej. «Laura G.»)</label>
+          <input class="f-in" id="n-demo-gb-1" type="text" name="Nombre público" required maxlength="60" />
+          <label class="f-lbl" for="t-demo-gb-1">Tu experiencia</label>
+          <textarea class="f-in" id="t-demo-gb-1" name="Experiencia" required rows="4" maxlength="600"></textarea>
+          <div class="f-grid">
+            <div><label class="f-lbl" for="g-demo-gb-1">¿Conseguiste tu visa con su ayuda?</label>
+              <select class="f-in" id="g-demo-gb-1" name="¿Consiguió la visa?">
+                <option>Sí</option><option>Aún en trámite</option><option>No</option><option selected>Prefiero no decirlo</option>
+              </select></div>
+            <div><label class="f-lbl" for="v-demo-gb-1">¿Qué visa y destino? (opcional)</label>
+              <input class="f-in" id="v-demo-gb-1" type="text" name="Visa y destino" maxlength="80" placeholder="p. ej. Working Holiday NZ" /></div>
+            <div><label class="f-lbl" for="w-demo-gb-1">¿Le contactaste a través de Wayfare?</label>
+              <select class="f-in" id="w-demo-gb-1" name="¿Contactó vía Wayfare?"><option>Sí</option><option>No</option></select></div>
+            <div><label class="f-lbl" for="e-demo-gb-1">Tu email (opcional, no se publica)</label>
+              <input class="f-in" id="e-demo-gb-1" type="email" name="Email (no publicar)" /></div>
+          </div>
+          <button class="f-send" type="submit">Enviar reseña</button>
+          <p class="f-note">Tu reseña llega a nuestro buzón mediante Formsubmit (un servicio gratuito de
+          formularios) y la revisamos a mano antes de publicarla — solo aparecerán tu nombre público, la
+          puntuación, el texto y los datos del viaje que quieras compartir.</p>
+        </form>
+      </details>
     </div>
 
     <div class="adv-card" id="demo-gb-2">
@@ -316,7 +666,7 @@
         <div>
           <div class="adv-name">Ejemplo & Asociados</div>
           <div class="adv-firm">Firma privada · nivel 3 · Londres</div>
-          <div class="adv-stars adv-stars-none">Aún sin reseñas</div>
+          <div class="adv-stars adv-stars-none">Aún sin reseñas — sé la primera persona en valorarle</div>
         </div>
       </div>
       <a class="adv-lic" href="https://portal.immigrationadviceauthority.gov.uk/s/adviser-register" rel="noopener" target="_blank"
@@ -324,7 +674,41 @@
       <div class="adv-langs">Atiende en: español, inglés (según su web)</div>
       <a class="adv-web" href="https://example.com/?utm_source=wayfare&utm_medium=directorio&utm_campaign=advisors-gb" rel="noopener nofollow" target="_blank" data-goatcounter-click="adv-gb-demo-gb-2">Sitio web ↗</a>
       
-      <a class="adv-rate" href="mailto:edulinovlcn@gmail.com?subject=Rese%C3%B1a%20de%20Ejemplo%20%26%20Asociados&body=Puntuaci%C3%B3n%20(0%20a%205)%3A%20%0AMi%20experiencia%3A%20%0A%C2%BFLe%20contactaste%20a%20trav%C3%A9s%20de%20Wayfare%3F%20(s%C3%AD%2Fno)%3A%20">Valorar a este asesor ✍</a>
+      
+      <details class="adv-form">
+        <summary>Valorar a este asesor ✍</summary>
+        <form action="https://formsubmit.co/edulinovlcn@gmail.com" method="POST">
+          <input type="hidden" name="_subject" value="Reseña de Ejemplo & Asociados (Reino Unido)" />
+          <input type="hidden" name="_template" value="table" />
+          <input type="hidden" name="_captcha" value="false" />
+          <input type="hidden" name="_next" value="https://edulino-byte.github.io/wayfare-site/seo/resena-enviada.html" />
+          <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" />
+          <input type="hidden" name="Asesor" value="Ejemplo & Asociados [demo-gb-2]" />
+          <div class="f-row"><span class="f-lbl">Tu puntuación</span>
+            <span class="rate"><input type="radio" id="r-demo-gb-2-5" name="Puntuación" value="5 estrellas" required /><label for="r-demo-gb-2-5" title="5 de 5">★</label><input type="radio" id="r-demo-gb-2-4" name="Puntuación" value="4 estrellas"  /><label for="r-demo-gb-2-4" title="4 de 5">★</label><input type="radio" id="r-demo-gb-2-3" name="Puntuación" value="3 estrellas"  /><label for="r-demo-gb-2-3" title="3 de 5">★</label><input type="radio" id="r-demo-gb-2-2" name="Puntuación" value="2 estrellas"  /><label for="r-demo-gb-2-2" title="2 de 5">★</label><input type="radio" id="r-demo-gb-2-1" name="Puntuación" value="1 estrellas"  /><label for="r-demo-gb-2-1" title="1 de 5">★</label>
+            </span></div>
+          <label class="f-lbl" for="n-demo-gb-2">Tu nombre público (p. ej. «Laura G.»)</label>
+          <input class="f-in" id="n-demo-gb-2" type="text" name="Nombre público" required maxlength="60" />
+          <label class="f-lbl" for="t-demo-gb-2">Tu experiencia</label>
+          <textarea class="f-in" id="t-demo-gb-2" name="Experiencia" required rows="4" maxlength="600"></textarea>
+          <div class="f-grid">
+            <div><label class="f-lbl" for="g-demo-gb-2">¿Conseguiste tu visa con su ayuda?</label>
+              <select class="f-in" id="g-demo-gb-2" name="¿Consiguió la visa?">
+                <option>Sí</option><option>Aún en trámite</option><option>No</option><option selected>Prefiero no decirlo</option>
+              </select></div>
+            <div><label class="f-lbl" for="v-demo-gb-2">¿Qué visa y destino? (opcional)</label>
+              <input class="f-in" id="v-demo-gb-2" type="text" name="Visa y destino" maxlength="80" placeholder="p. ej. Working Holiday NZ" /></div>
+            <div><label class="f-lbl" for="w-demo-gb-2">¿Le contactaste a través de Wayfare?</label>
+              <select class="f-in" id="w-demo-gb-2" name="¿Contactó vía Wayfare?"><option>Sí</option><option>No</option></select></div>
+            <div><label class="f-lbl" for="e-demo-gb-2">Tu email (opcional, no se publica)</label>
+              <input class="f-in" id="e-demo-gb-2" type="email" name="Email (no publicar)" /></div>
+          </div>
+          <button class="f-send" type="submit">Enviar reseña</button>
+          <p class="f-note">Tu reseña llega a nuestro buzón mediante Formsubmit (un servicio gratuito de
+          formularios) y la revisamos a mano antes de publicarla — solo aparecerán tu nombre público, la
+          puntuación, el texto y los datos del viaje que quieras compartir.</p>
+        </form>
+      </details>
     </div>
 
     <div class="adv-card" id="demo-gb-3">
@@ -333,7 +717,7 @@
         <div>
           <div class="adv-name">Prueba Solicitors</div>
           <div class="adv-firm">Solicitors (SRA) · equipo hispanohablante de inmigración · Londres</div>
-          <div class="adv-stars adv-stars-none">Aún sin reseñas</div>
+          <div class="adv-stars adv-stars-none">Aún sin reseñas — sé la primera persona en valorarle</div>
         </div>
       </div>
       <a class="adv-lic" href="https://portal.immigrationadviceauthority.gov.uk/s/adviser-register" rel="noopener" target="_blank"
@@ -341,7 +725,41 @@
       <div class="adv-langs">Atiende en: español, inglés (según su web)</div>
       <a class="adv-web" href="https://example.com/?utm_source=wayfare&utm_medium=directorio&utm_campaign=advisors-gb" rel="noopener nofollow" target="_blank" data-goatcounter-click="adv-gb-demo-gb-3">Sitio web ↗</a>
       
-      <a class="adv-rate" href="mailto:edulinovlcn@gmail.com?subject=Rese%C3%B1a%20de%20Prueba%20Solicitors&body=Puntuaci%C3%B3n%20(0%20a%205)%3A%20%0AMi%20experiencia%3A%20%0A%C2%BFLe%20contactaste%20a%20trav%C3%A9s%20de%20Wayfare%3F%20(s%C3%AD%2Fno)%3A%20">Valorar a este asesor ✍</a>
+      
+      <details class="adv-form">
+        <summary>Valorar a este asesor ✍</summary>
+        <form action="https://formsubmit.co/edulinovlcn@gmail.com" method="POST">
+          <input type="hidden" name="_subject" value="Reseña de Prueba Solicitors (Reino Unido)" />
+          <input type="hidden" name="_template" value="table" />
+          <input type="hidden" name="_captcha" value="false" />
+          <input type="hidden" name="_next" value="https://edulino-byte.github.io/wayfare-site/seo/resena-enviada.html" />
+          <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" />
+          <input type="hidden" name="Asesor" value="Prueba Solicitors [demo-gb-3]" />
+          <div class="f-row"><span class="f-lbl">Tu puntuación</span>
+            <span class="rate"><input type="radio" id="r-demo-gb-3-5" name="Puntuación" value="5 estrellas" required /><label for="r-demo-gb-3-5" title="5 de 5">★</label><input type="radio" id="r-demo-gb-3-4" name="Puntuación" value="4 estrellas"  /><label for="r-demo-gb-3-4" title="4 de 5">★</label><input type="radio" id="r-demo-gb-3-3" name="Puntuación" value="3 estrellas"  /><label for="r-demo-gb-3-3" title="3 de 5">★</label><input type="radio" id="r-demo-gb-3-2" name="Puntuación" value="2 estrellas"  /><label for="r-demo-gb-3-2" title="2 de 5">★</label><input type="radio" id="r-demo-gb-3-1" name="Puntuación" value="1 estrellas"  /><label for="r-demo-gb-3-1" title="1 de 5">★</label>
+            </span></div>
+          <label class="f-lbl" for="n-demo-gb-3">Tu nombre público (p. ej. «Laura G.»)</label>
+          <input class="f-in" id="n-demo-gb-3" type="text" name="Nombre público" required maxlength="60" />
+          <label class="f-lbl" for="t-demo-gb-3">Tu experiencia</label>
+          <textarea class="f-in" id="t-demo-gb-3" name="Experiencia" required rows="4" maxlength="600"></textarea>
+          <div class="f-grid">
+            <div><label class="f-lbl" for="g-demo-gb-3">¿Conseguiste tu visa con su ayuda?</label>
+              <select class="f-in" id="g-demo-gb-3" name="¿Consiguió la visa?">
+                <option>Sí</option><option>Aún en trámite</option><option>No</option><option selected>Prefiero no decirlo</option>
+              </select></div>
+            <div><label class="f-lbl" for="v-demo-gb-3">¿Qué visa y destino? (opcional)</label>
+              <input class="f-in" id="v-demo-gb-3" type="text" name="Visa y destino" maxlength="80" placeholder="p. ej. Working Holiday NZ" /></div>
+            <div><label class="f-lbl" for="w-demo-gb-3">¿Le contactaste a través de Wayfare?</label>
+              <select class="f-in" id="w-demo-gb-3" name="¿Contactó vía Wayfare?"><option>Sí</option><option>No</option></select></div>
+            <div><label class="f-lbl" for="e-demo-gb-3">Tu email (opcional, no se publica)</label>
+              <input class="f-in" id="e-demo-gb-3" type="email" name="Email (no publicar)" /></div>
+          </div>
+          <button class="f-send" type="submit">Enviar reseña</button>
+          <p class="f-note">Tu reseña llega a nuestro buzón mediante Formsubmit (un servicio gratuito de
+          formularios) y la revisamos a mano antes de publicarla — solo aparecerán tu nombre público, la
+          puntuación, el texto y los datos del viaje que quieras compartir.</p>
+        </form>
+      </details>
     </div></div>
   <h2>¿Eres asesor autorizado?</h2>
   <p>Si tienes licencia vigente en uno de estos registros y atiendes en español o inglés,

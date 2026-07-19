@@ -7,6 +7,14 @@
   <updated>2026-07-19T09:00:00Z</updated>
 
   <entry>
+    <title>Reseñas desde la propia página + evidencia Wayfare + volver al mapa (v1.53.0)</title>
+    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.53.0</id>
+    <updated>2026-07-19T09:00:00Z</updated>
+    <summary>**Formulario de reseña integrado en cada ficha** («Valorar a este asesor ✍» despliega estrellas clicables, nombre público, experiencia, datos del viaje y email opcional). Envío mediante Formsubmit (buzón gratuito → nuestro correo, declarado junto al botón); moderación manual antes de publicar, como siempre. Página de confirmación `resena-enviada.html`. Se acabó el mailto. — **Evidencia Wayfare en las reseñas** (diferenciación frente al estilo Google, decisión del usuario): ch</summary>
+  </entry>
+
+  <entry>
     <title>Reseñas y estrellas en las fichas de asesores + atribución UTM (v1.52.0)</title>
     <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
     <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.52.0</id>
@@ -156,13 +164,5 @@
     <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.41.2</id>
     <updated>2026-07-18T09:00:00Z</updated>
     <summary>**Petición del usuario:** que los botones queden clavados SIEMPRE en el borde inferior de la pantalla; antes eran `sticky` y al llegar al final del formulario subían con el contenido. — `screens.css`: `.submitbar` pasa de `sticky` a `fixed` (borde inferior del viewport), con degradado oscuro de fondo para legibilidad, `pointer-events: none` en la barra (los clics atraviesan el degradado; solo los botones capturan), y aire extra al final de `.q-wrap` (220px escritorio / 300px </summary>
-  </entry>
-
-  <entry>
-    <title>Parche: ambos botones «al mapa» fijos abajo, mismo formato (v1.41.1)</title>
-    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
-    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.41.1</id>
-    <updated>2026-07-18T09:00:00Z</updated>
-    <summary>**Petición del usuario:** el botón de volver/descartar (arriba) y el de enviar (abajo) no compartían sitio ni formato. Ahora **los dos viven en la barra fija inferior**, lado a lado, con la misma píldora grande (misma tipografía, tamaño y forma). — `Questionnaire.jsx`: el botón volver/descartar sale de la cabecera y entra en `.submit-row` junto al botón principal. — `screens.css`: nueva `.btn-map-back` (formato calcado de `.btn-primary`, base oscura translúcida con blur; verd</summary>
   </entry>
 </feed>

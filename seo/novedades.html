@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Novedades de reglas de visas — changelog público | Wayfare</title>
-<meta name="description" content="Registro público de cada cambio de datos y reglas de Wayfare: 66 versiones con fecha, qué cambió y por qué. Transparencia total." />
+<meta name="description" content="Registro público de cada cambio de datos y reglas de Wayfare: 67 versiones con fecha, qué cambió y por qué. Transparencia total." />
 <style>
   :root { --bg:#0c1a18; --card:#122622; --line:#1f3a35; --ink:#e8f1ee; --dim:#9db8b1; --acc:#39b48e; --amber:#d9b26a; }
   * { margin:0; box-sizing:border-box; }
@@ -87,8 +87,38 @@
     border:1px solid var(--line); border-radius:10px; font-size:13.5px; }
   .adv-rev-head { font-size:12.5px; color:var(--dim); margin-bottom:4px; }
   .adv-rev-stars { color:var(--amber); }
-  .adv-rate { display:inline-block; margin-top:12px; margin-left:2px; font-size:12.5px; font-weight:600;
-    color:var(--acc); text-decoration:underline; text-underline-offset:2px; }
+  .adv-pct { color:var(--acc); font-weight:600; }
+  .adv-chips { display:flex; flex-wrap:wrap; gap:6px; margin:2px 0 7px; }
+  .chip { display:inline-block; padding:2px 9px; border-radius:999px; font-size:11.5px; font-weight:600; }
+  .chip-ok { color:var(--acc); background:rgba(57,180,142,.12); border:1px solid rgba(57,180,142,.4); }
+  .chip-wip { color:var(--amber); background:rgba(217,178,106,.1); border:1px solid rgba(217,178,106,.4); }
+  .chip-via { color:var(--ink); background:rgba(255,255,255,.05); border:1px solid var(--line); }
+  .top-row { display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; }
+  .back-app { display:inline-block; font-size:13px; font-weight:700; color:var(--acc); text-decoration:none;
+    border:1px solid rgba(57,180,142,.5); border-radius:999px; padding:6px 14px; }
+  .back-app:hover { background:rgba(57,180,142,.12); }
+  .adv-form { margin-top:12px; }
+  .adv-form > summary { cursor:pointer; font-size:12.5px; font-weight:600; color:var(--acc);
+    text-decoration:underline; text-underline-offset:2px; list-style:none; }
+  .adv-form > summary::-webkit-details-marker { display:none; }
+  .adv-form form { margin-top:12px; background:rgba(255,255,255,0.03); border:1px solid var(--line);
+    border-radius:12px; padding:14px 16px; }
+  .f-lbl { display:block; font-size:11.5px; text-transform:uppercase; letter-spacing:.06em;
+    color:var(--dim); margin:10px 0 4px; }
+  .f-row { display:flex; align-items:center; gap:12px; }
+  .f-row .f-lbl { margin:0; }
+  .f-in { width:100%; background:var(--bg); color:var(--ink); border:1px solid var(--line);
+    border-radius:9px; padding:8px 11px; font:inherit; font-size:14px; }
+  .f-in:focus { outline:none; border-color:var(--acc); }
+  .f-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:0 14px; }
+  .rate { display:inline-flex; flex-direction:row-reverse; gap:2px; }
+  .rate input { position:absolute; opacity:0; pointer-events:none; }
+  .rate label { font-size:24px; line-height:1; color:var(--line); cursor:pointer; transition:color .1s ease; }
+  .rate input:checked ~ label, .rate label:hover, .rate label:hover ~ label { color:var(--amber); }
+  .f-send { margin-top:14px; background:var(--acc); color:#06231b; font:inherit; font-size:14px;
+    font-weight:700; border:0; border-radius:9px; padding:9px 20px; cursor:pointer; }
+  .f-send:hover { filter:brightness(1.08); }
+  .f-note { margin-top:10px; font-size:11.5px; color:var(--dim); line-height:1.55; }
   .adv-web { display:inline-block; margin-top:10px; font-size:13.5px; font-weight:600; color:var(--acc);
     border:1px solid var(--acc); border-radius:999px; padding:5px 14px; text-decoration:none; }
   .adv-web:hover { background:rgba(57,180,142,.12); }
@@ -105,6 +135,18 @@
   <h2>Historial completo</h2>
   <ul class="req">
         </ul>
+  <article class="nov">
+    <h2>Reseñas desde la propia página + evidencia Wayfare + volver al mapa <span class="ver">v1.53.0 · 19 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>Formulario de reseña integrado en cada ficha</strong> («Valorar a este asesor ✍» despliega estrellas clicables, nombre público, experiencia, datos del viaje y email opcional). Envío mediante Formsubmit (buzón gratuito → nuestro correo, declarado junto al botón); moderación manual antes de publicar, como siempre. Página de confirmación <code>resena-enviada.html</code>. Se acabó el mailto.</li>
+      <li><strong>Evidencia Wayfare en las reseñas</strong> (diferenciación frente al estilo Google, decisión del usuario): chips factuales por reseña — «✓ Consiguió su visa (WHV 462)», «⏳ Visa en trámite», «✓ Contactó vía Wayfare» — y agregado por asesor «el X% consiguió su visa» (solo reseñas con desenlace conocido). Campos nuevos: visa / gotVisa / viaWayfare.</li>
+      <li><strong>«← Volver a mi mapa»</strong> arriba de la página del directorio (y en la de gracias): vuelve a la app, que restaura el perfil guardado del dispositivo.</li>
+      <li>Las reseñas demo siguen siendo ficticias y marcadas como ejemplo, bajo el banner de demo.</li>
+      <li>Datos: sources.json intacto (misma auditoría, MATCH 1045 / 0 conflictos).</li>
+      <li>Volver aquí: <code>git checkout v1.53.0</code>.</li>
+    </ul>
+  </article>
+
   <article class="nov">
     <h2>Reseñas y estrellas en las fichas de asesores + atribución UTM <span class="ver">v1.52.0 · 19 de julio de 2026</span></h2>
     <ul class="req">
