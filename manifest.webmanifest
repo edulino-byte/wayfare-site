@@ -1,0 +1,13 @@
+{
+  "name": "Wayfare — simulador de visas",
+  "short_name": "Wayfare",
+  "description": "Descubre a qué países puedes irte y con qué visa, con datos verificados contra fuentes oficiales.",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#05090b",
+  "theme_color": "#5B62E0",
+  "icons": [
+    { "src": "assets/brand/wayfare-icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "assets/brand/wayfare-icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

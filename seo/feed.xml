@@ -7,6 +7,14 @@
   <updated>2026-07-19T09:00:00Z</updated>
 
   <entry>
+    <title>Icono de pantalla de inicio (iOS/Android) con la insignia W-Ruta (v1.54.1)</title>
+    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.54.1</id>
+    <updated>2026-07-19T09:00:00Z</updated>
+    <summary>**Feedback de probadores:** al añadir Wayfare a la pantalla de inicio del móvil salía un icono genérico negro con W blanca — iOS ignora el favicon SVG y pide un PNG `apple-touch-icon`. Generados los PNG oficiales de la insignia a sangre completa (fondo índigo #5B62E0, W + estrella polar en crema): 512/192/180 px en `assets/brand/` (rasterizados del SVG con QuickLook + sips, sin herramientas nuevas). — `apple-touch-icon` declarado en app, landing y las 80 páginas estáticas; `m</summary>
+  </entry>
+
+  <entry>
     <title>Rebranding «Índigo Horizonte»: nueva paleta + logotipo W-Ruta (v1.54.0)</title>
     <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
     <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.54.0</id>
@@ -156,13 +164,5 @@
     <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.42.0</id>
     <updated>2026-07-18T09:00:00Z</updated>
     <summary>**Petición del usuario:** que la app se adapte al tema del dispositivo (día/noche). — Mecanismo: `prefers-color-scheme` (CSS puro) — el sistema operativo del móvil o del ordenador comunica su modo y la app cambia al instante, sin recargar y sin botones. — `styles.css`: bloque claro que re-declara los tokens (--glass, --on-dark, --space-*…); el tema oscuro de siempre queda intacto como base. `color-scheme: dark`/`light` para que los controles nativos (selects, scrollbars) acom</summary>
-  </entry>
-
-  <entry>
-    <title>Parche: botones alineados con los extremos del cuestionario (v1.41.3)</title>
-    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
-    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.41.3</id>
-    <updated>2026-07-18T09:00:00Z</updated>
-    <summary>**Petición del usuario:** que los extremos de los dos botones coincidan con los extremos del cuestionario (volver/descartar pegado al borde izquierdo, enviar al derecho), siempre fijos abajo. — `screens.css`: `.submit-row` pasa a `justify-content: space-between` con `width: 100%` (el ancho útil de la barra ya coincide con la columna del formulario); `margin-left: auto` en el botón principal para que quede a la derecha también en el primer uso (sin botón de volver). Sin cambio</summary>
   </entry>
 </feed>
