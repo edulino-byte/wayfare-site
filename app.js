@@ -850,6 +850,7 @@ const MICRO_DEST_COORDS = {
   MT: { lat: 35.94, lng: 14.38 },
   LI: { lat: 47.16, lng: 9.55 }
 };
+const ADVISOR_ANCHORS = {};
 const GLOBE_TEXTURES = {
   textured: "https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg",
   night: "https://unpkg.com/three-globe/example/img/earth-night.jpg",
@@ -1432,6 +1433,24 @@ function CountryDetail({ t, lang, result, profile, onCompare }) {
       }),
       result.synthetic ? /* @__PURE__ */ React.createElement("div", { className: "synthetic-note" }, /* @__PURE__ */ React.createElement("svg", { width: "13", height: "13", viewBox: "0 0 24 24", fill: "none" }, /* @__PURE__ */ React.createElement("circle", { cx: "12", cy: "12", r: "9", stroke: "currentColor", strokeWidth: "2" }), /* @__PURE__ */ React.createElement("path", { d: "M12 8v5M12 16.5v.5", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round" })), t("g_simulated")) : null,
       /* @__PURE__ */ React.createElement(DataFreshness, { t, lang, iso: result.iso, synthetic: result.synthetic }),
+      ADVISOR_ANCHORS[result.iso] ? /* @__PURE__ */ React.createElement(
+        "a",
+        {
+          className: "advisors-link",
+          target: "_blank",
+          rel: "noopener noreferrer",
+          href: "seo/asesores.html#" + ADVISOR_ANCHORS[result.iso],
+          onClick: () => {
+            try {
+              if (window.goatcounter) window.goatcounter.count({ path: "adv-app-" + result.iso, event: true });
+            } catch (e) {
+            }
+          }
+        },
+        /* @__PURE__ */ React.createElement("svg", { width: "13", height: "13", viewBox: "0 0 24 24", fill: "none", "aria-hidden": "true", style: { flexShrink: 0 } }, /* @__PURE__ */ React.createElement("circle", { cx: "12", cy: "8", r: "4", stroke: "currentColor", strokeWidth: "2" }), /* @__PURE__ */ React.createElement("path", { d: "M4 20c1.4-3.6 4.4-5.5 8-5.5s6.6 1.9 8 5.5", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round" })),
+        /* @__PURE__ */ React.createElement("span", null, t("adv_btn")),
+        /* @__PURE__ */ React.createElement("span", { className: "arr", "aria-hidden": "true" }, "\u2192")
+      ) : null,
       /* @__PURE__ */ React.createElement("div", { className: "disclaimer-long" }, /* @__PURE__ */ React.createElement("svg", { width: "11", height: "11", viewBox: "0 0 24 24", fill: "none", style: { flexShrink: 0, marginTop: "1px" } }, /* @__PURE__ */ React.createElement("circle", { cx: "12", cy: "12", r: "9", stroke: "currentColor", strokeWidth: "2" }), /* @__PURE__ */ React.createElement("path", { d: "M12 8v5M12 16.5v.5", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round" })), t("disclaimer_long"))
     )
   );

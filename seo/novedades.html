@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Novedades de reglas de visas — changelog público | Wayfare</title>
-<meta name="description" content="Registro público de cada cambio de datos y reglas de Wayfare: 31 versiones con fecha, qué cambió y por qué. Transparencia total." />
+<meta name="description" content="Registro público de cada cambio de datos y reglas de Wayfare: 64 versiones con fecha, qué cambió y por qué. Transparencia total." />
 <style>
   :root { --bg:#0c1a18; --card:#122622; --line:#1f3a35; --ink:#e8f1ee; --dim:#9db8b1; --acc:#39b48e; --amber:#d9b26a; }
   * { margin:0; box-sizing:border-box; }
@@ -61,6 +61,19 @@
   .idx { list-style:none; display:grid; gap:8px; }
   .idx li { background:var(--card); border:1px solid var(--line); border-radius:10px; }
   .idx a { display:block; padding:11px 15px; text-decoration:none; }
+  .adv-flag { width:22px; height:16px; border-radius:3px; object-fit:cover; vertical-align:-2px; margin-right:6px; }
+  .adv-reg { font-size:13.5px; color:var(--dim); margin:-4px 0 4px; }
+  .adv-grid { display:grid; gap:12px; margin:14px 0 8px; }
+  .adv-card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:16px 18px; }
+  .adv-name { font-size:16.5px; font-weight:700; }
+  .adv-firm { color:var(--dim); font-size:13.5px; margin-top:2px; }
+  .adv-lic { display:inline-flex; align-items:center; gap:6px; margin-top:10px; margin-right:8px; font-size:12.5px;
+    font-weight:600; color:var(--acc); background:rgba(57,180,142,.1); border:1px solid rgba(57,180,142,.35);
+    border-radius:999px; padding:4px 11px; text-decoration:none; }
+  .adv-langs { margin-top:8px; font-size:13px; color:var(--dim); }
+  .adv-web { display:inline-block; margin-top:10px; font-size:13.5px; font-weight:600; color:var(--acc);
+    border:1px solid var(--acc); border-radius:999px; padding:5px 14px; text-decoration:none; }
+  .adv-web:hover { background:rgba(57,180,142,.12); }
 </style>
 </head>
 <body>
@@ -68,12 +81,327 @@
   <p class="src"><a href="index.html" style="text-decoration:none">Wayfare</a> · datos de visas verificados contra fuentes oficiales</p>
   <h1>Novedades de reglas de visas</h1>
   <p>Cada cambio de datos o de reglas queda registrado aquí con su versión y su fecha — el mismo registro interno que usamos para poder volver atrás, publicado tal cual. <a href="feed.xml">Suscríbete al feed</a> para enterarte cuando cambie una tarifa, un cupo o una fecha de apertura.</p>
-  <div class="verified">✓ Fuentes revisadas por última vez: 15 de julio de 2026</div><button class="print-btn" onclick="window.print()" title="Imprime o guarda como PDF tu checklist de esta ruta">🖨 Guardar checklist (PDF)</button>
+  <div class="verified">✓ Fuentes revisadas por última vez: 19 de julio de 2026</div><button class="print-btn" onclick="window.print()" title="Imprime o guarda como PDF tu checklist de esta ruta">🖨 Guardar checklist (PDF)</button>
   
   
   <h2>Historial completo</h2>
   <ul class="req">
         </ul>
+  <article class="nov">
+    <h2>Directorio de asesores (infraestructura, opt-in) + arreglo «undefined» en 9 guías <span class="ver">v1.50.0 · 19 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>Arreglo en vivo:</strong> 9 guías SEO de la Wave 3 (KR/AR/MX/TH/SG) decían «fuente oficial de undefined» y el índice tenía una sección «undefined» — faltaban esos 5 países en el mapa de nombres de <code>genSeoPages.mjs</code>. Corregido y regenerado.</li>
+      <li><strong>Directorio de asesores verificados (idea #21, MVP) — construido pero LATENTE:</strong> 20 profesionales (5 AU · 5 NZ · 5 CA · 5 GB, todos hispanohablantes salvo matices) con licencia cotejada uno a uno contra el registro oficial de su país (MARA, IAA/MBIE, CICC, IAA-UK/SRA) viven en <code>tools/advisors/advisors.json</code> con <code>optIn: false</code>. <strong>Decisión del usuario: opt-in previo</strong> — nadie se publica sin permiso explícito por escrito. <code>genSeoPages.mjs</code> genera <code>seo/asesores.html</code> SOLO con asesores <code>optIn: true</code> (con 0 permisos la página no existe); fichas con licencia enlazada al registro, idiomas «según su web» (ningún registro publica idiomas), clics medidos con GoatCounter y nota de corrección/retirada. En la app: botón <code>advisors-link</code> en el panel del país (<code>ADVISOR_ANCHORS</code> en Globe.jsx, HOY VACÍO → botón invisible), i18n <code>adv_btn</code> EN/ES, estilos día/noche en screens.css.</li>
+      <li><strong>Principio del directorio:</strong> la verificación contra el registro oficial es el único filtro de entrada — nadie puede comprar su inclusión, y cualquier posicionamiento pagado que exista en el futuro se etiquetará como tal.</li>
+      <li>Datos: sources.json intacto (misma auditoría, MATCH 1045 / 0 conflictos).</li>
+      <li>Volver aquí: <code>git checkout v1.50.0</code>.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Revelación progresiva: girar → zoom → banderas → nombres <span class="ver">v1.49.0 · 18 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>Decisión del usuario:</strong> globo limpio como siempre a vista global; al acercar el zoom aparecen las mini-banderitas de los destinos de la zona; con más zoom aún, sus nombres. Un bocadillo-guía enseña el gesto. El buscador con lupa (v1.48.0) se retira.</li>
+      <li><code>Globe.jsx</code>: <code>pillData</code> de nuevo para los 41 destinos (centroide del polígono mayor + micros), renderizados como mini-banderita redonda (aro del color de estado, clic → panel). Umbrales: banderitas a altitud &lt; 1.25 (micros &lt; 1.5, no tienen territorio visible) y ángulo &lt; 45°; nombres desplegados a altitud &lt; 0.9 y ángulo &lt; 30°.</li>
+      <li>Bocadillo-guía (<code>g_click_hint</code> EN/ES): «Gira el globo hasta tu zona — acerca el zoom para ver las banderas y elegir país.»</li>
+      <li>Retirado el buscador: JSX, estado, estilos <code>.search-*</code> y claves <code>search_*</code> (EN/ES).</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Mini-banderitas + buscador con lupa (decisión del usuario) <span class="ver">v1.48.0 · 18 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>Feedback:</strong> las chapitas con nombre «ocupaban mucha pantalla» y la aparición de nombres al pasar por encima seguía sin convencer. Tras valorar ideas, el usuario eligió: mini-banderita redonda para los micro-países + buscador con lupa.</li>
+      <li><strong>Mini-banderitas</strong> (<code>.micro-flag</code>): los micro-destinos (SG/MT/LI) son ahora un marcador circular de 22px con la bandera dentro y aro del color de estado; el nombre solo se despliega muy de cerca (altitud &lt; 0.95). Clic → panel. Las chapitas de destinos con polígono (v1.47.0) se retiran: el globo queda limpio.</li>
+      <li><strong>Buscador con lupa</strong> (<code>.search-fab</code> + <code>.search-card</code>): botón flotante bajo la barra; se escribe (sin acentos, EN/ES) o se elige de la lista completa (41 destinos con bandera y punto de estado, ordenados elegibles → parciales) y el globo VUELA solo al país y abre su panel (reutiliza <code>irA</code>). Tema día/noche y móvil cuidados.</li>
+      <li>i18n: <code>search_label</code> / <code>search_ph</code> / <code>search_empty</code> en EN y ES.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Nombres al acercarse: chapitas para los 41 destinos; adiós mirilla <span class="ver">v1.47.0 · 18 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>Decisión del usuario</strong> (tras valorar 4 ideas): identificar países sin puntería, estilo mapa — al acercarse a una región aparecen chapitas con nombre sobre los destinos verificados visibles; la mirilla central (v1.45.0) se retira (los países pequeños exigían pasar justo por el centro).</li>
+      <li><code>Globe.jsx</code>: <code>pillData</code> = destinos con reglas reales (centroide del polígono mayor) + micros (coordenadas propias). Chapita clicable: polígono → <code>selectFeature</code>, micro → <code>abrirMicro</code>. Reglas de calma en el actualizador: altitud &lt; 1.55, radio K que crece con el zoom (16°→~38°), máximo 8 (las más centradas primero) y rechazo de solapes por rectángulos; micros más generosos (&lt; 1.5 y 55°, no tienen polígono).</li>
+      <li>Retirados: sonda de mirilla, <code>pointInRing</code>/<code>pointInCountry</code>, <code>__WAYFARE_CENTER_PROBE</code>; en táctil el bocadillo de hover vuelve a <code>display: none</code>.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Chapitas legibles para micro-destinos (SG/MT/LI) <span class="ver">v1.46.0 · 18 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>Feedback real (fotos):</strong> los nombres de los países pequeños (Singapur, Malta, Liechtenstein) iban pintados del color de su estado directamente sobre el mapa y no se leían (ámbar sobre océano, verde sobre azul).</li>
+      <li><code>Globe.jsx</code>: el texto plano de la escena desaparece (queda el punto de color); el nombre vive ahora en una <strong>chapita HTML</strong> anclada a su lat/lng vía <code>htmlElementsData</code>: píldora de cristal con banderita SVG + nombre + punto de estado, clicable (abre el panel, igual que el punto). Aparece al acercarse (altitud &lt; 1.5, cubre los vuelos de leyenda/panel a 1.2) y solo en el hemisferio visible (ángulo &lt; 55° al centro de la vista — la librería no oculta los HTML tras el globo).</li>
+      <li><code>screens.css</code>: <code>.micro-pill</code> cristal oscuro de noche / blanco de día, fade suave.</li>
+      <li>Apertura unificada en <code>abrirMicro()</code> (punto, chapita y leyenda comparten camino).</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Mirilla central en móvil: bocadillo del país que pasa por el centro <span class="ver">v1.45.0 · 18 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>Petición del usuario:</strong> en móvil, que el bocadillo (bandera + nombre) muestre el país que pasa por el CENTRO de la pantalla, «como si el cursor estuviera en el centro».</li>
+      <li><code>Globe.jsx</code>: sonda cada 350ms en modo ligero — <code>toGlobeCoords(centro)</code> traduce el centro del viewport a lat/lng y un ray-casting propio (<code>pointInCountry</code>, anillo exterior menos agujeros) encuentra el país que lo contiene. Solo re-renderiza al CAMBIAR de país; se apaga con el panel abierto, la pestaña oculta o el globo pausado.</li>
+      <li>Los manejadores de hover ya no tocan el bocadillo en táctil (ni ponen ni borran): en móvil lo gobierna solo la mirilla.</li>
+      <li><code>screens.css</code> (pointer coarse): el bocadillo reaparece, centrado y flotando sobre el punto central (<code>translate(-50%, -170%)</code>) — nunca cortado. Escritorio intacto (sigue al cursor).</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Parche: tooltip de bandera cortado en móvil, retirado en táctil <span class="ver">v1.44.4 · 18 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>Feedback real (foto):</strong> al tocar un país en móvil, el bocadillo de hover (bandera + nombre) aparecía cortado en la esquina superior, fuera de pantalla.</li>
+      <li>Causa: el tooltip sigue al CURSOR (<code>mousemove</code>); en táctil no hay cursor y la posición se quedaba en (0,0) → se dibujaba pegado a la esquina y recortado por el <code>translate</code>.</li>
+      <li>En táctil el tooltip además es redundante: el toque ya abre el panel completo del país.</li>
+      <li>Arreglo doble: CSS <code>@media (pointer: coarse) { .globe-tooltip { display: none } }</code> + guardia JS en <code>onPolygonHover</code>/<code>onLabelHover</code> (no se genera el dato de hover en modo ligero). En escritorio el tooltip sigue igual.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Parche: barra de botones móvil elegante y uniforme <span class="ver">v1.44.3 · 18 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>Feedback real (foto):</strong> en móvil los dos botones de la barra fija salían con tamaños distintos («Back to my map» a ancho completo, «Map my options» encogido y descolocado a la derecha).</li>
+      <li>Causa: el <code>margin-left: auto</code> del botón principal (pensado para el reparto de escritorio) en la columna móvil lo encogía a su contenido y lo empujaba al borde.</li>
+      <li>Barra móvil rediseñada (≤700px): ambos botones a <strong>ancho completo y misma altura</strong>, el principal <strong>arriba</strong> (más visible y a mano del pulgar), aviso legal y enlace de restablecer centrados, barra más esbelta (menos aire tapado del formulario).</li>
+      <li>Escritorio intacto (lado a lado en los extremos, v1.41.3).</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Parche: la app cabe SIEMPRE en el marco (móvil/tablet/PC) <span class="ver">v1.44.2 · 18 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>Feedback real:</strong> en algunos móviles la app «se salía del marco» (scroll lateral, elementos cortados). Auditoría de desbordamiento a 320/375/768px en las 4 pantallas.</li>
+      <li>Causas y arreglos: 1. <strong>Grid blowout</strong> en el cuestionario: el ancho mínimo intrínseco de los selects con nombres largos («Equatorial Guinea») empujaba la columna fuera de pantalla → <code>min-width: 0</code> en los items del grid + <code>max-width: 100%</code> en los controles. 2. <strong>Segmentado</strong> («With family»): <code>white-space: nowrap</code> desbordaba a ≤400px → el texto salta de línea en pantallas estrechas. 3. <strong>Topbar del globo</strong>: «Edit profile» + EN/ES se salían del marco en ≤480px → botón de editar solo-icono (texto oculto vía font-size:0, sigue para lectores de pantalla), badge de versión oculto, padding reducido. 4. <strong>Red de seguridad</strong>: <code>overflow-x: hidden</code> en html/body — nada puede volver a generar scroll lateral, sea cual sea el dispositivo.</li>
+      <li>Verificado: 0 desbordes en cuestionario, globo, panel de país y comparador a 320px, 375px y 768px; escritorio intacto.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Parche: países alineados en el comparador móvil <span class="ver">v1.44.1 · 18 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>Feedback real (foto de un probador):</strong> en el comparador lado a lado, en móvil, los dos países aparecían a alturas distintas (uno arriba a la derecha, el otro más abajo).</li>
+      <li>Causa: la cabecera de la rejilla tiene 3 celdas (esquina vacía de la columna de etiquetas + país A + selector del país B); al pasar a 2 columnas en móvil, la esquina vacía ocupaba el primer hueco y cada país caía en una fila distinta.</li>
+      <li><code>screens.css</code> (bloque ≤560px): la celda-esquina se oculta y ambos países quedan lado a lado en la misma fila, alineados por la base. Escritorio intacto (3 columnas).</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Modo ligero para móviles (recalentamiento reportado) <span class="ver">v1.44.0 · 18 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>Feedback real:</strong> a un probador se le recalentaba el móvil (viejo) al mapear el perfil.</li>
+      <li>Causa: dos globos WebGL renderizando a 60fps sin descanso, a la resolución nativa del móvil (2x-3x), con antialias; el globo principal seguía renderizando incluso oculto durante la edición del perfil; y un filtro CSS a pantalla completa forzaba una pasada extra de composición por fotograma.</li>
+      <li><strong>Modo ligero automático en táctiles</strong> (<code>WAYFARE_PERF</code> en helpers.jsx, forzable con <code>?lite=1</code>/<code>?lite=0</code>): sin antialias + GPU <code>low-power</code>; render limitado a 1.5x (globo principal) y 1x (decorativo); el globo decorativo del cuestionario se congela tras la entrada (2.6s) — mismo fondo, quieto.</li>
+      <li><strong>Todos los dispositivos:</strong> el globo principal se PAUSA al editar el perfil (estaba oculto pero renderizando) y ambos globos se pausan con la pestaña en segundo plano (<code>visibilitychange</code>).</li>
+      <li>CSS táctil: fuera el <code>filter</code> del canvas del globo; desenfoques de cristal reducidos (blur 20-22 → 10-12) sobre canvas animado.</li>
+      <li>Sin cambios de datos ni de lógica de elegibilidad.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Retirado el contador flotante del revelado <span class="ver">v1.43.0 · 18 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>Petición del usuario:</strong> el bocadillo «N countries where you likely qualify» que aparecía al mapear sobraba — la leyenda de abajo a la izquierda ya da esos números por color (y con listas interactivas desde v1.40.0).</li>
+      <li><code>Globe.jsx</code>: fuera el estado <code>revealNum</code>, su recuento en el ticker del revelado y el bloque JSX; la cascada de colores queda intacta (revealRef no se toca).</li>
+      <li><code>screens.css</code>: fuera <code>.reveal-counter</code> (base oscura y anulación de día).</li>
+      <li><code>i18n/strings.js</code>: fuera <code>rv_eligible</code>/<code>rv_partial</code> en EN y ES (paridad mantenida).</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Parche: el planeta nítido también de día (sin neblina) <span class="ver">v1.42.2 · 18 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>Petición del usuario:</strong> el globo del cuestionario se veía «con neblina» en claro (lo había atenuado a opacidad 0.32 para que no se comiera el título).</li>
+      <li>Nuevo enfoque: el globo vuelve a plena intensidad (solo <code>brightness(1.05)</code> de luz de día) y la legibilidad la protege un <strong>halo de luz</strong> en el propio texto del título y subtítulo (<code>text-shadow</code> claro en 3 capas), el mismo truco que usamos en oscuro con las banderas pero invertido.</li>
+      <li>Tema noche intacto. Sin cambios de datos ni de lógica.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Parche: el tema claro es CIELO de día, no blanco papel <span class="ver">v1.42.1 · 18 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>Petición del usuario:</strong> que el modo claro se sienta como el día, no como papel.</li>
+      <li>Paleta clara re-afinada a celestes: cénit azul arriba (<code>#a5cbe8</code>), horizonte pálido abajo (<code>#e9f4fa</code>) y un resplandor cálido de sol arriba a la derecha (radial cálido). Tinta azul pizarra (<code>#17303c</code>) en lugar del verde grisáceo.</li>
+      <li>El degradado de cielo se aplica a cuestionario, procesado y escenario del globo; la barra fija funde con el horizonte; <code>theme-color</code> móvil pasa al azul del cénit.</li>
+      <li>Tema noche intacto. Sin cambios de datos ni de lógica.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Tema día/noche automático (móvil y ordenador) <span class="ver">v1.42.0 · 18 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>Petición del usuario:</strong> que la app se adapte al tema del dispositivo (día/noche).</li>
+      <li>Mecanismo: <code>prefers-color-scheme</code> (CSS puro) — el sistema operativo del móvil o del ordenador comunica su modo y la app cambia al instante, sin recargar y sin botones.</li>
+      <li><code>styles.css</code>: bloque claro que re-declara los tokens (--glass, --on-dark, --space-*…); el tema oscuro de siempre queda intacto como base. <code>color-scheme: dark</code>/<code>light</code> para que los controles nativos (selects, scrollbars) acompañen.</li>
+      <li><code>screens.css</code>: ~60 anulaciones puntuales de colores cosidos en oscuro (formulario, barra fija, procesado, escenario del globo, panel de país, leyenda, comparador, hoja móvil). De día las estrellas se apagan y el fondo pasa a cielo claro con degradado.</li>
+      <li>La cabecera de bandera conserva su velo oscuro propio → su texto sigue claro también de día. Los dos globos ya pintaban fondo transparente: cero cambios de JS.</li>
+      <li><code>index.html</code>: <code>meta color-scheme</code> + <code>theme-color</code> por tema (barra del navegador móvil).</li>
+      <li>Sin cambios de datos ni de lógica.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Parche: botones alineados con los extremos del cuestionario <span class="ver">v1.41.3 · 18 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>Petición del usuario:</strong> que los extremos de los dos botones coincidan con los extremos del cuestionario (volver/descartar pegado al borde izquierdo, enviar al derecho), siempre fijos abajo.</li>
+      <li><code>screens.css</code>: <code>.submit-row</code> pasa a <code>justify-content: space-between</code> con <code>width: 100%</code> (el ancho útil de la barra ya coincide con la columna del formulario); <code>margin-left: auto</code> en el botón principal para que quede a la derecha también en el primer uso (sin botón de volver). Sin cambios de datos ni de lógica.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Parche: la barra de botones no sube con el scroll <span class="ver">v1.41.2 · 18 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>Petición del usuario:</strong> que los botones queden clavados SIEMPRE en el borde inferior de la pantalla; antes eran <code>sticky</code> y al llegar al final del formulario subían con el contenido.</li>
+      <li><code>screens.css</code>: <code>.submitbar</code> pasa de <code>sticky</code> a <code>fixed</code> (borde inferior del viewport), con degradado oscuro de fondo para legibilidad, <code>pointer-events: none</code> en la barra (los clics atraviesan el degradado; solo los botones capturan), y aire extra al final de <code>.q-wrap</code> (220px escritorio / 300px móvil) para que nada quede tapado.</li>
+      <li><code>Questionnaire.jsx</code>: la barra sale de <code>.q-wrap</code> (su animación de entrada usa <code>transform</code>, que rompería el anclaje <code>fixed</code> durante el fade).</li>
+      <li>Sin cambios de datos ni de lógica.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Parche: ambos botones «al mapa» fijos abajo, mismo formato <span class="ver">v1.41.1 · 18 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>Petición del usuario:</strong> el botón de volver/descartar (arriba) y el de enviar (abajo) no compartían sitio ni formato. Ahora <strong>los dos viven en la barra fija inferior</strong>, lado a lado, con la misma píldora grande (misma tipografía, tamaño y forma).</li>
+      <li><code>Questionnaire.jsx</code>: el botón volver/descartar sale de la cabecera y entra en <code>.submit-row</code> junto al botón principal.</li>
+      <li><code>screens.css</code>: nueva <code>.btn-map-back</code> (formato calcado de <code>.btn-primary</code>, base oscura translúcida con blur; verde para «Volver a mi mapa», ámbar <code>.btn-map-discard</code> para «Descartar mis cambios…»); en pantallas &lt;700px se apilan a ancho completo. Retiradas las reglas antiguas <code>.q-back-btn</code>/<code>.q-back-wrap</code>/<code>.q-back-hint</code>.</li>
+      <li>Sin cambios de datos ni de lógica.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Botones intuitivos del cuestionario + «descartar cambios y volver» <span class="ver">v1.41.0 · 16 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>App (petición del usuario):</strong> el flujo editar-perfil queda con caminos claros y con nombres que se explican solos:</li>
+      <li>· Sin cambios: «Volver a mi mapa» (antes llevaba la coletilla «sin recalcular»).</li>
+      <li>· Con cambios: el botón se convierte en «Descartar mis cambios y volver a mi mapa» (ámbar, icono de deshacer) — restaura el formulario a la última configuración ENVIADA y vuelve al mapa al instante, sin re-escribir nada a mano. Sustituye al botón desactivado + aviso de v1.35 (mejor un camino útil que una puerta cerrada).</li>
+      <li>· El envío se relabela con cambios pendientes: «Actualizar mi mapa con estos cambios» (primer envío sigue siendo «Mapear mis opciones»).</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Parche: el destello se dispara SIEMPRE al cambiar de país <span class="ver">v1.40.1 · 16 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>App (fallo reportado):</strong> con el panel abierto, al clicar otro país el contenido cambiaba pero el destello no se repetía (React reutilizaba el mismo nodo y la animación CSS no se re-disparaba). Arreglo: key por país en CountryDetail — cada cambio remonta el contenido y el destello, la bandera y la cascada de tarjetas entran de nuevo, siempre.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Leyenda interactiva con listas por color + pulso en todos los países <span class="ver">v1.40.0 · 16 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>App (dos peticiones del usuario):</strong></li>
+      <li>· LEYENDA INTERACTIVA: los tres grupos de la leyenda (verde/ámbar/rojo) son ahora botones con su CONTADOR; al pulsar uno se despliega una listita discreta de esos países (banderita SVG + nombre, orden alfabético, con scroll) y al pulsar un país el globo VUELA hasta él y abre su panel — para quien no sabe dónde queda en el mapa. Incluye los micro-destinos (SG/MT/LI). Solo destinos con reglas verificadas (coherente con los colores del globo).</li>
+      <li>· PULSO PARA TODOS: el brillo de celebración al abrir un país suena ahora en CUALQUIER estado, con el color de su resultado (verde elegible, ámbar parcial, rojo improbable) vía var CSS.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Entretenimiento visual, tanda 1: el revelado del mapa <span class="ver">v1.39.0 · 16 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>App (petición del usuario: «que le guste usarla»):</strong> deleite medido, sin circo:</li>
+      <li>· REVELADO EN CASCADA: al enviar el perfil, una ola de color parte del país del usuario y recorre el mundo coloreando los destinos; un CONTADOR en vivo suma «X países donde probablemente calificas» (o «con camino parcial» si no hay verdes) y se desvanece solo.</li>
+      <li>· CELEBRACIÓN medida: pulso de brillo verde (1,7 s) al abrir un destino «probablemente elegible».</li>
+      <li>· PROCESANDO con narrativa REAL: los pasos muestran los números vivos del pipeline («Consultando 102 rutas de visa oficiales», «Cotejando 1.09X hechos verificados», «Revisando 43 destinos auditados») — entretiene y construye confianza a la vez.</li>
+      <li>· Entrada escalonada de las tarjetas de visa en el panel.</li>
+      <li>Sonido: pospuesto a propósito (opt-in futuro); decidido tras valorar Claude Design (que es para bibliotecas de componentes, no para animar la app).</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Parche: legibilidad sobre la bandera (feedback del usuario, caso España) <span class="ver">v1.38.1 · 16 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>App:</strong> sobre banderas claras (el amarillo de España) el texto y el pill sufrían. Tres retoques sin bajar la presencia de la bandera:</li>
+      <li>· Velo oscuro LATERAL integrado en el banner: el lado izquierdo (donde vive el texto) siempre apoya sobre oscuro; la bandera respira a plena luz a la derecha.</li>
+      <li>· El pill de estado lleva ahora base oscura bajo su tinte de color: legible sobre cualquier bandera.</li>
+      <li>· La región («Europe») sube de contraste.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Cabecera de bandera en el panel de país (diseño del usuario) <span class="ver">v1.38.0 · 16 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>App:</strong> cada país estrena «su ventana»: la bandera a sangre completa como cabecera del panel, traslúcida (50%), con desenfoque suave y fundida en degradado hacia el contenido. Ajustes del usuario sobre la primera propuesta: MÁS presencia (32%→50%, menos blur) y FUERA el emoji pequeño (la grande manda). Legibilidad protegida: sombra de texto en nombre/región y desenfoque de fondo en el pill de estado.</li>
+      <li><strong>Banderas:</strong> set completo de 271 SVG (flag-icons, MIT) copiado al build y servido EN LOCAL (assets/flags/, 2,7 MB; solo se carga la del país abierto) — cero CDN en runtime, y así también los países «sin datos» lucen bandera al no haber ya emoji. copyFlags.mjs nuevo.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Parche: icono del modo evidencia (parecía «copiar») <span class="ver">v1.37.1 · 15 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>App (feedback de usuarios):</strong> el botoncito que despliega la fuente oficial usaba dos rectángulos superpuestos — el icono universal de «copiar». Ahora es un LIBRO ABIERTO (fuente/referencia), mismo tamaño y color. Solo cambio visual.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Fuga de WebGL arreglada: el globo ya no se traba con las idas y vueltas <span class="ver">v1.37.0 · 15 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>App (fallo reportado: «entre más veces entra más lento va»):</strong> ninguno de los dos globos (el de fondo del cuestionario y el mapa interactivo) se APAGABA de verdad al desmontarse — el bucle de animación WebGL seguía corriendo invisible. Cada visita a «editar perfil» apilaba un globo de fondo fantasma; cada re-envío, un mapa fantasma. Con varias idas y vueltas: trabado progresivo y riesgo de agotar los contextos WebGL del navegador (~16).</li>
+      <li>Nuevo helper compartido destroyGlobe() (ui/helpers.jsx): _destructor() de globe.gl con respaldo pauseAnimation + renderer.dispose + controls.dispose, y vaciado del contenedor. Enganchado en los desmontajes de BackgroundGlobe y GlobeView.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Perfil con memoria: la app ya no «vuelve de 0» (feedback de usuarios) <span class="ver">v1.36.0 · 15 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>App (primera pieza de la Fase 5c):</strong> el perfil (borrador del cuestionario) y la foto del último envío se guardan en el NAVEGADOR del usuario (localStorage) y se restauran al volver: formulario pre-rellenado + botón «volver a mi mapa» disponible desde el primer segundo. PRIVACIDAD: todo queda solo en su dispositivo; nada viaja a ningún servidor (sin cuentas, sin cookies — coherente con GoatCounter sin cookies).</li>
+      <li><strong>Honestidad de los textos:</strong> el subtítulo del cuestionario decía «no guardamos nada» — ahora dice la verdad nueva: «Tus respuestas se guardan solo en este dispositivo (tu navegador) — nada se envía a ningún servidor.» (EN/ES).</li>
+      <li><strong>Control del usuario:</strong> enlace «Restablecer y empezar de cero (borra tu perfil guardado)» bajo el botón de envío: limpia la memoria local y devuelve los valores por defecto.</li>
+      <li>Tolerante a esquemas viejos (merge sobre defaults) y a almacenamiento bloqueado (la app funciona igual, solo que sin memoria).</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>«Volver al mapa» se desactiva si hay cambios sin enviar <span class="ver">v1.35.0 · 15 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>App (decisión del usuario, refinando v1.34.0):</strong> con cambios en el cuestionario, el botón «volver a mi mapa» queda DESACTIVADO (gris, sin clic) y el aviso ámbar manda al único camino válido: re-enviar con «Map my options». Sin ambigüedad posible entre mapa viejo y perfil nuevo.</li>
+      <li>Textos q_back_dirty acortados EN/ES; estilo :disabled del botón.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Aviso de «cambios sin aplicar» en el cuestionario <span class="ver">v1.34.0 · 15 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>App (pregunta de QA del usuario):</strong> verificado el comportamiento de v1.33.0 con test real (ES→CN): «Map my options» re-adapta TODO el mapa al perfil nuevo (Europa pasó a rojo, hasta los marcadores de micro-destinos); «volver al mapa» conserva el mapa del último envío.</li>
+      <li>Nuevo: si editas datos y NO los has re-enviado, bajo el botón «volver al mapa» aparece un aviso ámbar: «Tienes cambios sin aplicar: el mapa seguirá mostrando tu perfil anterior hasta que vuelvas a enviar el cuestionario.» (comparación del borrador contra la foto enviada).</li>
+      <li>i18n q_back_dirty EN/ES + estilos .q-back-wrap/.q-back-hint.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Feedback de usuarios: «Editar perfil» ya no destruye el mapa <span class="ver">v1.33.0 · 15 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>App (fallo reportado):</strong> al editar el perfil y volver, el globo se destruía y reconstruía desde cero (pantalla de carga incluida) aunque no cambiaras nada. Tres arreglos:</li>
+      <li>· Botón «← Volver a mi mapa (sin recalcular)» arriba del cuestionario (solo aparece si ya hay resultados): vuelta INSTANTÁNEA al globo, con su selección y estado intactos.</li>
+      <li>· El globo queda MONTADO (oculto) mientras editas; solo se reconstruye si pulsas «Map my options» de nuevo (perfil re-enviado = re-evaluación deliberada).</li>
+      <li>· El mapa de fronteras se cachea en memoria: las reconstrucciones ya no re-descargan la red.</li>
+      <li>· El globo ahora vive sobre la FOTO del perfil enviado (no sobre el borrador del formulario): editar sin enviar no desincroniza resultados y paneles.</li>
+      <li>i18n q_back_map EN/ES + estilo .q-back-btn.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Marcadores para micro-destinos: Singapur, Malta y Liechtenstein ya se ven <span class="ver">v1.32.0 · 15 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>App (hallazgo del usuario: «Singapur no se ve»):</strong> el geojson de fronteras (Natural Earth 110m) NO incluye polígonos para países diminutos — Singapur, Malta y Liechtenstein (destinos verificados los tres) eran invisibles e inclicables en el globo. Ahora se pintan como MARCADORES clicables (punto + etiqueta, coloreados por estado igual que los polígonos), con hover y clic que abre el panel de país como cualquier otro destino. La lista se calcula dinámicamente: destino con reglas reales sin polígono + coordenadas en MICRO_DEST_COORDS.</li>
+      <li>Relacionado con idea #19 (auto-hospedar geojson/texturas): si algún día subimos a 50m, los marcadores sobran solos (la lista dinámica quedará vacía para los que ganen polígono).</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Parche: sello de versión anti-caché en el build <span class="ver">v1.31.1 · 15 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>Build:</strong> todos los archivos de la app en dist/index.html llevan ahora <code>?v=&lt;versión&gt;</code> (vendor, datos, lógica, i18n, CSS). Cada despliegue fuerza la recarga en los navegadores de los visitantes — sin esto, quien había visitado la beta veía la versión cacheada vieja (los destinos nuevos salían grises; detectado por el usuario tras la Wave 3). Verificado: la web pública sirve v1.31.x y los destinos nuevos se colorean en visita fresca.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Wave 3 sudeste asiático: Tailandia y Singapur, destinos 40º y 41º <span class="ver">v1.31.0 · 15 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>Tailandia (1 ruta auditada + 3 funciones):</strong> turista (th_tourist) con el PDF oficial del MFA (93 países exentos 60 días + 30 de prórroga; texto por OCR Vision cotejado). Matiz capturado: ARGENTINA Y CHILE van por acuerdos bilaterales propios. AVISO DE TRANSICIÓN honesto: el Gabinete aprobó (19-may-2026) recortar el esquema; pendiente de Royal Gazette al capturar → uncertainFact REVIEW + aviso en la app + vigilancia. DTV nómada digital hedged (sin fuente capturada aún); sin working holiday; estudiante ED hedged.</li>
+      <li><strong>Singapur (2 rutas auditadas + 2 funciones):</strong> turista (sg_tourist) con la lista ICA de visado requerido — del selector solo GE/RU/UA la necesitan (¡China ya no!) + estancia por e-Pass + SG Arrival Card no-es-visa. Work Holiday Pass (sg_whp) con la página oficial del MOM: 18-25, universitarios/graduados de 10 países (AU FR DE HK JP NL NZ CH GB US), 6 meses, cupo 2.000. Sin nómada digital dedicada; estudiante hedged.</li>
+      <li><strong>Estado:</strong> 102 rutas, audit PASS (MATCH 1045, 0 conflictos). Goldens 114→123 (+9, existentes intactos). i18n +30 líneas con ES (huecos 0). +3 guías SEO (78 páginas).</li>
+      <li><strong>Nota de vigilancia:</strong> los extractos del PDF tailandés se verificaron contra el OCR archivado; el monitor semanal aún no hace hash de PDFs (fetch de texto plano) — mejora anotada.</li>
+    </ul>
+  </article>
+
   <article class="nov">
     <h2>Wave 3 tanda LatAm: Argentina y México, destinos 38º y 39º — y OCR nativo para PDFs oficiales <span class="ver">v1.30.0 · 15 de julio de 2026</span></h2>
     <ul class="req">

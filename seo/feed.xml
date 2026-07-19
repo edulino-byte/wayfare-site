@@ -4,165 +4,165 @@
   <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
   <link rel="self" href="https://edulino-byte.github.io/wayfare-site/seo/feed.xml"/>
   <id>https://edulino-byte.github.io/wayfare-site/seo/feed.xml</id>
-  <updated>2026-07-15T09:00:00Z</updated>
+  <updated>2026-07-19T09:00:00Z</updated>
 
   <entry>
-    <title>Wave 3 tanda LatAm: Argentina y México, destinos 38º y 39º — y OCR nativo para PDFs oficiales (v1.30.0)</title>
+    <title>Directorio de asesores (infraestructura, opt-in) + arreglo «undefined» en 9 guías (v1.50.0)</title>
     <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
-    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.30.0</id>
-    <updated>2026-07-15T09:00:00Z</updated>
-    <summary>**Infraestructura:** los PDFs oficiales escaneados ya no son un muro — OCR con Vision (nativo de macOS, vía JXA: scratchpad ocr_pdf.js) para la lista mexicana «no requieren visa» (PDF imagen de gob.mx). El texto OCR se coteja y archiva junto al PDF original. — **Argentina (3 rutas):** — · Turista (ar_tourist): matriz oficial del Régimen de Visas (migraciones.gob.ar) — 61 nacionalidades del selector sin visa; CN/CU/DO/GQ/TW requieren. Estancia 3 meses + prórroga.</summary>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.50.0</id>
+    <updated>2026-07-19T09:00:00Z</updated>
+    <summary>**Arreglo en vivo:** 9 guías SEO de la Wave 3 (KR/AR/MX/TH/SG) decían «fuente oficial de undefined» y el índice tenía una sección «undefined» — faltaban esos 5 países en el mapa de nombres de `genSeoPages.mjs`. Corregido y regenerado. — **Directorio de asesores verificados (idea #21, MVP) — construido pero LATENTE:** 20 profesionales (5 AU · 5 NZ · 5 CA · 5 GB, todos hispanohablantes salvo matices) con licencia cotejada uno a uno contra el registro oficial de su país (MARA, I</summary>
   </entry>
 
   <entry>
-    <title>Wave 3: Corea del Sur, 37º destino verificado — y captura automatizada (renderFetch) (v1.29.0)</title>
+    <title>Revelación progresiva: girar → zoom → banderas → nombres (v1.49.0)</title>
     <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
-    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.29.0</id>
-    <updated>2026-07-15T09:00:00Z</updated>
-    <summary>**Infraestructura (petición del usuario: «todo automático»):** nueva pieza del pipeline `renderFetch.mjs` (Playwright + Chromium headless) para fuentes oficiales que sirven 200 pero pintan por JavaScript. POLÍTICA INTACTA: si un sitio deniega activamente (403/Akamai/captcha), renderFetch sale con código 2 y se respeta (vía navegador del usuario, como AU). El monitor semanal (detectDrift) ahora renderiza los dominios RENDER_DOMAINS (k-eta.go.kr, whic.mofa.go.kr) — Corea queda </summary>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.49.0</id>
+    <updated>2026-07-18T09:00:00Z</updated>
+    <summary>**Decisión del usuario:** globo limpio como siempre a vista global; al acercar el zoom aparecen las mini-banderitas de los destinos de la zona; con más zoom aún, sus nombres. Un bocadillo-guía enseña el gesto. El buscador con lupa (v1.48.0) se retira. — `Globe.jsx`: `pillData` de nuevo para los 41 destinos (centroide del polígono mayor + micros), renderizados como mini-banderita redonda (aro del color de estado, clic → panel). Umbrales: banderitas a altitud &lt; 1.25 (micros </summary>
   </entry>
 
   <entry>
-    <title>Parche: «Solo» → «Alone» en el cuestionario inglés (v1.28.1)</title>
+    <title>Mini-banderitas + buscador con lupa (decisión del usuario) (v1.48.0)</title>
     <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
-    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.28.1</id>
-    <updated>2026-07-15T09:00:00Z</updated>
-    <summary>**App:** la opción de situación del cuestionario decía «Solo» (español) en el modo inglés; ahora dice «Alone» (feedback del usuario). La tabla española queda igual («Solo/a»). Sin cambio de comportamiento: solo texto.</summary>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.48.0</id>
+    <updated>2026-07-18T09:00:00Z</updated>
+    <summary>**Feedback:** las chapitas con nombre «ocupaban mucha pantalla» y la aparición de nombres al pasar por encima seguía sin convencer. Tras valorar ideas, el usuario eligió: mini-banderita redonda para los micro-países + buscador con lupa. — **Mini-banderitas** (`.micro-flag`): los micro-destinos (SG/MT/LI) son ahora un marcador circular de 22px con la bandera dentro y aro del color de estado; el nombre solo se despliega muy de cerca (altitud &lt; 0.95). Clic → panel. Las chapit</summary>
   </entry>
 
   <entry>
-    <title>Ideas #3, #7 y #5-parcial: comparador de destinos, changelog público y feed (v1.28.0)</title>
+    <title>Nombres al acercarse: chapitas para los 41 destinos; adiós mirilla (v1.47.0)</title>
     <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
-    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.28.0</id>
-    <updated>2026-07-15T09:00:00Z</updated>
-    <summary>**App (idea #3):** botón «Comparar destinos» en el panel de país → vista lado a lado de dos destinos por tipo de visa (estado + puntuación + nombre oficial), con selector de destino B limitado a los 36 destinos con reglas reales. Los resultados se calculan al vuelo con el MISMO motor y el MISMO perfil (componente CompareView + findEvidence intactos). i18n cmp_* EN/ES. — **Web (idea #7):** seo/novedades.html — changelog público generado parseando VERSIONS.md (cada versión = no</summary>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.47.0</id>
+    <updated>2026-07-18T09:00:00Z</updated>
+    <summary>**Decisión del usuario** (tras valorar 4 ideas): identificar países sin puntería, estilo mapa — al acercarse a una región aparecen chapitas con nombre sobre los destinos verificados visibles; la mirilla central (v1.45.0) se retira (los países pequeños exigían pasar justo por el centro). — `Globe.jsx`: `pillData` = destinos con reglas reales (centroide del polígono mayor) + micros (coordenadas propias). Chapita clicable: polígono → `selectFeature`, micro → `abrirMicro`. Reglas</summary>
   </entry>
 
   <entry>
-    <title>Ideas #6, #4 y #2: metodología pública, semáforo de aperturas y checklist imprimible (v1.27.0)</title>
+    <title>Chapitas legibles para micro-destinos (SG/MT/LI) (v1.46.0)</title>
     <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
-    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.27.0</id>
-    <updated>2026-07-15T09:00:00Z</updated>
-    <summary>**Web (ideas #6/#4/#2 del backlog):** — · **«Cómo verificamos»** (seo/como-verificamos.html): pipeline de 7 pasos + números VIVOS leídos del propio audit al generar (91 rutas, 36 destinos, 811 hechos, MATCH 990, 0 conflictos, 59 en revisión) + sección honesta «lo que NO hacemos». — · **Calendario de aperturas** (seo/calendario-aperturas.html): semáforo generado desde los hechos opening_status capturados (solo fechas con fuente): PL 15-jul (abierta ya), AR 24-sep, PE 1-oct, BR</summary>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.46.0</id>
+    <updated>2026-07-18T09:00:00Z</updated>
+    <summary>**Feedback real (fotos):** los nombres de los países pequeños (Singapur, Malta, Liechtenstein) iban pintados del color de su estado directamente sobre el mapa y no se leían (ámbar sobre océano, verde sobre azul). — `Globe.jsx`: el texto plano de la escena desaparece (queda el punto de color); el nombre vive ahora en una **chapita HTML** anclada a su lat/lng vía `htmlElementsData`: píldora de cristal con banderita SVG + nombre + punto de estado, clicable (abre el panel, igual </summary>
   </entry>
 
   <entry>
-    <title>"Modo evidencia" (idea #1): la auditoría, visible en la app (v1.26.0)</title>
+    <title>Mirilla central en móvil: bocadillo del país que pasa por el centro (v1.45.0)</title>
     <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
-    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.26.0</id>
-    <updated>2026-07-15T09:00:00Z</updated>
-    <summary>**App:** cada requisito del panel de país que proviene de un hecho auditado muestra ahora un botoncito que despliega el EXTRACTO LITERAL de la página oficial capturada, el enlace a la fuente y la fecha de captura (y la marca «en revisión» si el hecho no está plenamente verificado). El casado línea↔hecho usa los MISMOS tokens appMatch que valida la auditoría. Nuevo componente EvidenceRow + findEvidence en ui/Globe.jsx; estilos ev-* en screens.css; claves i18n ev_* EN/ES. — **D</summary>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.45.0</id>
+    <updated>2026-07-18T09:00:00Z</updated>
+    <summary>**Petición del usuario:** en móvil, que el bocadillo (bandera + nombre) muestre el país que pasa por el CENTRO de la pantalla, «como si el cursor estuviera en el centro». — `Globe.jsx`: sonda cada 350ms en modo ligero — `toGlobeCoords(centro)` traduce el centro del viewport a lat/lng y un ray-casting propio (`pointInCountry`, anillo exterior menos agujeros) encuentra el país que lo contiene. Solo re-renderiza al CAMBIAR de país; se apaga con el panel abierto, la pestaña ocult</summary>
   </entry>
 
   <entry>
-    <title>Idea #20 CERRADA: Australia turista con listas oficiales eVisitor/ETA (v1.25.0)</title>
+    <title>Parche: tooltip de bandera cortado en móvil, retirado en táctil (v1.44.4)</title>
     <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
-    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.25.0</id>
-    <updated>2026-07-15T09:00:00Z</updated>
-    <summary>**App:** el turista de Australia deja el camino único "subclass 600 para todos" y distingue los TRES caminos oficiales con listas capturadas 15-jul-2026 vía navegador del usuario (immi.homeaffairs bloquea el fetch automatizado): AU_EVISITOR (36 pasaportes europeos, eVisitor 651 gratuita, 3 meses por entrada) y AU_ETA (añade BN CA HK JP MY MT SG KR TW US y GB-BNO, ETA 601 vía app). Nueva Zelanda: acuerdo Trans-Tasman (SCV 444 a la llegada) con redacción de cobertura — sin fuen</summary>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.44.4</id>
+    <updated>2026-07-18T09:00:00Z</updated>
+    <summary>**Feedback real (foto):** al tocar un país en móvil, el bocadillo de hover (bandera + nombre) aparecía cortado en la esquina superior, fuera de pantalla. — Causa: el tooltip sigue al CURSOR (`mousemove`); en táctil no hay cursor y la posición se quedaba en (0,0) → se dibujaba pegado a la esquina y recortado por el `translate`. — En táctil el tooltip además es redundante: el toque ya abre el panel completo del país.</summary>
   </entry>
 
   <entry>
-    <title>Idea #20: los tiers de turista sustituidos por listas oficiales (NZ/GB/CA) (v1.24.0)</title>
+    <title>Parche: barra de botones móvil elegante y uniforme (v1.44.3)</title>
     <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
-    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.24.0</id>
-    <updated>2026-07-15T09:00:00Z</updated>
-    <summary>**App:** los turistas de NZ, GB y CA dejan la estimación tier del prototipo y usan LISTAS OFICIALES capturadas 15-jul-2026: NZ_VISA_WAIVER (44, INZ), GB_VISA_NATIONALS (16 del selector + 7 heredados, gov.uk Appendix Visitor) y CA_ETA_EXEMPT/CONDITIONAL (40+6, canada.ca — incl. el matiz de la eTA condicionada de AR/BR/CR/MX/PA/UY por aire con visa previa). Casos especiales: AU→NZ (sin visa ni NZeTA) y US→CA (sin visa ni eTA). Corrección de banda: argentino→Canadá pasa de "inel</summary>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.44.3</id>
+    <updated>2026-07-18T09:00:00Z</updated>
+    <summary>**Feedback real (foto):** en móvil los dos botones de la barra fija salían con tamaños distintos («Back to my map» a ancho completo, «Map my options» encogido y descolocado a la derecha). — Causa: el `margin-left: auto` del botón principal (pensado para el reparto de escritorio) en la columna móvil lo encogía a su contenido y lo empujaba al borde. — Barra móvil rediseñada (≤700px): ambos botones a **ancho completo y misma altura**, el principal **arriba** (más visible y a man</summary>
   </entry>
 
   <entry>
-    <title>12 pasaportes que faltaban en el selector (v1.23.0)</title>
+    <title>Parche: la app cabe SIEMPRE en el marco (móvil/tablet/PC) (v1.44.2)</title>
     <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
-    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.23.0</id>
-    <updated>2026-07-15T09:00:00Z</updated>
-    <summary>**Hallazgo (pregunta del usuario "¿están todos los pasaportes?"):** el selector ofrecía 56 pasaportes pero omitía 12 que el motor YA modelaba: AU, NZ, KR, TW, HK, IL, RO, SK, SI, MT, AD, LI. Un australiano no podía ni elegir su pasaporte en la app que modela su Trans-Tasman. — **App:** añadidos a SUPPORTED_PROFILE_COUNTRY_CODES (`data/mock.js`) con tiers coherentes con el motor; nombres EN en el fallback del cuestionario y nombres ES completados en COUNTRY_NAMES (de paso: tod</summary>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.44.2</id>
+    <updated>2026-07-18T09:00:00Z</updated>
+    <summary>**Feedback real:** en algunos móviles la app «se salía del marco» (scroll lateral, elementos cortados). Auditoría de desbordamiento a 320/375/768px en las 4 pantallas. — Causas y arreglos: 1. **Grid blowout** en el cuestionario: el ancho mínimo intrínseco de los selects con nombres largos («Equatorial Guinea») empujaba la columna fuera de pantalla → `min-width: 0` en los items del grid + `max-width: 100%` en los controles. 2. **Segmentado** («With family»): `white-space: nowr</summary>
   </entry>
 
   <entry>
-    <title>Banners de acceso especial (2ª ronda de feedback de usuarios) (v1.22.0)</title>
+    <title>Parche: países alineados en el comparador móvil (v1.44.1)</title>
     <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
-    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.22.0</id>
-    <updated>2026-07-15T09:00:00Z</updated>
-    <summary>**App:** banner destacado en el panel de país cuando la nacionalidad tiene un convenio de acceso especial con el destino — 3 convenios: libre circulación UE/EEE, Trans-Tasman (AU↔NZ) y Common Travel Area (GB↔IE). Nuevo helper `Eligibility.specialAccess(nat, iso)` (solo lectura). — **Evidencia capturada:** INZ "Australian Resident Visa" ("you can visit, work and live in New Zealand", directo 200) y gov.uk CTA (directo 200) en checkpoints/wave2-europa/pages/. — **Sin cambios de</summary>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.44.1</id>
+    <updated>2026-07-18T09:00:00Z</updated>
+    <summary>**Feedback real (foto de un probador):** en el comparador lado a lado, en móvil, los dos países aparecían a alturas distintas (uno arriba a la derecha, el otro más abajo). — Causa: la cabecera de la rejilla tiene 3 celdas (esquina vacía de la columna de etiquetas + país A + selector del país B); al pasar a 2 columnas en móvil, la esquina vacía ocupaba el primer hueco y cada país caía en una fila distinta. — `screens.css` (bloque ≤560px): la celda-esquina se oculta y ambos paí</summary>
   </entry>
 
   <entry>
-    <title>Correcciones de usuarios reales (idea #12 en acción) (v1.21.0)</title>
+    <title>Modo ligero para móviles (recalentamiento reportado) (v1.44.0)</title>
     <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
-    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.21.0</id>
-    <updated>2026-07-15T09:00:00Z</updated>
-    <summary>**Feedback 1 — colores del globo poco visibles:** opacidades de los países subidas (base 0.42→0.62, hover 0.58→0.75, seleccionado 0.72→0.88) en `ui/Globe.jsx`. — **Feedback 2 — visas preseleccionadas confusas:** el cuestionario ahora muestra los tipos de visa SIN seleccionar (`visaTypes: []` por defecto en `ui/App.jsx`); el usuario elige. Si no elige ninguna, se evalúan todas (comportamiento del motor sin cambios). Pista actualizada bajo el selector (EN/ES). — **Sin cambios d</summary>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.44.0</id>
+    <updated>2026-07-18T09:00:00Z</updated>
+    <summary>**Feedback real:** a un probador se le recalentaba el móvil (viejo) al mapear el perfil. — Causa: dos globos WebGL renderizando a 60fps sin descanso, a la resolución nativa del móvil (2x-3x), con antialias; el globo principal seguía renderizando incluso oculto durante la edición del perfil; y un filtro CSS a pantalla completa forzaba una pasada extra de composición por fotograma. — **Modo ligero automático en táctiles** (`WAYFARE_PERF` en helpers.jsx, forzable con `?lite=1`/`</summary>
   </entry>
 
   <entry>
-    <title>Europa tanda 2: WHV reales de Alemania y Francia + Irlanda (36º destino) (v1.20.0)</title>
+    <title>Retirado el contador flotante del revelado (v1.43.0)</title>
     <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
-    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.20.0</id>
-    <updated>2026-07-15T09:00:00Z</updated>
-    <summary>**Alemania** (FAQ oficial Auswärtiges Amt, directo 200): DE_YM con 11 socios (AR AU BR CL HK IL JP KR NZ TW UY), 18-30 (KR hasta 34), 12 meses. México NO está (verificado — la memoria engaña). — **Francia** (france-visas, snapshot archive.org oct-2025; directo 403): FR_YM con 16 socios, 8 latinoamericanos (AR BR CL CO EC MX PE UY), 18-30 (AR/AU/CA hasta 35), propósito turístico-cultural. — **Irlanda** (ISD oficial, directo 200): destino nuevo NO-Schengen — WHA con 11 países (</summary>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.43.0</id>
+    <updated>2026-07-18T09:00:00Z</updated>
+    <summary>**Petición del usuario:** el bocadillo «N countries where you likely qualify» que aparecía al mapear sobraba — la leyenda de abajo a la izquierda ya da esos números por color (y con listas interactivas desde v1.40.0). — `Globe.jsx`: fuera el estado `revealNum`, su recuento en el ticker del revelado y el bloque JSX; la cascada de colores queda intacta (revealRef no se toca). — `screens.css`: fuera `.reveal-counter` (base oscura y anulación de día).</summary>
   </entry>
 
   <entry>
-    <title>EUROPA: los 27 miembros Schengen restantes como destinos (v1.19.0)</title>
+    <title>Parche: el planeta nítido también de día (sin neblina) (v1.42.2)</title>
     <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
-    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.19.0</id>
-    <updated>2026-07-15T09:00:00Z</updated>
-    <summary>**App:** fábrica `makeSchengenRules(iso)` para AT BE BG CH CZ DE DK EE FI FR GR HR HU IS IT LI LT LU LV MT NL NO PL RO SE SI SK — turista Schengen compartido (reutiliza el modelo auditado de ES: regla 90/180, fuente Comisión Europea), trabajo con libre circulación UE/EEE y patrocinio genérico para no comunitarios, student conservador (tope 68), working holiday y nómada digital con redacción prudente "aún no verificado" (sin negativas absolutas — lección PT). Irlanda queda FUE</summary>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.42.2</id>
+    <updated>2026-07-18T09:00:00Z</updated>
+    <summary>**Petición del usuario:** el globo del cuestionario se veía «con neblina» en claro (lo había atenuado a opacidad 0.32 para que no se comiera el título). — Nuevo enfoque: el globo vuelve a plena intensidad (solo `brightness(1.05)` de luz de día) y la legibilidad la protege un **halo de luz** en el propio texto del título y subtítulo (`text-shadow` claro en 3 capas), el mismo truco que usamos en oscuro con las banderas pero invertido. — Tema noche intacto. Sin cambios de datos </summary>
   </entry>
 
   <entry>
-    <title>Wave 2 rematada: rutas de refuerzo JP student y US work (v1.18.0)</title>
+    <title>Parche: el tema claro es CIELO de día, no blanco papel (v1.42.1)</title>
     <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
-    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.18.0</id>
-    <updated>2026-07-14T09:00:00Z</updated>
-    <summary>**Datos:** +2 rutas de refuerzo — JP.student.coe (Study in Japan oficial: COE + evidencia de fondos) y US.work.temporary (travel.state.gov: petición aprobada + H-1B specialty occupation) → **61 rutas**, hash `0ca439bd…`. Audit PASS exacto: MATCH 878→886, APP_DECISION 72→74, 0-0-0. Sin cambios de app (la lógica ya emitía esas líneas; ahora tienen respaldo auditado). — **JP nómada digital:** intentadas TODAS las vías legítimas (curl 403, archive.org sin snapshot útil, save-now </summary>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.42.1</id>
+    <updated>2026-07-18T09:00:00Z</updated>
+    <summary>**Petición del usuario:** que el modo claro se sienta como el día, no como papel. — Paleta clara re-afinada a celestes: cénit azul arriba (`#a5cbe8`), horizonte pálido abajo (`#e9f4fa`) y un resplandor cálido de sol arriba a la derecha (radial cálido). Tinta azul pizarra (`#17303c`) en lugar del verde grisáceo. — El degradado de cielo se aplica a cuestionario, procesado y escenario del globo; la barra fija funde con el horizonte; `theme-color` móvil pasa al azul del cénit.</summary>
   </entry>
 
   <entry>
-    <title>Wave 2: EE.UU. como destino nuevo (8º destino) (v1.17.0)</title>
+    <title>Tema día/noche automático (móvil y ordenador) (v1.42.0)</title>
     <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
-    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.17.0</id>
-    <updated>2026-07-14T09:00:00Z</updated>
-    <summary>**App:** nuevo `COUNTRY_RULES.US` — turista por Visa Waiver Program (41 países con ESTA y 90 días; Chile único LatAm) o visa B-1/B-2 con entrevista para el resto; F-1 con I-20 (SEVP), tope partial; trabajo con patrocinio/loterías (tope 60); sin working holiday (J-1 como alternativa señalada) y sin visa de nómada digital — afirmaciones negativas verdaderas para EE.UU., registradas como appDecision. — **Datos:** +2 rutas US → **59 rutas**, hash `044b0999…`. travel.state.gov res</summary>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.42.0</id>
+    <updated>2026-07-18T09:00:00Z</updated>
+    <summary>**Petición del usuario:** que la app se adapte al tema del dispositivo (día/noche). — Mecanismo: `prefers-color-scheme` (CSS puro) — el sistema operativo del móvil o del ordenador comunica su modo y la app cambia al instante, sin recargar y sin botones. — `styles.css`: bloque claro que re-declara los tokens (--glass, --on-dark, --space-*…); el tema oscuro de siempre queda intacto como base. `color-scheme: dark`/`light` para que los controles nativos (selects, scrollbars) acom</summary>
   </entry>
 
   <entry>
-    <title>Wave 2: JAPÓN como destino nuevo (7º destino) (v1.16.0)</title>
+    <title>Parche: botones alineados con los extremos del cuestionario (v1.41.3)</title>
     <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
-    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.16.0</id>
-    <updated>2026-07-14T09:00:00Z</updated>
-    <summary>**App:** nuevo `COUNTRY_RULES.JP` — working holiday con tabla oficial JP_WHV (30 socios del selector; cupos oficiales: ES 700, AR 400, CL 200, UY 100, CA 6.283, KR 10.000, GB 6.000…), turista por exención (74 países, 90 días; aviso ePassport a BR/PE/PY/PA/RS), student/work conservadores con COE (tope partial), nómada digital con cobertura y sin cifras (fuente ISA bloqueada y sin snapshot — REVIEW). Japón se colorea en el globo automáticamente (hasRealRules). — **Método nuevo:</summary>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.41.3</id>
+    <updated>2026-07-18T09:00:00Z</updated>
+    <summary>**Petición del usuario:** que los extremos de los dos botones coincidan con los extremos del cuestionario (volver/descartar pegado al borde izquierdo, enviar al derecho), siempre fijos abajo. — `screens.css`: `.submit-row` pasa a `justify-content: space-between` con `width: 100%` (el ancho útil de la barra ya coincide con la columna del formulario); `margin-left: auto` en el botón principal para que quede a la derecha también en el primer uso (sin botón de volver). Sin cambio</summary>
   </entry>
 
   <entry>
-    <title>España auditada: LOS 6 DESTINOS COMPLETOS (Fase ES/PT cerrada) (v1.15.0)</title>
+    <title>Parche: la barra de botones no sube con el scroll (v1.41.2)</title>
     <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
-    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.15.0</id>
-    <updated>2026-07-14T09:00:00Z</updated>
-    <summary>**CORRECCIÓN** (`logic/eligibility.js`): la app decía "España no opera Working Holiday" — FALSO. Evidencia oficial (Embajada en Tokio): programa con Japón desde 1-jul-2017 + acuerdos con Australia, Canadá y Nueva Zelanda. ES_YM = {JP, AU, CA, NZ}, 18-30, tope partial (fuente de 2017 y condiciones por país no capturadas); resto de nacionalidades: redacción prudente en vez del "no existe" absoluto. Corea/Argentina citados por terceros — REVIEW hasta fuente oficial. — **DNV con </summary>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.41.2</id>
+    <updated>2026-07-18T09:00:00Z</updated>
+    <summary>**Petición del usuario:** que los botones queden clavados SIEMPRE en el borde inferior de la pantalla; antes eran `sticky` y al llegar al final del formulario subían con el contenido. — `screens.css`: `.submitbar` pasa de `sticky` a `fixed` (borde inferior del viewport), con degradado oscuro de fondo para legibilidad, `pointer-events: none` en la barra (los clics atraviesan el degradado; solo los botones capturan), y aire extra al final de `.q-wrap` (220px escritorio / 300px </summary>
   </entry>
 
   <entry>
-    <title>Portugal auditado: corrección mayor de youth mobility (Fase ES/PT) (v1.14.0)</title>
+    <title>Parche: ambos botones «al mapa» fijos abajo, mismo formato (v1.41.1)</title>
     <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
-    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.14.0</id>
-    <updated>2026-07-14T09:00:00Z</updated>
-    <summary>**CORRECCIÓN MAYOR** (`logic/eligibility.js`): la lista Working Holiday de Portugal del prototipo (AU CA NZ AR BR UY CO EC BO PY) era una suposición y estaba mal. Tabla oficial PT_YM con los 9 memorandos vigentes (vistos.mne.gov.pt, capturado 14-jul): AR 18-30/100 · AU 18-31/500 · CA 18-35/600 · CL 18-30 · JP 18-30 · NZ 18-30/50 · PE 18-31/400+grado · KR 18-34/200 · US piloto/400 (sin edad publicada → tope partial). Corrige 5 falsos negativos (CL JP PE KR US) y 6 falsos posit</summary>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.41.1</id>
+    <updated>2026-07-18T09:00:00Z</updated>
+    <summary>**Petición del usuario:** el botón de volver/descartar (arriba) y el de enviar (abajo) no compartían sitio ni formato. Ahora **los dos viven en la barra fija inferior**, lado a lado, con la misma píldora grande (misma tipografía, tamaño y forma). — `Questionnaire.jsx`: el botón volver/descartar sale de la cabecera y entra en `.submit-row` junto al botón principal. — `screens.css`: nueva `.btn-map-back` (formato calcado de `.btn-primary`, base oscura translúcida con blur; verd</summary>
   </entry>
 
   <entry>
-    <title>Inglés en niveles CEFR (A1–C2) (v1.13.0)</title>
+    <title>Botones intuitivos del cuestionario + «descartar cambios y volver» (v1.41.0)</title>
     <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
-    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.13.0</id>
-    <updated>2026-07-14T09:00:00Z</updated>
-    <summary>**App:** el selector de inglés pasa de Básico/Intermedio/Avanzado/Nativo a los 6 niveles CEFR/MCER (A1–C2) con pista explicativa. `data/mock.js`: lista ENGLISH = a1..c2. `logic/eligibility.js`: escala interna intacta + normalizador conservador (a1/a2→basic, b1→intermediate, b2/c1→advanced, c2→native); los valores antiguos siguen aceptándose. Perfil por defecto: b2 (equivalente al antiguo "advanced"). — **Prueba de equivalencia:** los 6 pares CEFR↔escala antigua producen salid</summary>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.41.0</id>
+    <updated>2026-07-16T09:00:00Z</updated>
+    <summary>**App (petición del usuario):** el flujo editar-perfil queda con caminos claros y con nombres que se explican solos: — · Sin cambios: «Volver a mi mapa» (antes llevaba la coletilla «sin recalcular»). — · Con cambios: el botón se convierte en «Descartar mis cambios y volver a mi mapa» (ámbar, icono de deshacer) — restaura el formulario a la última configuración ENVIADA y vuelve al mapa al instante, sin re-escribir nada a mano. Sustituye al botón desactivado + aviso de v1.35 (m</summary>
   </entry>
 
   <entry>
-    <title>Cuestionario sin campos de dinero (v1.12.0)</title>
+    <title>Parche: el destello se dispara SIEMPRE al cambiar de país (v1.40.1)</title>
     <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
-    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.12.0</id>
-    <updated>2026-07-14T09:00:00Z</updated>
-    <summary>**App:** `ui/Questionnaire.jsx` — eliminados los deslizadores de ahorros e ingresos mensuales (el dinero no puntúa desde el motor v2.1; solo generaba avisos informativos). Se conserva "¿Trabajas en remoto?" porque sí condiciona las visas de nómada digital. `i18n/strings.js`: sección 03 renombrada a "Idioma y forma de trabajo" (EN/ES). — **Prueba de no-interferencia:** las 49 fotos doradas quedaron byte-idénticas — los resultados de visas no cambian. Petición del usuario confi</summary>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.40.1</id>
+    <updated>2026-07-16T09:00:00Z</updated>
+    <summary>**App (fallo reportado):** con el panel abierto, al clicar otro país el contenido cambiaba pero el destello no se repetía (React reutilizaba el mismo nodo y la animación CSS no se re-disparaba). Arreglo: key por país en CountryDetail — cada cambio remonta el contenido y el destello, la bandera y la cascada de tarjetas entran de nuevo, siempre.</summary>
   </entry>
 </feed>
