@@ -7,6 +7,14 @@
   <updated>2026-07-19T09:00:00Z</updated>
 
   <entry>
+    <title>Reseñas y estrellas en las fichas de asesores + atribución UTM (v1.52.0)</title>
+    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.52.0</id>
+    <updated>2026-07-19T09:00:00Z</updated>
+    <summary>**Valoración 0-5 y reseñas de usuarios en cada ficha:** la página del directorio muestra media de estrellas, número de reseñas y las reseñas completas plegadas («Leer reseñas»), con autor y fecha; en la app, la mini-ficha enseña las estrellas y enlaza a la ficha completa (ancla por asesor). Fichas sin reseñas: «Aún sin reseñas». — **«Valorar a este asesor»:** cada ficha lleva un enlace que abre un correo pre-rellenado (puntuación, experiencia y si el contacto llegó vía Wayfar</summary>
+  </entry>
+
+  <entry>
     <title>Panel plegable en escritorio + sección de asesores (demo con perfiles ficticios) (v1.51.0)</title>
     <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
     <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.51.0</id>
@@ -156,13 +164,5 @@
     <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.41.1</id>
     <updated>2026-07-18T09:00:00Z</updated>
     <summary>**Petición del usuario:** el botón de volver/descartar (arriba) y el de enviar (abajo) no compartían sitio ni formato. Ahora **los dos viven en la barra fija inferior**, lado a lado, con la misma píldora grande (misma tipografía, tamaño y forma). — `Questionnaire.jsx`: el botón volver/descartar sale de la cabecera y entra en `.submit-row` junto al botón principal. — `screens.css`: nueva `.btn-map-back` (formato calcado de `.btn-primary`, base oscura translúcida con blur; verd</summary>
-  </entry>
-
-  <entry>
-    <title>Botones intuitivos del cuestionario + «descartar cambios y volver» (v1.41.0)</title>
-    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
-    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.41.0</id>
-    <updated>2026-07-16T09:00:00Z</updated>
-    <summary>**App (petición del usuario):** el flujo editar-perfil queda con caminos claros y con nombres que se explican solos: — · Sin cambios: «Volver a mi mapa» (antes llevaba la coletilla «sin recalcular»). — · Con cambios: el botón se convierte en «Descartar mis cambios y volver a mi mapa» (ámbar, icono de deshacer) — restaura el formulario a la última configuración ENVIADA y vuelve al mapa al instante, sin re-escribir nada a mano. Sustituye al botón desactivado + aviso de v1.35 (m</summary>
   </entry>
 </feed>

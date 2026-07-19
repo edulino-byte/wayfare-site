@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Novedades de reglas de visas — changelog público | Wayfare</title>
-<meta name="description" content="Registro público de cada cambio de datos y reglas de Wayfare: 65 versiones con fecha, qué cambió y por qué. Transparencia total." />
+<meta name="description" content="Registro público de cada cambio de datos y reglas de Wayfare: 66 versiones con fecha, qué cambió y por qué. Transparencia total." />
 <style>
   :root { --bg:#0c1a18; --card:#122622; --line:#1f3a35; --ink:#e8f1ee; --dim:#9db8b1; --acc:#39b48e; --amber:#d9b26a; }
   * { margin:0; box-sizing:border-box; }
@@ -75,6 +75,20 @@
     font-weight:600; color:var(--acc); background:rgba(57,180,142,.1); border:1px solid rgba(57,180,142,.35);
     border-radius:999px; padding:4px 11px; text-decoration:none; }
   .adv-langs { margin-top:8px; font-size:13px; color:var(--dim); }
+  .adv-stars { margin-top:3px; font-size:12.5px; font-weight:600; color:var(--amber); }
+  .adv-stars-none { color:var(--dim); font-weight:400; }
+  .adv-revs { margin-top:12px; }
+  .adv-revs > summary { cursor:pointer; font-size:13px; font-weight:600; color:var(--acc);
+    list-style:none; }
+  .adv-revs > summary::-webkit-details-marker { display:none; }
+  .adv-revs > summary::before { content:"▸ "; }
+  .adv-revs[open] > summary::before { content:"▾ "; }
+  .adv-rev { margin-top:10px; padding:10px 13px; background:rgba(255,255,255,0.03);
+    border:1px solid var(--line); border-radius:10px; font-size:13.5px; }
+  .adv-rev-head { font-size:12.5px; color:var(--dim); margin-bottom:4px; }
+  .adv-rev-stars { color:var(--amber); }
+  .adv-rate { display:inline-block; margin-top:12px; margin-left:2px; font-size:12.5px; font-weight:600;
+    color:var(--acc); text-decoration:underline; text-underline-offset:2px; }
   .adv-web { display:inline-block; margin-top:10px; font-size:13.5px; font-weight:600; color:var(--acc);
     border:1px solid var(--acc); border-radius:999px; padding:5px 14px; text-decoration:none; }
   .adv-web:hover { background:rgba(57,180,142,.12); }
@@ -91,6 +105,18 @@
   <h2>Historial completo</h2>
   <ul class="req">
         </ul>
+  <article class="nov">
+    <h2>Reseñas y estrellas en las fichas de asesores + atribución UTM <span class="ver">v1.52.0 · 19 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>Valoración 0-5 y reseñas de usuarios en cada ficha:</strong> la página del directorio muestra media de estrellas, número de reseñas y las reseñas completas plegadas («Leer reseñas»), con autor y fecha; en la app, la mini-ficha enseña las estrellas y enlaza a la ficha completa (ancla por asesor). Fichas sin reseñas: «Aún sin reseñas».</li>
+      <li><strong>«Valorar a este asesor»:</strong> cada ficha lleva un enlace que abre un correo pre-rellenado (puntuación, experiencia y si el contacto llegó vía Wayfare). Las reseñas se revisan a mano antes de publicarse — jamás se inventan — y así lo declara el descargo de la página.</li>
+      <li><strong>Atribución medible:</strong> todos los enlaces salientes a webs de asesores llevan ahora <code>utm_source=wayfare</code> — cada profesional puede ver en su propia analítica el tráfico que le enviamos, sin depender de nuestros números.</li>
+      <li>Las reseñas de la demo son ficticias y van marcadas «(Reseña de ejemplo)» bajo el banner de demostración; siguen a la espera los 20 profesionales reales cotejados (opt-in).</li>
+      <li>Datos: sources.json intacto (misma auditoría, MATCH 1045 / 0 conflictos).</li>
+      <li>Volver aquí: <code>git checkout v1.52.0</code>.</li>
+    </ul>
+  </article>
+
   <article class="nov">
     <h2>Panel plegable en escritorio + sección de asesores (demo con perfiles ficticios) <span class="ver">v1.51.0 · 19 de julio de 2026</span></h2>
     <ul class="req">

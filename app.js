@@ -1447,7 +1447,23 @@ function CountryDetail({ t, lang, result, profile, onCompare }) {
       (() => {
         const adv = advInfo;
         if (!adv || !adv.advisors || !adv.advisors.length) return null;
-        return /* @__PURE__ */ React.createElement("div", { className: "visa-card adv-card-app" }, /* @__PURE__ */ React.createElement("details", { className: "vc-acc adv-acc", ref: advRef }, /* @__PURE__ */ React.createElement("summary", { className: "vc-acc-sum" }, /* @__PURE__ */ React.createElement("span", { className: "vc-acc-label" }, "\u{1F9D1}\u200D\u{1F4BC} ", t("adv_section")), /* @__PURE__ */ React.createElement("span", { className: "vc-acc-count" }, adv.advisors.length)), /* @__PURE__ */ React.createElement("div", { className: "vc-acc-body adv-list" }, window.ADVISORS_APP_DEMO ? /* @__PURE__ */ React.createElement("div", { className: "adv-demo-note" }, "\u26A0 ", t("adv_demo_note")) : null, adv.advisors.map((a) => /* @__PURE__ */ React.createElement("div", { className: "adv-mini", key: a.slug }, /* @__PURE__ */ React.createElement("div", { className: "adv-mini-head" }, a.photo ? /* @__PURE__ */ React.createElement("img", { className: "adv-ava", src: a.photo, alt: "", loading: "lazy" }) : /* @__PURE__ */ React.createElement("div", { className: "adv-ava adv-ava-txt", "aria-hidden": "true" }, a.name.split(/\s+/).slice(0, 2).map((w) => w[0]).join("").toUpperCase()), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "adv-mini-name" }, a.name), a.firm || a.city ? /* @__PURE__ */ React.createElement("div", { className: "adv-mini-firm" }, [a.firm, a.city].filter(Boolean).join(" \xB7 ")) : null)), /* @__PURE__ */ React.createElement("div", { className: "adv-mini-row" }, /* @__PURE__ */ React.createElement(
+        return /* @__PURE__ */ React.createElement("div", { className: "visa-card adv-card-app" }, /* @__PURE__ */ React.createElement("details", { className: "vc-acc adv-acc", ref: advRef }, /* @__PURE__ */ React.createElement("summary", { className: "vc-acc-sum" }, /* @__PURE__ */ React.createElement("span", { className: "vc-acc-label" }, "\u{1F9D1}\u200D\u{1F4BC} ", t("adv_section")), /* @__PURE__ */ React.createElement("span", { className: "vc-acc-count" }, adv.advisors.length)), /* @__PURE__ */ React.createElement("div", { className: "vc-acc-body adv-list" }, window.ADVISORS_APP_DEMO ? /* @__PURE__ */ React.createElement("div", { className: "adv-demo-note" }, "\u26A0 ", t("adv_demo_note")) : null, adv.advisors.map((a) => /* @__PURE__ */ React.createElement("div", { className: "adv-mini", key: a.slug }, /* @__PURE__ */ React.createElement("div", { className: "adv-mini-head" }, a.photo ? /* @__PURE__ */ React.createElement("img", { className: "adv-ava", src: a.photo, alt: "", loading: "lazy" }) : /* @__PURE__ */ React.createElement("div", { className: "adv-ava adv-ava-txt", "aria-hidden": "true" }, a.name.split(/\s+/).slice(0, 2).map((w) => w[0]).join("").toUpperCase()), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "adv-mini-name" }, a.name), a.firm || a.city ? /* @__PURE__ */ React.createElement("div", { className: "adv-mini-firm" }, [a.firm, a.city].filter(Boolean).join(" \xB7 ")) : null, a.ratingCount ? /* @__PURE__ */ React.createElement(
+          "a",
+          {
+            className: "adv-mini-stars",
+            target: "_blank",
+            rel: "noopener noreferrer",
+            href: "seo/asesores.html#" + a.slug,
+            title: t("adv_reviews_title")
+          },
+          /* @__PURE__ */ React.createElement("span", { "aria-hidden": "true" }, "\u2605".repeat(Math.round(a.ratingAvg)) + "\u2606".repeat(5 - Math.round(a.ratingAvg))),
+          " ",
+          lang === "es" ? String(a.ratingAvg).replace(".", ",") : a.ratingAvg,
+          " \xB7 ",
+          a.ratingCount,
+          " ",
+          t("adv_reviews")
+        ) : null)), /* @__PURE__ */ React.createElement("div", { className: "adv-mini-row" }, /* @__PURE__ */ React.createElement(
           "a",
           {
             className: "adv-mini-lic",
