@@ -6,7 +6,7 @@
 <link rel="icon" type="image/svg+xml" href="../assets/brand/wayfare-favicon.svg" />
 <link rel="apple-touch-icon" sizes="180x180" href="../assets/brand/wayfare-touch-180.png" />
 <title>Novedades de reglas de visas — changelog público | Wayfare</title>
-<meta name="description" content="Registro público de cada cambio de datos y reglas de Wayfare: 69 versiones con fecha, qué cambió y por qué. Transparencia total." />
+<meta name="description" content="Registro público de cada cambio de datos y reglas de Wayfare: 71 versiones con fecha, qué cambió y por qué. Transparencia total." />
 <style>
   :root { --bg:#0b0d1a; --card:#141830; --line:#242a4a; --ink:#e9ebf6; --dim:#9aa0c2; --acc:#7E84F5; --amber:#d9b26a; }
   * { margin:0; box-sizing:border-box; }
@@ -131,12 +131,31 @@
   <p class="src"><a href="index.html" style="text-decoration:none">Wayfare</a> · datos de visas verificados contra fuentes oficiales</p>
   <h1>Novedades de reglas de visas</h1>
   <p>Cada cambio de datos o de reglas queda registrado aquí con su versión y su fecha — el mismo registro interno que usamos para poder volver atrás, publicado tal cual. <a href="feed.xml">Suscríbete al feed</a> para enterarte cuando cambie una tarifa, un cupo o una fecha de apertura.</p>
-  <div class="verified">✓ Fuentes revisadas por última vez: 19 de julio de 2026</div><button class="print-btn" onclick="window.print()" title="Imprime o guarda como PDF tu checklist de esta ruta">🖨 Guardar checklist (PDF)</button>
+  <div class="verified">✓ Fuentes revisadas por última vez: 20 de julio de 2026</div><button class="print-btn" onclick="window.print()" title="Imprime o guarda como PDF tu checklist de esta ruta">🖨 Guardar checklist (PDF)</button>
   
   
   <h2>Historial completo</h2>
   <ul class="req">
         </ul>
+  <article class="nov">
+    <h2>Globo blindado: texturas y fronteras auto-hospedadas (idea #19) <span class="ver">v1.55.0 · 20 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>Riesgo eliminado:</strong> las imágenes de la Tierra (blue-marble, night, dark, topología) y el geojson de fronteras (Natural Earth 110m) se descargaban en runtime de unpkg y GitHub <strong>sin versión fijada</strong> — si esos ficheros cambiaban o desaparecían, el globo se rompía solo. Ahora viajan con el sitio en <code>assets/world/</code> (~3 MB, en git).</li>
+      <li><code>ui/Globe.jsx</code> y <code>ui/BackgroundGlobe.jsx</code> apuntan a rutas locales; cero peticiones a CDNs ajenos en runtime para el globo. Re-captura documentada e idempotente: <code>tools/build/fetchWorldAssets.mjs</code> (fuentes y fecha de captura en el propio script).</li>
+      <li>Beneficio extra: la app de producción ya no depende de terceros para renderizar el globo (solo quedan las fuentes de Google como dependencia externa — idea #17).</li>
+      <li>Datos: sources.json intacto (misma auditoría, MATCH 1045 / 0 conflictos).</li>
+      <li>Volver aquí: <code>git checkout v1.55.0</code>.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Icono de inicio: W y estrella en blanco puro <span class="ver">v1.54.2 · 19 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>Feedback del usuario:</strong> la W del icono instalable se veía apagada — el símbolo pasa del crema #eceefb a blanco puro #ffffff en los PNG del icono (512/192/180 regenerados). El resto del sistema de logo (topbar, favicon del navegador) no cambia.</li>
+      <li>Volver aquí: <code>git checkout v1.54.2</code>.</li>
+    </ul>
+  </article>
+
   <article class="nov">
     <h2>Icono de pantalla de inicio (iOS/Android) con la insignia W-Ruta <span class="ver">v1.54.1 · 19 de julio de 2026</span></h2>
     <ul class="req">

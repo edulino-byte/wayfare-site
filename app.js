@@ -567,8 +567,8 @@ Object.assign(window, {
 });
 
 /* ===== ui/BackgroundGlobe.jsx ===== */
-const BG_GLOBE_TEXTURE = "https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg";
-const BG_BUMP_URL = "https://unpkg.com/three-globe/example/img/earth-topology.png";
+const BG_GLOBE_TEXTURE = "assets/world/earth-blue-marble.jpg";
+const BG_BUMP_URL = "assets/world/earth-topology.png";
 function paintStars(canvas) {
   const W = canvas.width, H = canvas.height;
   const ctx = canvas.getContext("2d");
@@ -844,7 +844,7 @@ function Processing({ t, onDone }) {
 window.Processing = Processing;
 
 /* ===== ui/Globe.jsx ===== */
-const GEOJSON_URL = "https://raw.githubusercontent.com/vasturiano/globe.gl/master/example/datasets/ne_110m_admin_0_countries.geojson";
+const GEOJSON_URL = "assets/world/ne_110m_admin_0_countries.geojson";
 const MICRO_DEST_COORDS = {
   SG: { lat: 1.35, lng: 103.82 },
   MT: { lat: 35.94, lng: 14.38 },
@@ -852,11 +852,11 @@ const MICRO_DEST_COORDS = {
 };
 const ADVISORS_APP = window.ADVISORS_APP || {};
 const GLOBE_TEXTURES = {
-  textured: "https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg",
-  night: "https://unpkg.com/three-globe/example/img/earth-night.jpg",
-  dark: "https://unpkg.com/three-globe/example/img/earth-dark.jpg"
+  textured: "assets/world/earth-blue-marble.jpg",
+  night: "assets/world/earth-night.jpg",
+  dark: "assets/world/earth-dark.jpg"
 };
-const BUMP_URL = "https://unpkg.com/three-globe/example/img/earth-topology.png";
+const BUMP_URL = "assets/world/earth-topology.png";
 const STATUS_RGB = {
   eligible: [38, 140, 90],
   /* sage-teal green — softer than #1f9d57     */

@@ -4,7 +4,23 @@
   <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
   <link rel="self" href="https://edulino-byte.github.io/wayfare-site/seo/feed.xml"/>
   <id>https://edulino-byte.github.io/wayfare-site/seo/feed.xml</id>
-  <updated>2026-07-19T09:00:00Z</updated>
+  <updated>2026-07-20T09:00:00Z</updated>
+
+  <entry>
+    <title>Globo blindado: texturas y fronteras auto-hospedadas (idea #19) (v1.55.0)</title>
+    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.55.0</id>
+    <updated>2026-07-20T09:00:00Z</updated>
+    <summary>**Riesgo eliminado:** las imágenes de la Tierra (blue-marble, night, dark, topología) y el geojson de fronteras (Natural Earth 110m) se descargaban en runtime de unpkg y GitHub **sin versión fijada** — si esos ficheros cambiaban o desaparecían, el globo se rompía solo. Ahora viajan con el sitio en `assets/world/` (~3 MB, en git). — `ui/Globe.jsx` y `ui/BackgroundGlobe.jsx` apuntan a rutas locales; cero peticiones a CDNs ajenos en runtime para el globo. Re-captura documentada </summary>
+  </entry>
+
+  <entry>
+    <title>Icono de inicio: W y estrella en blanco puro (v1.54.2)</title>
+    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.54.2</id>
+    <updated>2026-07-19T09:00:00Z</updated>
+    <summary>**Feedback del usuario:** la W del icono instalable se veía apagada — el símbolo pasa del crema #eceefb a blanco puro #ffffff en los PNG del icono (512/192/180 regenerados). El resto del sistema de logo (topbar, favicon del navegador) no cambia. — Volver aquí: `git checkout v1.54.2`.</summary>
+  </entry>
 
   <entry>
     <title>Icono de pantalla de inicio (iOS/Android) con la insignia W-Ruta (v1.54.1)</title>
@@ -148,21 +164,5 @@
     <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.42.2</id>
     <updated>2026-07-18T09:00:00Z</updated>
     <summary>**Petición del usuario:** el globo del cuestionario se veía «con neblina» en claro (lo había atenuado a opacidad 0.32 para que no se comiera el título). — Nuevo enfoque: el globo vuelve a plena intensidad (solo `brightness(1.05)` de luz de día) y la legibilidad la protege un **halo de luz** en el propio texto del título y subtítulo (`text-shadow` claro en 3 capas), el mismo truco que usamos en oscuro con las banderas pero invertido. — Tema noche intacto. Sin cambios de datos </summary>
-  </entry>
-
-  <entry>
-    <title>Parche: el tema claro es CIELO de día, no blanco papel (v1.42.1)</title>
-    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
-    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.42.1</id>
-    <updated>2026-07-18T09:00:00Z</updated>
-    <summary>**Petición del usuario:** que el modo claro se sienta como el día, no como papel. — Paleta clara re-afinada a celestes: cénit azul arriba (`#a5cbe8`), horizonte pálido abajo (`#e9f4fa`) y un resplandor cálido de sol arriba a la derecha (radial cálido). Tinta azul pizarra (`#17303c`) en lugar del verde grisáceo. — El degradado de cielo se aplica a cuestionario, procesado y escenario del globo; la barra fija funde con el horizonte; `theme-color` móvil pasa al azul del cénit.</summary>
-  </entry>
-
-  <entry>
-    <title>Tema día/noche automático (móvil y ordenador) (v1.42.0)</title>
-    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
-    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.42.0</id>
-    <updated>2026-07-18T09:00:00Z</updated>
-    <summary>**Petición del usuario:** que la app se adapte al tema del dispositivo (día/noche). — Mecanismo: `prefers-color-scheme` (CSS puro) — el sistema operativo del móvil o del ordenador comunica su modo y la app cambia al instante, sin recargar y sin botones. — `styles.css`: bloque claro que re-declara los tokens (--glass, --on-dark, --space-*…); el tema oscuro de siempre queda intacto como base. `color-scheme: dark`/`light` para que los controles nativos (selects, scrollbars) acom</summary>
   </entry>
 </feed>
