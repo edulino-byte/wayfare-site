@@ -538,6 +538,22 @@ const WAYFARE_PERF = (() => {
     }
   };
 })();
+function wfTrack(path) {
+  try {
+    if (wfTrack._sent[path]) return;
+    wfTrack._sent[path] = true;
+    let intentos = 0;
+    (function enviar() {
+      if (window.goatcounter && window.goatcounter.count) {
+        window.goatcounter.count({ path, event: true });
+      } else if (intentos++ < 20) {
+        setTimeout(enviar, 500);
+      }
+    })();
+  } catch (e) {
+  }
+}
+wfTrack._sent = {};
 function destroyGlobe(world, host) {
   try {
     if (world && typeof world._destructor === "function") {
@@ -563,7 +579,8 @@ Object.assign(window, {
   Slider,
   Chips,
   destroyGlobe,
-  WAYFARE_PERF
+  WAYFARE_PERF,
+  wfTrack
 });
 
 /* ===== ui/BackgroundGlobe.jsx ===== */
@@ -672,12 +689,18 @@ window.BackgroundGlobe = BackgroundGlobe;
 /* ===== ui/Questionnaire.jsx ===== */
 function Questionnaire({ t, lang, profile, setProfile, onSubmit, onBack, onDiscard, dirty, onReset }) {
   const D = window.VISA_DATA;
-  const set = (k, v) => setProfile((p) => Object.assign({}, p, { [k]: v }));
-  const toggleIn = (k, v) => setProfile((p) => {
-    const arr = p[k] || [];
-    const next = arr.includes(v) ? arr.filter((x) => x !== v) : arr.concat(v);
-    return Object.assign({}, p, { [k]: next });
-  });
+  const set = (k, v) => {
+    wfTrack("embudo-2-interaccion");
+    setProfile((p) => Object.assign({}, p, { [k]: v }));
+  };
+  const toggleIn = (k, v) => {
+    wfTrack("embudo-2-interaccion");
+    setProfile((p) => {
+      const arr = p[k] || [];
+      const next = arr.includes(v) ? arr.filter((x) => x !== v) : arr.concat(v);
+      return Object.assign({}, p, { [k]: next });
+    });
+  };
   const passportOpts = D.PASSPORTS.map((p) => ({ value: p.code, label: isoToFlag(p.code) + "  " + countryName(p.code, lang) })).sort((a, b) => a.label.localeCompare(b.label));
   const residenceSource = D.RESIDENCES || D.PASSPORTS;
   const residenceOpts = residenceSource.map((r) => ({ value: r.code, label: isoToFlag(r.code) + "  " + (countryName(r.code, lang) || r.code) })).sort((a, b) => a.label.localeCompare(b.label));
@@ -1052,6 +1075,8 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
       if (!d.r) return;
       selRef.current = null;
       setSelected(Object.assign({}, d.r, { iso: d.iso }));
+      wfTrack("embudo-5-destino");
+      wfTrack("destino-" + d.iso);
       setDetailOpen(true);
       world.controls().autoRotate = false;
       world.pointOfView({ lat: d.lat, lng: d.lng - 12, altitude: 1.2 }, 900);
@@ -1190,6 +1215,8 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
       selRef.current = d;
       const r = results[d.__id];
       setSelected(r ? Object.assign({}, r, { iso: d.__iso || r.iso }) : null);
+      wfTrack("embudo-5-destino");
+      if (d.__iso || r && r.iso) wfTrack("destino-" + (d.__iso || r.iso));
       setDetailOpen(true);
       world.controls().autoRotate = false;
       world.polygonAltitude(altOf).polygonCapColor(capColor).polygonStrokeColor(strokeColor);
@@ -1312,7 +1339,10 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
       lang,
       result: selected,
       profile,
-      onCompare: () => setCompareIso(selected.iso === "NZ" ? "AU" : "NZ")
+      onCompare: () => {
+        wfTrack("embudo-6-profundiza");
+        setCompareIso(selected.iso === "NZ" ? "AU" : "NZ");
+      }
     }
   ))) : null, selected && compareIso ? /* @__PURE__ */ React.createElement(
     CompareView,
@@ -1382,6 +1412,7 @@ function CountryDetail({ t, lang, result, profile, onCompare }) {
     if (!el) return;
     el.open = true;
     el.scrollIntoView({ behavior: "smooth", block: "center" });
+    wfTrack("embudo-6-profundiza");
     try {
       if (window.goatcounter) window.goatcounter.count({ path: "adv-open-" + result.iso, event: true });
     } catch (e) {
@@ -1524,7 +1555,17 @@ function EvidenceRow({ t, lang, className, icon, text, fact }) {
       onClick: () => setOpen(!open)
     },
     /* @__PURE__ */ React.createElement("svg", { width: "11", height: "11", viewBox: "0 0 24 24", fill: "none" }, /* @__PURE__ */ React.createElement("path", { d: "M2 4h6a4 4 0 014 4v13a3 3 0 00-3-3H2V4z", stroke: "currentColor", strokeWidth: "2", strokeLinejoin: "round" }), /* @__PURE__ */ React.createElement("path", { d: "M22 4h-6a4 4 0 00-4 4v13a3 3 0 013-3h7V4z", stroke: "currentColor", strokeWidth: "2", strokeLinejoin: "round" }))
-  )), open ? /* @__PURE__ */ React.createElement("div", { className: "ev-panel" }, /* @__PURE__ */ React.createElement("div", { className: "ev-quote" }, "\u201C", fact.x, "\u201D"), /* @__PURE__ */ React.createElement("div", { className: "ev-meta" }, /* @__PURE__ */ React.createElement("a", { href: fact.u, target: "_blank", rel: "noopener noreferrer" }, t("ev_source"), " \u2197"), dateStr ? /* @__PURE__ */ React.createElement("span", null, " \xB7 ", t("ev_captured"), dateStr) : null, fact.r ? /* @__PURE__ */ React.createElement("span", { className: "ev-review" }, " \xB7 ", t("ev_review")) : null)) : null);
+  )), open ? /* @__PURE__ */ React.createElement("div", { className: "ev-panel" }, /* @__PURE__ */ React.createElement("div", { className: "ev-quote" }, "\u201C", fact.x, "\u201D"), /* @__PURE__ */ React.createElement("div", { className: "ev-meta" }, /* @__PURE__ */ React.createElement(
+    "a",
+    {
+      href: fact.u,
+      target: "_blank",
+      rel: "noopener noreferrer",
+      onClick: () => wfTrack("embudo-6-profundiza")
+    },
+    t("ev_source"),
+    " \u2197"
+  ), dateStr ? /* @__PURE__ */ React.createElement("span", null, " \xB7 ", t("ev_captured"), dateStr) : null, fact.r ? /* @__PURE__ */ React.createElement("span", { className: "ev-review" }, " \xB7 ", t("ev_review")) : null)) : null);
 }
 function DataFreshness({ t, lang, iso, synthetic }) {
   if (synthetic) return null;
@@ -1536,7 +1577,17 @@ function DataFreshness({ t, lang, iso, synthetic }) {
     lang === "es" ? "es-ES" : "en-GB",
     { day: "numeric", month: "short", year: "numeric" }
   );
-  return /* @__PURE__ */ React.createElement("div", { className: "verified-note" }, /* @__PURE__ */ React.createElement("svg", { width: "12", height: "12", viewBox: "0 0 24 24", fill: "none", style: { flexShrink: 0, marginTop: "1px" } }, /* @__PURE__ */ React.createElement("path", { d: "M5 12l5 5L19 7", stroke: "currentColor", strokeWidth: "2.4", strokeLinecap: "round", strokeLinejoin: "round" })), /* @__PURE__ */ React.createElement("span", null, t("g_verified_prefix"), dateStr, v.monitored ? " \xB7 " + t("g_verified_monitor") : "", " \xB7 ", /* @__PURE__ */ React.createElement("a", { className: "method-link", href: "seo/como-verificamos.html", target: "_blank", rel: "noopener noreferrer" }, t("g_method_link"))));
+  return /* @__PURE__ */ React.createElement("div", { className: "verified-note" }, /* @__PURE__ */ React.createElement("svg", { width: "12", height: "12", viewBox: "0 0 24 24", fill: "none", style: { flexShrink: 0, marginTop: "1px" } }, /* @__PURE__ */ React.createElement("path", { d: "M5 12l5 5L19 7", stroke: "currentColor", strokeWidth: "2.4", strokeLinecap: "round", strokeLinejoin: "round" })), /* @__PURE__ */ React.createElement("span", null, t("g_verified_prefix"), dateStr, v.monitored ? " \xB7 " + t("g_verified_monitor") : "", " \xB7 ", /* @__PURE__ */ React.createElement(
+    "a",
+    {
+      className: "method-link",
+      href: "seo/como-verificamos.html",
+      target: "_blank",
+      rel: "noopener noreferrer",
+      onClick: () => wfTrack("embudo-6-profundiza")
+    },
+    t("g_method_link")
+  )));
 }
 function EmptyState({ t }) {
   return /* @__PURE__ */ React.createElement("div", { className: "empty" }, /* @__PURE__ */ React.createElement("div", { className: "ic" }, /* @__PURE__ */ React.createElement("svg", { width: "24", height: "24", viewBox: "0 0 24 24", fill: "none" }, /* @__PURE__ */ React.createElement("circle", { cx: "11", cy: "11", r: "7", stroke: "currentColor", strokeWidth: "1.8" }), /* @__PURE__ */ React.createElement("path", { d: "M16 16l4 4", stroke: "currentColor", strokeWidth: "1.8", strokeLinecap: "round" }))), /* @__PURE__ */ React.createElement("h3", null, t("g_no_selection")), /* @__PURE__ */ React.createElement("p", null, t("g_no_selection_sub")));
@@ -1614,6 +1665,9 @@ function App() {
   React.useEffect(() => {
     saveStored(STORE_SUBMITTED, submitted);
   }, [submitted]);
+  React.useEffect(() => {
+    wfTrack(submitted ? "embudo-0-retorno" : "embudo-1-cuestionario");
+  }, []);
   const resetAll = React.useCallback(() => {
     saveStored(STORE_PROFILE, null);
     saveStored(STORE_SUBMITTED, null);
@@ -1664,6 +1718,7 @@ function App() {
       setProfile,
       onSubmit: () => {
         window.scrollTo(0, 0);
+        wfTrack(submitted ? "embudo-3b-reenvio" : "embudo-3-envio");
         setSubmitted({ profile: Object.assign({}, profile), version: (submitted ? submitted.version : 0) + 1 });
         setScreen("processing");
       },
@@ -1672,7 +1727,10 @@ function App() {
       dirty: submitted ? JSON.stringify(profile) !== JSON.stringify(submitted.profile) : false,
       onReset: resetAll
     }
-  ), screen === "processing" && /* @__PURE__ */ React.createElement(Processing, { t: tr, onDone: () => setScreen("globe") }), submitted && screen !== "processing" && /* @__PURE__ */ React.createElement("div", { style: { display: screen === "globe" ? "contents" : "none" } }, /* @__PURE__ */ React.createElement(
+  ), screen === "processing" && /* @__PURE__ */ React.createElement(Processing, { t: tr, onDone: () => {
+    wfTrack("embudo-4-mapa");
+    setScreen("globe");
+  } }), submitted && screen !== "processing" && /* @__PURE__ */ React.createElement("div", { style: { display: screen === "globe" ? "contents" : "none" } }, /* @__PURE__ */ React.createElement(
     GlobeView,
     {
       key: submitted.version,
