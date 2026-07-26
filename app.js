@@ -569,6 +569,16 @@ function destroyGlobe(world, host) {
     while (host.firstChild) host.removeChild(host.firstChild);
   }
 }
+function useGlobeLib() {
+  const [ready, setReady] = React.useState(!!window.Globe);
+  React.useEffect(() => {
+    if (ready) return;
+    const h = () => setReady(true);
+    window.addEventListener("wayfare:globe-ready", h, { once: true });
+    return () => window.removeEventListener("wayfare:globe-ready", h);
+  }, [ready]);
+  return ready;
+}
 function estampaResultado({ nE, nP, t }) {
   try {
     const S = 1080;
@@ -651,7 +661,8 @@ Object.assign(window, {
   destroyGlobe,
   WAYFARE_PERF,
   wfTrack,
-  estampaResultado
+  estampaResultado,
+  useGlobeLib
 });
 
 /* ===== ui/BackgroundGlobe.jsx ===== */
@@ -691,6 +702,7 @@ function BackgroundGlobe() {
   const starsRef = React.useRef(null);
   const hostRef = React.useRef(null);
   const globeRef = React.useRef(null);
+  const globeLib = useGlobeLib();
   React.useEffect(() => {
     const canvas = starsRef.current;
     if (!canvas) return;
@@ -704,6 +716,7 @@ function BackgroundGlobe() {
     return () => window.removeEventListener("resize", sizeAndPaint);
   }, []);
   React.useEffect(() => {
+    if (!globeLib) return;
     const host = hostRef.current;
     if (!host || globeRef.current) return;
     const world = window.Globe(window.WAYFARE_PERF.globeConfig)(host).width(host.clientWidth).height(host.clientHeight).backgroundColor("rgba(0,0,0,0)").globeImageUrl(BG_GLOBE_TEXTURE).bumpImageUrl(BG_BUMP_URL).showAtmosphere(true).atmosphereColor("#6b71ea").atmosphereAltitude(0.22);
@@ -739,7 +752,7 @@ function BackgroundGlobe() {
       destroyGlobe(world, host);
       globeRef.current = null;
     };
-  }, []);
+  }, [globeLib]);
   return React.createElement(
     React.Fragment,
     null,
@@ -1020,6 +1033,7 @@ function GlobeStars() {
 function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
   const hostRef = React.useRef(null);
   const globeRef = React.useRef(null);
+  const globeLib = useGlobeLib();
   const [features, setFeatures] = React.useState(null);
   const [results, setResults] = React.useState(null);
   const [micros, setMicros] = React.useState([]);
@@ -1071,7 +1085,7 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
     };
   }, []);
   React.useEffect(() => {
-    if (!features || !results || !hostRef.current || globeRef.current) return;
+    if (!globeLib || !features || !results || !hostRef.current || globeRef.current) return;
     const host = hostRef.current;
     const G = window.Globe;
     const microPills = [];
