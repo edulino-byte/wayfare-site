@@ -6,7 +6,17 @@
 <link rel="icon" type="image/svg+xml" href="../assets/brand/wayfare-favicon.svg" />
 <link rel="apple-touch-icon" sizes="180x180" href="../assets/brand/wayfare-touch-180.png" />
 <title>Novedades de reglas de visas — changelog público | Wayfare</title>
-<meta name="description" content="Registro público de cada cambio de datos y reglas de Wayfare: 71 versiones con fecha, qué cambió y por qué. Transparencia total." />
+<meta name="description" content="Registro público de cada cambio de datos y reglas de Wayfare: 74 versiones con fecha, qué cambió y por qué. Transparencia total." />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Wayfare" />
+<meta property="og:title" content="Novedades de reglas de visas — changelog público | Wayfare" />
+<meta property="og:description" content="Registro público de cada cambio de datos y reglas de Wayfare: 74 versiones con fecha, qué cambió y por qué. Transparencia total." />
+<meta property="og:image" content="https://edulino-byte.github.io/wayfare-site/assets/brand/wayfare-og-card.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:locale" content="es_ES" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://edulino-byte.github.io/wayfare-site/assets/brand/wayfare-og-card.png" />
 <style>
   :root { --bg:#0b0d1a; --card:#141830; --line:#242a4a; --ink:#e9ebf6; --dim:#9aa0c2; --acc:#7E84F5; --amber:#d9b26a; }
   * { margin:0; box-sizing:border-box; }
@@ -131,12 +141,49 @@
   <p class="src"><a href="index.html" style="text-decoration:none">Wayfare</a> · datos de visas verificados contra fuentes oficiales</p>
   <h1>Novedades de reglas de visas</h1>
   <p>Cada cambio de datos o de reglas queda registrado aquí con su versión y su fecha — el mismo registro interno que usamos para poder volver atrás, publicado tal cual. <a href="feed.xml">Suscríbete al feed</a> para enterarte cuando cambie una tarifa, un cupo o una fecha de apertura.</p>
-  <div class="verified">✓ Fuentes revisadas por última vez: 20 de julio de 2026</div><button class="print-btn" onclick="window.print()" title="Imprime o guarda como PDF tu checklist de esta ruta">🖨 Guardar checklist (PDF)</button>
+  <div class="verified">✓ Fuentes revisadas por última vez: 26 de julio de 2026</div><button class="print-btn" onclick="window.print()" title="Imprime o guarda como PDF tu checklist de esta ruta">🖨 Guardar checklist (PDF)</button>
   
   
   <h2>Historial completo</h2>
   <ul class="req">
         </ul>
+  <article class="nov">
+    <h2>Francia re-anclada: URL nueva de vacances-travail <span class="ver">v1.58.0 · 26 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>Cambio real del drift 24-jul resuelto</strong>: france-visas reestructuró su web y la URL registrada (<code>…/jeune-voyageur-vacances-travail</code>) da <strong>404</strong>. La ruta FR.work_and_holiday.francevisas apunta ahora a la página nueva <code>https://france-visas.gouv.fr/fr/jeunes-voyageurs</code>, verificada con navegador.</li>
+      <li><strong>Contenido cotejado</strong>: los 16 países del acuerdo IDÉNTICOS; el «motif principal … découverte touristique et culturelle» literal; la edad ahora viene POR PAÍS (hasta el día del 30º cumpleaños CL/EC/HK/MX/PE; víspera del 31º BR/CO/KR/JP/NZ/RU/TW/UY; víspera del 36º AR/AU/CA) — compatible con la app, extractos re-anclados.</li>
+      <li><strong>Vigilante</strong>: <code>france-visas.gouv.fr</code> a MANUAL_DOMAINS (403 activo a robots desde el rediseño; política del proyecto: no disfrazarse — revisión con navegador). Deja de saltar como URGENTE cada semana.</li>
+      <li>Auditoría idéntica: PASS · MATCH 1073 · 0/0/0 · 141 · 102. Backup del cambio en <code>checkpoints/review-closure-2026-07/backups/sources.json.*.fr-url.bak</code>.</li>
+      <li>Volver aquí: <code>git checkout v1.58.0</code>.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Cierre de los 61 REVIEW: datos 100 % decididos (0 pendientes) <span class="ver">v1.57.0 · 26 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>Qué se cerró:</strong> los 61 hechos que el auditor clasificaba como «necesita decisión humana» quedaron resueltos con evidencia del día: <strong>28 promovidos a oficial</strong> (extracto literal verificado en la fuente) y <strong>32 convertidos en decisión documentada</strong> (ausencias confirmadas con render completo o datos que la app decide no modelar); 1 se fusionó (ES <code>agreement_list_currency</code> → <code>agreements_list</code>).</li>
+      <li><strong>Auditoría: PASS con MATCH 1073 · 0 CONFLICT · 0 REVIEW · 141 APP_DECISION · 102 DEFERRED</strong> (predicción del apply clavada). Backup del apply en <code>tools/visa-intelligence/checkpoints/review-closure-2026-07/backups/</code>.</li>
+      <li><strong>Hallazgo clave (NZ):</strong> el rediseño de immigration.govt.nz nombra ahora las industrias de la extensión en cada página («viticulture or horticulture», en tooltips de glosario) y muestra «Visas available each year N» en TODOS los países con cupo → 17 promociones y 20 ausencias confirmadas de una tacada. El texto de los tooltips vive en atributos HTML: detectDrift.py aprendió a incorporarlo (ver cambios de tools).</li>
+      <li><strong>Cambios de app (3, con fuente):</strong> ES bilateral ahora lista los 6 acuerdos oficiales (+Corea BOE 8-nov-2018, +Argentina BOE 26-ene-2023 — Ministerio de Inclusión); KR workation con texto verificado (F-1-D oficial desde 30-jun-2026, MOJ); AU 600 con el subclass 444 verificado (página oficial capturada). i18n ES al día (0 huecos).</li>
+      <li><strong>Sonda nueva:</strong> <code>pe_letter_of_support</code> en AU.462 (el token de la carta solo se emite para nacionalidades afectadas; la sonda lo hace verificable → MATCH).</li>
+      <li>Tools (misma sesión, pre-apply): detectDrift.py blindado — reintentos NZ ante páginas cortas, MANUAL_DOMAINS (+travel.state.gov), tooltips de glosario incorporados.</li>
+      <li>Evidencia y veredictos: <code>tools/visa-intelligence/checkpoints/review-closure-2026-07/</code>.</li>
+      <li>Volver aquí: <code>git checkout v1.57.0</code>. Volver a los datos previos: backup del apply.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Embudo de medición (Bloque B de la ruta de 3 meses) <span class="ver">v1.56.0 · 24 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>Qué mide:</strong> el recorrido completo del usuario por etapas, con eventos GoatCounter (sin cookies, sin datos personales): <code>embudo-1-cuestionario</code> (llega un visitante nuevo) / <code>embudo-0-retorno</code> (vuelve uno con perfil guardado) → <code>embudo-2-interaccion</code> (toca el formulario) → <code>embudo-3-envio</code> (pulsa «Map my options»; re-envíos aparte en <code>embudo-3b-reenvio</code>) → <code>embudo-4-mapa</code> (el globo llega a verse) → <code>embudo-5-destino</code> (abre un país) → <code>embudo-6-profundiza</code> (comparador, asesores, fuente oficial o metodología). Además <code>destino-&lt;ISO&gt;</code> para saber qué países interesan más.</li>
+      <li><strong>Regla clave:</strong> cada evento de embudo se emite COMO MUCHO UNA VEZ por carga de página (helper <code>wfTrack</code> en helpers.jsx) — mide cuántas personas llegan a cada etapa, no cuántas veces repiten. En el panel de GoatCounter, la caída entre etapas dice exactamente dónde se pierde la gente.</li>
+      <li>Archivos: helpers.jsx (wfTrack), App.jsx (etapas 0/1, 3, 4), Questionnaire.jsx (etapa 2), Globe.jsx (etapas 5 y 6 + destino-ISO).</li>
+      <li>Datos: sources.json intacto (misma auditoría, MATCH 1045 / 0 conflictos).</li>
+      <li>Contexto de la sesión: proyecto mudado a <code>~/wayfare</code> (el vigilante launchd no podía leer el Escritorio — error 78); evidencia respaldada en <code>~/wayfare-snapshots-backup.zip</code>.</li>
+      <li>Volver aquí: <code>git checkout v1.56.0</code>.</li>
+    </ul>
+  </article>
+
   <article class="nov">
     <h2>Globo blindado: texturas y fronteras auto-hospedadas (idea #19) <span class="ver">v1.55.0 · 20 de julio de 2026</span></h2>
     <ul class="req">

@@ -145,6 +145,12 @@ window.I18N = {
     g_legend_eligible: "May qualify",
     g_legend_partial: "Partial match",
     g_legend_unlikely: "Unlikely",
+    g_share_btn: "Share your map",
+    g_share_text: "My passport could take me to {E} countries (plus {P} more with conditions). Find your own map on Wayfare:",
+    g_share_copied: "Copied! Paste it anywhere — your map image was downloaded too.",
+    g_share_saved: "Your map image was downloaded. Link: edulino-byte.github.io/wayfare-site",
+    g_share_img_countries: "countries are waiting for me",
+    g_share_img_footer: "Find your map · data verified against official sources",
 
     /* statuses */
     st_eligible: "Likely eligible",
@@ -728,6 +734,12 @@ window.I18N = {
     g_legend_eligible: "Podrías calificar",
     g_legend_partial: "Coincidencia parcial",
     g_legend_unlikely: "Poco probable",
+    g_share_btn: "Comparte tu mapa",
+    g_share_text: "Con mi pasaporte puedo irme a {E} países (y a otros {P} con condiciones). Descubre tu propio mapa en Wayfare:",
+    g_share_copied: "¡Copiado! Pégalo donde quieras — la imagen de tu mapa también se ha descargado.",
+    g_share_saved: "Imagen de tu mapa descargada. Enlace: edulino-byte.github.io/wayfare-site",
+    g_share_img_countries: "países me esperan",
+    g_share_img_footer: "Descubre tu mapa · datos verificados contra fuentes oficiales",
 
     st_eligible: "Probablemente elegible",
     st_partial: "Cerca — con vacíos",

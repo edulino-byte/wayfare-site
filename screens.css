@@ -348,6 +348,14 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
   padding: 14px 16px; backdrop-filter: blur(12px); animation: fadeIn .8s ease both; z-index: 2; }
 .legend .row { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--on-dark); font-weight: 600; }
 .legend .sw { width: 12px; height: 12px; border-radius: 4px; }
+/* v1.59.0 — trío de compartir: botón en la leyenda */
+.lg-share { display: flex; align-items: center; gap: 8px; margin-top: 6px; padding: 8px 12px;
+  border: 1px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 10px;
+  background: color-mix(in srgb, var(--accent) 16%, transparent); color: var(--on-dark);
+  font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
+.lg-share:hover { background: color-mix(in srgb, var(--accent) 28%, transparent); }
+.lg-share-done { max-width: 230px; margin-top: 4px; font-size: 11.5px; line-height: 1.35;
+  color: var(--on-dark); opacity: 0.85; }
 
 /* v1.48.0 — mini-banderita redonda de micro-destinos (SG/MT/LI): marcador
    circular con la bandera dentro y aro del color de estado; el nombre solo

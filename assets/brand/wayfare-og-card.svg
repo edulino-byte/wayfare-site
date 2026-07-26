@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <!-- Tarjeta OG/Twitter 1200×630 — v1.59.0 (trío de compartir).
+       Fondo índigo de páginas estáticas (#0b0d1a) + marca W-Ruta (trazados puros,
+       sin fuentes web). Texto con Helvetica (instalada en macOS al rasterizar). -->
+  <defs>
+    <radialGradient id="glow" cx="78%" cy="18%" r="80%">
+      <stop offset="0%" stop-color="#141830"/>
+      <stop offset="60%" stop-color="#0b0d1a"/>
+      <stop offset="100%" stop-color="#05070f"/>
+    </radialGradient>
+    <linearGradient id="arc" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7E84F5" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#7E84F5" stop-opacity="0.05"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <!-- globo sugerido: arco de meridianos a la derecha -->
+  <g fill="none" stroke="url(#arc)" stroke-width="2.5">
+    <circle cx="1050" cy="315" r="260"/>
+    <ellipse cx="1050" cy="315" rx="170" ry="260"/>
+    <ellipse cx="1050" cy="315" rx="70" ry="260"/>
+    <ellipse cx="1050" cy="315" rx="260" ry="90"/>
+    <line x1="790" y1="315" x2="1200" y2="315"/>
+  </g>
+  <!-- destinos: puntos del semáforo sobre el globo -->
+  <circle cx="960" cy="185" r="11" fill="#9da2f8"/>
+  <circle cx="1120" cy="240" r="9" fill="#e8c268"/>
+  <circle cx="1010" cy="415" r="10" fill="#9da2f8"/>
+  <circle cx="1135" cy="390" r="8" fill="#7E84F5"/>
+
+  <!-- marca W-Ruta (misma geometría que wayfare-mark) -->
+  <g transform="translate(84,84) scale(1.35)">
+    <path d="M22,30 L35,72 L50,46 L65,72 L78,30" fill="none" stroke="#7E84F5" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+    <polygon points="50,8 53,19 64,22 53,25 50,40 47,25 36,22 47,19" fill="#7E84F5"/>
+  </g>
+  <text x="230" y="164" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="64" font-weight="700" letter-spacing="-1" fill="#eef3f1">Wayfare</text>
+
+  <!-- mensaje -->
+  <text x="86" y="330" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="58" font-weight="700" fill="#eef3f1">Descubre a qué países</text>
+  <text x="86" y="400" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="58" font-weight="700" fill="#eef3f1">puedes irte con tu pasaporte</text>
+
+  <!-- subtítulo -->
+  <text x="86" y="474" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="30" font-weight="500" fill="#9aa3c7">41 destinos · 102 rutas de visa · verificado contra fuentes oficiales</text>
+
+  <!-- píldora semáforo -->
+  <g transform="translate(86,516)">
+    <rect width="360" height="56" rx="28" fill="#141830" stroke="#2a2f55" stroke-width="1.5"/>
+    <circle cx="36" cy="28" r="10" fill="#7fc98f"/>
+    <circle cx="70" cy="28" r="10" fill="#e8c268"/>
+    <circle cx="104" cy="28" r="10" fill="#e07a6a"/>
+    <text x="132" y="37" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="24" font-weight="600" fill="#cdd3ef">Tu mapa en 2 minutos</text>
+  </g>
+</svg>

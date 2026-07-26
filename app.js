@@ -569,6 +569,76 @@ function destroyGlobe(world, host) {
     while (host.firstChild) host.removeChild(host.firstChild);
   }
 }
+function estampaResultado({ nE, nP, t }) {
+  try {
+    const S = 1080;
+    const cv = document.createElement("canvas");
+    cv.width = S;
+    cv.height = S;
+    const ctx = cv.getContext("2d");
+    const F = "'Space Grotesk', 'Helvetica Neue', Helvetica, sans-serif";
+    const bg = ctx.createRadialGradient(S * 0.8, S * 0.15, 60, S * 0.5, S * 0.5, S);
+    bg.addColorStop(0, "#171b36");
+    bg.addColorStop(0.55, "#0b0d1a");
+    bg.addColorStop(1, "#05070f");
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, S, S);
+    ctx.strokeStyle = "rgba(126,132,245,0.28)";
+    ctx.lineWidth = 3;
+    const gx = S * 0.78, gy = S * 0.2, gr = 190;
+    ctx.beginPath();
+    ctx.arc(gx, gy, gr, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.ellipse(gx, gy, gr * 0.55, gr, 0, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.ellipse(gx, gy, gr, gr * 0.4, 0, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.save();
+    ctx.translate(72, 64);
+    ctx.scale(1.5, 1.5);
+    ctx.strokeStyle = "#7E84F5";
+    ctx.lineWidth = 9;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.stroke(new Path2D("M22,30 L35,72 L50,46 L65,72 L78,30"));
+    ctx.fillStyle = "#7E84F5";
+    ctx.fill(new Path2D("M50,8 L53,19 L64,22 L53,25 L50,40 L47,25 L36,22 L47,19 Z"));
+    ctx.restore();
+    ctx.fillStyle = "#eef3f1";
+    ctx.font = "700 76px " + F;
+    ctx.fillText("Wayfare", 236, 158);
+    ctx.fillStyle = "#9da2f8";
+    ctx.font = "700 300px " + F;
+    ctx.fillText(String(nE), 72, 600);
+    ctx.fillStyle = "#eef3f1";
+    ctx.font = "700 64px " + F;
+    ctx.fillText(t("g_share_img_countries"), 76, 690);
+    ctx.font = "600 40px " + F;
+    ctx.fillStyle = "#7fc98f";
+    ctx.beginPath();
+    ctx.arc(96, 790, 16, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = "#cdd3ef";
+    ctx.fillText(nE + " \xB7 " + t("g_legend_eligible"), 130, 804);
+    ctx.fillStyle = "#e8c268";
+    ctx.beginPath();
+    ctx.arc(96, 866, 16, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = "#cdd3ef";
+    ctx.fillText(nP + " \xB7 " + t("g_legend_partial"), 130, 880);
+    ctx.fillStyle = "rgba(154,163,199,0.9)";
+    ctx.font = "500 34px " + F;
+    ctx.fillText(t("g_share_img_footer"), 72, 972);
+    ctx.fillStyle = "#7E84F5";
+    ctx.font = "700 36px " + F;
+    ctx.fillText("edulino-byte.github.io/wayfare-site", 72, 1022);
+    return new Promise((res) => cv.toBlob((b) => res(b), "image/png"));
+  } catch (e) {
+    return Promise.resolve(null);
+  }
+}
 Object.assign(window, {
   isoToFlag,
   fmt,
@@ -580,7 +650,8 @@ Object.assign(window, {
   Chips,
   destroyGlobe,
   WAYFARE_PERF,
-  wfTrack
+  wfTrack,
+  estampaResultado
 });
 
 /* ===== ui/BackgroundGlobe.jsx ===== */
@@ -1296,6 +1367,44 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
     Object.values(g).forEach((a) => a.sort((x, y) => x.name.localeCompare(y.name)));
     return g;
   }, [features, results, micros, lang]);
+  const [shareMsg, setShareMsg] = React.useState(null);
+  async function compartirMapa() {
+    const nE = grupos ? grupos.eligible.length : 0;
+    const nP = grupos ? grupos.partial.length : 0;
+    const url = "https://edulino-byte.github.io/wayfare-site/";
+    const texto = t("g_share_text").replace("{E}", nE).replace("{P}", nP);
+    wfTrack("compartir-mapa");
+    let archivo = null;
+    try {
+      const blob = await window.estampaResultado({ nE, nP, t });
+      if (blob) archivo = new File([blob], "wayfare-mi-mapa.png", { type: "image/png" });
+    } catch (e) {
+    }
+    try {
+      if (archivo && navigator.canShare && navigator.canShare({ files: [archivo] })) {
+        await navigator.share({ title: "Wayfare", text: texto + " " + url, files: [archivo] });
+      } else if (navigator.share) {
+        await navigator.share({ title: "Wayfare", text: texto, url });
+      } else {
+        let copiado = false;
+        try {
+          await navigator.clipboard.writeText(texto + " " + url);
+          copiado = true;
+        } catch (e) {
+        }
+        if (archivo) {
+          const a = document.createElement("a");
+          a.href = URL.createObjectURL(archivo);
+          a.download = "wayfare-mi-mapa.png";
+          a.click();
+          setTimeout(() => URL.revokeObjectURL(a.href), 4e3);
+        }
+        setShareMsg(copiado ? t("g_share_copied") : t("g_share_saved"));
+        setTimeout(() => setShareMsg(null), 4e3);
+      }
+    } catch (e) {
+    }
+  }
   const irA = (iso) => {
     setOpenGroup(null);
     const f = globeRef.current && globeRef.current.__byIso && globeRef.current.__byIso(iso);
@@ -1331,7 +1440,16 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
     const abierto = openGroup === st;
     const label = st === "eligible" ? "g_legend_eligible" : st === "partial" ? "g_legend_partial" : "g_legend_unlikely";
     return /* @__PURE__ */ React.createElement("div", { key: st, className: "lg-group" + (abierto ? " lg-group--open" : "") }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "row lg-row", onClick: () => setOpenGroup(abierto ? null : st) }, /* @__PURE__ */ React.createElement("span", { className: "sw", style: { background: statusColor(st, 1) } }), t(label), /* @__PURE__ */ React.createElement("span", { className: "lg-count", style: { color: statusColor(st, 1) } }, lista.length), /* @__PURE__ */ React.createElement("svg", { className: "lg-caret", width: "10", height: "10", viewBox: "0 0 24 24", fill: "none" }, /* @__PURE__ */ React.createElement("path", { d: "M9 6l6 6-6 6", stroke: "currentColor", strokeWidth: "2.4", strokeLinecap: "round", strokeLinejoin: "round" }))), abierto ? /* @__PURE__ */ React.createElement("div", { className: "lg-list" }, lista.length ? lista.map((c) => /* @__PURE__ */ React.createElement("button", { type: "button", key: c.iso, className: "lg-item", onClick: () => irA(c.iso) }, /* @__PURE__ */ React.createElement("img", { className: "lg-flag", alt: "", src: "assets/flags/" + c.iso.toLowerCase() + ".svg" }), c.name)) : /* @__PURE__ */ React.createElement("div", { className: "lg-empty" }, "\u2014")) : null);
-  }), /* @__PURE__ */ React.createElement("div", { className: "row" }, /* @__PURE__ */ React.createElement("span", { className: "sw", style: { background: "rgba(148,163,160,0.55)" } }), t("g_legend_nodata"))) : null, selected && detailOpen ? /* @__PURE__ */ React.createElement("aside", { className: "detail-panel" }, /* @__PURE__ */ React.createElement("div", { className: "detail-panel-inner" }, /* @__PURE__ */ React.createElement("button", { className: "detail-panel-close", onClick: closeDetail, "aria-label": "Close" }, /* @__PURE__ */ React.createElement("svg", { width: "14", height: "14", viewBox: "0 0 24 24", fill: "none", "aria-hidden": "true", style: { pointerEvents: "none" } }, /* @__PURE__ */ React.createElement("path", { d: "M18 6L6 18M6 6l12 12", stroke: "currentColor", strokeWidth: "2.2", strokeLinecap: "round" }))), /* @__PURE__ */ React.createElement(
+  }), /* @__PURE__ */ React.createElement("div", { className: "row" }, /* @__PURE__ */ React.createElement("span", { className: "sw", style: { background: "rgba(148,163,160,0.55)" } }), t("g_legend_nodata")), /* @__PURE__ */ React.createElement("button", { type: "button", className: "lg-share", onClick: compartirMapa }, /* @__PURE__ */ React.createElement("svg", { width: "14", height: "14", viewBox: "0 0 24 24", fill: "none", "aria-hidden": "true" }, /* @__PURE__ */ React.createElement(
+    "path",
+    {
+      d: "M12 15V3m0 0L7 8m5-5 5 5M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6",
+      stroke: "currentColor",
+      strokeWidth: "2.2",
+      strokeLinecap: "round",
+      strokeLinejoin: "round"
+    }
+  )), t("g_share_btn")), shareMsg ? /* @__PURE__ */ React.createElement("div", { className: "lg-share-done" }, shareMsg) : null) : null, selected && detailOpen ? /* @__PURE__ */ React.createElement("aside", { className: "detail-panel" }, /* @__PURE__ */ React.createElement("div", { className: "detail-panel-inner" }, /* @__PURE__ */ React.createElement("button", { className: "detail-panel-close", onClick: closeDetail, "aria-label": "Close" }, /* @__PURE__ */ React.createElement("svg", { width: "14", height: "14", viewBox: "0 0 24 24", fill: "none", "aria-hidden": "true", style: { pointerEvents: "none" } }, /* @__PURE__ */ React.createElement("path", { d: "M18 6L6 18M6 6l12 12", stroke: "currentColor", strokeWidth: "2.2", strokeLinecap: "round" }))), /* @__PURE__ */ React.createElement(
     CountryDetail,
     {
       key: selected.iso,
