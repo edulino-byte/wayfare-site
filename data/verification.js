@@ -2,14 +2,14 @@
    Resumen de verificación de datos por destino (Fase 1 · Dato vivo).
    Regenerar: node tools/build/genVerification.mjs */
 window.VERIFICATION = {
-  "generatedAt": "2026-07-24",
+  "generatedAt": "2026-07-26",
   "monitorLastRun": "2026-07-24",
   "destinations": {
     "NZ": {
       "routes": 35,
-      "facts": 654,
+      "facts": 632,
       "monitored": true,
-      "lastCheck": "2026-07-24"
+      "lastCheck": "2026-07-26"
     },
     "AU": {
       "routes": 4,
@@ -19,31 +19,31 @@ window.VERIFICATION = {
     },
     "GB": {
       "routes": 3,
-      "facts": 44,
+      "facts": 42,
       "monitored": true,
       "lastCheck": "2026-07-24"
     },
     "CA": {
       "routes": 3,
-      "facts": 30,
+      "facts": 26,
       "monitored": true,
       "lastCheck": "2026-07-24"
     },
     "PT": {
       "routes": 5,
-      "facts": 19,
+      "facts": 18,
       "monitored": true,
       "lastCheck": "2026-07-24"
     },
     "ES": {
       "routes": 5,
-      "facts": 13,
+      "facts": 11,
       "monitored": true,
       "lastCheck": "2026-07-24"
     },
     "JP": {
       "routes": 3,
-      "facts": 17,
+      "facts": 16,
       "monitored": true,
       "lastCheck": "2026-07-24"
     },
@@ -241,7 +241,7 @@ window.VERIFICATION = {
     },
     "TH": {
       "routes": 1,
-      "facts": 3,
+      "facts": 2,
       "monitored": true,
       "lastCheck": "2026-07-24"
     },

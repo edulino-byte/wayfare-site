@@ -159,7 +159,7 @@ window.Eligibility = (function () {
         score += 62;
         S600.subclass = "444";
         m.push("New Zealand citizens can usually enter Australia under the Trans-Tasman Travel Arrangement (Special Category visa granted on arrival).");
-        w.push("The Trans-Tasman arrangement could not be verified against a captured official source; check the Special Category visa (subclass 444) conditions before travelling.");
+        w.push("As a New Zealand citizen you are usually granted the Special Category visa (subclass 444) on arrival under the Trans-Tasman arrangement - it is free and lets you visit, study and work in Australia.");
       } else if (inList(AU_EVISITOR, nat)) {
         score += 58;
         S600.subclass = "651";
@@ -1206,14 +1206,13 @@ window.Eligibility = (function () {
     },
 
     work_and_holiday: function (p) {
-      /* v1.15.0 — corrección: España SÍ tiene acuerdos de working holiday como
-         destino. Evidencia oficial (Embajada de España en Tokio, capturada
-         14-jul-2026): programa con Japón en vigor desde 1-jul-2017 (18-30 años)
-         y "otros Acuerdos... con Australia, Canadá y Nueva Zelanda". La fuente
-         es un artículo de 2017 => tope partial y verificación con consulado.
-         Acuerdos posteriores (p.ej. Corea, Argentina) sin fuente oficial
-         capturada: no se listan todavía. */
-      var ES_YM = ["JP", "AU", "CA", "NZ"];
+      /* v1.57.0 — lista oficial COMPLETA (Ministerio de Inclusión, «Convenios
+         de movilidad de jóvenes», capturada 26-jul-2026 con navegador): 6
+         acuerdos con referencia BOE — JP (11-may-2017), AU (19-sep-2014),
+         CA (2-feb-2010), NZ (4-may-2010), KR (8-nov-2018), AR (26-ene-2023).
+         Las condiciones por país no están modeladas => tope partial y
+         verificación con consulado. */
+      var ES_YM = ["JP", "AU", "CA", "NZ", "KR", "AR"];
       var m = [], w = [], x = [], score = 0, nat = p.nationality;
       function esYmResult(sc) {
         var r = visaResult("work_and_holiday", sc, m, w, x);
@@ -1222,7 +1221,7 @@ window.Eligibility = (function () {
         return r;
       }
       if (!inList(ES_YM, nat)) {
-        w.push("Spain's working holiday agreements appear limited to certain countries (Japan, Australia, Canada and New Zealand per the latest captured official source). Verify with the Spanish consulate in your country.");
+        w.push("Spain's working holiday agreements cover Japan, Australia, Canada, New Zealand, South Korea and Argentina (official list of the Ministry of Inclusion, with BOE references). Verify current conditions with the Spanish consulate in your country.");
         x.push("passport");
         return esYmResult(10);
       }
@@ -1723,7 +1722,7 @@ window.Eligibility = (function () {
       }
       score += 30; m.push("Your profile indicates remote work, which is the primary condition for this route.");
       w.push("Korea introduced a digital nomad (workation) visa with income and insurance requirements - check the Korea Immigration Service or a Korean embassy for current requirements.");
-      w.push("This route could not be verified against a captured official source yet. Treat as preliminary guidance.");
+      w.push("The F-1-D workation visa was officially launched on 30 June 2026: income thresholds range from about 1 to 2 times Korea's GNI per capita depending on age and region, and private health insurance is required.");
       return krDnv(clamp(score, 0, 45));
     },
   };
