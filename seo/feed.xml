@@ -7,6 +7,22 @@
   <updated>2026-07-26T09:00:00Z</updated>
 
   <entry>
+    <title>Datos estructurados + frase de marca (catálogo, tanda 2) (v1.60.0)</title>
+    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.60.0</id>
+    <updated>2026-07-26T09:00:00Z</updated>
+    <summary>**Datos estructurados (JSON-LD)**: `Article` + `BreadcrumbList` en las 79 guías — con `dateModified` = fecha REAL de verificación de fuentes (nuestro diferencial, ahora legible por buscadores) — y `WebSite` + `Organization` en el índice de guías y en la app (dev + build). Helper `jsonLd()` en genSeoPages.mjs. 158 bloques validados como JSON correcto. Deja el posicionamiento listo para cuando se indexe (condición vigente: primer asesor real). — **Frase de marca unificada** (de</summary>
+  </entry>
+
+  <entry>
+    <title>Trío de compartir (catálogo: Producto #1 + Creatividad #1-2) (v1.59.0)</title>
+    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.59.0</id>
+    <updated>2026-07-26T09:00:00Z</updated>
+    <summary>**Primera tanda del Catálogo de Mejoras** (ver PLAN-CATALOGO.md; decisión del usuario: «trío de compartir» primero, indexación se mantiene condicionada al primer asesor real). — **1) Tarjeta al compartir enlaces (OG/Twitter)**: imagen de marca 1200×630 (`assets/brand/wayfare-og-card.{svg,png}`, rasterizada con Chromium — `tools/build/renderOgCard.mjs`; qlmanage genera miniaturas CUADRADAS y deforma). Metas og:/twitter: en app (dev + build), landing (demo.html) y las 79 guías </summary>
+  </entry>
+
+  <entry>
     <title>Francia re-anclada: URL nueva de vacances-travail (v1.58.0)</title>
     <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
     <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.58.0</id>
@@ -148,21 +164,5 @@
     <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.44.3</id>
     <updated>2026-07-18T09:00:00Z</updated>
     <summary>**Feedback real (foto):** en móvil los dos botones de la barra fija salían con tamaños distintos («Back to my map» a ancho completo, «Map my options» encogido y descolocado a la derecha). — Causa: el `margin-left: auto` del botón principal (pensado para el reparto de escritorio) en la columna móvil lo encogía a su contenido y lo empujaba al borde. — Barra móvil rediseñada (≤700px): ambos botones a **ancho completo y misma altura**, el principal **arriba** (más visible y a man</summary>
-  </entry>
-
-  <entry>
-    <title>Parche: la app cabe SIEMPRE en el marco (móvil/tablet/PC) (v1.44.2)</title>
-    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
-    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.44.2</id>
-    <updated>2026-07-18T09:00:00Z</updated>
-    <summary>**Feedback real:** en algunos móviles la app «se salía del marco» (scroll lateral, elementos cortados). Auditoría de desbordamiento a 320/375/768px en las 4 pantallas. — Causas y arreglos: 1. **Grid blowout** en el cuestionario: el ancho mínimo intrínseco de los selects con nombres largos («Equatorial Guinea») empujaba la columna fuera de pantalla → `min-width: 0` en los items del grid + `max-width: 100%` en los controles. 2. **Segmentado** («With family»): `white-space: nowr</summary>
-  </entry>
-
-  <entry>
-    <title>Parche: países alineados en el comparador móvil (v1.44.1)</title>
-    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
-    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.44.1</id>
-    <updated>2026-07-18T09:00:00Z</updated>
-    <summary>**Feedback real (foto de un probador):** en el comparador lado a lado, en móvil, los dos países aparecían a alturas distintas (uno arriba a la derecha, el otro más abajo). — Causa: la cabecera de la rejilla tiene 3 celdas (esquina vacía de la columna de etiquetas + país A + selector del país B); al pasar a 2 columnas en móvil, la esquina vacía ocupaba el primer hueco y cada país caía en una fila distinta. — `screens.css` (bloque ≤560px): la celda-esquina se oculta y ambos paí</summary>
   </entry>
 </feed>

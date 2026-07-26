@@ -6,17 +6,19 @@
 <link rel="icon" type="image/svg+xml" href="../assets/brand/wayfare-favicon.svg" />
 <link rel="apple-touch-icon" sizes="180x180" href="../assets/brand/wayfare-touch-180.png" />
 <title>Novedades de reglas de visas — changelog público | Wayfare</title>
-<meta name="description" content="Registro público de cada cambio de datos y reglas de Wayfare: 74 versiones con fecha, qué cambió y por qué. Transparencia total." />
+<meta name="description" content="Registro público de cada cambio de datos y reglas de Wayfare: 76 versiones con fecha, qué cambió y por qué. Transparencia total." />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="Wayfare" />
 <meta property="og:title" content="Novedades de reglas de visas — changelog público | Wayfare" />
-<meta property="og:description" content="Registro público de cada cambio de datos y reglas de Wayfare: 74 versiones con fecha, qué cambió y por qué. Transparencia total." />
+<meta property="og:description" content="Registro público de cada cambio de datos y reglas de Wayfare: 76 versiones con fecha, qué cambió y por qué. Transparencia total." />
 <meta property="og:image" content="https://edulino-byte.github.io/wayfare-site/assets/brand/wayfare-og-card.png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta property="og:locale" content="es_ES" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:image" content="https://edulino-byte.github.io/wayfare-site/assets/brand/wayfare-og-card.png" />
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Novedades de reglas de visas","description":"Registro público de cada cambio de datos y reglas de Wayfare: 76 versiones con fecha, qué cambió y por qué. Transparencia total.","inLanguage":"es","author":{"@type":"Organization","name":"Wayfare","url":"https://edulino-byte.github.io/wayfare-site"},"publisher":{"@type":"Organization","name":"Wayfare","url":"https://edulino-byte.github.io/wayfare-site","logo":{"@type":"ImageObject","url":"https://edulino-byte.github.io/wayfare-site/assets/brand/wayfare-icon-512.png"}},"image":"https://edulino-byte.github.io/wayfare-site/assets/brand/wayfare-og-card.png","dateModified":"2026-07-26","mainEntityOfPage":"https://edulino-byte.github.io/wayfare-site/seo/novedades.html"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Wayfare","item":"https://edulino-byte.github.io/wayfare-site/"},{"@type":"ListItem","position":2,"name":"Guías de visas","item":"https://edulino-byte.github.io/wayfare-site/seo/index.html"},{"@type":"ListItem","position":3,"name":"Novedades de reglas de visas"}]}</script>
 <style>
   :root { --bg:#0b0d1a; --card:#141830; --line:#242a4a; --ink:#e9ebf6; --dim:#9aa0c2; --acc:#7E84F5; --amber:#d9b26a; }
   * { margin:0; box-sizing:border-box; }
@@ -147,6 +149,30 @@
   <h2>Historial completo</h2>
   <ul class="req">
         </ul>
+  <article class="nov">
+    <h2>Datos estructurados + frase de marca (catálogo, tanda 2) <span class="ver">v1.60.0 · 26 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>Datos estructurados (JSON-LD)</strong>: <code>Article</code> + <code>BreadcrumbList</code> en las 79 guías — con <code>dateModified</code> = fecha REAL de verificación de fuentes (nuestro diferencial, ahora legible por buscadores) — y <code>WebSite</code> + <code>Organization</code> en el índice de guías y en la app (dev + build). Helper <code>jsonLd()</code> en genSeoPages.mjs. 158 bloques validados como JSON correcto. Deja el posicionamiento listo para cuando se indexe (condición vigente: primer asesor real).</li>
+      <li><strong>Frase de marca unificada</strong> (decisión del usuario): «Descubre a qué países puedes irte con tu pasaporte» — ahora idéntica en el título de la app, la landing, el índice de guías y la tarjeta OG (que ya la llevaba).</li>
+      <li>Datos: sources.json intacto (misma auditoría: MATCH 1073 / 0 / 0 REVIEW).</li>
+      <li>Volver aquí: <code>git checkout v1.60.0</code>.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Trío de compartir (catálogo: Producto #1 + Creatividad #1-2) <span class="ver">v1.59.0 · 26 de julio de 2026</span></h2>
+    <ul class="req">
+      <li><strong>Primera tanda del Catálogo de Mejoras</strong> (ver PLAN-CATALOGO.md; decisión del usuario: «trío de compartir» primero, indexación se mantiene condicionada al primer asesor real).</li>
+      <li><strong>1) Tarjeta al compartir enlaces (OG/Twitter)</strong>: imagen de marca 1200×630 (<code>assets/brand/wayfare-og-card.{svg,png}</code>, rasterizada con Chromium — <code>tools/build/renderOgCard.mjs</code>; qlmanage genera miniaturas CUADRADAS y deforma). Metas og:/twitter: en app (dev + build), landing (demo.html) y las 79 guías + índice + directorio (helper <code>ogTags</code> en genSeoPages.mjs).</li>
+      <li><strong>2) Botón «comparte tu mapa»</strong> en la leyenda del globo: navigator.share (móvil, con la imagen adjunta si el dispositivo lo permite) → fallback portapapeles + descarga; aviso visible si el portapapeles se deniega. Evento GoatCounter <code>compartir-mapa</code>. Claves i18n g_share_* (EN+ES).</li>
+      <li><strong>3) Estampa personalizada</strong> (<code>estampaResultado</code> en helpers.jsx): canvas 1080×1080 con marca, «N países me esperan», chips del semáforo y URL — sin datos personales (solo recuentos) y sin red. Verificada en navegador (PNG ~840 KB, tipografía de marca).</li>
+      <li>Puerta estricta del SEO satisfecha: traducciones ES para los hechos promovidos en v1.57.0 (english_soft_signal, nz_trans_tasman, dependants_2024, decision_timing, multiplier_4x) — las guías ahora muestran esos requisitos.</li>
+      <li>Reinstalado <code>playwright</code> (faltaba en node_modules; los HTTP 0 de k-eta/whic en el drift eran probablemente esto — vigilar el lunes).</li>
+      <li>Datos: sources.json intacto (misma auditoría: MATCH 1073 / 0 / 0 REVIEW).</li>
+      <li>Volver aquí: <code>git checkout v1.59.0</code>.</li>
+    </ul>
+  </article>
+
   <article class="nov">
     <h2>Francia re-anclada: URL nueva de vacances-travail <span class="ver">v1.58.0 · 26 de julio de 2026</span></h2>
     <ul class="req">
