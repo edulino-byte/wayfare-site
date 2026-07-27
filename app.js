@@ -1325,7 +1325,7 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
       destroyGlobe(world, host);
       globeRef.current = null;
     };
-  }, [features, results]);
+  }, [features, results, globeLib]);
   React.useEffect(() => {
     if (globeRef.current) {
       globeRef.current.globeImageUrl(GLOBE_TEXTURES[globeStyle] || GLOBE_TEXTURES.textured);
@@ -1785,20 +1785,21 @@ function saveStored(key, value) {
 function App() {
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
   const [lang, setLang] = React.useState("en");
-  const [screen, setScreen] = React.useState("questionnaire");
-  const [profile, setProfile] = React.useState(() => Object.assign(defaultProfile(), loadStored(STORE_PROFILE) || {}));
   const [submitted, setSubmitted] = React.useState(() => {
     const s = loadStored(STORE_SUBMITTED);
-    return s && s.profile && s.version ? s : null;
+    if (s && s.profile && s.version) return s;
+    return { profile: defaultProfile(), version: 1, demo: true };
   });
+  const [screen, setScreen] = React.useState("globe");
+  const [profile, setProfile] = React.useState(() => Object.assign(defaultProfile(), loadStored(STORE_PROFILE) || {}));
   React.useEffect(() => {
     saveStored(STORE_PROFILE, profile);
   }, [profile]);
   React.useEffect(() => {
-    saveStored(STORE_SUBMITTED, submitted);
+    if (!(submitted && submitted.demo)) saveStored(STORE_SUBMITTED, submitted);
   }, [submitted]);
   React.useEffect(() => {
-    wfTrack(submitted ? "embudo-0-retorno" : "embudo-1-cuestionario");
+    wfTrack(submitted && !submitted.demo ? "embudo-0-retorno" : "embudo-1-cuestionario");
   }, []);
   const resetAll = React.useCallback(() => {
     saveStored(STORE_PROFILE, null);
@@ -1850,7 +1851,7 @@ function App() {
       setProfile,
       onSubmit: () => {
         window.scrollTo(0, 0);
-        wfTrack(submitted ? "embudo-3b-reenvio" : "embudo-3-envio");
+        wfTrack(submitted && !submitted.demo ? "embudo-3b-reenvio" : "embudo-3-envio");
         setSubmitted({ profile: Object.assign({}, profile), version: (submitted ? submitted.version : 0) + 1 });
         setScreen("processing");
       },
@@ -1873,7 +1874,11 @@ function App() {
       visible: screen === "globe",
       onEditProfile: () => setScreen("questionnaire")
     }
-  ))), /* @__PURE__ */ React.createElement(TweaksPanel, null, /* @__PURE__ */ React.createElement(TweakSection, { label: "Globe" }), /* @__PURE__ */ React.createElement(
+  ), submitted.demo && screen === "globe" ? /* @__PURE__ */ React.createElement("div", { className: "demo-banner" }, /* @__PURE__ */ React.createElement("span", { className: "demo-banner-tag" }, tr("demo_map_tag")), /* @__PURE__ */ React.createElement("span", { className: "demo-banner-text" }, tr("demo_map_text")), /* @__PURE__ */ React.createElement("button", { type: "button", className: "demo-banner-cta", onClick: () => {
+    wfTrack("ejemplo-cta");
+    setScreen("questionnaire");
+    window.scrollTo(0, 0);
+  } }, tr("demo_map_cta"))) : null)), /* @__PURE__ */ React.createElement(TweaksPanel, null, /* @__PURE__ */ React.createElement(TweakSection, { label: "Globe" }), /* @__PURE__ */ React.createElement(
     TweakRadio,
     {
       label: "Texture",
