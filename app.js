@@ -1863,22 +1863,30 @@ function App() {
   ), screen === "processing" && /* @__PURE__ */ React.createElement(Processing, { t: tr, onDone: () => {
     wfTrack("embudo-4-mapa");
     setScreen("globe");
-  } }), submitted && screen !== "processing" && /* @__PURE__ */ React.createElement("div", { style: { display: screen === "globe" ? "contents" : "none" } }, /* @__PURE__ */ React.createElement(
-    GlobeView,
+  } }), submitted && screen !== "processing" && /* @__PURE__ */ React.createElement(
+    "div",
     {
-      key: submitted.version,
-      t: tr,
-      lang,
-      profile: submitted.profile,
-      globeStyle: t.globeStyle,
-      visible: screen === "globe",
-      onEditProfile: () => setScreen("questionnaire")
-    }
-  ), submitted.demo && screen === "globe" ? /* @__PURE__ */ React.createElement("div", { className: "demo-banner" }, /* @__PURE__ */ React.createElement("span", { className: "demo-banner-tag" }, tr("demo_map_tag")), /* @__PURE__ */ React.createElement("span", { className: "demo-banner-text" }, tr("demo_map_text")), /* @__PURE__ */ React.createElement("button", { type: "button", className: "demo-banner-cta", onClick: () => {
-    wfTrack("ejemplo-cta");
-    setScreen("questionnaire");
-    window.scrollTo(0, 0);
-  } }, tr("demo_map_cta"))) : null)), /* @__PURE__ */ React.createElement(TweaksPanel, null, /* @__PURE__ */ React.createElement(TweakSection, { label: "Globe" }), /* @__PURE__ */ React.createElement(
+      className: submitted.demo ? "demo-mode" : void 0,
+      style: { display: screen === "globe" ? "contents" : "none" }
+    },
+    /* @__PURE__ */ React.createElement(
+      GlobeView,
+      {
+        key: submitted.version,
+        t: tr,
+        lang,
+        profile: submitted.profile,
+        globeStyle: t.globeStyle,
+        visible: screen === "globe",
+        onEditProfile: () => setScreen("questionnaire")
+      }
+    ),
+    submitted.demo && screen === "globe" ? /* @__PURE__ */ React.createElement("div", { className: "demo-banner" }, /* @__PURE__ */ React.createElement("div", { className: "demo-banner-row" }, /* @__PURE__ */ React.createElement("span", { className: "demo-banner-tag" }, tr("demo_map_tag")), /* @__PURE__ */ React.createElement("span", { className: "demo-banner-text" }, tr("demo_map_text"))), /* @__PURE__ */ React.createElement("button", { type: "button", className: "demo-banner-cta", onClick: () => {
+      wfTrack("ejemplo-cta");
+      setScreen("questionnaire");
+      window.scrollTo(0, 0);
+    } }, tr("demo_map_cta"), /* @__PURE__ */ React.createElement("span", { className: "cta-arrow", "aria-hidden": "true" }, "\u2192"))) : null
+  )), /* @__PURE__ */ React.createElement(TweaksPanel, null, /* @__PURE__ */ React.createElement(TweakSection, { label: "Globe" }), /* @__PURE__ */ React.createElement(
     TweakRadio,
     {
       label: "Texture",
