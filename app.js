@@ -1463,7 +1463,16 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
       strokeLinecap: "round",
       strokeLinejoin: "round"
     }
-  )), t("g_share_btn")), shareMsg ? /* @__PURE__ */ React.createElement("div", { className: "lg-share-done" }, shareMsg) : null) : null, selected && detailOpen ? /* @__PURE__ */ React.createElement("aside", { className: "detail-panel" }, /* @__PURE__ */ React.createElement("div", { className: "detail-panel-inner" }, /* @__PURE__ */ React.createElement("button", { className: "detail-panel-close", onClick: closeDetail, "aria-label": "Close" }, /* @__PURE__ */ React.createElement("svg", { width: "14", height: "14", viewBox: "0 0 24 24", fill: "none", "aria-hidden": "true", style: { pointerEvents: "none" } }, /* @__PURE__ */ React.createElement("path", { d: "M18 6L6 18M6 6l12 12", stroke: "currentColor", strokeWidth: "2.2", strokeLinecap: "round" }))), /* @__PURE__ */ React.createElement(
+  )), t("g_share_btn")), shareMsg ? /* @__PURE__ */ React.createElement("div", { className: "lg-share-done" }, shareMsg) : null) : null, tally && !detailOpen ? /* @__PURE__ */ React.createElement("button", { type: "button", className: "share-float", onClick: compartirMapa }, /* @__PURE__ */ React.createElement("svg", { width: "17", height: "17", viewBox: "0 0 24 24", fill: "none", "aria-hidden": "true" }, /* @__PURE__ */ React.createElement(
+    "path",
+    {
+      d: "M12 15V3m0 0L7 8m5-5 5 5M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6",
+      stroke: "currentColor",
+      strokeWidth: "2.4",
+      strokeLinecap: "round",
+      strokeLinejoin: "round"
+    }
+  )), t("g_share_btn")) : null, shareMsg && !detailOpen ? /* @__PURE__ */ React.createElement("div", { className: "share-float-done" }, shareMsg) : null, selected && detailOpen ? /* @__PURE__ */ React.createElement("aside", { className: "detail-panel" }, /* @__PURE__ */ React.createElement("div", { className: "detail-panel-inner" }, /* @__PURE__ */ React.createElement("button", { className: "detail-panel-close", onClick: closeDetail, "aria-label": "Close" }, /* @__PURE__ */ React.createElement("svg", { width: "14", height: "14", viewBox: "0 0 24 24", fill: "none", "aria-hidden": "true", style: { pointerEvents: "none" } }, /* @__PURE__ */ React.createElement("path", { d: "M18 6L6 18M6 6l12 12", stroke: "currentColor", strokeWidth: "2.2", strokeLinecap: "round" }))), /* @__PURE__ */ React.createElement(
     CountryDetail,
     {
       key: selected.iso,

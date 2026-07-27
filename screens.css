@@ -397,14 +397,37 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
   .demo-mode .legend, .demo-mode .globe-hint { display: none; }
 }
 
-/* v1.59.0 — trío de compartir: botón en la leyenda */
-.lg-share { display: flex; align-items: center; gap: 8px; margin-top: 6px; padding: 8px 12px;
+/* v1.59.0 — trío de compartir: botón en la leyenda (desde v1.62.3, solo móvil) */
+.lg-share { display: none; align-items: center; gap: 8px; margin-top: 6px; padding: 8px 12px;
   border: 1px solid color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 10px;
   background: color-mix(in srgb, var(--accent) 16%, transparent); color: var(--on-dark);
   font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
 .lg-share:hover { background: color-mix(in srgb, var(--accent) 28%, transparent); }
-.lg-share-done { max-width: 230px; margin-top: 4px; font-size: 11.5px; line-height: 1.35;
+.lg-share-done { display: none; max-width: 230px; margin-top: 4px; font-size: 11.5px; line-height: 1.35;
   color: var(--on-dark); opacity: 0.85; }
+
+/* v1.62.3 — compartir en escritorio: botón destacado arriba a la derecha,
+   bajo «editar perfil» e idioma, con el ancho de los dos juntos (petición
+   del usuario: el de la leyenda quedaba escondido). Mismo hueco que el CTA
+   de la demo — nunca coinciden (en demo se comparte el mapa propio, no). */
+.share-float { position: absolute; top: 72px; right: 24px; z-index: 30;
+  display: inline-flex; align-items: center; gap: 10px; justify-content: center;
+  min-width: 252px; padding: 13px 26px; border: 0; border-radius: 999px; cursor: pointer;
+  font: inherit; font-size: 15.5px; font-weight: 800; letter-spacing: 0.01em;
+  color: var(--accent-ink, #0b0d1a); background: var(--accent);
+  box-shadow: 0 4px 22px color-mix(in srgb, var(--accent) 40%, transparent);
+  transition: transform 0.15s ease, filter 0.15s ease; }
+.share-float:hover { filter: brightness(1.12); transform: scale(1.04); }
+.share-float-done { position: absolute; top: 126px; right: 24px; z-index: 30;
+  max-width: 260px; padding: 8px 12px; border-radius: 10px; font-size: 12px; line-height: 1.4;
+  color: var(--on-dark); text-align: right;
+  background: color-mix(in srgb, var(--panel, #141830) 90%, transparent); }
+.demo-mode .share-float, .demo-mode .share-float-done { display: none; }
+@media (max-width: 560px) {
+  .share-float, .share-float-done { display: none; }
+  .lg-share { display: flex; }
+  .lg-share-done { display: block; }
+}
 
 /* v1.48.0 — mini-banderita redonda de micro-destinos (SG/MT/LI): marcador
    circular con la bandera dentro y aro del color de estado; el nombre solo
