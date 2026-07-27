@@ -1881,11 +1881,14 @@ function App() {
         onEditProfile: () => setScreen("questionnaire")
       }
     ),
-    submitted.demo && screen === "globe" ? /* @__PURE__ */ React.createElement("div", { className: "demo-banner" }, /* @__PURE__ */ React.createElement("div", { className: "demo-banner-row" }, /* @__PURE__ */ React.createElement("span", { className: "demo-banner-tag" }, tr("demo_map_tag")), /* @__PURE__ */ React.createElement("span", { className: "demo-banner-text" }, tr("demo_map_text"))), /* @__PURE__ */ React.createElement("button", { type: "button", className: "demo-banner-cta", onClick: () => {
-      wfTrack("ejemplo-cta");
-      setScreen("questionnaire");
-      window.scrollTo(0, 0);
-    } }, tr("demo_map_cta"), /* @__PURE__ */ React.createElement("span", { className: "cta-arrow", "aria-hidden": "true" }, "\u2192"))) : null
+    submitted.demo && screen === "globe" ? (() => {
+      const empezar = () => {
+        wfTrack("ejemplo-cta");
+        setScreen("questionnaire");
+        window.scrollTo(0, 0);
+      };
+      return /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", { className: "demo-banner" }, /* @__PURE__ */ React.createElement("div", { className: "demo-banner-row" }, /* @__PURE__ */ React.createElement("span", { className: "demo-banner-tag" }, tr("demo_map_tag")), /* @__PURE__ */ React.createElement("span", { className: "demo-banner-text" }, tr("demo_map_text"))), /* @__PURE__ */ React.createElement("button", { type: "button", className: "demo-banner-cta", onClick: empezar }, tr("demo_map_cta"), /* @__PURE__ */ React.createElement("span", { className: "cta-arrow", "aria-hidden": "true" }, "\u2192"))), /* @__PURE__ */ React.createElement("button", { type: "button", className: "demo-banner-cta demo-cta-float", onClick: empezar }, tr("demo_map_cta"), /* @__PURE__ */ React.createElement("span", { className: "cta-arrow", "aria-hidden": "true" }, "\u2192")));
+    })() : null
   )), /* @__PURE__ */ React.createElement(TweaksPanel, null, /* @__PURE__ */ React.createElement(TweakSection, { label: "Globe" }), /* @__PURE__ */ React.createElement(
     TweakRadio,
     {
