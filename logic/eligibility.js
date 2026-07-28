@@ -2571,9 +2571,32 @@ window.Eligibility = (function () {
     return r;
   };
   COUNTRY_RULES.BR = mercosurRules("BR", ["digital_nomad", "student"]);
-  COUNTRY_RULES.CL = mercosurRules("CL", ["digital_nomad"]);
+  COUNTRY_RULES.CL = mercosurRules("CL", []);
+  /* v1.71.0 — Chile NO tiene visa de nómada dedicada: ruta «honesta» al estilo
+     AU/CA/NZ (existe para explicar la realidad, no para aparentar programa). */
+  COUNTRY_RULES.CL.digital_nomad = function (p) {
+    return visaResult("digital_nomad", p.remoteWork ? 30 : 12,
+      p.remoteWork ? ["Your profile indicates remote work, which is the main factor for nomad-style stays."] : [],
+      ["Chile does not currently offer a dedicated Digital Nomad visa.",
+       "Remote workers commonly stay under the visitor permit (up to 90 days); longer stays require a residence visa.",
+       "Simulated guidance only. Always verify with official immigration sources."],
+      []);
+  };
+  /* v1.71.0 — Georgia: el programa «Remotely from Georgia» fue pandémico y
+     cerró; lo real es el año sin visado para muchas nacionalidades. */
+  COUNTRY_RULES.GE = {
+    digital_nomad: function (p) {
+      return visaResult("digital_nomad", p.remoteWork ? 34 : 14,
+        p.remoteWork ? ["Your profile indicates remote work, which is the main factor for nomad-style stays."] : [],
+        ["Georgia does not currently offer a dedicated Digital Nomad visa.",
+         "Citizens of many countries can stay in Georgia visa-free for a full year, which remote workers commonly use.",
+         "Simulated guidance only. Always verify with official immigration sources."],
+        []);
+    },
+    tourist: function (p) { return genericDe("GE", "tourist", p); },
+  };
   COUNTRY_RULES.CO = mercosurRules("CO", ["digital_nomad", "student", "tourist"]);
-  COUNTRY_RULES.PE = mercosurRules("PE", ["student", "tourist"]);
+  COUNTRY_RULES.PE = mercosurRules("PE", ["student", "tourist", "digital_nomad"]); /* v1.71.0: Perú SÍ tiene visa de nómada (D.L. fin 2023, operativa 2024) */
   COUNTRY_RULES.EC = mercosurRules("EC", ["digital_nomad", "student", "tourist"]);
   COUNTRY_RULES.UY = mercosurRules("UY", ["digital_nomad", "student", "tourist"]);
   COUNTRY_RULES.PY = mercosurRules("PY", ["student", "tourist"]);

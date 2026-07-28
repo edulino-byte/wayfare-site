@@ -1258,6 +1258,14 @@ window.I18N = {
     "Work permit processes may be more complex for your passport nationality.": "Los trámites de permiso de trabajo pueden ser más complejos según tu nacionalidad de pasaporte.",
     "You may need to show sufficient funds and income. Check official digital nomad visa requirements for this destination.": "Puede que debas demostrar fondos e ingresos suficientes. Consulta los requisitos oficiales de la visa de nómada digital de este destino.",
     "Your passport appears to provide strong global visa access.": "Tu pasaporte parece ofrecer un acceso global fuerte a visados.",
+    /* Nómada digital honesto CL/GE (v1.71.0) */
+    "Proof of regular income may support a visitor application.": "Acreditar ingresos regulares puede reforzar una solicitud de visitante.",
+    "Your profile indicates remote work, which is the main factor for nomad-style stays.": "Tu perfil indica trabajo remoto, el factor principal para estancias de tipo nómada.",
+    "Your profile indicates remote work, which is the main qualifying factor.": "Tu perfil indica trabajo remoto, el principal factor de elegibilidad.",
+    "Chile does not currently offer a dedicated Digital Nomad visa.": "Chile no ofrece por ahora una visa de nómada digital dedicada.",
+    "Remote workers commonly stay under the visitor permit (up to 90 days); longer stays require a residence visa.": "Quienes trabajan en remoto suelen usar el permiso de visitante (hasta 90 días); estancias más largas requieren una visa de residencia.",
+    "Georgia does not currently offer a dedicated Digital Nomad visa.": "Georgia no ofrece por ahora una visa de nómada digital dedicada.",
+    "Citizens of many countries can stay in Georgia visa-free for a full year, which remote workers commonly use.": "Los ciudadanos de muchos países pueden permanecer en Georgia un año entero sin visado, opción habitual entre quienes trabajan en remoto.",
     /* Mercosur (v1.68.0) */
     "Mercosur Residence Agreement: citizens of member and associated countries can apply for temporary residence with the right to work, without needing a job offer.": "Acuerdo de Residencia de Mercosur: los ciudadanos de países miembros y asociados pueden solicitar la residencia temporal con derecho a trabajar, sin necesidad de oferta de empleo.",
     "After two years of temporary residence you can usually apply for permanent residence.": "Tras dos años de residencia temporal, normalmente puedes solicitar la residencia permanente.",

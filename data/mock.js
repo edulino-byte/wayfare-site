@@ -223,6 +223,7 @@ window.VISA_DATA = (function () {
       v("student", [1, 2, 3, 4], { minSavings: 4000 }),
     ]},
     { iso: "PE", name: "Peru", region: "south_america", visas: [
+      v("digital_nomad", [1, 2, 3, 4], { minSavings: 9000 }), /* v1.71.0: programa real (2024) */
       v("work", [1, 2, 3], { minExp: 2 }),
       v("student", [1, 2, 3, 4], { minSavings: 4000 }),
       v("tourist", [1, 2, 3], { minSavings: 6000 }),
@@ -293,6 +294,7 @@ window.VISA_DATA = (function () {
     { iso: "ZA", name: "South Africa", region: "africa", visas: [
       v("work", [1, 2, 3], { minExp: 3 }),
       v("student", [1, 2, 3, 4], { minSavings: 6000 }),
+      v("digital_nomad", [1, 2, 3], { minSavings: 12000 }), /* v1.71.0: programa real (2024) */
     ]},
     { iso: "GE", name: "Georgia", region: "asia", visas: [
       v("digital_nomad", [1, 2, 3, 4], { minSavings: 4000 }),
