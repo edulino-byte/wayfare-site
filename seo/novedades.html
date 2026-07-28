@@ -6,18 +6,18 @@
 <link rel="icon" type="image/svg+xml" href="../assets/brand/wayfare-favicon.svg" />
 <link rel="apple-touch-icon" sizes="180x180" href="../assets/brand/wayfare-touch-180.png" />
 <title>Novedades de reglas de visas — changelog público | Wayfare</title>
-<meta name="description" content="Registro público de cada cambio de datos y reglas de Wayfare: 83 versiones con fecha, qué cambió y por qué. Transparencia total." />
+<meta name="description" content="Registro público de cada cambio de datos y reglas de Wayfare: 85 versiones con fecha, qué cambió y por qué. Transparencia total." />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="Wayfare" />
 <meta property="og:title" content="Novedades de reglas de visas — changelog público | Wayfare" />
-<meta property="og:description" content="Registro público de cada cambio de datos y reglas de Wayfare: 83 versiones con fecha, qué cambió y por qué. Transparencia total." />
+<meta property="og:description" content="Registro público de cada cambio de datos y reglas de Wayfare: 85 versiones con fecha, qué cambió y por qué. Transparencia total." />
 <meta property="og:image" content="https://edulino-byte.github.io/wayfare-site/assets/brand/wayfare-og-card.png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta property="og:locale" content="es_ES" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:image" content="https://edulino-byte.github.io/wayfare-site/assets/brand/wayfare-og-card.png" />
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Novedades de reglas de visas","description":"Registro público de cada cambio de datos y reglas de Wayfare: 83 versiones con fecha, qué cambió y por qué. Transparencia total.","inLanguage":"es","author":{"@type":"Organization","name":"Wayfare","url":"https://edulino-byte.github.io/wayfare-site"},"publisher":{"@type":"Organization","name":"Wayfare","url":"https://edulino-byte.github.io/wayfare-site","logo":{"@type":"ImageObject","url":"https://edulino-byte.github.io/wayfare-site/assets/brand/wayfare-icon-512.png"}},"image":"https://edulino-byte.github.io/wayfare-site/assets/brand/wayfare-og-card.png","dateModified":"2026-07-27","mainEntityOfPage":"https://edulino-byte.github.io/wayfare-site/seo/novedades.html"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Novedades de reglas de visas","description":"Registro público de cada cambio de datos y reglas de Wayfare: 85 versiones con fecha, qué cambió y por qué. Transparencia total.","inLanguage":"es","author":{"@type":"Organization","name":"Wayfare","url":"https://edulino-byte.github.io/wayfare-site"},"publisher":{"@type":"Organization","name":"Wayfare","url":"https://edulino-byte.github.io/wayfare-site","logo":{"@type":"ImageObject","url":"https://edulino-byte.github.io/wayfare-site/assets/brand/wayfare-icon-512.png"}},"image":"https://edulino-byte.github.io/wayfare-site/assets/brand/wayfare-og-card.png","dateModified":"2026-07-28","mainEntityOfPage":"https://edulino-byte.github.io/wayfare-site/seo/novedades.html"}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Wayfare","item":"https://edulino-byte.github.io/wayfare-site/"},{"@type":"ListItem","position":2,"name":"Guías de visas","item":"https://edulino-byte.github.io/wayfare-site/seo/index.html"},{"@type":"ListItem","position":3,"name":"Novedades de reglas de visas"}]}</script>
 <style>
   :root { --bg:#0b0d1a; --card:#141830; --line:#242a4a; --ink:#e9ebf6; --dim:#9aa0c2; --acc:#7E84F5; --amber:#d9b26a; }
@@ -143,12 +143,33 @@
   <p class="src"><a href="index.html" style="text-decoration:none">Wayfare</a> · datos de visas verificados contra fuentes oficiales</p>
   <h1>Novedades de reglas de visas</h1>
   <p>Cada cambio de datos o de reglas queda registrado aquí con su versión y su fecha — el mismo registro interno que usamos para poder volver atrás, publicado tal cual. <a href="feed.xml">Suscríbete al feed</a> para enterarte cuando cambie una tarifa, un cupo o una fecha de apertura.</p>
-  <div class="verified">✓ Fuentes revisadas por última vez: 27 de julio de 2026</div><button class="print-btn" onclick="window.print()" title="Imprime o guarda como PDF tu checklist de esta ruta">🖨 Guardar checklist (PDF)</button>
+  <div class="verified">✓ Fuentes revisadas por última vez: 28 de julio de 2026</div><button class="print-btn" onclick="window.print()" title="Imprime o guarda como PDF tu checklist de esta ruta">🖨 Guardar checklist (PDF)</button>
   
   
   <h2>Historial completo</h2>
   <ul class="req">
         </ul>
+  <article class="nov">
+    <h2>Vigilancia semanal pública + histórico por ruta («la joya escondida») <span class="ver">v1.65.0 · 28 de julio de 2026</span></h2>
+    <ul class="req">
+      <li>Página nueva <code>seo/vigilancia.html</code>: registro público del vigilante de los lunes, generado desde los informes reales (<code>drift-reports/&lt;fecha&gt;/report.json</code>, 5 pasadas desde el 12-jul). Muestra: cómo funciona (85 fuentes, 736 extractos palabra por palabra), tabla de pasadas y el histórico por ruta (rutas cuya fuente oficial cambió de contenido, con fechas, agrupadas por destino).</li>
+      <li>Lenguaje CURADO a propósito: los «URGENTE» internos se publican como «fuentes a revisión manual» (bloqueos anti-robot y PDFs — que es lo que son) y se explica que «contenido cambiado» ≠ «regla cambiada»; los cambios de reglas aplicados siguen siendo cosa de Novedades. El vigilante NO se toca (sigue solo-lectura).</li>
+      <li>Enlace cruzado desde el paso 7 de «Cómo verificamos». Grupo Wayfare del índice: «🛰️ Vigilancia semanal». La página se refresca sola en cada build con la última pasada registrada.</li>
+      <li>Volver aquí: <code>git checkout v1.65.0</code>.</li>
+    </ul>
+  </article>
+
+  <article class="nov">
+    <h2>Páginas por nacionalidad — la mayor palanca SEO (Catálogo, DESPUÉS) <span class="ver">v1.64.0 · 28 de julio de 2026</span></h2>
+    <ul class="req">
+      <li>20 páginas nuevas <code>seo/visados-para-&lt;gentilicio&gt;.html</code> (los 20 pasaportes hispanohablantes del selector, decisión del usuario 28-jul): españoles, mexicanos, argentinos… hasta ecuatoguineanos.</li>
+      <li>Generadas con el MOTOR REAL de la app: genSeoPages.mjs carga eligibility.js + mock.js + strings.js en Node (shim de window) y evalúa los 25 destinos modelados con un perfil de ejemplo DECLARADO (25 años, universitario — el mismo criterio honesto que el mapa de ejemplo). Cero texto inventado: estados, frases y nombres de país salen del motor y de i18n.</li>
+      <li>Cada página: recuento verde/cerca, bloques por estado con la mejor ruta por destino y su motivo, enlazado interno (guía NZ por nacionalidad si existe, máx. 2 guías de ruta por destino), transparencia del perfil de ejemplo y CTA «Haz TU mapa». Grupo nuevo «Por nacionalidad» en el índice; sitemap automático.</li>
+      <li>Total del sitio: 81 → 101 páginas. Siguen noindex (condición del primer asesor).</li>
+      <li>Volver aquí: <code>git checkout v1.64.0</code>.</li>
+    </ul>
+  </article>
+
   <article class="nov">
     <h2>Páginas legales completas (Catálogo: Finanzas, AHORA) <span class="ver">v1.63.0 · 27 de julio de 2026</span></h2>
     <ul class="req">
