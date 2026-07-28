@@ -1250,6 +1250,19 @@ window.I18N = {
 
     /* ── Europa Schengen compartida (v1.19.0) ── */
     "EU/EEA citizens can work in this destination under freedom of movement.": "Los ciudadanos UE/EEE pueden trabajar en este destino por libre circulación.",
+    /* Motor genérico — frases destapadas por la tanda LatAm (v1.68.0) */
+    "A visa will likely be required for this destination.": "Lo más probable es que necesites visa para este destino.",
+    "Additional documentation may be required for your passport nationality.": "Puede requerirse documentación adicional según tu nacionalidad de pasaporte.",
+    "Remote work is the primary eligibility factor for Digital Nomad visas.": "El trabajo remoto es el factor principal de elegibilidad en las visas de nómada digital.",
+    "Simulated guidance only. Always verify with official immigration sources.": "Orientación simulada. Verifica siempre con las fuentes oficiales de inmigración.",
+    "Work permit processes may be more complex for your passport nationality.": "Los trámites de permiso de trabajo pueden ser más complejos según tu nacionalidad de pasaporte.",
+    "You may need to show sufficient funds and income. Check official digital nomad visa requirements for this destination.": "Puede que debas demostrar fondos e ingresos suficientes. Consulta los requisitos oficiales de la visa de nómada digital de este destino.",
+    "Your passport appears to provide strong global visa access.": "Tu pasaporte parece ofrecer un acceso global fuerte a visados.",
+    /* Mercosur (v1.68.0) */
+    "Mercosur Residence Agreement: citizens of member and associated countries can apply for temporary residence with the right to work, without needing a job offer.": "Acuerdo de Residencia de Mercosur: los ciudadanos de países miembros y asociados pueden solicitar la residencia temporal con derecho a trabajar, sin necesidad de oferta de empleo.",
+    "After two years of temporary residence you can usually apply for permanent residence.": "Tras dos años de residencia temporal, normalmente puedes solicitar la residencia permanente.",
+    "You will need a valid passport or ID and a clean criminal record certificate.": "Necesitarás pasaporte o documento de identidad vigente y certificado de antecedentes penales limpio.",
+    "Modelled from the regional agreement; each country applies its own procedure and fees. Not yet audited against this destination's official sources.": "Modelado a partir del acuerdo regional; cada país aplica su propio procedimiento y tasas. Aún no auditado contra las fuentes oficiales de este destino.",
     "Your passport nationality is generally accepted for student visa applications in this destination.": "Tu nacionalidad de pasaporte es generalmente aceptada para solicitudes de visa de estudiante en este destino.",
     "EU/EEA citizens face minimal visa barriers for studying in this destination.": "Los ciudadanos UE/EEE tienen barreras de visado mínimas para estudiar en este destino.",
     "You may need to show sufficient funds for tuition and living costs. Check official student visa requirements for this destination.": "Puede que necesites demostrar fondos suficientes para matrícula y manutención. Consulta los requisitos oficiales de la visa de estudiante de este destino.",

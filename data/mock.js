@@ -210,6 +210,71 @@ window.VISA_DATA = (function () {
       v("digital_nomad", [1, 2, 3, 4], { minSavings: 8000 }),
       v("tourist", [1, 2, 3], { minSavings: 15000 }),
     ]},
+    /* ---- Tanda LatAm (v1.68.0) — nivel modelado, AÚN SIN AUDITAR ----------
+       Decisión del usuario 28-jul-2026 (anula el veto del catálogo): añadir
+       Latinoamérica completa. Los miembros del Acuerdo de Residencia Mercosur
+       (CO PE EC UY PY BO + BR CL ya existentes) reciben además la regla
+       mercosurWork en eligibility.js — allí COUNTRY_RULES manda sobre esta
+       lista, que sirve de fallback genérico y para el mapa/nombre/región. */
+    { iso: "CO", name: "Colombia", region: "south_america", visas: [
+      v("digital_nomad", [1, 2, 3, 4], { minSavings: 4000 }),
+      v("work", [1, 2, 3], { minExp: 2 }),
+      v("student", [1, 2, 3, 4], { minSavings: 4000 }),
+    ]},
+    { iso: "PE", name: "Peru", region: "south_america", visas: [
+      v("work", [1, 2, 3], { minExp: 2 }),
+      v("student", [1, 2, 3, 4], { minSavings: 4000 }),
+      v("tourist", [1, 2, 3], { minSavings: 6000 }),
+    ]},
+    { iso: "EC", name: "Ecuador", region: "south_america", visas: [
+      v("digital_nomad", [1, 2, 3, 4], { minSavings: 5000 }),
+      v("student", [1, 2, 3, 4], { minSavings: 4000 }),
+      v("tourist", [1, 2, 3], { minSavings: 6000 }),
+    ]},
+    { iso: "UY", name: "Uruguay", region: "south_america", visas: [
+      v("digital_nomad", [1, 2, 3, 4], { minSavings: 5000 }),
+      v("work", [1, 2, 3], { minExp: 1 }),
+      v("student", [1, 2, 3, 4], { minSavings: 5000 }),
+    ]},
+    { iso: "PY", name: "Paraguay", region: "south_america", visas: [
+      v("work", [1, 2, 3], { minExp: 1 }),
+      v("tourist", [1, 2, 3], { minSavings: 5000 }),
+    ]},
+    { iso: "BO", name: "Bolivia", region: "south_america", visas: [
+      v("student", [1, 2, 3, 4], { minSavings: 3000 }),
+      v("tourist", [1, 2, 3], { minSavings: 5000 }),
+    ]},
+    { iso: "VE", name: "Venezuela", region: "south_america", visas: [
+      v("tourist", [1, 2, 3], { minSavings: 6000 }),
+    ]},
+    { iso: "PA", name: "Panama", region: "north_america", visas: [
+      v("digital_nomad", [1, 2, 3, 4], { minSavings: 8000 }),
+      v("work", [1, 2, 3], { minExp: 3 }),
+      v("tourist", [1, 2, 3], { minSavings: 6000 }),
+    ]},
+    { iso: "DO", name: "Dominican Republic", region: "north_america", visas: [
+      v("work", [1, 2, 3], { minExp: 2 }),
+      v("tourist", [1, 2, 3], { minSavings: 6000 }),
+    ]},
+    { iso: "GT", name: "Guatemala", region: "north_america", visas: [
+      v("work", [1, 2, 3], { minExp: 2 }),
+      v("tourist", [1, 2, 3], { minSavings: 6000 }),
+    ]},
+    { iso: "HN", name: "Honduras", region: "north_america", visas: [
+      v("work", [1, 2, 3], { minExp: 2 }),
+      v("tourist", [1, 2, 3], { minSavings: 6000 }),
+    ]},
+    { iso: "SV", name: "El Salvador", region: "north_america", visas: [
+      v("work", [1, 2, 3], { minExp: 2 }),
+      v("tourist", [1, 2, 3], { minSavings: 6000 }),
+    ]},
+    { iso: "NI", name: "Nicaragua", region: "north_america", visas: [
+      v("tourist", [1, 2, 3], { minSavings: 6000 }),
+    ]},
+    { iso: "CU", name: "Cuba", region: "north_america", visas: [
+      v("student", [1, 2, 3, 4], { minSavings: 5000 }),
+      v("tourist", [1, 2, 3, 4], { minSavings: 6000 }),
+    ]},
     { iso: "ZA", name: "South Africa", region: "africa", visas: [
       v("work", [1, 2, 3], { minExp: 3 }),
       v("student", [1, 2, 3, 4], { minSavings: 6000 }),

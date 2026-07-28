@@ -2534,6 +2534,52 @@ window.Eligibility = (function () {
   };
 
   /* =========================================================================
+     MERCOSUR — Acuerdo de Residencia (v1.68.0 · nivel modelado, SIN auditar)
+     Miembros y asociados adheridos al acuerdo de residencia: AR BR PY UY +
+     BO CL PE CO EC. (Venezuela está suspendida del bloque.)
+     ⚠ AR queda FUERA de esta regla a propósito: sus rutas están AUDITADAS y
+     no se tocan sin pasar por el pipeline de evidencia (relevo 28-jul-2026).
+     Cuando un país tiene COUNTRY_RULES, esa lista de tipos MANDA sobre
+     mock.js — por eso cada miembro define aquí TODOS sus tipos, con
+     genericDe() como fallback a la configuración de mock.js.
+  ========================================================================= */
+  var MERCOSUR = { AR:1, BR:1, PY:1, UY:1, BO:1, CL:1, PE:1, CO:1, EC:1 };
+
+  function genericDe(iso, vType, p) {
+    var c  = (D.COUNTRIES || []).find(function(x) { return x.iso === iso; });
+    var mv = c && c.visas && c.visas.find(function(v) { return v.type === vType; });
+    return genericVisa(vType, p, mv ? mv.req : {});
+  }
+
+  function mercosurWork(iso, p) {
+    if (MERCOSUR[p.nationality] && p.nationality !== iso) {
+      return visaResult("work", 88,
+        ["Mercosur Residence Agreement: citizens of member and associated countries can apply for temporary residence with the right to work, without needing a job offer.",
+         "After two years of temporary residence you can usually apply for permanent residence."],
+        ["You will need a valid passport or ID and a clean criminal record certificate.",
+         "Modelled from the regional agreement; each country applies its own procedure and fees. Not yet audited against this destination's official sources."],
+        []);
+    }
+    return genericDe(iso, "work", p);
+  }
+
+  var mercosurRules = function (iso, tipos) {
+    var r = { work: function (p) { return mercosurWork(iso, p); } };
+    tipos.forEach(function (t) {
+      if (t !== "work") r[t] = function (p) { return genericDe(iso, t, p); };
+    });
+    return r;
+  };
+  COUNTRY_RULES.BR = mercosurRules("BR", ["digital_nomad", "student"]);
+  COUNTRY_RULES.CL = mercosurRules("CL", ["digital_nomad"]);
+  COUNTRY_RULES.CO = mercosurRules("CO", ["digital_nomad", "student"]);
+  COUNTRY_RULES.PE = mercosurRules("PE", ["student", "tourist"]);
+  COUNTRY_RULES.EC = mercosurRules("EC", ["digital_nomad", "student", "tourist"]);
+  COUNTRY_RULES.UY = mercosurRules("UY", ["digital_nomad", "student"]);
+  COUNTRY_RULES.PY = mercosurRules("PY", ["tourist"]);
+  COUNTRY_RULES.BO = mercosurRules("BO", ["student", "tourist"]);
+
+  /* =========================================================================
      EVALUATE ONE COUNTRY
   ========================================================================= */
   function evaluateCountry(country, profile) {
