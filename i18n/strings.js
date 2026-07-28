@@ -1258,6 +1258,15 @@ window.I18N = {
     "Work permit processes may be more complex for your passport nationality.": "Los trámites de permiso de trabajo pueden ser más complejos según tu nacionalidad de pasaporte.",
     "You may need to show sufficient funds and income. Check official digital nomad visa requirements for this destination.": "Puede que debas demostrar fondos e ingresos suficientes. Consulta los requisitos oficiales de la visa de nómada digital de este destino.",
     "Your passport appears to provide strong global visa access.": "Tu pasaporte parece ofrecer un acceso global fuerte a visados.",
+    /* Indonesia auditada (v1.75.0) — E33G Remote Worker */
+    "Indonesia's E33G Remote Worker visa lets you live in Indonesia while working for a company established outside Indonesia.": "La visa E33G Remote Worker de Indonesia te permite vivir en Indonesia trabajando para una empresa establecida fuera de Indonesia.",
+    "Stays of 1 year; the stay permit can be extended online, and no Indonesian sponsor is required.": "Estancia de 1 año; el permiso puede prorrogarse online y no se necesita sponsor indonesio.",
+    "You appear to meet the living-funds requirement: a bank statement for the last 3 months with at least USD $2,000.": "Pareces cumplir el requisito de fondos de vida: extracto bancario de los últimos 3 meses con al menos USD $2.000.",
+    "You must show living funds: a bank statement for the last 3 months with at least USD $2,000.": "Debes demostrar fondos de vida: extracto bancario de los últimos 3 meses con al menos USD $2.000.",
+    "Bank records must show salary or income of at least US$60,000 per year, plus an employment agreement with the foreign company.": "Los extractos deben demostrar salario o ingresos de al menos US$60.000 al año, más el contrato de trabajo con la empresa extranjera.",
+    "The visa fee (PNBP) is Rp 7,000,000 for the 1-year stay, plus other components.": "La tasa de la visa (PNBP) es de Rp 7.000.000 para la estancia de 1 año, más otros componentes.",
+    "Your passport must be valid for at least 6 months.": "Tu pasaporte debe tener una vigencia mínima de 6 meses.",
+    "Approval is always a prerogative of the Indonesian State. Simulated guidance only.": "La aprobación es siempre potestad del Estado indonesio. Orientación simulada.",
     /* Uruguay auditado (v1.74.0) — Residencia Legal Permanente Mercosur */
     "Uruguay's Permanente Mercosur grants DIRECT permanent legal residence to nationals of Mercosur member and associated states.": "La Permanente Mercosur de Uruguay concede residencia legal permanente DIRECTA a los nacionales de países parte y asociados del Mercosur.",
     "Uruguay's official list covers Argentina, Brazil, Chile, Bolivia, Paraguay, Peru, Ecuador, Colombia and Venezuela (plus Suriname and Guyana).": "La lista oficial de Uruguay cubre Argentina, Brasil, Chile, Bolivia, Paraguay, Perú, Ecuador, Colombia y Venezuela (más Surinam y Guyana).",

@@ -2718,6 +2718,44 @@ window.Eligibility = (function () {
   };
 
   /* =========================================================================
+     INDONESIA — E33G Remote Worker al nivel AUDITADO (v1.75.0)
+     Fuente capturada 29-jul-2026: imigrasi.go.id/wna/daftar-visa-indonesia/E33G
+     (responde a curl — vigilable sin trato especial). Snapshot:
+     tools/visa-intelligence/snapshots/id-upgrade-2026-07/.
+     Sin puerta por nacionalidad (la fuente no la impone); el verde exige
+     fondos altos (proxy de los US$60.000/año de ingresos exigidos).
+  ========================================================================= */
+  COUNTRY_RULES.ID = {
+    digital_nomad: function (p) {
+      var m = [], w = [], x = [];
+      function idDn(sc) {
+        var r = visaResult("digital_nomad", sc, m, w, x);
+        r.officialName = "Indonesia E33G Remote Worker Visa (Visa Rumah Kedua Pekerja Jarak Jauh)";
+        r.route = "id_digital_nomad";
+        return r;
+      }
+      if (!p.remoteWork) {
+        w.push("Indonesia's E33G Remote Worker visa lets you live in Indonesia while working for a company established outside Indonesia.");
+        return idDn(8);
+      }
+      m.push("Indonesia's E33G Remote Worker visa lets you live in Indonesia while working for a company established outside Indonesia.");
+      m.push("Stays of 1 year; the stay permit can be extended online, and no Indonesian sponsor is required.");
+      var score = 38;
+      if (p.savings >= 2000) { score += 14; m.push("You appear to meet the living-funds requirement: a bank statement for the last 3 months with at least USD $2,000."); }
+      else { w.push("You must show living funds: a bank statement for the last 3 months with at least USD $2,000."); }
+      if (p.savings >= 60000) { score += 20; }
+      w.push("Bank records must show salary or income of at least US$60,000 per year, plus an employment agreement with the foreign company.");
+      w.push("The visa fee (PNBP) is Rp 7,000,000 for the 1-year stay, plus other components.");
+      w.push("Your passport must be valid for at least 6 months.");
+      w.push("Approval is always a prerogative of the Indonesian State. Simulated guidance only.");
+      return idDn(score);
+    },
+    tourist: function (p) { return genericDe("ID", "tourist", p); },
+    student: function (p) { return genericDe("ID", "student", p); },
+    work: function (p) { return genericDe("ID", "work", p); },
+  };
+
+  /* =========================================================================
      EVALUATE ONE COUNTRY
   ========================================================================= */
   function evaluateCountry(country, profile) {
