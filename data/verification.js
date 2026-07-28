@@ -240,8 +240,8 @@ window.VERIFICATION = {
       "lastCheck": "2026-07-27"
     },
     "TH": {
-      "routes": 1,
-      "facts": 2,
+      "routes": 2,
+      "facts": 8,
       "monitored": true,
       "lastCheck": "2026-07-27"
     },
@@ -266,6 +266,12 @@ window.VERIFICATION = {
     "ID": {
       "routes": 1,
       "facts": 7,
+      "monitored": false,
+      "lastCheck": "2026-07-29"
+    },
+    "AE": {
+      "routes": 1,
+      "facts": 5,
       "monitored": false,
       "lastCheck": "2026-07-29"
     }

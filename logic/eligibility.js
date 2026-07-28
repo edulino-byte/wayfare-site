@@ -2000,21 +2000,65 @@ window.Eligibility = (function () {
     },
 
     digital_nomad: function (p) {
+      /* v1.77.0 — DTV AUDITADA: checklist oficial del MFA (Checklist_DTV.pdf,
+         image.mfa.go.th) capturado 29-jul-2026 con UA de navegador. Snapshot:
+         tools/visa-intelligence/snapshots/ae-th-upgrade-2026-07/. */
       var m = [], w = [], x = [], score = 0;
       function thDnv(sc) {
         var r = visaResult("digital_nomad", sc, m, w, x);
-        r.officialName = "Destination Thailand Visa (DTV)"; r.route = "th_dtv";
+        r.officialName = "Destination Thailand Visa (DTV — Workcation)"; r.route = "th_dtv";
         return r;
       }
       if (!p.remoteWork) {
-        w.push("Thailand's Destination Thailand Visa (DTV) is aimed at remote workers, freelancers and long-stay visitors with activities such as Thai soft-power programmes.");
-        return thDnv(6);
+        w.push("Thailand's DTV (Workcation) covers digital nomads, remote workers, foreign talent and freelancers.");
+        w.push("A DTV track also exists for Thai soft power activities such as Muaythai, Thai culinary training and medical treatment.");
+        return thDnv(8);
       }
-      score += 30; m.push("Your profile indicates remote work, which is the primary condition for this route.");
-      w.push("Thailand introduced the Destination Thailand Visa (DTV) with financial requirements and multi-year validity - check the Royal Thai embassy or the official Thai e-Visa site for current conditions.");
-      w.push("This route could not be verified against a captured official source yet. Treat as preliminary guidance.");
-      return thDnv(clamp(score, 0, 45));
+      m.push("Thailand's DTV (Workcation) covers digital nomads, remote workers, foreign talent and freelancers.");
+      m.push("A DTV track also exists for Thai soft power activities such as Muaythai, Thai culinary training and medical treatment.");
+      score = 40;
+      if (p.savings >= 15000) { score += 22; m.push("You appear to meet the funds requirement: a bank statement for the last 3 months with an ending balance of no less than 500,000 THB."); }
+      else { w.push("You need a bank statement for the last 3 months with an ending balance of no less than 500,000 THB."); }
+      if (p.savings >= 30000) score += 12;
+      w.push("You must show proof of salary or monthly income for the last 6 months, plus an employment contract or certificate authenticated by an embassy.");
+      w.push("Proof of prolonged residence in Thailand for at least 6 months (such as a rental agreement) is required.");
+      w.push("Your passport must be valid within 6 months from the travel date.");
+      w.push("Approval is always a prerogative of the Thai authorities. Simulated guidance only.");
+      return thDnv(score);
     },
+  };
+
+  /* =========================================================================
+     EMIRATOS ÁRABES UNIDOS — Virtual Work Visa al nivel AUDITADO (v1.77.0)
+     Fuente capturada 29-jul-2026: u.ae (portal oficial del Gobierno de EAU),
+     "Residence visa for working outside the UAE" (curl-friendly). Snapshot:
+     tools/visa-intelligence/snapshots/ae-th-upgrade-2026-07/.
+  ========================================================================= */
+  COUNTRY_RULES.AE = {
+    digital_nomad: function (p) {
+      var m = [], w = [], x = [];
+      function aeDn(sc) {
+        var r = visaResult("digital_nomad", sc, m, w, x);
+        r.officialName = "UAE Virtual Work Residence Visa";
+        r.route = "ae_digital_nomad";
+        return r;
+      }
+      if (!p.remoteWork) {
+        w.push("The UAE virtual work visa lets you live in the UAE while working for a company outside the UAE.");
+        return aeDn(8);
+      }
+      m.push("The UAE virtual work visa lets you live in the UAE while working for a company outside the UAE.");
+      m.push("It is a one-year visa under self-sponsorship.");
+      var score = 38;
+      if (p.savings >= 10000) { score += 16; }
+      if (p.savings >= 42000) { score += 18; }
+      w.push("You need a salary certificate of a minimum of 3,500 US dollars per month (or equivalent).");
+      w.push("You must provide a copy of health insurance and a medical fitness test result.");
+      w.push("Applications go to the federal ICP or to GDRFA Dubai.");
+      w.push("Approval is always a prerogative of the UAE authorities. Simulated guidance only.");
+      return aeDn(score);
+    },
+    tourist: function (p) { return genericDe("AE", "tourist", p); },
   };
 
   /* =========================================================================
