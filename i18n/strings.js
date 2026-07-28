@@ -1342,6 +1342,6 @@ window.COUNTRY_NAMES = {
     BO: "Bolivia", CO: "Colombia", CU: "Cuba", DO: "República Dominicana",
     EC: "Ecuador", GT: "Guatemala", HN: "Honduras", NI: "Nicaragua",
     PA: "Panamá", PY: "Paraguay", PE: "Perú", SV: "El Salvador",
-    UY: "Uruguay", VE: "Venezuela",
+    UY: "Uruguay", VE: "Venezuela", BZ: "Belice",
   },
 };

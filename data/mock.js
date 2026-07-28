@@ -275,6 +275,11 @@ window.VISA_DATA = (function () {
       v("student", [1, 2, 3, 4], { minSavings: 5000 }),
       v("tourist", [1, 2, 3, 4], { minSavings: 6000 }),
     ]},
+    /* Belice (v1.69.0) — completa Centroamérica; mismo nivel sin auditar */
+    { iso: "BZ", name: "Belize", region: "north_america", visas: [
+      v("tourist", [1, 2, 3], { minSavings: 6000 }),
+      v("work", [1, 2, 3], { minExp: 2 }),
+    ]},
     { iso: "ZA", name: "South Africa", region: "africa", visas: [
       v("work", [1, 2, 3], { minExp: 3 }),
       v("student", [1, 2, 3, 4], { minSavings: 6000 }),

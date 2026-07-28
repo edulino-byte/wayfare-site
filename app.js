@@ -1369,7 +1369,7 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
     const g = { eligible: [], partial: [], ineligible: [] };
     features.forEach((f) => {
       const r = results[f.__id];
-      if (r && !r.synthetic && f.__iso && window.Eligibility.hasRealRules(f.__iso) && g[r.status]) {
+      if (r && !r.synthetic && f.__iso && g[r.status]) {
         g[r.status].push({ iso: f.__iso, name: countryName(f.__iso, lang) || r.name });
       }
     });
