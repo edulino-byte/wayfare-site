@@ -1091,7 +1091,7 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
     const microPills = [];
     const pillData = features.filter((f) => {
       const r = results[f.__id];
-      return r && !r.synthetic && window.Eligibility.hasRealRules(f.__iso);
+      return r && !r.synthetic;
     }).map((f) => {
       const c = featureCentroid(f) || [0, 0];
       return { iso: f.__iso, lat: c[1], lng: c[0], r: results[f.__id], f };
@@ -1292,7 +1292,7 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
       const r = results[d.__id];
       const isSel = selRef.current && d.__id === selRef.current.__id;
       const isHov = hoverRef.current && d.__id === hoverRef.current.__id;
-      const real = r && !r.synthetic && window.Eligibility.hasRealRules(d.__iso || r.iso);
+      const real = r && !r.synthetic;
       if (!real) return `rgba(148,163,160,${isSel ? 0.45 : isHov ? 0.32 : 0.1})`;
       return statusColor(r.status, isSel ? 0.88 : isHov ? 0.75 : 0.62);
     }
