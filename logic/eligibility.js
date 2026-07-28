@@ -2595,7 +2595,62 @@ window.Eligibility = (function () {
     },
     tourist: function (p) { return genericDe("GE", "tourist", p); },
   };
-  COUNTRY_RULES.CO = mercosurRules("CO", ["digital_nomad", "student", "tourist"]);
+  /* =========================================================================
+     COLOMBIA — piloto del nivel AUDITADO (v1.73.0)
+     Fuentes capturadas 29-jul-2026 (navegador real; ambos dominios en
+     MANUAL_DOMAINS del vigilante):
+     - cancilleria.gov.co /tipos-de-visa (Nómada Digital · Migrante Mercosur)
+     - mercosur.int /estatuto-de-la-ciudadania/circulacion-de-personas
+     Evidencia: tools/visa-intelligence/snapshots/co-upgrade-2026-07/
+  ========================================================================= */
+  COUNTRY_RULES.CO = {
+    work: function (p) {
+      if (MERCOSUR[p.nationality] && p.nationality !== "CO") {
+        var r = visaResult("work", 88,
+          ["Colombia's Migrante (M) Mercosur visa applies the regional Residence Agreement and is equivalent to the temporary resident visa under that instrument.",
+           "Under the agreement you get temporary residence without needing to prove the activity you will carry out, with the right to work and carry out any lawful activity.",
+           "Time as a Migrante (M) holder counts towards Colombia's Resident (R) visa after a minimum stay of 2 years."],
+          ["You will need a request letter explaining your activity in Colombia and your means of subsistence, a passport valid for at least six (6) months, and a criminal record certificate covering the last three (3) years.",
+           "Approval is always a prerogative of the Colombian State. Simulated guidance only."],
+          []);
+        r.officialName = "Colombia Migrante (M) — Acuerdo de Residencia Mercosur";
+        r.route = "co_work_mercosur";
+        return r;
+      }
+      return genericDe("CO", "work", p);
+    },
+    digital_nomad: function (p) {
+      var m = [], w = [], x = [], score = 0;
+      function coDn(sc) {
+        var r = visaResult("digital_nomad", sc, m, w, x);
+        r.officialName = "Colombia Digital Nomad Visa (V — Nómada Digital)";
+        r.route = "co_digital_nomad";
+        return r;
+      }
+      if (!p.remoteWork) {
+        w.push("Colombia's Digital Nomad (V) visa is for remote work or teleworking from Colombia over digital media, exclusively for foreign companies, or for starting a digital-content or IT venture.");
+        return coDn(8);
+      }
+      m.push("Colombia's Digital Nomad (V) visa is for remote work or teleworking from Colombia over digital media, exclusively for foreign companies, or for starting a digital-content or IT venture.");
+      score += 34;
+      if (passportTier(p.nationality) <= 2) {
+        score += 30;
+        m.push("Your passport nationality appears to be on Colombia's short-stay visa exemption list, a requirement for this visa.");
+      } else {
+        w.push("This visa requires a passport from a country exempt from Colombia's short-stay visa (per the current Resolución); your nationality appears to need one — check the official list.");
+        score = 20;
+      }
+      m.push("Stays are allowed for up to two (2) years.");
+      if (p.savings >= 5000) { score += 12; }
+      w.push("Bank statements must show minimum income equivalent to three (3) Colombian legal monthly minimum wages (SMLMV) over the last 3 months.");
+      w.push("You need a health policy with full coverage in Colombia for the whole planned stay.");
+      w.push("You will need a letter from the foreign company (or a contract, or proof of company partnership); entrepreneurs present a motivation letter for their venture.");
+      w.push("Approval is always a prerogative of the Colombian State. Simulated guidance only.");
+      return coDn(score);
+    },
+    student: function (p) { return genericDe("CO", "student", p); },
+    tourist: function (p) { return genericDe("CO", "tourist", p); },
+  };
   COUNTRY_RULES.PE = mercosurRules("PE", ["student", "tourist", "digital_nomad"]); /* v1.71.0: Perú SÍ tiene visa de nómada (D.L. fin 2023, operativa 2024) */
   COUNTRY_RULES.EC = mercosurRules("EC", ["digital_nomad", "student", "tourist"]);
   COUNTRY_RULES.UY = mercosurRules("UY", ["digital_nomad", "student", "tourist"]);
