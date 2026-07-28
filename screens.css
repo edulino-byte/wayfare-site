@@ -237,6 +237,15 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
   max-width: 44ch;
 }
 
+/* Enlaces legales discretos dentro de los disclaimers (v1.63.0) */
+.legal-links { white-space: nowrap; }
+.legal-links a {
+  color: inherit;
+  text-decoration: underline dotted;
+  text-underline-offset: 2px;
+}
+.legal-links a:hover { color: var(--accent); }
+
 /* Long disclaimer â€” bottom of country detail card */
 .disclaimer-long {
   display: flex; align-items: flex-start; gap: 6px;

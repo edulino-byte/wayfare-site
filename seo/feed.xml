@@ -4,7 +4,63 @@
   <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
   <link rel="self" href="https://edulino-byte.github.io/wayfare-site/seo/feed.xml"/>
   <id>https://edulino-byte.github.io/wayfare-site/seo/feed.xml</id>
-  <updated>2026-07-26T09:00:00Z</updated>
+  <updated>2026-07-27T09:00:00Z</updated>
+
+  <entry>
+    <title>Páginas legales completas (Catálogo: Finanzas, AHORA) (v1.63.0)</title>
+    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.63.0</id>
+    <updated>2026-07-27T09:00:00Z</updated>
+    <summary>Dos páginas nuevas con el molde de las guías (variante «plana» de `pagina()` en genSeoPages.mjs, sin botón de checklist ni «¿Calificas tú?»): `seo/privacidad.html` y `seo/aviso-legal.html`. En lenguaje llano y diciendo EXACTAMENTE lo que el sitio hace: cuestionario solo en localStorage, GoatCounter sin cookies (sin banner), Formsubmit como único dato personal (moderación manual), terceros técnicos (GitHub Pages, Google Fonts), derechos RGPD y AEPD. — Titular publicado: nombre</summary>
+  </entry>
+
+  <entry>
+    <title>«Comparte tu mapa» a la medida exacta del topbar (petición del usuario) (v1.62.4)</title>
+    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.62.4</id>
+    <updated>2026-07-27T09:00:00Z</updated>
+    <summary>El botón flotante de compartir en escritorio queda con la MISMA huella que el par «editar perfil» + idioma: 212×32 px, mismo borde izquierdo y derecho (medido con getBoundingClientRect en la verificación), tipografía de 13px como las píldoras del topbar. Mantiene el color acento para destacar. — Solo estilo; sin cambios de comportamiento. — Volver aquí: `git checkout v1.62.4`.</summary>
+  </entry>
+
+  <entry>
+    <title>«Comparte tu mapa» destacado arriba a la derecha (petición del usuario) (v1.62.3)</title>
+    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.62.3</id>
+    <updated>2026-07-27T09:00:00Z</updated>
+    <summary>El botón que el usuario quería mover era el de COMPARTIR (él ve su mapa real, no la demo): en escritorio, «Comparte tu mapa» sale de la leyenda y pasa a ser una píldora acento arriba a la derecha, bajo «editar perfil» e idioma, con el ancho de ambos (~252px+). Su aviso («copiado»/«imagen descargada») aparece justo debajo. — En móvil sigue en la leyenda (ahí funciona bien). Mismo hueco que el CTA de la demo: nunca coinciden (en demo no se comparte; clase .demo-mode lo garantiz</summary>
+  </entry>
+
+  <entry>
+    <title>CTA de escritorio arriba a la derecha (petición del usuario) (v1.62.2)</title>
+    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.62.2</id>
+    <updated>2026-07-27T09:00:00Z</updated>
+    <summary>En escritorio, «Haz TU mapa — 2 minutos» ya no vive dentro de la banda central: es un botón flotante arriba a la derecha, justo debajo de «editar perfil» y el selector de idioma, con el ancho de ambos juntos (~252px+) y el mismo halo. La banda central conserva solo la señalización de «mapa de ejemplo». — En móvil no cambia nada: CTA a ancho completo dentro de la banda (el flotante se oculta). Mismo handler en ambos huecos (evento `ejemplo-cta`). — Verificado en escritorio (cl</summary>
+  </entry>
+
+  <entry>
+    <title>CTA del mapa de ejemplo protagonista (petición del usuario) (v1.62.1)</title>
+    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.62.1</id>
+    <updated>2026-07-27T09:00:00Z</updated>
+    <summary>«Haz TU mapa — 2 minutos» ahora es grande y central: píldora en su propia línea, flecha animada al pasar, halo pulsante suave (desactivado con prefers-reduced-motion). En móvil ocupa el ancho de la banda. — En móvil, el modo demo se queda con lo esencial (globo + banda): la leyenda y la pista de girar se ocultan (clase .demo-mode) y vuelven cuando el mapa es real — antes la banda pisaba la leyenda. — Verificado en escritorio y móvil (375px). Solo estilo: sin cambios de compor</summary>
+  </entry>
+
+  <entry>
+    <title>El globo antes del cuestionario + vigilante a prueba de red (v1.62.0)</title>
+    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.62.0</id>
+    <updated>2026-07-27T09:00:00Z</updated>
+    <summary>**Mapa de ejemplo al abrir** (catálogo Producto «ver el globo antes de rellenar», diseño elegido por el usuario): el visitante nuevo ya NO ve un formulario — ve el globo COLOREADO con un perfil de muestra bien señalizado (banda «MAPA DE EJEMPLO: pasaporte español, 25 años») y un CTA «Haz TU mapa — 2 minutos». El primer envío real sustituye la demo (que nunca se persiste). Quien vuelve con perfil guardado aterriza directo en SU mapa (antes volvía al formulario). Embudo: etapa </summary>
+  </entry>
+
+  <entry>
+    <title>Velocidad en móvil: motor 3D asíncrono (catálogo, tanda 3) (v1.61.0)</title>
+    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
+    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.61.0</id>
+    <updated>2026-07-26T09:00:00Z</updated>
+    <summary>**El camino crítico de carga pasa de 2.010 KB a 139 KB de librerías**: vendor.js se parte en `vendor-core.js` (React, 139 KB, síncrono) y `vendor-globe.js` (globe.gl + THREE, 1.870 KB, **async**). El cuestionario se pinta y es interactivo mientras el motor 3D baja en paralelo; al aterrizar dispara `wayfare:globe-ready`. — Hook `useGlobeLib()` en helpers.jsx; BackgroundGlobe y GlobeView montan el globo cuando el motor está (en desarrollo el script sigue síncrono → camino rápid</summary>
+  </entry>
 
   <entry>
     <title>Datos estructurados + frase de marca (catálogo, tanda 2) (v1.60.0)</title>
@@ -108,61 +164,5 @@
     <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.50.0</id>
     <updated>2026-07-19T09:00:00Z</updated>
     <summary>**Arreglo en vivo:** 9 guías SEO de la Wave 3 (KR/AR/MX/TH/SG) decían «fuente oficial de undefined» y el índice tenía una sección «undefined» — faltaban esos 5 países en el mapa de nombres de `genSeoPages.mjs`. Corregido y regenerado. — **Directorio de asesores verificados (idea #21, MVP) — construido pero LATENTE:** 20 profesionales (5 AU · 5 NZ · 5 CA · 5 GB, todos hispanohablantes salvo matices) con licencia cotejada uno a uno contra el registro oficial de su país (MARA, I</summary>
-  </entry>
-
-  <entry>
-    <title>Revelación progresiva: girar → zoom → banderas → nombres (v1.49.0)</title>
-    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
-    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.49.0</id>
-    <updated>2026-07-18T09:00:00Z</updated>
-    <summary>**Decisión del usuario:** globo limpio como siempre a vista global; al acercar el zoom aparecen las mini-banderitas de los destinos de la zona; con más zoom aún, sus nombres. Un bocadillo-guía enseña el gesto. El buscador con lupa (v1.48.0) se retira. — `Globe.jsx`: `pillData` de nuevo para los 41 destinos (centroide del polígono mayor + micros), renderizados como mini-banderita redonda (aro del color de estado, clic → panel). Umbrales: banderitas a altitud &lt; 1.25 (micros </summary>
-  </entry>
-
-  <entry>
-    <title>Mini-banderitas + buscador con lupa (decisión del usuario) (v1.48.0)</title>
-    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
-    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.48.0</id>
-    <updated>2026-07-18T09:00:00Z</updated>
-    <summary>**Feedback:** las chapitas con nombre «ocupaban mucha pantalla» y la aparición de nombres al pasar por encima seguía sin convencer. Tras valorar ideas, el usuario eligió: mini-banderita redonda para los micro-países + buscador con lupa. — **Mini-banderitas** (`.micro-flag`): los micro-destinos (SG/MT/LI) son ahora un marcador circular de 22px con la bandera dentro y aro del color de estado; el nombre solo se despliega muy de cerca (altitud &lt; 0.95). Clic → panel. Las chapit</summary>
-  </entry>
-
-  <entry>
-    <title>Nombres al acercarse: chapitas para los 41 destinos; adiós mirilla (v1.47.0)</title>
-    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
-    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.47.0</id>
-    <updated>2026-07-18T09:00:00Z</updated>
-    <summary>**Decisión del usuario** (tras valorar 4 ideas): identificar países sin puntería, estilo mapa — al acercarse a una región aparecen chapitas con nombre sobre los destinos verificados visibles; la mirilla central (v1.45.0) se retira (los países pequeños exigían pasar justo por el centro). — `Globe.jsx`: `pillData` = destinos con reglas reales (centroide del polígono mayor) + micros (coordenadas propias). Chapita clicable: polígono → `selectFeature`, micro → `abrirMicro`. Reglas</summary>
-  </entry>
-
-  <entry>
-    <title>Chapitas legibles para micro-destinos (SG/MT/LI) (v1.46.0)</title>
-    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
-    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.46.0</id>
-    <updated>2026-07-18T09:00:00Z</updated>
-    <summary>**Feedback real (fotos):** los nombres de los países pequeños (Singapur, Malta, Liechtenstein) iban pintados del color de su estado directamente sobre el mapa y no se leían (ámbar sobre océano, verde sobre azul). — `Globe.jsx`: el texto plano de la escena desaparece (queda el punto de color); el nombre vive ahora en una **chapita HTML** anclada a su lat/lng vía `htmlElementsData`: píldora de cristal con banderita SVG + nombre + punto de estado, clicable (abre el panel, igual </summary>
-  </entry>
-
-  <entry>
-    <title>Mirilla central en móvil: bocadillo del país que pasa por el centro (v1.45.0)</title>
-    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
-    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.45.0</id>
-    <updated>2026-07-18T09:00:00Z</updated>
-    <summary>**Petición del usuario:** en móvil, que el bocadillo (bandera + nombre) muestre el país que pasa por el CENTRO de la pantalla, «como si el cursor estuviera en el centro». — `Globe.jsx`: sonda cada 350ms en modo ligero — `toGlobeCoords(centro)` traduce el centro del viewport a lat/lng y un ray-casting propio (`pointInCountry`, anillo exterior menos agujeros) encuentra el país que lo contiene. Solo re-renderiza al CAMBIAR de país; se apaga con el panel abierto, la pestaña ocult</summary>
-  </entry>
-
-  <entry>
-    <title>Parche: tooltip de bandera cortado en móvil, retirado en táctil (v1.44.4)</title>
-    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
-    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.44.4</id>
-    <updated>2026-07-18T09:00:00Z</updated>
-    <summary>**Feedback real (foto):** al tocar un país en móvil, el bocadillo de hover (bandera + nombre) aparecía cortado en la esquina superior, fuera de pantalla. — Causa: el tooltip sigue al CURSOR (`mousemove`); en táctil no hay cursor y la posición se quedaba en (0,0) → se dibujaba pegado a la esquina y recortado por el `translate`. — En táctil el tooltip además es redundante: el toque ya abre el panel completo del país.</summary>
-  </entry>
-
-  <entry>
-    <title>Parche: barra de botones móvil elegante y uniforme (v1.44.3)</title>
-    <link href="https://edulino-byte.github.io/wayfare-site/seo/novedades.html"/>
-    <id>https://edulino-byte.github.io/wayfare-site/seo/novedades.html#v1.44.3</id>
-    <updated>2026-07-18T09:00:00Z</updated>
-    <summary>**Feedback real (foto):** en móvil los dos botones de la barra fija salían con tamaños distintos («Back to my map» a ancho completo, «Map my options» encogido y descolocado a la derecha). — Causa: el `margin-left: auto` del botón principal (pensado para el reparto de escritorio) en la columna móvil lo encogía a su contenido y lo empujaba al borde. — Barra móvil rediseñada (≤700px): ambos botones a **ancho completo y misma altura**, el principal **arriba** (más visible y a man</summary>
   </entry>
 </feed>
