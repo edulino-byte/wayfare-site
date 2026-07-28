@@ -218,6 +218,7 @@ window.VISA_DATA = (function () {
        lista, que sirve de fallback genérico y para el mapa/nombre/región. */
     { iso: "CO", name: "Colombia", region: "south_america", visas: [
       v("digital_nomad", [1, 2, 3, 4], { minSavings: 4000 }),
+      v("tourist", [1, 2, 3], { minSavings: 6000 }),
       v("work", [1, 2, 3], { minExp: 2 }),
       v("student", [1, 2, 3, 4], { minSavings: 4000 }),
     ]},
@@ -233,11 +234,13 @@ window.VISA_DATA = (function () {
     ]},
     { iso: "UY", name: "Uruguay", region: "south_america", visas: [
       v("digital_nomad", [1, 2, 3, 4], { minSavings: 5000 }),
+      v("tourist", [1, 2, 3], { minSavings: 6000 }),
       v("work", [1, 2, 3], { minExp: 1 }),
       v("student", [1, 2, 3, 4], { minSavings: 5000 }),
     ]},
     { iso: "PY", name: "Paraguay", region: "south_america", visas: [
       v("work", [1, 2, 3], { minExp: 1 }),
+      v("student", [1, 2, 3, 4], { minSavings: 4000 }),
       v("tourist", [1, 2, 3], { minSavings: 5000 }),
     ]},
     { iso: "BO", name: "Bolivia", region: "south_america", visas: [
@@ -251,25 +254,31 @@ window.VISA_DATA = (function () {
       v("digital_nomad", [1, 2, 3, 4], { minSavings: 8000 }),
       v("work", [1, 2, 3], { minExp: 3 }),
       v("tourist", [1, 2, 3], { minSavings: 6000 }),
+      v("student", [1, 2, 3, 4], { minSavings: 4000 }),
     ]},
     { iso: "DO", name: "Dominican Republic", region: "north_america", visas: [
       v("work", [1, 2, 3], { minExp: 2 }),
       v("tourist", [1, 2, 3], { minSavings: 6000 }),
+      v("student", [1, 2, 3, 4], { minSavings: 4000 }),
     ]},
     { iso: "GT", name: "Guatemala", region: "north_america", visas: [
       v("work", [1, 2, 3], { minExp: 2 }),
       v("tourist", [1, 2, 3], { minSavings: 6000 }),
+      v("student", [1, 2, 3, 4], { minSavings: 4000 }),
     ]},
     { iso: "HN", name: "Honduras", region: "north_america", visas: [
       v("work", [1, 2, 3], { minExp: 2 }),
       v("tourist", [1, 2, 3], { minSavings: 6000 }),
+      v("student", [1, 2, 3, 4], { minSavings: 4000 }),
     ]},
     { iso: "SV", name: "El Salvador", region: "north_america", visas: [
       v("work", [1, 2, 3], { minExp: 2 }),
       v("tourist", [1, 2, 3], { minSavings: 6000 }),
+      v("student", [1, 2, 3, 4], { minSavings: 4000 }),
     ]},
     { iso: "NI", name: "Nicaragua", region: "north_america", visas: [
       v("tourist", [1, 2, 3], { minSavings: 6000 }),
+      v("student", [1, 2, 3, 4], { minSavings: 4000 }),
     ]},
     { iso: "CU", name: "Cuba", region: "north_america", visas: [
       v("student", [1, 2, 3, 4], { minSavings: 5000 }),
@@ -279,6 +288,7 @@ window.VISA_DATA = (function () {
     { iso: "BZ", name: "Belize", region: "north_america", visas: [
       v("tourist", [1, 2, 3], { minSavings: 6000 }),
       v("work", [1, 2, 3], { minExp: 2 }),
+      v("student", [1, 2, 3, 4], { minSavings: 4000 }),
     ]},
     { iso: "ZA", name: "South Africa", region: "africa", visas: [
       v("work", [1, 2, 3], { minExp: 3 }),

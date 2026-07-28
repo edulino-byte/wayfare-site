@@ -2572,11 +2572,11 @@ window.Eligibility = (function () {
   };
   COUNTRY_RULES.BR = mercosurRules("BR", ["digital_nomad", "student"]);
   COUNTRY_RULES.CL = mercosurRules("CL", ["digital_nomad"]);
-  COUNTRY_RULES.CO = mercosurRules("CO", ["digital_nomad", "student"]);
+  COUNTRY_RULES.CO = mercosurRules("CO", ["digital_nomad", "student", "tourist"]);
   COUNTRY_RULES.PE = mercosurRules("PE", ["student", "tourist"]);
   COUNTRY_RULES.EC = mercosurRules("EC", ["digital_nomad", "student", "tourist"]);
-  COUNTRY_RULES.UY = mercosurRules("UY", ["digital_nomad", "student"]);
-  COUNTRY_RULES.PY = mercosurRules("PY", ["tourist"]);
+  COUNTRY_RULES.UY = mercosurRules("UY", ["digital_nomad", "student", "tourist"]);
+  COUNTRY_RULES.PY = mercosurRules("PY", ["student", "tourist"]);
   COUNTRY_RULES.BO = mercosurRules("BO", ["student", "tourist"]);
 
   /* =========================================================================
