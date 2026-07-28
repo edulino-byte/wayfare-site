@@ -256,6 +256,12 @@ window.VERIFICATION = {
       "facts": 11,
       "monitored": false,
       "lastCheck": "2026-07-29"
+    },
+    "UY": {
+      "routes": 1,
+      "facts": 6,
+      "monitored": false,
+      "lastCheck": "2026-07-29"
     }
   }
 };

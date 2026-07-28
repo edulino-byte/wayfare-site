@@ -2653,7 +2653,39 @@ window.Eligibility = (function () {
   };
   COUNTRY_RULES.PE = mercosurRules("PE", ["student", "tourist", "digital_nomad"]); /* v1.71.0: Perú SÍ tiene visa de nómada (D.L. fin 2023, operativa 2024) */
   COUNTRY_RULES.EC = mercosurRules("EC", ["digital_nomad", "student", "tourist"]);
-  COUNTRY_RULES.UY = mercosurRules("UY", ["digital_nomad", "student", "tourist"]);
+  /* =========================================================================
+     URUGUAY — nivel AUDITADO (v1.74.0)
+     Fuente capturada 29-jul-2026: gub.uy/tramites/residencia-legal-permanente-
+     mercosur (Ministerio del Interior · DNM; responde a curl con UA por
+     defecto — el vigilante puede leerla sin trato especial). Snapshot:
+     tools/visa-intelligence/snapshots/uy-pe-ec-upgrade-2026-07/.
+     DOS datos diferenciales del texto oficial: la residencia Mercosur de
+     Uruguay es PERMANENTE DIRECTA, y su lista oficial INCLUYE a Venezuela
+     (y Surinam y Guyana). PE/EC: fuentes nacionales inaccesibles desde esta
+     red (gob.pe y gob.ec sin respuesta por 3 vías) — ascenso pospuesto.
+  ========================================================================= */
+  var UY_MERCOSUR = { AR:1, BR:1, CL:1, BO:1, PY:1, PE:1, EC:1, CO:1, VE:1 };
+  COUNTRY_RULES.UY = {
+    work: function (p) {
+      if (UY_MERCOSUR[p.nationality] && p.nationality !== "UY") {
+        var r = visaResult("work", 90,
+          ["Uruguay's Permanente Mercosur grants DIRECT permanent legal residence to nationals of Mercosur member and associated states.",
+           "Uruguay's official list covers Argentina, Brazil, Chile, Bolivia, Paraguay, Peru, Ecuador, Colombia and Venezuela (plus Suriname and Guyana).",
+           "With the residence you can work and carry out any lawful activity.",
+           "A Temporaria Mercosur also exists for stays of up to 2 years, extendable for the same period."],
+          ["You will need an ID document, a criminal record certificate from the country where you lived the last 5 years, and a vaccination certificate meeting Uruguay's official schedule.",
+           "Approval is always a prerogative of the Uruguayan State. Simulated guidance only."],
+          []);
+        r.officialName = "Uruguay Residencia Legal — Permanente Mercosur";
+        r.route = "uy_work_mercosur";
+        return r;
+      }
+      return genericDe("UY", "work", p);
+    },
+    digital_nomad: function (p) { return genericDe("UY", "digital_nomad", p); },
+    student: function (p) { return genericDe("UY", "student", p); },
+    tourist: function (p) { return genericDe("UY", "tourist", p); },
+  };
   COUNTRY_RULES.PY = mercosurRules("PY", ["student", "tourist"]);
   COUNTRY_RULES.BO = mercosurRules("BO", ["student", "tourist"]);
 
