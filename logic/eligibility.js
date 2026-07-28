@@ -2602,6 +2602,34 @@ window.Eligibility = (function () {
   COUNTRY_RULES.PY = mercosurRules("PY", ["student", "tourist"]);
   COUNTRY_RULES.BO = mercosurRules("BO", ["student", "tourist"]);
 
+  /* v1.72.0 — Vietnam y Sri Lanka: destinos nómada MUY populares pero SIN visa
+     dedicada → ruta honesta (estilo AU/CA/NZ/CL/GE); el resto de sus tipos,
+     genérico desde mock.js (recordar: COUNTRY_RULES manda sobre esa lista). */
+  function honestDN(frases) {
+    return function (p) {
+      return visaResult("digital_nomad", p.remoteWork ? 32 : 12,
+        p.remoteWork ? ["Your profile indicates remote work, which is the main factor for nomad-style stays."] : [],
+        frases.concat(["Simulated guidance only. Always verify with official immigration sources."]),
+        []);
+    };
+  }
+  COUNTRY_RULES.VN = {
+    digital_nomad: honestDN([
+      "Vietnam does not currently offer a dedicated Digital Nomad visa.",
+      "Remote workers commonly use the 90-day tourist e-visa; longer stays require another visa type."]),
+    tourist: function (p) { return genericDe("VN", "tourist", p); },
+    student: function (p) { return genericDe("VN", "student", p); },
+    work: function (p) { return genericDe("VN", "work", p); },
+  };
+  COUNTRY_RULES.LK = {
+    digital_nomad: honestDN([
+      "Sri Lanka does not currently offer a dedicated Digital Nomad visa.",
+      "Remote workers commonly use the extendable tourist visa (ETA)."]),
+    tourist: function (p) { return genericDe("LK", "tourist", p); },
+    student: function (p) { return genericDe("LK", "student", p); },
+    work: function (p) { return genericDe("LK", "work", p); },
+  };
+
   /* =========================================================================
      EVALUATE ONE COUNTRY
   ========================================================================= */

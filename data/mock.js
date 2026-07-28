@@ -300,6 +300,40 @@ window.VISA_DATA = (function () {
       v("digital_nomad", [1, 2, 3, 4], { minSavings: 4000 }),
       v("tourist", [1, 2, 3, 4], { minSavings: 12000 }),
     ]},
+    /* ---- Tanda 2 Asia/Pacífico/Golfo (v1.72.0) — nivel modelado, SIN auditar.
+       VN y LK reciben además la ruta nómada «honesta» en eligibility.js
+       (COUNTRY_RULES manda sobre esta lista; genericDe usa estos req). */
+    { iso: "ID", name: "Indonesia", region: "asia", visas: [
+      v("digital_nomad", [1, 2, 3], { minSavings: 12000 }), /* E33G Remote Worker (2024), programa real */
+      v("tourist", [1, 2, 3], { minSavings: 5000 }),
+      v("student", [1, 2, 3, 4], { minSavings: 5000 }),
+      v("work", [1, 2, 3], { minExp: 2 }),
+    ]},
+    { iso: "VN", name: "Vietnam", region: "asia", visas: [
+      v("tourist", [1, 2, 3], { minSavings: 4000 }),
+      v("student", [1, 2, 3, 4], { minSavings: 4000 }),
+      v("work", [1, 2, 3], { minExp: 2 }),
+    ]},
+    { iso: "QA", name: "Qatar", region: "asia", visas: [
+      v("work", [1, 2, 3], { minExp: 2 }),
+      v("tourist", [1, 2, 3], { minSavings: 6000 }),
+      v("student", [1, 2, 3, 4], { minSavings: 6000 }),
+    ]},
+    { iso: "IN", name: "India", region: "asia", visas: [
+      v("tourist", [1, 2, 3], { minSavings: 4000 }),
+      v("student", [1, 2, 3, 4], { minSavings: 4000 }),
+      v("work", [1, 2, 3], { minExp: 2 }),
+    ]},
+    { iso: "LK", name: "Sri Lanka", region: "asia", visas: [
+      v("tourist", [1, 2, 3], { minSavings: 4000 }),
+      v("student", [1, 2, 3, 4], { minSavings: 4000 }),
+      v("work", [1, 2, 3], { minExp: 2 }),
+    ]},
+    { iso: "FJ", name: "Fiji", region: "oceania", visas: [
+      v("tourist", [1, 2, 3], { minSavings: 5000 }),
+      v("work", [1, 2, 3], { minExp: 2 }),
+      v("student", [1, 2, 3, 4], { minSavings: 5000 }),
+    ]},
   ];
 
   return { EDUCATION, ENGLISH, VISA_TYPES, PASSPORTS, RESIDENCES, COUNTRIES,

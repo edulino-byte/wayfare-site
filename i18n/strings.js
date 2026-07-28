@@ -1258,6 +1258,11 @@ window.I18N = {
     "Work permit processes may be more complex for your passport nationality.": "Los trámites de permiso de trabajo pueden ser más complejos según tu nacionalidad de pasaporte.",
     "You may need to show sufficient funds and income. Check official digital nomad visa requirements for this destination.": "Puede que debas demostrar fondos e ingresos suficientes. Consulta los requisitos oficiales de la visa de nómada digital de este destino.",
     "Your passport appears to provide strong global visa access.": "Tu pasaporte parece ofrecer un acceso global fuerte a visados.",
+    /* Nómada digital honesto VN/LK (v1.72.0) */
+    "Vietnam does not currently offer a dedicated Digital Nomad visa.": "Vietnam no ofrece por ahora una visa de nómada digital dedicada.",
+    "Remote workers commonly use the 90-day tourist e-visa; longer stays require another visa type.": "Quienes trabajan en remoto suelen usar la e-visa de turista de 90 días; estancias más largas requieren otro tipo de visa.",
+    "Sri Lanka does not currently offer a dedicated Digital Nomad visa.": "Sri Lanka no ofrece por ahora una visa de nómada digital dedicada.",
+    "Remote workers commonly use the extendable tourist visa (ETA).": "Quienes trabajan en remoto suelen usar la visa de turista prorrogable (ETA).",
     /* Nómada digital honesto CL/GE (v1.71.0) */
     "Proof of regular income may support a visitor application.": "Acreditar ingresos regulares puede reforzar una solicitud de visitante.",
     "Your profile indicates remote work, which is the main factor for nomad-style stays.": "Tu perfil indica trabajo remoto, el factor principal para estancias de tipo nómada.",
@@ -1351,5 +1356,7 @@ window.COUNTRY_NAMES = {
     EC: "Ecuador", GT: "Guatemala", HN: "Honduras", NI: "Nicaragua",
     PA: "Panamá", PY: "Paraguay", PE: "Perú", SV: "El Salvador",
     UY: "Uruguay", VE: "Venezuela", BZ: "Belice",
+    ID: "Indonesia", VN: "Vietnam", QA: "Catar", IN: "India",
+    LK: "Sri Lanka", FJ: "Fiyi",
   },
 };
