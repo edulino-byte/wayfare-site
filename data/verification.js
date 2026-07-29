@@ -6,8 +6,8 @@ window.VERIFICATION = {
   "monitorLastRun": "2026-07-27",
   "destinations": {
     "NZ": {
-      "routes": 35,
-      "facts": 632,
+      "routes": 36,
+      "facts": 633,
       "monitored": true,
       "lastCheck": "2026-07-27"
     },

@@ -865,26 +865,38 @@ window.Eligibility = (function () {
          on passport alone. No passport-tier gate, no money scoring, no
          work-right scoring. NZeTA is informational only (not its own route).
       ─────────────────────────────────────────────────────────────────── */
-      var m = [], w = [], x = [], score = 50;
+      /* v1.83.0 — FASE 3: NZeTA y Visitor Visa como TARJETAS separadas.
+         Exentos (lista oficial): tarjeta NZeTA + Visitor universal; AU:
+         entrada sin visa ni NZeTA (tarjeta visitor con su línea especial);
+         no exentos: solo Visitor. Rutas partidas en sources.json; mismas
+         frases traducidas/ancladas. */
+      var cards = [];
+      var esWaiver = p.nationality !== "AU" && inList(NZ_VISA_WAIVER, p.nationality);
 
-      /* v1.24.0 — exención por LISTA OFICIAL (antes línea genérica) */
+      if (esWaiver) {
+        var mE = [], wE = [];
+        mE.push("Your passport nationality is on New Zealand's visa waiver list: you do not need a visitor visa, but you must request an NZeTA (Electronic Travel Authority) before travelling.");
+        wE.push("This is simulated guidance only. Always verify with Immigration New Zealand.");
+        var rE = visaResult("tourist", 55, mE, wE, []);
+        rE.officialName = "NZeTA (Electronic Travel Authority)";
+        rE.route = "nz_tourist_nzeta";
+        cards.push(rE);
+      }
+
+      var m = [], w = [], x = [], score;
       if (p.nationality === "AU") {
         score = 60;
         m.push("Australian citizens do not need a visa or NZeTA to visit New Zealand.");
-      } else if (inList(NZ_VISA_WAIVER, p.nationality)) {
-        score = 55;
-        m.push("Your passport nationality is on New Zealand's visa waiver list: you do not need a visitor visa, but you must request an NZeTA (Electronic Travel Authority) before travelling.");
+      } else if (esWaiver) {
+        score = 46;
+        m.push("New Zealand's full Visitor Visa is available to any nationality.");
       } else {
         score = 42;
         w.push("Your passport nationality is not on New Zealand's visa waiver list: you need a visitor visa before travelling.");
       }
-
-      /* Remote-work nuance (preserve digital-nomad fairness) */
       if (p.remoteWork) {
         m.push("Your profile indicates remote work. Check the work conditions below for New Zealand Visitor Visa limits.");
       }
-
-      /* Official requirements — informational warnings (not assessable here) */
       w.push("A Visitor Visa is usually granted for up to either 6 months or 9 months (a single-entry visa can allow up to 9 months in an 18-month period).");
       w.push("You cannot work for a New Zealand employer or provide services in the New Zealand labour market on this visa. Remote work for an overseas employer, business, or client may be possible.");
       w.push("You can study for up to 3 months on a visitor visa.");
@@ -896,14 +908,13 @@ window.Eligibility = (function () {
       w.push("Your passport must be valid for at least 3 months after the date you plan to leave New Zealand.");
       w.push("You can include your partner and any dependent children aged 19 or younger in your application, or they can apply for their own visas.");
       w.push("This is simulated guidance only. Always verify with Immigration New Zealand.");
-
-      /* Always partial: core requirements cannot be verified by Wayfare */
       score = clamp(score, 40, 68);
-
       var r = visaResult("tourist", score, m, w, x);
       r.officialName = "Visitor Visa";
       r.route        = "visitor_visa";
-      return r;
+      cards.push(r);
+
+      return cards;
     },
 
     /* Country-by-country Working Holiday — see nzWorkingHoliday() above */
