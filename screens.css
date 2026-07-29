@@ -237,6 +237,17 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
   max-width: 44ch;
 }
 
+/* Aviso de objetivo obligatorio (v1.80.0) */
+.goal-error {
+  margin: 10px 0 0;
+  padding: 8px 12px;
+  border: 1px solid var(--st-partial);
+  border-radius: var(--radius-sm);
+  color: var(--st-partial);
+  background: rgba(217,147,22,0.10);
+  font-size: 13px;
+}
+
 /* Enlaces legales discretos dentro de los disclaimers (v1.63.0) */
 .legal-links { white-space: nowrap; }
 .legal-links a {

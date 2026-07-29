@@ -49,7 +49,8 @@ window.I18N = {
     goal_tourism: "Tourism / travel",
     goal_remote: "Work remotely",
     f_countries_hint: "Optional — pick any that excite you. We still scan the whole map.",
-    f_visas_hint: "Optional — pick one or several and we'll show you the visas that fit each goal; leave them all unselected and we'll evaluate everything.",
+    f_visas_hint: "Pick one or several — your map is built around your goals.",
+    goal_required: "Choose at least one goal so we can build your map.",
 
     submit: "Map my options",
     reset: "Reset",
@@ -555,7 +556,8 @@ window.I18N = {
     goal_tourism: "Turismo",
     goal_remote: "Trabajar en remoto",
     f_countries_hint: "Opcional — elige los que te llamen. Igual escaneamos todo el mapa.",
-    f_visas_hint: "Opcional — elige uno o varios y te enseñamos las visas que encajan con cada objetivo; si no eliges nada, lo evaluamos todo.",
+    f_visas_hint: "Elige uno o varios — tu mapa se construye según tus objetivos.",
+    goal_required: "Elige al menos un objetivo para que podamos generar tu mapa.",
 
     submit: "Mapear mis opciones",
     reset: "Reiniciar",
