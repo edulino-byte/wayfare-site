@@ -152,61 +152,66 @@ window.Eligibility = (function () {
         return r;
       }
 
-      var m = [], w = [], x = [], score = 0, nat = p.nationality;
+      /* v1.82.0 — FASE 3: los caminos oficiales como TARJETAS SEPARADAS.
+         La tarjeta principal según tu pasaporte (444 / 651 / 601) + la
+         Visitor 600 (disponible para cualquier nacionalidad) siempre como
+         opción. Rutas auditadas partidas en 4 (sources.json); cada tarjeta
+         casa por su route. Mismas frases traducidas/ancladas de siempre. */
+      var nat = p.nationality;
+      var cards = [];
+      function card(subclass, route, nombre, score, m, w, x) {
+        var r = visaResult("tourist", Math.min(score, 68), m, w, x);
+        r.subclass = subclass; r.route = route; r.officialName = nombre;
+        return r;
+      }
+      function extrasComunes(m, w) {
+        if (p.age < 18) w.push("For applicants under 18, the visa may not be granted if it is not in the best interests of the child.");
+        if (p.remoteWork) w.push("This visa does not allow work in Australia. If you plan to work remotely while in Australia, you should check official conditions carefully.");
+        w.push("You must be a genuine visitor and only intend to stay temporarily in Australia.");
+      }
 
-      /* 1. Passport path — official eligible-passport lists (captured 15-jul-2026) */
+      /* — tarjeta principal según el pasaporte — */
       if (nat === "NZ") {
-        score += 62;
-        S600.subclass = "444";
-        m.push("New Zealand citizens can usually enter Australia under the Trans-Tasman Travel Arrangement (Special Category visa granted on arrival).");
-        w.push("As a New Zealand citizen you are usually granted the Special Category visa (subclass 444) on arrival under the Trans-Tasman arrangement - it is free and lets you visit, study and work in Australia.");
+        var m444 = [], w444 = [];
+        m444.push("New Zealand citizens can usually enter Australia under the Trans-Tasman Travel Arrangement (Special Category visa granted on arrival).");
+        w444.push("As a New Zealand citizen you are usually granted the Special Category visa (subclass 444) on arrival under the Trans-Tasman arrangement - it is free and lets you visit, study and work in Australia.");
+        extrasComunes(m444, w444);
+        cards.push(card("444", "au_tourist_444", "Special Category visa (subclass 444) — Trans-Tasman", 62, m444, w444, []));
       } else if (inList(AU_EVISITOR, nat)) {
-        score += 58;
-        S600.subclass = "651";
-        m.push("Your passport nationality appears to be on the eVisitor (subclass 651) eligible list: apply online for free and stay up to 3 months at a time.");
-        w.push("The eVisitor lets you visit as often as you wish in a 12-month period, staying up to 3 months each time you enter Australia.");
+        var m651 = [], w651 = [];
+        m651.push("Your passport nationality appears to be on the eVisitor (subclass 651) eligible list: apply online for free and stay up to 3 months at a time.");
+        w651.push("The eVisitor lets you visit as often as you wish in a 12-month period, staying up to 3 months each time you enter Australia.");
+        extrasComunes(m651, w651);
+        cards.push(card("651", "au_tourist_651", "eVisitor (subclass 651)", 58, m651, w651, []));
       } else if (inList(AU_ETA, nat)) {
-        score += 56;
-        S600.subclass = "601";
-        m.push("Your passport nationality appears to be on the Electronic Travel Authority (subclass 601) eligible list: stays of up to 3 months at a time.");
-        w.push("You must apply for the ETA before travelling, normally through the Australian ETA app.");
-      } else {
-        score += 48;
-        w.push("Your passport nationality does not appear on the eVisitor or ETA eligible lists, so a full Visitor visa (subclass 600) application is likely required.");
+        var m601 = [], w601 = [];
+        m601.push("Your passport nationality appears to be on the Electronic Travel Authority (subclass 601) eligible list: stays of up to 3 months at a time.");
+        w601.push("You must apply for the ETA before travelling, normally through the Australian ETA app.");
+        extrasComunes(m601, w601);
+        cards.push(card("601", "au_tourist_601", "Electronic Travel Authority (subclass 601)", 56, m601, w601, []));
       }
 
-      /* 2. Residence / application location */
+      /* — Visitor 600: para cualquier nacionalidad; principal si no hay lista — */
+      var m600 = [], w600 = [], score600;
+      if (cards.length) {
+        score600 = 44;
+        m600.push("The full Visitor visa (subclass 600) is available to any nationality.");
+      } else {
+        score600 = 48;
+        w600.push("Your passport nationality does not appear on the eVisitor or ETA eligible lists, so a full Visitor visa (subclass 600) application is likely required.");
+      }
       if (p.currentResidence === "AU") {
-        score -= 8;
-        w.push("This tourist stream requires you to be outside Australia when you apply and when the visa is decided.");
+        score600 -= 8;
+        w600.push("This tourist stream requires you to be outside Australia when you apply and when the visa is decided.");
       } else {
-        m.push("Your current residence appears consistent with an outside-Australia tourist stream, but your actual location at application time must be checked.");
+        m600.push("Your current residence appears consistent with an outside-Australia tourist stream, but your actual location at application time must be checked.");
       }
+      extrasComunes(m600, w600);
+      finReq("You must have, or have access to, enough money to support yourself while in Australia. Wayfare does not currently assess financial evidence.", w600);
+      S600.notEvaluated.forEach(function(req) { w600.push(req); });
+      cards.push(card("600", "au_tourist_600", "Visitor visa (subclass 600)", score600, m600, w600, []));
 
-      /* 3. Age — no adult-only requirement; under-18 warning only */
-      if (p.age < 18) {
-        w.push("For applicants under 18, the visa may not be granted if it is not in the best interests of the child.");
-      }
-
-      /* 4. Remote work — not a blocker but requires a clear warning */
-      if (p.remoteWork) {
-        w.push("This visa does not allow work in Australia. If you plan to work remotely while in Australia, you should check official conditions carefully.");
-      }
-
-      /* 5. Genuine visitor — always informational */
-      w.push("You must be a genuine visitor and only intend to stay temporarily in Australia.");
-
-      /* 6. Financial — informational only */
-      finReq("You must have, or have access to, enough money to support yourself while in Australia. Wayfare does not currently assess financial evidence.", w);
-
-      /* 7. Non-evaluable official requirements */
-      S600.notEvaluated.forEach(function(req) { w.push(req); });
-
-      /* Cap at partial: genuine visitor intent, funds, health/character,
-         actual application location cannot be assessed by Wayfare */
-      score = Math.min(score, 68);
-
-      return s600Result(score, m, w, x);
+      return cards;
     },
 
     work_and_holiday: function (p) {

@@ -12,7 +12,7 @@ window.VERIFICATION = {
       "lastCheck": "2026-07-27"
     },
     "AU": {
-      "routes": 4,
+      "routes": 7,
       "facts": 49,
       "monitored": false,
       "lastCheck": "2026-07-13"
