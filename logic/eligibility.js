@@ -2794,7 +2794,26 @@ window.Eligibility = (function () {
       w.push("Approval is always a prerogative of the Indonesian State. Simulated guidance only.");
       return idDn(score);
     },
-    tourist: function (p) { return genericDe("ID", "tourist", p); },
+    /* v1.81.0 — Fase 2 estrenada aquí: DOS visas de turismo concretas (array),
+       nivel modelado (sin fuente capturada aún → línea de orientación
+       preliminar en ambas). El ejemplo exacto que pidió el usuario. */
+    tourist: function (p) {
+      var pt = passportTier(p.nationality);
+      var voaM = [], voaW = [], visitM = [], visitW = [];
+      voaM.push("Indonesia's Visa on Arrival allows a 30-day tourist stay and can be extended once for another 30 days.");
+      voaW.push("Available to nationals of the countries on Indonesia's VOA list — check the official list; it can also be applied for online as an e-VOA before travel.");
+      voaW.push("This route could not be verified against a captured official source yet. Treat as preliminary guidance.");
+      var voa = visaResult("tourist", pt <= 2 ? 74 : pt === 3 ? 62 : 28, voaM, voaW, []);
+      voa.officialName = "Indonesia Visa on Arrival (VOA / e-VOA) — 30 days";
+      voa.route = "id_tourist_voa";
+      visitM.push("Indonesia's tourist visit visa allows stays of up to 60 days, with possible extensions in-country.");
+      visitW.push("Applied for online via Indonesia's official e-visa portal before travel, with proof of funds and onward travel.");
+      visitW.push("This route could not be verified against a captured official source yet. Treat as preliminary guidance.");
+      var visit = visaResult("tourist", pt <= 3 ? 58 : 44, visitM, visitW, []);
+      visit.officialName = "Indonesia Tourist Visit Visa — up to 60 days";
+      visit.route = "id_tourist_visit";
+      return [voa, visit];
+    },
     student: function (p) { return genericDe("ID", "student", p); },
     work: function (p) { return genericDe("ID", "work", p); },
   };
@@ -2829,7 +2848,11 @@ window.Eligibility = (function () {
                synthetic: !!country.synthetic, status: "ineligible", score: 0, visas: [] };
     }
 
-    var visaResults = types.map(function(vType) {
+    /* v1.81.0 — Fase 2: una regla puede devolver VARIAS visas concretas del
+       mismo tipo (array) — p. ej. los dos turismos de Indonesia. Se normaliza
+       a lista plana; cada tarjeta lleva su propio status. */
+    var visaResults = [];
+    types.forEach(function(vType) {
       var r;
       if (rules && typeof rules[vType] === "function") {
         r = rules[vType](profile);
@@ -2837,8 +2860,10 @@ window.Eligibility = (function () {
         var mockVisa = country.visas && country.visas.find(function(v) { return v.type === vType; });
         r = genericVisa(vType, profile, mockVisa ? mockVisa.req : {});
       }
-      r.status = scoreToStatus(r.score);
-      return r;
+      (Array.isArray(r) ? r : [r]).forEach(function(one) {
+        one.status = scoreToStatus(one.score);
+        visaResults.push(one);
+      });
     });
 
     var countryStatus = "ineligible";

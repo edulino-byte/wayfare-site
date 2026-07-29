@@ -1268,6 +1268,11 @@ window.I18N = {
     "Work permit processes may be more complex for your passport nationality.": "Los trámites de permiso de trabajo pueden ser más complejos según tu nacionalidad de pasaporte.",
     "You may need to show sufficient funds and income. Check official digital nomad visa requirements for this destination.": "Puede que debas demostrar fondos e ingresos suficientes. Consulta los requisitos oficiales de la visa de nómada digital de este destino.",
     "Your passport appears to provide strong global visa access.": "Tu pasaporte parece ofrecer un acceso global fuerte a visados.",
+    /* Fase 2 — dos turismos de Indonesia (v1.81.0, nivel modelado) */
+    "Indonesia's Visa on Arrival allows a 30-day tourist stay and can be extended once for another 30 days.": "La Visa on Arrival de Indonesia permite una estancia turística de 30 días, prorrogable una vez por otros 30.",
+    "Available to nationals of the countries on Indonesia's VOA list — check the official list; it can also be applied for online as an e-VOA before travel.": "Disponible para nacionales de los países de la lista VOA de Indonesia — consulta la lista oficial; también puede solicitarse online como e-VOA antes de viajar.",
+    "Indonesia's tourist visit visa allows stays of up to 60 days, with possible extensions in-country.": "La visa de visita turística de Indonesia permite estancias de hasta 60 días, con posibles prórrogas dentro del país.",
+    "Applied for online via Indonesia's official e-visa portal before travel, with proof of funds and onward travel.": "Se solicita online en el portal oficial de e-visa de Indonesia antes de viajar, con prueba de fondos y billete de salida.",
     /* Tailandia DTV + Emiratos Virtual Work auditadas (v1.77.0) */
     "Thailand's DTV (Workcation) covers digital nomads, remote workers, foreign talent and freelancers.": "La DTV de Tailandia (modalidad Workcation) cubre a nómadas digitales, trabajadores remotos, talento extranjero y freelancers.",
     "A DTV track also exists for Thai soft power activities such as Muaythai, Thai culinary training and medical treatment.": "También existe una vía DTV para actividades de «soft power» tailandés como Muaythai, formación de cocina tailandesa y tratamiento médico.",
