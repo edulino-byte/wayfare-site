@@ -1268,6 +1268,9 @@ window.I18N = {
     "Work permit processes may be more complex for your passport nationality.": "Los trámites de permiso de trabajo pueden ser más complejos según tu nacionalidad de pasaporte.",
     "You may need to show sufficient funds and income. Check official digital nomad visa requirements for this destination.": "Puede que debas demostrar fondos e ingresos suficientes. Consulta los requisitos oficiales de la visa de nómada digital de este destino.",
     "Your passport appears to provide strong global visa access.": "Tu pasaporte parece ofrecer un acceso global fuerte a visados.",
+    /* Fase 3 — desdobles GB y CA (v1.84.0) */
+    "The full Standard Visitor visa is available to any nationality.": "La Standard Visitor visa completa está disponible para cualquier nacionalidad.",
+    "Canada's full visitor visa (TRV) is available to any nationality.": "La visitor visa completa de Canadá (TRV) está disponible para cualquier nacionalidad.",
     /* Fase 3 — desdoble del turismo de NZ (v1.83.0) */
     "New Zealand's full Visitor Visa is available to any nationality.": "La Visitor Visa completa de Nueva Zelanda está disponible para cualquier nacionalidad.",
     /* Fase 3 — desdoble del turismo de Australia (v1.82.0) */

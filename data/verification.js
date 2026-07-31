@@ -2,7 +2,7 @@
    Resumen de verificación de datos por destino (Fase 1 · Dato vivo).
    Regenerar: node tools/build/genVerification.mjs */
 window.VERIFICATION = {
-  "generatedAt": "2026-07-29",
+  "generatedAt": "2026-07-31",
   "monitorLastRun": "2026-07-27",
   "destinations": {
     "NZ": {
@@ -18,13 +18,13 @@ window.VERIFICATION = {
       "lastCheck": "2026-07-13"
     },
     "GB": {
-      "routes": 3,
-      "facts": 42,
+      "routes": 4,
+      "facts": 43,
       "monitored": true,
       "lastCheck": "2026-07-27"
     },
     "CA": {
-      "routes": 3,
+      "routes": 4,
       "facts": 26,
       "monitored": true,
       "lastCheck": "2026-07-27"

@@ -1008,14 +1008,27 @@ window.Eligibility = (function () {
   COUNTRY_RULES.CA = {
 
     tourist: function (p) {
+      /* v1.84.0 — FASE 3: eTA de Canadá y visitor visa (TRV) separadas.
+         Exentos: tarjeta eTA + TRV universal; US: sin visa ni eTA (línea en
+         la TRV); condicionales y resto: solo TRV. */
+      var cards = [];
       var m = [], w = [], x = [], score = 0, nat = p.nationality;
+      if (nat !== "US" && inList(CA_ETA_EXEMPT, nat)) {
+        var mE = [], wE = [];
+        mE.push("Your passport nationality is visa-exempt for Canada: you need an eTA (Electronic Travel Authorization) to fly, not a visitor visa.");
+        wE.push("This is simulated guidance only. Verify with IRCC (Immigration, Refugees and Citizenship Canada).");
+        var rE = visaResult("tourist", 55, mE, wE, []);
+        rE.officialName = "Canada eTA (Electronic Travel Authorization)";
+        rE.route = "ca_tourist_eta";
+        cards.push(rE);
+      }
       /* v1.24.0 — listas OFICIALES de canada.ca (antes tier del prototipo) */
       if (nat === "US") {
         score += 60;
         m.push("US citizens do not need a visa or an eTA to visit Canada.");
       } else if (inList(CA_ETA_EXEMPT, nat)) {
-        score += 55;
-        m.push("Your passport nationality is visa-exempt for Canada: you need an eTA (Electronic Travel Authorization) to fly, not a visitor visa.");
+        score += 46;
+        m.push("Canada's full visitor visa (TRV) is available to any nationality.");
       } else if (inList(CA_ETA_CONDITIONAL, nat)) {
         score += 42;   /* vía real (eTA condicionada) => banda parcial, no "poco probable" */
         w.push("Canada requires a visitor visa for your nationality, but you may be eligible for an eTA instead if you travel by air and have held a Canadian visa in the last 10 years or hold a valid US visa.");
@@ -1035,9 +1048,10 @@ window.Eligibility = (function () {
       finReq("You may need to show sufficient funds for your stay. Check IRCC for current financial requirements.", w);
       w.push("This is simulated guidance only. Verify with IRCC (Immigration, Refugees and Citizenship Canada).");
       var r = visaResult("tourist", score, m, w, x);
-      r.officialName = "Visitor visa / eTA";
+      r.officialName = "Canada Visitor visa (TRV)";
       r.route        = "ca_visitor";
-      return r;
+      cards.push(r);
+      return cards;
     },
 
     work_and_holiday: function (p) {
@@ -2527,15 +2541,28 @@ window.Eligibility = (function () {
 
     /* ── Standard Visitor ──────────────────────────────────────────────── */
     tourist: function (p) {
-      var m = [], w = [], x = [], score = 50;
+      /* v1.84.0 — FASE 3: ETA del Reino Unido y Standard Visitor separadas.
+         No «visa nationals»: tarjeta ETA + Standard Visitor universal;
+         «visa nationals»: solo Standard Visitor. */
+      var cards = [];
+      var esVisaNational = inList(GB_VISA_NATIONALS, p.nationality);
+      if (!esVisaNational) {
+        var mE = [], wE = [];
+        mE.push("Your nationality is not on the UK visa national list: you can usually visit for up to 6 months without a visitor visa, but you may need an Electronic Travel Authorisation (ETA).");
+        wE.push("This is simulated guidance only. Always verify with GOV.UK.");
+        var rE = visaResult("tourist", 55, mE, wE, []);
+        rE.officialName = "UK Electronic Travel Authorisation (ETA)";
+        rE.route = "gb_tourist_eta";
+        cards.push(rE);
+      }
 
-      /* v1.24.0 — visa-national list OFICIAL (antes línea genérica) */
-      if (inList(GB_VISA_NATIONALS, p.nationality)) {
+      var m = [], w = [], x = [], score;
+      if (esVisaNational) {
         score = 42;
         w.push("Your nationality is on the UK visa national list: you must obtain a Standard Visitor visa before you travel.");
       } else {
-        score = 55;
-        m.push("Your nationality is not on the UK visa national list: you can usually visit for up to 6 months without a visitor visa, but you may need an Electronic Travel Authorisation (ETA).");
+        score = 46;
+        m.push("The full Standard Visitor visa is available to any nationality.");
       }
 
       w.push("You can usually stay in the UK for up to 6 months as a Standard Visitor.");
@@ -2555,7 +2582,8 @@ window.Eligibility = (function () {
       var r = visaResult("tourist", score, m, w, x);
       r.officialName = "Standard Visitor visa";
       r.route = "gb_standard_visitor";
-      return r;
+      cards.push(r);
+      return cards;
     },
 
     /* ── Student visa ──────────────────────────────────────────────────── */
