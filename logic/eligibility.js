@@ -2015,29 +2015,49 @@ window.Eligibility = (function () {
 
   COUNTRY_RULES.TH = {
 
+    /* v1.88.0 — Fase 3: turismo en DOS tarjetas. La exención (AUDITADA, PDF del
+       MFA) conserva sus hechos y su ruta — solo se le corrige el officialName
+       combinado (lección v1.84) y se le renombra la ruta a th_tourist_exemption
+       en la app y en sources.json a la vez. La Tourist Visa (TR) es una tarjeta
+       app-side (patrón us_tourist_b1b2): sin hechos capturados aún → línea
+       preliminar. La ruta auditada tiene sourcesComplete=false, así que no hay
+       riesgo de EXTRA_IN_APP al repartir frases. */
     tourist: function (p) {
       var m = [], w = [], x = [], score = 0, nat = p.nationality;
-      function thTourist(sc) {
-        var r = visaResult("tourist", sc, m, w, x);
-        r.officialName = "Thailand visa exemption / tourist visa"; r.route = "th_tourist";
-        return r;
-      }
-      if (inList(TH_EXEMPT, nat)) {
+      var exempt = inList(TH_EXEMPT, nat), bilateral = inList(TH_BILATERAL, nat);
+
+      /* ── Exención de visado (ruta auditada) ──────────────────────────── */
+      if (exempt) {
         score += 55;
         m.push("Your passport nationality appears on Thailand's visa exemption list: stays of up to 60 days for tourism, extendable once by up to 30 days.");
-      } else if (inList(TH_BILATERAL, nat)) {
+      } else if (bilateral) {
         score += 55;
         m.push("Your passport nationality has a bilateral visa exemption agreement with Thailand; the period of stay is based on the respective agreement.");
       } else {
         score += 10;
-        w.push("A tourist visa is likely required for your nationality. Check the Royal Thai embassy or consulate in your country.");
+        w.push("Your passport nationality does not appear on Thailand's visa exemption list, so you would need a visa before travelling.");
         x.push("passport");
       }
       w.push("Thailand approved changes to its visa exemption scheme in May 2026 (reducing stays for many nationalities); the change was pending official publication at capture time - verify before travelling.");
       w.push("You cannot work during a visa-exempt stay; paid activities are not allowed.");
       finReq("You may need to show sufficient funds for your stay and onward travel.", w);
       w.push("This is simulated guidance only. Always verify with the Ministry of Foreign Affairs of Thailand (mfa.go.th).");
-      return thTourist(clamp(score, 0, 68));
+      var exemption = visaResult("tourist", clamp(score, 0, 68), m, w, x);
+      exemption.officialName = "Thailand visa exemption — 60 days";
+      exemption.route = "th_tourist_exemption";
+
+      /* ── Tourist Visa (TR): universal, app-side, nivel modelado ──────── */
+      var tm = [], tw = [];
+      tm.push("Thailand's Tourist Visa (TR) is applied for before you travel and allows a 60-day stay, which an immigration office can extend once by 30 days.");
+      tw.push("There is a single-entry version and a multiple-entry version valid for 6 months, with each stay of up to 60 days.");
+      tw.push("It is applied for through Thailand's official e-Visa portal or a Royal Thai embassy or consulate, and the multiple-entry version asks for higher proof of funds.");
+      tw.push("You cannot work in Thailand on a tourist visa; paid activities are not allowed.");
+      tw.push("This route could not be verified against a captured official source yet. Treat as preliminary guidance.");
+      var tr = visaResult("tourist", exempt || bilateral ? 52 : 58, tm, tw, []);
+      tr.officialName = "Thailand Tourist Visa (TR) — 60 days";
+      tr.route = "th_tourist_tr";
+
+      return [exemption, tr];
     },
 
     work_and_holiday: function (p) {
