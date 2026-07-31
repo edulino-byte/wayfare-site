@@ -1210,9 +1210,21 @@ window.Eligibility = (function () {
       score += scoreAge(p.age, 17, 65, 10);
       finReq("You may need to show sufficient funds for tuition and living costs. Check official Spanish student visa requirements.", w);
       w.push("Enrollment acceptance from an accredited Spanish institution is required. Simulated guidance only.");
+      m.push("This authorisation covers studies of more than 180 days.");
       var r = visaResult("student", score, m, w, x);
       r.officialName = "Spain long-term study stay"; r.route = "es_study";
-      return r;
+
+      /* v1.86.0 — FASE 3: tarjeta hermana de CORTA duración (91–180 días),
+         nivel modelado (línea preliminar) hasta capturar su fuente. */
+      var mC = [], wC = [];
+      mC.push("Spain's short-term study visa covers courses of 91 to 180 days.");
+      wC.push("Enrollment acceptance from an accredited Spanish institution is required. Simulated guidance only.");
+      finReq("You may need to show sufficient funds for tuition and living costs. Check official Spanish student visa requirements.", wC);
+      wC.push("This route could not be verified against a captured official source yet. Treat as preliminary guidance.");
+      var rC = visaResult("student", clamp(score - 4, 0, 64), mC, wC, []);
+      rC.officialName = "Spain short-term study visa (91–180 days)";
+      rC.route = "es_study_corta";
+      return [r, rC];
     },
 
     work: function (p) {
@@ -1321,9 +1333,21 @@ window.Eligibility = (function () {
       score += scoreAge(p.age, 17, 65, 10);
       finReq("You may need to show sufficient funds for tuition and living costs. Check official Portuguese student visa requirements.", w);
       w.push("Enrollment acceptance from an accredited Portuguese institution is required. Simulated guidance only.");
+      m.push("For programmes of a year or longer you apply for the D4 study visa leading to a residence permit.");
       var r = visaResult("student", score, m, w, x);
-      r.officialName = "Portugal Study Visa"; r.route = "pt_study";
-      return r;
+      r.officialName = "Portugal Study Visa (D4)"; r.route = "pt_study";
+
+      /* v1.86.0 — FASE 3: tarjeta de estada temporária (cursos hasta 1 año),
+         nivel modelado (línea preliminar) hasta capturar su fuente. */
+      var mT = [], wT = [];
+      mT.push("Portugal's temporary stay visa covers study programmes of up to one year.");
+      wT.push("Enrollment acceptance from an accredited Portuguese institution is required. Simulated guidance only.");
+      finReq("You may need to show sufficient funds for tuition and living costs. Check official Portuguese student visa requirements.", wT);
+      wT.push("This route could not be verified against a captured official source yet. Treat as preliminary guidance.");
+      var rT = visaResult("student", clamp(score - 4, 0, 64), mT, wT, []);
+      rT.officialName = "Portugal temporary stay visa for studies (up to 1 year)";
+      rT.route = "pt_study_temporaria";
+      return [r, rT];
     },
 
     work: function (p) {

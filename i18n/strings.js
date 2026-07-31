@@ -1268,6 +1268,11 @@ window.I18N = {
     "Work permit processes may be more complex for your passport nationality.": "Los trámites de permiso de trabajo pueden ser más complejos según tu nacionalidad de pasaporte.",
     "You may need to show sufficient funds and income. Check official digital nomad visa requirements for this destination.": "Puede que debas demostrar fondos e ingresos suficientes. Consulta los requisitos oficiales de la visa de nómada digital de este destino.",
     "Your passport appears to provide strong global visa access.": "Tu pasaporte parece ofrecer un acceso global fuerte a visados.",
+    /* Fase 3 — estudios ES corta/larga y PT temporária/D4 (v1.86.0) */
+    "This authorisation covers studies of more than 180 days.": "Esta autorización cubre estudios de más de 180 días.",
+    "Spain's short-term study visa covers courses of 91 to 180 days.": "El visado de estudios de corta duración de España cubre cursos de 91 a 180 días.",
+    "For programmes of a year or longer you apply for the D4 study visa leading to a residence permit.": "Para programas de un año o más se solicita el visado de estudios D4, que conduce a permiso de residencia.",
+    "Portugal's temporary stay visa covers study programmes of up to one year.": "El visado de estada temporária de Portugal cubre programas de estudios de hasta un año.",
     /* Fase 3 — desdoble EE.UU. (v1.85.0) */
     "The full B-1/B-2 visitor visa is available to any nationality.": "La visa de visitante B-1/B-2 completa está disponible para cualquier nacionalidad.",
     /* Fase 3 — desdobles GB y CA (v1.84.0) */
