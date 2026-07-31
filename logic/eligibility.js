@@ -2708,7 +2708,16 @@ window.Eligibility = (function () {
       []);
   };
   /* v1.71.0 — Georgia: el programa «Remotely from Georgia» fue pandémico y
-     cerró; lo real es el año sin visado para muchas nacionalidades. */
+     cerró; lo real es el año sin visado para muchas nacionalidades.
+     v1.87.0 — listas del turismo: GE_VISA_FREE = nacionalidades de nuestro
+     selector con el AÑO completo sin visado; GE_VISA_FREE_SHORT = sin visado
+     pero por menos tiempo. El resto va por e-Visa. */
+  var GE_VISA_FREE = ["AD", "AR", "AT", "AU", "BE", "BG", "BR", "CA", "CH", "CL", "CO", "CR", "CY",
+    "CZ", "DE", "DK", "DO", "EC", "EE", "ES", "FI", "FR", "GB", "GR", "HN", "HR", "HU", "IE", "IL",
+    "IS", "IT", "JP", "KR", "LI", "LT", "LU", "LV", "MT", "MX", "NL", "NO", "NZ", "PA", "PE", "PL",
+    "PT", "RO", "RS", "RU", "SE", "SI", "SK", "SV", "TR", "UA", "US", "UY"];
+  var GE_VISA_FREE_SHORT = ["PY", "CN", "HK"];
+
   COUNTRY_RULES.GE = {
     digital_nomad: function (p) {
       return visaResult("digital_nomad", p.remoteWork ? 34 : 14,
@@ -2718,7 +2727,46 @@ window.Eligibility = (function () {
          "Simulated guidance only. Always verify with official immigration sources."],
         []);
     },
-    tourist: function (p) { return genericDe("GE", "tourist", p); },
+    /* v1.87.0 — Fase 3: turismo por visa concreta (nivel MODELADO). La entrada
+       sin visado de hasta 1 año (Ordenanza 255/2015) es la vía real para casi
+       todo nuestro selector; la e-Visa solo se enseña a quien NO tiene el año
+       (patrón GB: tarjeta condicionada, no ruido para quien no la necesita). */
+    tourist: function (p) {
+      var cards = [], nat = p.nationality;
+      var full  = inList(GE_VISA_FREE, nat);
+      var short = inList(GE_VISA_FREE_SHORT, nat);
+
+      var fm = [], fw = [];
+      if (full) {
+        fm.push("Your passport nationality appears on Georgia's visa-free list: you can enter and stay for up to 1 year without a visa.");
+      } else if (short) {
+        fw.push("Your passport nationality can enter Georgia without a visa, but for a shorter period than the full year — check the official list.");
+      } else {
+        fw.push("Your passport nationality does not appear on Georgia's visa-free list; the e-Visa is the usual route.");
+        fw.push("Holding a valid visa or residence permit from certain countries can also open visa-free entry — check the official conditions.");
+      }
+      fw.push("The visa-free stay covers visiting; if you want to settle you must apply for a residence permit before it runs out.");
+      fw.push("This route could not be verified against a captured official source yet. Treat as preliminary guidance.");
+      var visaFree = visaResult("tourist", full ? 80 : short ? 62 : 22, fm, fw, full || short ? [] : ["passport"]);
+      visaFree.officialName = "Georgia visa-free entry — up to 1 year";
+      visaFree.route = "ge_tourist_visa_free";
+      cards.push(visaFree);
+
+      if (!full) {
+        var em = [], ew = [];
+        em.push("Georgia's e-Visa is applied for online and covers short visits for nationalities that are not exempt for a full year.");
+        ew.push("Depending on your nationality, the e-Visa allows 30 days within a 120-day period or 90 days within a 180-day period.");
+        ew.push("It is an ordinary (category C) short-stay visa: you cannot use it to work for a Georgian employer.");
+        finReq("You may need to show sufficient funds for your stay and onward travel.", ew);
+        ew.push("This route could not be verified against a captured official source yet. Treat as preliminary guidance.");
+        var evisa = visaResult("tourist", short ? 58 : 64, em, ew, []);
+        evisa.officialName = "Georgia e-Visa (ordinary short-stay visa, category C)";
+        evisa.route = "ge_tourist_evisa";
+        cards.push(evisa);
+      }
+
+      return cards;
+    },
   };
   /* =========================================================================
      COLOMBIA — piloto del nivel AUDITADO (v1.73.0)
@@ -2825,11 +2873,59 @@ window.Eligibility = (function () {
         []);
     };
   }
+  /* =========================================================================
+     VIETNAM — Fase 3 (v1.87.0): el turismo, por visa concreta. Nivel MODELADO
+     (sin fuente capturada aún → línea preliminar en las dos tarjetas):
+     - Exención unilateral de 45 días para 13 nacionalidades (vigente desde
+       15-ago-2023) + exenciones bilaterales (Chile, Panamá y la ASEAN).
+     - E-visa de 90 días y entradas múltiples, abierta a TODAS las
+       nacionalidades desde 2023 → tarjeta universal (patrón GB/CA/US: la
+       tarjeta condicionada primero, la universal siempre).
+     La ruta nómada «honesta» ya apuntaba a esta e-visa: sigue coherente.
+  ========================================================================= */
+  var VN_EXEMPT_45  = ["DE", "FR", "IT", "ES", "GB", "RU", "JP", "KR", "DK", "SE", "NO", "FI"];
+  var VN_EXEMPT_BIL = ["CL", "PA"];
+
   COUNTRY_RULES.VN = {
     digital_nomad: honestDN([
       "Vietnam does not currently offer a dedicated Digital Nomad visa.",
       "Remote workers commonly use the 90-day tourist e-visa; longer stays require another visa type."]),
-    tourist: function (p) { return genericDe("VN", "tourist", p); },
+
+    tourist: function (p) {
+      var cards = [], nat = p.nationality, pt = passportTier(nat);
+
+      /* ── Exención de visado: solo para quien está en las listas ───────── */
+      if (inList(VN_EXEMPT_45, nat) || inList(VN_EXEMPT_BIL, nat)) {
+        var em = [], ew = [];
+        if (inList(VN_EXEMPT_45, nat)) {
+          em.push("Your passport nationality appears on Vietnam's unilateral visa exemption list: tourist stays of up to 45 days without a visa.");
+        } else {
+          em.push("Your passport nationality has a bilateral visa exemption agreement with Vietnam; the length of stay follows that agreement.");
+        }
+        ew.push("The exemption covers tourism only: you cannot take paid work during a visa-free stay.");
+        ew.push("Vietnam has been extending visa exemption to further nationalities on a temporary basis — check the current official list before booking.");
+        ew.push("This route could not be verified against a captured official source yet. Treat as preliminary guidance.");
+        var exemption = visaResult("tourist", inList(VN_EXEMPT_45, nat) ? 78 : 72, em, ew, []);
+        exemption.officialName = "Vietnam visa exemption — up to 45 days";
+        exemption.route = "vn_tourist_exemption";
+        cards.push(exemption);
+      }
+
+      /* ── E-visa: universal, siempre visible ───────────────────────────── */
+      var vm = [], vw = [];
+      vm.push("Vietnam's e-visa is open to citizens of all countries and territories, for stays of up to 90 days with multiple entries.");
+      vw.push("It is applied for online through Vietnam's official immigration e-visa portal before travelling, and you can only enter through the designated ports of entry.");
+      vw.push("You cannot take paid work in Vietnam on a tourist e-visa.");
+      finReq("You may need to show sufficient funds for your stay and onward travel.", vw);
+      vw.push("This route could not be verified against a captured official source yet. Treat as preliminary guidance.");
+      var evisa = visaResult("tourist", pt <= 2 ? 68 : pt === 3 ? 62 : 56, vm, vw, []);
+      evisa.officialName = "Vietnam E-visa — 90 days, multiple entry";
+      evisa.route = "vn_tourist_evisa";
+      cards.push(evisa);
+
+      return cards;
+    },
+
     student: function (p) { return genericDe("VN", "student", p); },
     work: function (p) { return genericDe("VN", "work", p); },
   };
