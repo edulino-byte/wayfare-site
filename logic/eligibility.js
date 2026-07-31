@@ -3095,17 +3095,133 @@ window.Eligibility = (function () {
   COUNTRY_RULES.PY = mercosurRules("PY", ["student", "tourist"]);
   COUNTRY_RULES.BO = mercosurRules("BO", ["student", "tourist"]);
 
+  /* v1.94.0 — tanda «Remoto» (R5): estos dos van AQUÍ, después de sus reglas
+     Mercosur, no arriba con los demás (los métodos sueltos siempre después del
+     objeto que los recibe). Comprobado: ninguno de los dos tiene visa de nómada
+     — las listas que dicen lo contrario confunden Paraguay con otros programas. */
+  COUNTRY_RULES.PY.digital_nomad = honestDN([
+    "Paraguay does not offer a dedicated Digital Nomad visa.",
+    "What remote workers actually use is its residence route: the 2022 migration law grants a two-year temporary residence that allows living and working there."],
+    { nombre: "Paraguay", iso: "PY" });
+
+  COUNTRY_RULES.BO.digital_nomad = honestDN([
+    "Bolivia does not offer a dedicated Digital Nomad visa.",
+    "Remote workers commonly use the tourist entry, limited to 90 days per year; longer stays need a specific-purpose visa."],
+    { nombre: "Bolivia", iso: "BO" });
+
   /* v1.72.0 — Vietnam y Sri Lanka: destinos nómada MUY populares pero SIN visa
      dedicada → ruta honesta (estilo AU/CA/NZ/CL/GE); el resto de sus tipos,
      genérico desde mock.js (recordar: COUNTRY_RULES manda sobre esa lista). */
-  function honestDN(frases) {
+  function honestDN(frases, pais) {
     return function (p) {
-      return visaResult("digital_nomad", p.remoteWork ? 32 : 12,
+      var r = visaResult("digital_nomad", p.remoteWork ? 32 : 12,
         p.remoteWork ? ["Your profile indicates remote work, which is the main factor for nomad-style stays."] : [],
         frases.concat(["Simulated guidance only. Always verify with official immigration sources."]),
         []);
+      if (pais) {                       // v1.94.0: nombre y ruta propios
+        r.officialName = pais.nombre + ": no digital nomad visa";
+        r.route = pais.iso.toLowerCase() + "_digital_nomad";
+      }
+      return r;
     };
   }
+
+  /* =========================================================================
+     v1.94.0 — TANDA «REMOTO» (R5, 3ª parte). Trece destinos no enseñaban NADA a
+     quien elegía «Trabajo remoto». ANTES de escribir «aquí no existe» se
+     comprobó país por país — y menos mal: El Salvador y Belice SÍ tienen
+     programa real, así que llevan tarjeta de verdad, no la honesta. Paraguay y
+     República Dominicana NO tienen (las listas de internet los confunden con
+     *Dominica*, que es otro país).
+     Venezuela, Nicaragua y Cuba se quedan fuera A PROPÓSITO: son recortes
+     deliberados del usuario y no se «arreglan» sin preguntar.
+
+     reglasModeladas() encapsula la trampa que ya nos mordió con Sudáfrica y
+     Costa Rica: cuando un país estrena COUNTRY_RULES, esa lista MANDA sobre
+     mock.js — si no se declaran todos sus tipos, desaparecen en silencio.
+  ========================================================================= */
+  function reglasModeladas(iso, extra) {
+    var c = (D.COUNTRIES || []).find(function (x) { return x.iso === iso; });
+    var reglas = {};
+    ((c && c.visas) || []).forEach(function (v) {
+      if (!reglas[v.type]) {
+        reglas[v.type] = (function (t) {
+          return function (p) { return genericDe(iso, t, p); };
+        })(v.type);
+      }
+    });
+    Object.keys(extra || {}).forEach(function (k) { reglas[k] = extra[k]; });
+    return reglas;
+  }
+
+  /* --- Sin programa: tarjeta honesta (explica la realidad, no la disfraza) -- */
+  COUNTRY_RULES.DO = reglasModeladas("DO", { digital_nomad: honestDN([
+    "The Dominican Republic does not offer a dedicated Digital Nomad visa.",
+    "Remote workers commonly use the tourist entry, which does not allow taking a job in the country.",
+    "Careful with the lists that say otherwise: the country with a nomad visa is Dominica, a different Caribbean state."],
+    { nombre: "The Dominican Republic", iso: "DO" }) });
+
+  COUNTRY_RULES.GT = reglasModeladas("GT", { digital_nomad: honestDN([
+    "Guatemala does not offer a dedicated Digital Nomad visa.",
+    "Remote workers commonly use the tourist entry, which covers up to 90 days shared across the CA-4 countries (Guatemala, El Salvador, Honduras and Nicaragua)."],
+    { nombre: "Guatemala", iso: "GT" }) });
+
+  COUNTRY_RULES.HN = reglasModeladas("HN", { digital_nomad: honestDN([
+    "Honduras does not offer a dedicated Digital Nomad visa.",
+    "Remote workers commonly use the tourist entry, which covers up to 90 days shared across the CA-4 countries; longer stays need a residence permit."],
+    { nombre: "Honduras", iso: "HN" }) });
+
+  COUNTRY_RULES.QA = reglasModeladas("QA", { digital_nomad: honestDN([
+    "Qatar does not offer a dedicated Digital Nomad visa.",
+    "Residence in Qatar is normally tied to a local employer who sponsors you."],
+    { nombre: "Qatar", iso: "QA" }) });
+
+  COUNTRY_RULES.IN = reglasModeladas("IN", { digital_nomad: honestDN([
+    "India does not offer a dedicated Digital Nomad visa.",
+    "Remote workers commonly use the e-tourist visa, which does not allow working for an Indian company."],
+    { nombre: "India", iso: "IN" }) });
+
+  COUNTRY_RULES.FJ = reglasModeladas("FJ", { digital_nomad: honestDN([
+    "Fiji does not offer a dedicated Digital Nomad visa.",
+    "Remote workers commonly use the visitor permit, which can usually be extended up to six months in total."],
+    { nombre: "Fiji", iso: "FJ" }) });
+
+  /* --- CON programa real: tarjeta de verdad ------------------------------- */
+  COUNTRY_RULES.SV = reglasModeladas("SV", {
+    digital_nomad: function (p) {
+      var m = [], w = [], score = 0;
+      if (p.remoteWork) { score += 40; m.push("Your profile indicates remote work, which is the main condition for this route."); }
+      else w.push("This route is for people who work remotely for employers or clients outside El Salvador.");
+      m.push("El Salvador has a digital nomad residence for remote workers, created in 2023.");
+      w.push("It is granted for one year and can be renewed, up to a total of four years.");
+      w.push("You must show that your income comes from outside El Salvador, plus a clean criminal record and health insurance.");
+      finReq("You will be asked to prove regular income from abroad.", w);
+      if (p.savings >= 6000) { score += 12; m.push("Your savings are a positive signal for the income and solvency checks."); }
+      w.push("This route could not be verified against a captured official source yet. Treat as preliminary guidance.");
+      var r = visaResult("digital_nomad", clamp(score + 10, 0, 62), m, w, []);
+      r.officialName = "El Salvador digital nomad residence";
+      r.route = "sv_digital_nomad";
+      return r;
+    },
+  });
+
+  COUNTRY_RULES.BZ = reglasModeladas("BZ", {
+    digital_nomad: function (p) {
+      var m = [], w = [], score = 0;
+      if (p.remoteWork) { score += 40; m.push("Your profile indicates remote work, which is the main condition for this route."); }
+      else w.push("This route is for people employed or self-employed outside Belize.");
+      m.push("Belize runs the Work Where You Vacation programme for remote workers.");
+      w.push("It allows a stay of up to 180 days, working for your employer or clients abroad.");
+      w.push("You must show annual earnings of at least US$75,000 (less for a couple applying together) and health insurance covering at least US$50,000.");
+      if (p.savings >= 12000) { score += 12; m.push("Your savings are a positive signal for the income and solvency checks."); }
+      else w.push("The income threshold is high: check it carefully before applying.");
+      w.push("This route could not be verified against a captured official source yet. Treat as preliminary guidance.");
+      var r = visaResult("digital_nomad", clamp(score + 10, 0, 62), m, w, []);
+      r.officialName = "Belize Work Where You Vacation (remote workers)";
+      r.route = "bz_digital_nomad";
+      return r;
+    },
+  });
   /* =========================================================================
      VIETNAM — Fase 3 (v1.87.0): el turismo, por visa concreta. Nivel MODELADO
      (sin fuente capturada aún → línea preliminar en las dos tarjetas):
