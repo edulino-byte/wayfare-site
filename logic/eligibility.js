@@ -2666,6 +2666,23 @@ window.Eligibility = (function () {
       return cards;
     },
 
+    /* ── Nómada digital: ruta HONESTA (v1.92.0, agujero R5) ────────────────
+       El Reino Unido no enseñaba NADA a quien elegía «Remoto» siendo uno de los
+       destinos más consultados. Mismo estilo que US/AU/CA/NZ: la tarjeta existe
+       para explicar la realidad, no para aparentar un programa que no hay. */
+    digital_nomad: function (p) {
+      var m = [], w = [];
+      if (p.remoteWork) m.push("Your profile indicates remote work, which is the main factor for nomad-style stays.");
+      w.push("The UK does not offer a digital nomad visa.");
+      w.push("Since 2024 the visitor rules do allow you to work remotely for your employer abroad while you are in the UK, as long as remote working is not the main reason for your visit.");
+      w.push("A Standard Visitor stay is up to 6 months, and you cannot take a job with a UK employer or live in the UK through repeated visits.");
+      w.push("This is simulated guidance only. Always verify with GOV.UK.");
+      var r = visaResult("digital_nomad", p.remoteWork ? 34 : 14, m, w, []);
+      r.officialName = "United Kingdom: no digital nomad visa";
+      r.route = "gb_digital_nomad";
+      return r;
+    },
+
     /* ── Student visa ──────────────────────────────────────────────────── */
     student: function (p) {
       var m = [], w = [], x = [], score = 50;
@@ -2740,6 +2757,97 @@ window.Eligibility = (function () {
   };
   COUNTRY_RULES.BR = mercosurRules("BR", ["digital_nomad", "student"]);
   COUNTRY_RULES.CL = mercosurRules("CL", []);
+
+  /* =========================================================================
+     v1.92.0 — AGUJEROS DE COBERTURA TAPADOS (riesgo R5 de la auditoría 31-jul).
+     Brasil, Chile y Sudáfrica no enseñaban NADA a quien elegía «Turismo»: tres
+     destinos grandes en blanco. Nivel MODELADO (línea preliminar en todas),
+     con el patrón de siempre: la tarjeta condicionada primero, la universal
+     después. Las listas son de nacionalidades DE NUESTRO SELECTOR, no la lista
+     oficial entera — por eso cada tarjeta remite a la lista oficial.
+  ========================================================================= */
+  var BR_VISA_FREE = ["AD", "AR", "AT", "BE", "BG", "BO", "CH", "CL", "CO", "CR", "CU", "CY", "CZ",
+    "DE", "DK", "DO", "EC", "EE", "ES", "FI", "FR", "GB", "GR", "GT", "HK", "HN", "HR", "HU", "IE",
+    "IL", "IS", "IT", "JP", "KR", "LI", "LT", "LU", "LV", "MT", "MX", "NI", "NL", "NO", "NZ", "PA",
+    "PE", "PL", "PT", "PY", "RO", "RS", "RU", "SE", "SI", "SK", "SV", "TR", "UA", "UY", "VE"];
+  var BR_EVISA = ["US", "CA", "AU"];      // reciprocidad restablecida el 10-abr-2025
+
+  COUNTRY_RULES.BR.tourist = function (p) {
+    var cards = [], nat = p.nationality, libre = inList(BR_VISA_FREE, nat), evisa = inList(BR_EVISA, nat);
+
+    if (evisa) {
+      var em = [], ew = [];
+      em.push("Brazil requires an e-visa from US, Canadian and Australian citizens: the visa exemption ended on 10 April 2025 when Brazil restored reciprocity.");
+      ew.push("It is applied for online before travelling, and the visa is valid for multiple entries over several years.");
+      ew.push("Each stay cannot exceed 90 days, with a limit of 180 days in any 12-month period.");
+      finReq("You may be asked for proof of funds, accommodation and onward travel.", ew);
+      ew.push("This route could not be verified against a captured official source yet. Treat as preliminary guidance.");
+      var ev = visaResult("tourist", 58, em, ew, []);
+      ev.officialName = "Brazil e-Visa (tourism) — 90 days per stay";
+      ev.route = "br_tourist_evisa";
+      cards.push(ev);
+    } else {
+      var fm = [], fw = [];
+      if (libre) fm.push("Your passport nationality can enter Brazil for tourism without a visa.");
+      else       fw.push("Your passport nationality does not appear on the visa-exemption list we model for Brazil — check the official list before booking.");
+      fw.push("Visa-free stays are up to 90 days, extendable at the Federal Police up to a total of 180 days in any 12-month period.");
+      fw.push("You cannot take paid work in Brazil as a tourist.");
+      finReq("You may be asked for proof of funds, accommodation and onward travel.", fw);
+      fw.push("This route could not be verified against a captured official source yet. Treat as preliminary guidance.");
+      var fr = visaResult("tourist", libre ? 76 : 30, fm, fw, libre ? [] : ["passport"]);
+      fr.officialName = "Brazil visa-free entry (tourism) — up to 90 days";
+      fr.route = "br_tourist_visa_free";
+      cards.push(fr);
+    }
+    return cards;
+  };
+
+  var CL_VISA_FREE = ["AD", "AR", "AT", "AU", "BE", "BG", "BO", "BR", "CA", "CH", "CO", "CR", "CY",
+    "CZ", "DE", "DK", "DO", "EC", "EE", "ES", "FI", "FR", "GB", "GR", "HK", "HR", "HU", "IE", "IL",
+    "IS", "IT", "JP", "KR", "LI", "LT", "LU", "LV", "MT", "MX", "NL", "NO", "NZ", "PA", "PE", "PL",
+    "PT", "PY", "RO", "RS", "SE", "SI", "SK", "SV", "TR", "US", "UY"];
+
+  COUNTRY_RULES.CL.tourist = function (p) {
+    var m = [], w = [], x = [], libre = inList(CL_VISA_FREE, p.nationality);
+    if (libre) m.push("Your passport nationality can enter Chile as a tourist without a visa.");
+    else       w.push("Your passport nationality does not appear on the visa-exemption list we model for Chile: you would need a consular tourist visa.");
+    w.push("Tourist stays are granted for up to 90 days, recorded in the Tarjeta Única Migratoria you receive on entry.");
+    w.push("You cannot take paid work in Chile as a tourist; the stay can be extended once at the immigration service.");
+    finReq("You may be asked for proof of funds, accommodation and onward travel.", w);
+    w.push("This route could not be verified against a captured official source yet. Treat as preliminary guidance.");
+    var r = visaResult("tourist", libre ? 76 : 30, m, w, libre ? [] : ["passport"]);
+    r.officialName = "Chile tourist entry — up to 90 days";
+    r.route = "cl_tourist";
+    return r;
+  };
+
+  var ZA_VISA_FREE = ["AD", "AR", "AT", "AU", "BE", "BR", "CA", "CH", "CL", "CY", "CZ", "DE", "DK",
+    "EC", "ES", "FI", "FR", "GB", "GR", "HK", "HU", "IE", "IL", "IS", "IT", "JP", "LI", "LU", "MT",
+    "NL", "NO", "NZ", "PA", "PL", "PT", "PY", "SE", "SI", "SG", "US", "UY", "VE"];
+
+  /* ⚠ ZA no tenía reglas propias (era solo mock.js). Al crearlas hay que declarar
+     TODOS sus tipos: cuando un país tiene COUNTRY_RULES, esa lista MANDA sobre
+     mock.js — si solo pusiéramos «tourist», Sudáfrica perdería trabajo, estudios
+     y nómada. Los tres siguen delegando en la configuración de mock.js. */
+  COUNTRY_RULES.ZA = {
+    work:          function (p) { return genericDe("ZA", "work", p); },
+    student:       function (p) { return genericDe("ZA", "student", p); },
+    digital_nomad: function (p) { return genericDe("ZA", "digital_nomad", p); },
+  };
+  COUNTRY_RULES.ZA.tourist = function (p) {
+    var m = [], w = [], x = [], libre = inList(ZA_VISA_FREE, p.nationality);
+    if (libre) m.push("Your passport nationality can visit South Africa without a visa for up to 90 days.");
+    else       w.push("Your passport nationality does not appear on the visa-exemption list we model for South Africa: you would need a visitor's visa from a South African mission.");
+    w.push("Exempt nationalities are given between 30 and 90 days depending on the passport — check which applies to yours.");
+    w.push("South Africa is rolling out an Electronic Travel Authorisation; exempt travellers are not obliged to use it yet, but it may speed up the border.");
+    w.push("You cannot take paid work in South Africa as a visitor.");
+    finReq("You may be asked for proof of funds, accommodation and a return ticket.", w);
+    w.push("This route could not be verified against a captured official source yet. Treat as preliminary guidance.");
+    var r = visaResult("tourist", libre ? 74 : 30, m, w, libre ? [] : ["passport"]);
+    r.officialName = "South Africa visitor entry — up to 90 days";
+    r.route = "za_tourist";
+    return r;
+  };
   /* v1.71.0 — Chile NO tiene visa de nómada dedicada: ruta «honesta» al estilo
      AU/CA/NZ (existe para explicar la realidad, no para aparentar programa). */
   COUNTRY_RULES.CL.digital_nomad = function (p) {
