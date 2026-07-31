@@ -1927,26 +1927,49 @@ window.Eligibility = (function () {
 
   COUNTRY_RULES.MX = {
 
+    /* v1.89.0 — Fase 3: turismo en DOS tarjetas, misma cirugía que Tailandia.
+       La ENTRADA SIN VISA conserva la ruta auditada (officialName combinado
+       corregido, ruta renombrada a mx_tourist_novisa en app y sources a la vez)
+       y se queda con los 3 hechos oficiales: la lista sin visa, el tope de 180
+       días y los documentos alternativos (visa/residencia de EE.UU., Canadá,
+       Japón, Reino Unido o Schengen) — por eso sigue siendo universal, igual
+       que las sondas AR/CO/PE del auditor. La visa consular es app-side. */
     tourist: function (p) {
-      var m = [], w = [], x = [], score = 0, nat = p.nationality;
-      function mxTourist(sc) {
-        var r = visaResult("tourist", sc, m, w, x);
-        r.officialName = "Mexico visitor entry (visa-free / visa)"; r.route = "mx_tourist";
-        return r;
-      }
-      if (inList(MX_NOVISA, nat)) {
+      var m = [], w = [], x = [], score = 0, nat = p.nationality, cards = [];
+      var novisa = inList(MX_NOVISA, nat);
+
+      if (novisa) {
         score += 55;
         m.push("Your passport nationality appears on Mexico's official list of countries that do not require a visa (visitor without paid activities).");
-        w.push("Visitor stays cannot exceed 180 days.");
       } else {
         score += 40;
-        w.push("A Mexican visitor visa is likely required for your nationality - or, as an alternative, a valid visa or permanent residence of the US, Canada, Japan, the UK or a Schengen country.");
-        w.push("Visitor stays cannot exceed 180 days.");
+        w.push("Your passport nationality is not on Mexico's no-visa list, but a valid visa or permanent residence of the US, Canada, Japan, the UK or a Schengen country also lets you enter as a visitor without a Mexican visa.");
       }
+      w.push("Visitor stays cannot exceed 180 days.");
+      w.push("The days you are given are decided at the border and recorded in your entry record, and they can be fewer than the maximum.");
       w.push("You cannot work during a visitor stay; paid activities are not allowed.");
       finReq("The migration authority may ask for hotel bookings, return tickets and proof of your travel purpose.", w);
       w.push("This is simulated guidance only. Always verify with the Instituto Nacional de Migración (inm.gob.mx).");
-      return mxTourist(clamp(score, 0, 68));
+      var entry = visaResult("tourist", clamp(score, 0, 68), m, w, x);
+      entry.officialName = "Mexico visitor entry without a visa — up to 180 days";
+      entry.route = "mx_tourist_novisa";
+      cards.push(entry);
+
+      /* ── Visa de visitante consular: solo para quien la necesita ─────── */
+      if (!novisa) {
+        var vm = [], vw = [];
+        vm.push("Mexico's visitor visa without permission to carry out paid activities is the consular route when you are not on the no-visa list.");
+        vw.push("It is applied for in person at a Mexican consulate, with an appointment, and the consulate decides after an interview.");
+        vw.push("Consulates usually ask for proof of economic solvency, employment or studies, and ties to your country of residence.");
+        vw.push("Once granted, it is normally a multiple-entry visa, and each visitor stay still cannot exceed 180 days.");
+        vw.push("This route could not be verified against a captured official source yet. Treat as preliminary guidance.");
+        var consular = visaResult("tourist", 52, vm, vw, []);
+        consular.officialName = "Mexico Visitor Visa (visa de visitante sin permiso para realizar actividades remuneradas)";
+        consular.route = "mx_tourist_visa";
+        cards.push(consular);
+      }
+
+      return cards;
     },
 
     work_and_holiday: function (p) {
