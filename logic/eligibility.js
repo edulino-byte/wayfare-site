@@ -2802,6 +2802,72 @@ window.Eligibility = (function () {
     return cards;
   };
 
+  /* v1.93.0 — ESTUDIOS en blanco (R5, 2ª parte). Cuatro destinos no enseñaban
+     nada a quien elegía «Estudiar»: EAU, Chile, Costa Rica y Georgia. Nivel
+     modelado con línea preliminar. Venezuela se queda fuera A PROPÓSITO
+     (recorte deliberado del usuario: solo turismo). */
+  function estudioBase(p, tope) {
+    var m = [], w = [], score = 0;
+    if (passportTier(p.nationality) <= 2) { score += 14; m.push("Your passport nationality is generally accepted for student applications in this destination."); }
+    else                                   { score += 8;  w.push("Additional documentation requirements may apply for your passport nationality."); }
+    score += scoreEdu(p, "secondary", 24);
+    if (eduRank(p.education) >= eduRank("secondary")) m.push("Your education level appears to meet general requirements.");
+    score += scoreAge(p.age, 16, 65, 10);
+    return { m: m, w: w, score: score, tope: tope };
+  }
+
+  COUNTRY_RULES.CL.student = function (p) {
+    var b = estudioBase(p, 60), m = b.m, w = b.w;
+    m.push("Chile's temporary residence permit for students covers studies at state-recognised institutions.");
+    w.push("It must be applied for from OUTSIDE Chile, through the online portal of the Servicio Nacional de Migraciones — Chilean consulates do not process it.");
+    w.push("You need proof of admission or enrolment at the institution.");
+    finReq("You must show you can support yourself during your studies.", w);
+    w.push("Once you hold it you can change category, for example to work, without leaving Chile.");
+    w.push("This route could not be verified against a captured official source yet. Treat as preliminary guidance.");
+    var r = visaResult("student", Math.min(b.score, b.tope), m, w, eduRank(p.education) < eduRank("secondary") ? ["minEdu"] : []);
+    r.officialName = "Chile student temporary residence (residencia temporal, estudiantes)";
+    r.route = "cl_student";
+    return r;
+  };
+
+  /* (el de Georgia va MÁS ABAJO, tras definirse COUNTRY_RULES.GE — si se pone
+     aquí, o revienta la app o lo pisa el objeto literal de GE) */
+
+  COUNTRY_RULES.AE.student = function (p) {
+    var b = estudioBase(p, 60), m = b.m, w = b.w;
+    m.push("A UAE student residence visa is sponsored by the university or higher-education institution that admits you.");
+    w.push("It is normally issued for one year and renewed while you stay enrolled.");
+    w.push("You need an acceptance letter, a medical fitness test, health insurance and an Emirates ID.");
+    finReq("You may need to show funds for tuition and living costs.", w);
+    w.push("Outstanding students can qualify for a long-term residence under the UAE's talent schemes.");
+    w.push("This route could not be verified against a captured official source yet. Treat as preliminary guidance.");
+    var r = visaResult("student", Math.min(b.score, b.tope), m, w, eduRank(p.education) < eduRank("secondary") ? ["minEdu"] : []);
+    r.officialName = "UAE student residence visa";
+    r.route = "ae_student";
+    return r;
+  };
+
+  /* ⚠ Costa Rica no tenía reglas propias: al crearlas hay que declarar TODOS sus
+     tipos (misma trampa que Sudáfrica) — turismo y nómada siguen delegando en
+     la configuración de mock.js. */
+  COUNTRY_RULES.CR = {
+    tourist:       function (p) { return genericDe("CR", "tourist", p); },
+    digital_nomad: function (p) { return genericDe("CR", "digital_nomad", p); },
+    student: function (p) {
+      var b = estudioBase(p, 58), m = b.m, w = b.w;
+      m.push("Costa Rica grants a special student category to people admitted to an accredited institution.");
+      w.push("You need an acceptance letter from the institution and to register with the migration authority once there.");
+      w.push("Documents issued abroad usually need an apostille and an official Spanish translation.");
+      finReq("You may need to show funds for tuition and living costs.", w);
+      w.push("It is normally granted for one year and renewed while you remain enrolled.");
+      w.push("This route could not be verified against a captured official source yet. Treat as preliminary guidance.");
+      var r = visaResult("student", Math.min(b.score, b.tope), m, w, eduRank(p.education) < eduRank("secondary") ? ["minEdu"] : []);
+      r.officialName = "Costa Rica student category (categoría especial de estudiante)";
+      r.route = "cr_student";
+      return r;
+    },
+  };
+
   var CL_VISA_FREE = ["AD", "AR", "AT", "AU", "BE", "BG", "BO", "BR", "CA", "CH", "CO", "CR", "CY",
     "CZ", "DE", "DK", "DO", "EC", "EE", "ES", "FI", "FR", "GB", "GR", "HK", "HR", "HU", "IE", "IL",
     "IS", "IT", "JP", "KR", "LI", "LT", "LU", "LV", "MT", "MX", "NL", "NO", "NZ", "PA", "PE", "PL",
@@ -2919,6 +2985,22 @@ window.Eligibility = (function () {
       return cards;
     },
   };
+
+  /* v1.93.0 — estudios de Georgia (R5): va AQUÍ, después del objeto literal de
+     COUNTRY_RULES.GE, porque asignarlo antes lo borraría al crearse el objeto. */
+  COUNTRY_RULES.GE.student = function (p) {
+    var b = estudioBase(p, 58), m = b.m, w = b.w;
+    m.push("Georgia issues a study visa (D3) and, for longer courses, a temporary residence permit for study.");
+    w.push("You must be admitted to an institution authorised to run higher-education programmes in Georgia.");
+    w.push("Nationals who can enter Georgia visa-free often enrol first and apply for the study residence permit from inside the country.");
+    finReq("You may need to show funds for tuition and living costs.", w);
+    w.push("This route could not be verified against a captured official source yet. Treat as preliminary guidance.");
+    var r = visaResult("student", Math.min(b.score, b.tope), m, w, eduRank(p.education) < eduRank("secondary") ? ["minEdu"] : []);
+    r.officialName = "Georgia study visa (D3) / study residence permit";
+    r.route = "ge_student";
+    return r;
+  };
+
   /* =========================================================================
      COLOMBIA — piloto del nivel AUDITADO (v1.73.0)
      Fuentes capturadas 29-jul-2026 (navegador real; ambos dominios en
