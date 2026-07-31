@@ -1444,25 +1444,38 @@ window.Eligibility = (function () {
   COUNTRY_RULES.US = {
 
     tourist: function (p) {
-      var m = [], w = [], x = [], score = 0, nat = p.nationality;
-      function usTourist(sc) {
-        var r = visaResult("tourist", sc, m, w, x);
-        r.officialName = "Visa Waiver Program (ESTA) / B-2 Visitor"; r.route = "us_vwp_b2";
-        return r;
+      /* v1.85.0 — FASE 3: ESTA (VWP) y B-1/B-2 como tarjetas separadas.
+         Miembros del VWP: tarjeta ESTA + B-1/B-2 universal; resto: solo B. */
+      var cards = [], nat = p.nationality;
+      var esVwp = inList(US_VWP, nat);
+      if (esVwp) {
+        var mE = [], wE = [];
+        mE.push("Your passport nationality appears to be in the Visa Waiver Program: stays of 90 days or less without a visa.");
+        wE.push("You must obtain an approved ESTA (Electronic System for Travel Authorization) before travelling.");
+        wE.push("You cannot work during a visitor stay; paid activities are not allowed.");
+        wE.push("This is simulated guidance only. Always verify with travel.state.gov.");
+        var rE = visaResult("tourist", 55, mE, wE, []);
+        rE.officialName = "Visa Waiver Program (ESTA)";
+        rE.route = "us_tourist_esta";
+        cards.push(rE);
       }
-      if (inList(US_VWP, nat)) {
-        score += 55;
-        m.push("Your passport nationality appears to be in the Visa Waiver Program: stays of 90 days or less without a visa.");
-        w.push("You must obtain an approved ESTA (Electronic System for Travel Authorization) before travelling.");
+      var m = [], w = [], x = [], score;
+      if (esVwp) {
+        score = 46;
+        m.push("The full B-1/B-2 visitor visa is available to any nationality.");
       } else {
-        score += 10;
+        score = 10;
         w.push("A B-1/B-2 visitor visa is likely required, including a consular interview. Approval rates vary by nationality and profile.");
         x.push("passport");
       }
       w.push("You cannot work during a visitor stay; paid activities are not allowed.");
       finReq("You may need to show sufficient funds and strong ties to your home country.", w);
       w.push("This is simulated guidance only. Always verify with travel.state.gov.");
-      return usTourist(clamp(score, 0, 68));
+      var r = visaResult("tourist", clamp(score, 0, 68), m, w, x);
+      r.officialName = "B-1/B-2 Visitor Visa";
+      r.route = "us_tourist_b1b2";
+      cards.push(r);
+      return cards;
     },
 
     work_and_holiday: function (p) {
