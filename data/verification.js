@@ -310,6 +310,12 @@ window.VERIFICATION = {
       "facts": 9,
       "monitored": false,
       "lastCheck": "2026-08-01"
+    },
+    "ZA": {
+      "routes": 3,
+      "facts": 9,
+      "monitored": false,
+      "lastCheck": "2026-08-01"
     }
   }
 };

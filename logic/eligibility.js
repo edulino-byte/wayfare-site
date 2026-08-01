@@ -2968,10 +2968,40 @@ window.Eligibility = (function () {
      TODOS sus tipos: cuando un país tiene COUNTRY_RULES, esa lista MANDA sobre
      mock.js — si solo pusiéramos «tourist», Sudáfrica perdería trabajo, estudios
      y nómada. Los tres siguen delegando en la configuración de mock.js. */
+  /* v1.102.0 — SUDÁFRICA: trabajo y estudios ASCENDIDOS a nivel auditado (R5).
+     Fuente capturada el 1-ago-2026: dha.gov.za (Department of Home Affairs)
+     publica TODAS sus categorías en una sola página de 54.000 caracteres, con
+     descarga normal. Snapshot: za-upgrade-2026-08/.
+     El nómada sigue delegando en mock.js: Sudáfrica anunció un régimen para
+     trabajadores remotos pero la página del DHA aún no lo detalla. */
   COUNTRY_RULES.ZA = {
-    work:          function (p) { return genericDe("ZA", "work", p); },
-    student:       function (p) { return genericDe("ZA", "student", p); },
     digital_nomad: function (p) { return genericDe("ZA", "digital_nomad", p); },
+
+    work: function (p) {
+      var b = trabajoBase(p, 58), m = b.m, w = b.w;
+      m.push("South Africa's general work visa is valid for the duration of the employment contract, up to a maximum of five years.");
+      w.push("You need a police clearance certificate from every country where you lived for longer than 12 months in the last five years, and it cannot be older than six months when you submit it.");
+      w.push("You also need a medical report signed by a medical practitioner, no older than six months at submission.");
+      w.push("This is simulated guidance only. Always verify with the Department of Home Affairs.");
+      var r = visaResult("work", Math.min(b.score, b.tope), m, w, []);
+      r.officialName = "South Africa General Work Visa";
+      r.route = "za_work";
+      return r;
+    },
+
+    student: function (p) {
+      var b = estudioBase(p, 58), m = b.m, w = b.w;
+      m.push("South Africa issues a study visa for the course you are accepted onto.");
+      w.push("You need an official letter confirming provisional acceptance or acceptance at the learning institution and the duration of the course.");
+      w.push("You need a police clearance certificate from every country where you lived for longer than 12 months in the last five years, and it cannot be older than six months when you submit it.");
+      w.push("Proof of medical cover is required, and a cash deposit equivalent to a return or onward ticket may be asked for.");
+      w.push("This is simulated guidance only. Always verify with the Department of Home Affairs.");
+      var r = visaResult("student", Math.min(b.score, b.tope), m, w,
+        eduRank(p.education) < eduRank("secondary") ? ["minEdu"] : []);
+      r.officialName = "South Africa Study Visa";
+      r.route = "za_student";
+      return r;
+    },
   };
   COUNTRY_RULES.ZA.tourist = function (p) {
     var m = [], w = [], x = [], libre = inList(ZA_VISA_FREE, p.nationality);
@@ -2979,6 +3009,11 @@ window.Eligibility = (function () {
     else       w.push("Your passport nationality does not appear on the visa-exemption list we model for South Africa: you would need a visitor's visa from a South African mission.");
     w.push("Exempt nationalities are given between 30 and 90 days depending on the passport — check which applies to yours.");
     w.push("South Africa is rolling out an Electronic Travel Authorisation; exempt travellers are not obliged to use it yet, but it may speed up the border.");
+    /* v1.102.0 — tres hechos oficiales del DHA capturados (la ruta deja de ser
+       modelada). El tercero salva viajes perdidos: sin visa no te dejan embarcar. */
+    w.push("Visitors' visas are for stays of 90 days or less, for tourism or business.");
+    w.push("Your passport must be valid for no less than 30 days after your intended visit ends.");
+    w.push("Visas are not issued at South African ports of entry: airline staff are obliged to insist on the visa before letting you board.");
     w.push("You cannot take paid work in South Africa as a visitor.");
     finReq("You may be asked for proof of funds, accommodation and a return ticket.", w);
     w.push("This route could not be verified against a captured official source yet. Treat as preliminary guidance.");

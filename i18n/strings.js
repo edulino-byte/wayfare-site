@@ -1268,6 +1268,17 @@ window.I18N = {
     "Work permit processes may be more complex for your passport nationality.": "Los trámites de permiso de trabajo pueden ser más complejos según tu nacionalidad de pasaporte.",
     "You may need to show sufficient funds and income. Check official digital nomad visa requirements for this destination.": "Puede que debas demostrar fondos e ingresos suficientes. Consulta los requisitos oficiales de la visa de nómada digital de este destino.",
     "Your passport appears to provide strong global visa access.": "Tu pasaporte parece ofrecer un acceso global fuerte a visados.",
+    /* R5 — SUDÁFRICA auditada en sus tres rutas (v1.102.0, DHA) */
+    "Visitors' visas are for stays of 90 days or less, for tourism or business.": "Las visas de visitante son para estancias de 90 días o menos, por turismo o negocios.",
+    "Your passport must be valid for no less than 30 days after your intended visit ends.": "Tu pasaporte debe ser válido al menos 30 días después del final de tu visita prevista.",
+    "Visas are not issued at South African ports of entry: airline staff are obliged to insist on the visa before letting you board.": "No se expiden visas en los puestos de entrada sudafricanos: el personal de la aerolínea está obligado a exigirte la visa antes de dejarte embarcar.",
+    "South Africa's general work visa is valid for the duration of the employment contract, up to a maximum of five years.": "La visa general de trabajo de Sudáfrica vale por la duración del contrato de empleo, con un máximo de cinco años.",
+    "You need a police clearance certificate from every country where you lived for longer than 12 months in the last five years, and it cannot be older than six months when you submit it.": "Necesitas certificado de antecedentes de cada país donde hayas vivido más de 12 meses en los últimos cinco años, y no puede tener más de seis meses cuando lo presentes.",
+    "You also need a medical report signed by a medical practitioner, no older than six months at submission.": "También necesitas un informe médico firmado por un facultativo, con menos de seis meses de antigüedad al presentarlo.",
+    "South Africa issues a study visa for the course you are accepted onto.": "Sudáfrica expide una visa de estudios para el curso en el que te admiten.",
+    "You need an official letter confirming provisional acceptance or acceptance at the learning institution and the duration of the course.": "Necesitas una carta oficial que confirme la aceptación (o aceptación provisional) en el centro y la duración del curso.",
+    "Proof of medical cover is required, and a cash deposit equivalent to a return or onward ticket may be asked for.": "Se exige prueba de cobertura médica, y pueden pedirte un depósito en efectivo equivalente a un billete de vuelta o de continuación.",
+    "This is simulated guidance only. Always verify with the Department of Home Affairs.": "Esto es orientación simulada. Verifica siempre con el Department of Home Affairs.",
     /* R5 — BELICE y REP. DOMINICANA auditadas (v1.101.0) */
     "Your passport must be valid for more than 6 months.": "Tu pasaporte debe tener más de 6 meses de vigencia.",
     "Your original passport must be valid for at least six months.": "Tu pasaporte original debe tener una vigencia mínima de seis meses.",
