@@ -298,6 +298,18 @@ window.VERIFICATION = {
       "facts": 10,
       "monitored": false,
       "lastCheck": "2026-08-01"
+    },
+    "BZ": {
+      "routes": 3,
+      "facts": 10,
+      "monitored": false,
+      "lastCheck": "2026-08-01"
+    },
+    "DO": {
+      "routes": 3,
+      "facts": 9,
+      "monitored": false,
+      "lastCheck": "2026-08-01"
     }
   }
 };

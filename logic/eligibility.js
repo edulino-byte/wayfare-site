@@ -3388,7 +3388,58 @@ window.Eligibility = (function () {
     },
   });
 
-  COUNTRY_RULES.DO = reglasModeladas("DO", { digital_nomad: honestDN([
+  /* =========================================================================
+     REPÚBLICA DOMINICANA — turismo, estudios y trabajo AUDITADOS (v1.101.0).
+     Fuente capturada el 1-ago-2026: el portal de servicios consulares del
+     Ministerio de Relaciones Exteriores (MIREX) publica los requisitos de las
+     13 visas en una sola página. Snapshot: do-upgrade-2026-08/.
+     ⚠ La Dirección General de Migración (migracion.gob.do) devuelve 403 con
+     cualquier agente: MIREX es la vía capturable.
+     El trabajo va por la visa de negocios con fines laborales (NM1), que es la
+     que la propia fuente describe para permanecer un año trabajando.
+  ========================================================================= */
+  var DO_AUDITADO = {
+    tourist: function (p) {
+      var m = [], w = [], x = [], pt = passportTier(p.nationality), score = 0;
+      if (pt <= 2) { score += 20; m.push("Your passport nationality is generally accepted for visits to this destination."); }
+      else         { score += 10; w.push("Additional documentation requirements may apply for your passport nationality."); }
+      m.push("The Dominican tourist visa comes in a simple version (60 days, one entry) and a multiple version (60 days, two entries).");
+      w.push("Your original passport must be valid for at least six months.");
+      finReq("You must show economic solvency: an employment certificate and a bank certification with the last three months of movements.", w);
+      w.push("This is simulated guidance only. Always verify with the Dominican Ministry of Foreign Affairs.");
+      var r = visaResult("tourist", clamp(score + 30, 0, 62), m, w, x);
+      r.officialName = "Dominican Republic tourist visa (TS / TM)";
+      r.route = "do_tourist";
+      return r;
+    },
+    student: function (p) {
+      var b = estudioBase(p, 58), m = b.m, w = b.w;
+      m.push("The Dominican student visa is issued for one year with several entries.");
+      w.push("You need an acceptance certificate from the university or institution in the Dominican Republic.");
+      w.push("You must show who will pay for your studies.");
+      w.push("This is simulated guidance only. Always verify with the Dominican Ministry of Foreign Affairs.");
+      var r = visaResult("student", Math.min(b.score, b.tope), m, w,
+        eduRank(p.education) < eduRank("secondary") ? ["minEdu"] : []);
+      r.officialName = "Dominican Republic student visa (E)";
+      r.route = "do_student";
+      return r;
+    },
+    work: function (p) {
+      var b = trabajoBase(p, 56), m = b.m, w = b.w;
+      m.push("The Dominican route for working is the business visa for employment purposes: it is granted to people who, because of their occupation, stay a year in the country without having to leave.");
+      w.push("It is issued for one year with several entries.");
+      w.push("You need a criminal record certificate issued by a federal authority of every country where you lived in the last 5 years, legalised or apostilled.");
+      w.push("This is simulated guidance only. Always verify with the Dominican Ministry of Foreign Affairs.");
+      var r = visaResult("work", Math.min(b.score, b.tope), m, w, []);
+      r.officialName = "Dominican Republic business visa for employment (NM1)";
+      r.route = "do_work";
+      return r;
+    },
+  };
+
+  COUNTRY_RULES.DO = reglasModeladas("DO", {
+    tourist: DO_AUDITADO.tourist, student: DO_AUDITADO.student, work: DO_AUDITADO.work,
+    digital_nomad: honestDN([
     "The Dominican Republic does not offer a dedicated Digital Nomad visa.",
     "Remote workers commonly use the tourist entry, which does not allow taking a job in the country.",
     "Careful with the lists that say otherwise: the country with a nomad visa is Dominica, a different Caribbean state."],
@@ -3438,7 +3489,56 @@ window.Eligibility = (function () {
     },
   });
 
+  /* =========================================================================
+     BELICE — turismo, estudios y trabajo AL NIVEL AUDITADO (v1.101.0, R5).
+     Fuente capturada el 1-ago-2026: immigration.gov.bz publica cada trámite en
+     su propia página, en inglés y con tasas. Snapshot: bz-upgrade-2026-08/.
+     Su visa de nómada (Work Where You Vacation) ya estaba en v1.94.0 y se
+     mantiene como estaba: esa aún NO tiene captura propia.
+  ========================================================================= */
+  var BZ_AUDITADO = {
+    tourist: function (p) {
+      var m = [], w = [], x = [], pt = passportTier(p.nationality), score = 0;
+      if (pt <= 2) { score += 20; m.push("Your passport nationality is generally accepted for visits to this destination."); }
+      else         { score += 10; w.push("Additional documentation requirements may apply for your passport nationality."); }
+      m.push("A Belize visa lets you enter and stay legally for a maximum of 30 days from the date of entry.");
+      w.push("Your passport must be valid for more than 6 months.");
+      w.push("Your flight itinerary must show the expected arrival in Belize and the return date to your country of origin.");
+      finReq("You and your sponsor must provide banking financials showing the last six months of transactions.", w);
+      w.push("This is simulated guidance only. Always verify with the Belize Immigration Department.");
+      var r = visaResult("tourist", clamp(score + 30, 0, 62), m, w, x);
+      r.officialName = "Belize visitor visa";
+      r.route = "bz_tourist";
+      return r;
+    },
+    student: function (p) {
+      var b = estudioBase(p, 58), m = b.m, w = b.w;
+      m.push("Belize issues a student permit; at tertiary level it is issued for one semester.");
+      w.push("You need a letter from the institution stating the duration of study, the programme and the institution's details.");
+      w.push("The permit costs BZ$200 per school year or semester for most nationalities, and more for some.");
+      w.push("This is simulated guidance only. Always verify with the Belize Immigration Department.");
+      var r = visaResult("student", Math.min(b.score, b.tope), m, w,
+        eduRank(p.education) < eduRank("secondary") ? ["minEdu"] : []);
+      r.officialName = "Belize student permit";
+      r.route = "bz_student";
+      return r;
+    },
+    work: function (p) {
+      var b = trabajoBase(p, 56), m = b.m, w = b.w;
+      m.push("Belize's route is the Temporary Employment Permit, applied for at the Labour Department.");
+      w.push("To apply you must already hold a valid passport and a valid Belize visa.");
+      w.push("Within 30 days you will receive a call from the Labour Department about your application.");
+      w.push("Permits run for one week, one crop season or one year; for professional workers with a university degree the one-year fee is $3000.");
+      w.push("This is simulated guidance only. Always verify with the Belize Immigration Department.");
+      var r = visaResult("work", Math.min(b.score, b.tope), m, w, []);
+      r.officialName = "Belize Temporary Employment Permit";
+      r.route = "bz_work";
+      return r;
+    },
+  };
+
   COUNTRY_RULES.BZ = reglasModeladas("BZ", {
+    tourist: BZ_AUDITADO.tourist, student: BZ_AUDITADO.student, work: BZ_AUDITADO.work,
     digital_nomad: function (p) {
       var m = [], w = [], score = 0;
       if (p.remoteWork) { score += 40; m.push("Your profile indicates remote work, which is the main condition for this route."); }
