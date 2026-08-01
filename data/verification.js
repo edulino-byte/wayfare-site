@@ -316,6 +316,18 @@ window.VERIFICATION = {
       "facts": 9,
       "monitored": false,
       "lastCheck": "2026-08-01"
+    },
+    "LK": {
+      "routes": 3,
+      "facts": 8,
+      "monitored": false,
+      "lastCheck": "2026-08-01"
+    },
+    "FJ": {
+      "routes": 3,
+      "facts": 9,
+      "monitored": false,
+      "lastCheck": "2026-08-01"
     }
   }
 };

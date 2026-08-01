@@ -1598,7 +1598,10 @@ function CountryDetail({ t, lang, result, profile, onCompare }) {
           style: { backgroundImage: "linear-gradient(to right, rgba(8,16,14,0.94) 0%, rgba(8,16,14,0.62) 42%, rgba(8,16,14,0.12) 78%, rgba(8,16,14,0) 100%),url(assets/flags/" + String(result.iso || "").toLowerCase() + ".svg)" }
         }
       ),
-      /* @__PURE__ */ React.createElement("div", { className: "detail-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "nm" }, countryName(result.iso, lang) || result.name), /* @__PURE__ */ React.createElement("div", { className: "rg" }, t("rg_" + (result.region || "other"))), /* @__PURE__ */ React.createElement("span", { className: "status-pill", style: {
+      /* @__PURE__ */ React.createElement("div", { className: "detail-head" }, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", { className: "nm" }, (() => {
+        const n = countryName(result.iso, lang);
+        return n && n !== result.iso ? n : result.name || n;
+      })()), /* @__PURE__ */ React.createElement("div", { className: "rg" }, t("rg_" + (result.region || "other"))), /* @__PURE__ */ React.createElement("span", { className: "status-pill", style: {
         background: `linear-gradient(rgba(${pillColor[0]},${pillColor[1]},${pillColor[2]},0.20), rgba(${pillColor[0]},${pillColor[1]},${pillColor[2]},0.20)), rgba(8,16,14,0.78)`,
         color: statusColor(result.status, 1)
       } }, /* @__PURE__ */ React.createElement("span", { className: "sw", style: { background: statusColor(result.status, 1) } }), t(statusKey)))),
@@ -1610,6 +1613,7 @@ function CountryDetail({ t, lang, result, profile, onCompare }) {
       onCompare ? /* @__PURE__ */ React.createElement("button", { type: "button", className: "cmp-open-btn", onClick: onCompare }, /* @__PURE__ */ React.createElement("svg", { width: "12", height: "12", viewBox: "0 0 24 24", fill: "none", "aria-hidden": "true" }, /* @__PURE__ */ React.createElement("path", { d: "M8 3v18M16 3v18M3 8h5M3 16h5M16 8h5M16 16h5", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round" })), t("cmp_btn")) : null,
       advInfo && advInfo.advisors.length ? /* @__PURE__ */ React.createElement("button", { type: "button", className: "adv-chip", onClick: openAdvisors }, "\u{1F9D1}\u200D\u{1F4BC} ", t("adv_section"), /* @__PURE__ */ React.createElement("span", { className: "adv-chip-n" }, advInfo.advisors.length)) : null,
       /* @__PURE__ */ React.createElement("div", { className: "sub-label" }, t("g_visas_here")),
+      result.visas.length === 0 ? /* @__PURE__ */ React.createElement("div", { className: "empty" }, /* @__PURE__ */ React.createElement("h3", null, t("g_no_visas_goal")), /* @__PURE__ */ React.createElement("p", null, t("g_no_visas_goal_sub"))) : null,
       result.visas.map((v, i) => {
         const vStatusKey = v.status === "eligible" ? "st_eligible" : v.status === "partial" ? "st_partial" : "st_ineligible";
         return (
@@ -1806,7 +1810,25 @@ function saveStored(key, value) {
 }
 function App() {
   const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
-  const [lang, setLang] = React.useState("en");
+  const [lang, setLangState] = React.useState(function() {
+    try {
+      const g = localStorage.getItem("wayfare_lang_v1");
+      if (g === "es" || g === "en") return g;
+    } catch (e) {
+    }
+    try {
+      if ((navigator.language || "").toLowerCase().indexOf("es") === 0) return "es";
+    } catch (e) {
+    }
+    return "en";
+  });
+  const setLang = React.useCallback(function(l) {
+    setLangState(l);
+    try {
+      localStorage.setItem("wayfare_lang_v1", l);
+    } catch (e) {
+    }
+  }, []);
   const [submitted, setSubmitted] = React.useState(() => {
     const s = loadStored(STORE_SUBMITTED);
     if (s && s.profile && s.version) return s;

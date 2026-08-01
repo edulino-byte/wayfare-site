@@ -1820,6 +1820,15 @@ window.Eligibility = (function () {
 
   COUNTRY_RULES.AR = {
 
+    /* ⚠ v1.104.0 — FALLO CORREGIDO: Argentina declaraba `work` en mock.js pero
+       esta regla no lo definía, y como la lista de tipos de COUNTRY_RULES MANDA
+       sobre mock.js, la tarjeta de trabajo DESAPARECÍA en silencio. Efecto real:
+       un chileno veía que podía trabajar en los otros 7 países del Mercosur y en
+       Argentina no, que es falso — y es el destino más buscado del grupo.
+       Se restituye con la misma vía que sus vecinos: el Acuerdo de Residencia
+       (nivel modelado y así etiquetado; las rutas AUDITADAS de AR no se tocan). */
+    work: function (p) { return mercosurWork("AR", p); },
+
     tourist: function (p) {
       var m = [], w = [], x = [], score = 0, nat = p.nationality;
       function arTourist(sc) {
@@ -3500,7 +3509,57 @@ window.Eligibility = (function () {
     "Remote workers commonly use the e-tourist visa, which does not allow working for an Indian company."],
     { nombre: "India", iso: "IN" }) });
 
-  COUNTRY_RULES.FJ = reglasModeladas("FJ", { digital_nomad: honestDN([
+  /* =========================================================================
+     FIYI — turismo, estudios y trabajo AUDITADOS (v1.103.0, R5).
+     Fuente capturada el 1-ago-2026: immigration.gov.fj, una página por trámite.
+     Snapshot: lk-fj-upgrade-2026-08/.
+     ⚠ Al verificar salió un dato FALSO que traía la investigación previa (un
+     supuesto aval por estudios de más de 12 meses): no existe en la fuente y se
+     descartó. Cada extracto de aquí está comprobado literal contra la captura.
+  ========================================================================= */
+  var FJ_AUDITADO = {
+    tourist: function (p) {
+      var m = [], w = [], x = [], pt = passportTier(p.nationality), score = 0;
+      if (pt <= 2) { score += 20; m.push("Your passport nationality is generally accepted for visits to this destination."); }
+      else         { score += 10; w.push("Additional documentation requirements may apply for your passport nationality."); }
+      m.push("Fiji's single-journey visa is valid for 3 months and can only be used for one trip.");
+      w.push("There is also a multiple-entry visa valid for 12 months from issue, with each stay limited to 4 months.");
+      w.push("Processing takes 14 working days from the day the visa officer receives your application.");
+      finReq("Fees depend on the type: single entry costs $93 and multiple entry $185.", w);
+      w.push("This is simulated guidance only. Always verify with the Fiji Immigration Department.");
+      var r = visaResult("tourist", clamp(score + 30, 0, 62), m, w, x);
+      r.officialName = "Fiji visitor visa";
+      r.route = "fj_tourist";
+      return r;
+    },
+    student: function (p) {
+      var b = estudioBase(p, 58), m = b.m, w = b.w;
+      m.push("Fiji issues a student permit for the current academic year.");
+      w.push("You need an acceptance letter from the school or institution for the current academic year.");
+      w.push("A local police report is required for people over 18 who have already studied 12 months or more in Fiji.");
+      w.push("The student permit application costs $321 and takes about 21 working days.");
+      w.push("This is simulated guidance only. Always verify with the Fiji Immigration Department.");
+      var r = visaResult("student", Math.min(b.score, b.tope), m, w,
+        eduRank(p.education) < eduRank("secondary") ? ["minEdu"] : []);
+      r.officialName = "Fiji student permit";
+      r.route = "fj_student";
+      return r;
+    },
+    work: function (p) {
+      var b = trabajoBase(p, 56), m = b.m, w = b.w;
+      m.push("Fiji issues long-term work permits of three years, and short-term permits of one year or less for temporary engagements.");
+      w.push("You cannot switch from a visitor permit: no work permit application is accepted from visitor permit holders inside the country.");
+      w.push("This is simulated guidance only. Always verify with the Fiji Immigration Department.");
+      var r = visaResult("work", Math.min(b.score, b.tope), m, w, []);
+      r.officialName = "Fiji work permit";
+      r.route = "fj_work";
+      return r;
+    },
+  };
+
+  COUNTRY_RULES.FJ = reglasModeladas("FJ", {
+    tourist: FJ_AUDITADO.tourist, student: FJ_AUDITADO.student, work: FJ_AUDITADO.work,
+    digital_nomad: honestDN([
     "Fiji does not offer a dedicated Digital Nomad visa.",
     "Remote workers commonly use the visitor permit, which can usually be extended up to six months in total."],
     { nombre: "Fiji", iso: "FJ" }) });
@@ -3650,9 +3709,48 @@ window.Eligibility = (function () {
     digital_nomad: honestDN([
       "Sri Lanka does not currently offer a dedicated Digital Nomad visa.",
       "Remote workers commonly use the extendable tourist visa (ETA)."]),
-    tourist: function (p) { return genericDe("LK", "tourist", p); },
-    student: function (p) { return genericDe("LK", "student", p); },
-    work: function (p) { return genericDe("LK", "work", p); },
+    /* v1.103.0 — LAS TRES AUDITADAS (R5). Fuente capturada el 1-ago-2026:
+       immigration.gov.lk (Department of Immigration and Emigration).
+       Snapshot: lk-fj-upgrade-2026-08/. La ruta nómada sigue honesta: Sri Lanka
+       no tiene programa dedicado y la fuente no lo menciona. */
+    tourist: function (p) {
+      var m = [], w = [], x = [], pt = passportTier(p.nationality), score = 0;
+      if (pt <= 2) { score += 20; m.push("Your passport nationality is generally accepted for visits to this destination."); }
+      else         { score += 10; w.push("Additional documentation requirements may apply for your passport nationality."); }
+      m.push("Sri Lanka grants a 30-day free tourist visa to seven nationalities on a payment basis: China, India, Russia, Japan, Thailand, Malaysia and Indonesia.");
+      w.push("Your intended stay must end at least two months before your travel document expires.");
+      w.push("Children under 12 must extend their tourist visa, paying the extension fee, if they stay longer than thirty days from arrival.");
+      finReq("You may be asked for proof of funds and onward travel.", w);
+      w.push("This is simulated guidance only. Always verify with the Sri Lanka Department of Immigration and Emigration.");
+      var r = visaResult("tourist", clamp(score + 30, 0, 62), m, w, x);
+      r.officialName = "Sri Lanka tourist visa (ETA)";
+      r.route = "lk_tourist";
+      return r;
+    },
+    student: function (p) {
+      var b = estudioBase(p, 58), m = b.m, w = b.w;
+      m.push("Studying in Sri Lanka goes through a residence visa in the educational category.");
+      w.push("University students need a recommendation from the Ministry of Higher Education.");
+      w.push("You must show bank encashment receipts to the value of US$1500 for a year per person.");
+      w.push("The residence visa is valid for one year, or the period recommended by the ministry or the academic institution, and can be renewed.");
+      w.push("This is simulated guidance only. Always verify with the Sri Lanka Department of Immigration and Emigration.");
+      var r = visaResult("student", Math.min(b.score, b.tope), m, w,
+        eduRank(p.education) < eduRank("secondary") ? ["minEdu"] : []);
+      r.officialName = "Sri Lanka residence visa — educational category";
+      r.route = "lk_student";
+      return r;
+    },
+    work: function (p) {
+      var b = trabajoBase(p, 56), m = b.m, w = b.w;
+      m.push("A Sri Lankan residence visa is a permit for a non-Sri Lankan to obtain residence facilities for special purposes, and employment is one of those categories.");
+      w.push("You need a request letter from the company or institute, its registration certificate and the details of its board of directors.");
+      w.push("The residence visa is valid for one year, or the period the relevant authority recommends, and is renewed annually.");
+      w.push("This is simulated guidance only. Always verify with the Sri Lanka Department of Immigration and Emigration.");
+      var r = visaResult("work", Math.min(b.score, b.tope), m, w, []);
+      r.officialName = "Sri Lanka residence visa — employment category";
+      r.route = "lk_work";
+      return r;
+    },
   };
 
   /* =========================================================================
