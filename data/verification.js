@@ -274,6 +274,12 @@ window.VERIFICATION = {
       "facts": 5,
       "monitored": true,
       "lastCheck": "2026-07-31"
+    },
+    "CL": {
+      "routes": 1,
+      "facts": 7,
+      "monitored": false,
+      "lastCheck": "2026-08-01"
     }
   }
 };

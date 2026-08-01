@@ -2829,14 +2829,23 @@ window.Eligibility = (function () {
     return { m: m, w: w, score: score, tope: tope };
   }
 
+  /* v1.97.0 — ASCENDIDA A NIVEL AUDITADO (R5). Fuente capturada el 1-ago-2026:
+     serviciomigraciones.cl (SERMIG) responde a una descarga normal, así que es
+     vigilable sin trato especial. Snapshot: snapshots/cl-upgrade-2026-08/.
+     Se cae la línea de «orientación preliminar» y entran tres datos oficiales
+     que antes no teníamos: pasaporte con un año de vigencia, antecedentes de
+     menos de 60 días y —el más útil— que con esta residencia SÍ se puede
+     trabajar hasta 30 horas semanales sin permiso adicional. */
   COUNTRY_RULES.CL.student = function (p) {
     var b = estudioBase(p, 60), m = b.m, w = b.w;
     m.push("Chile's temporary residence permit for students covers studies at state-recognised institutions.");
     w.push("It must be applied for from OUTSIDE Chile, through the online portal of the Servicio Nacional de Migraciones — Chilean consulates do not process it.");
-    w.push("You need proof of admission or enrolment at the institution.");
-    finReq("You must show you can support yourself during your studies.", w);
+    w.push("You need proof of admission or enrolment at the institution: a certificate of regular student status or of enrolment.");
+    finReq("You must show you can support yourself during your studies, with bank deposits, regular transfers, a notarised affidavit from whoever supports you, or a scholarship certificate.", w);
+    m.push("With this residence you can work up to 30 hours a week without needing any extra authorisation, either at your own institution or for any other employer.");
+    w.push("Your passport must be valid for at least one year from the date you apply.");
+    w.push("The criminal record certificate from your country must be no more than 60 days old, and documents issued abroad need an apostille and, if not in Spanish or English, an official translation.");
     w.push("Once you hold it you can change category, for example to work, without leaving Chile.");
-    w.push("This route could not be verified against a captured official source yet. Treat as preliminary guidance.");
     var r = visaResult("student", Math.min(b.score, b.tope), m, w, eduRank(p.education) < eduRank("secondary") ? ["minEdu"] : []);
     r.officialName = "Chile student temporary residence (residencia temporal, estudiantes)";
     r.route = "cl_student";
