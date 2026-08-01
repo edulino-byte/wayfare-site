@@ -2806,6 +2806,19 @@ window.Eligibility = (function () {
      nada a quien elegía «Estudiar»: EAU, Chile, Costa Rica y Georgia. Nivel
      modelado con línea preliminar. Venezuela se queda fuera A PROPÓSITO
      (recorte deliberado del usuario: solo turismo). */
+  /* v1.95.0 — base común de las tarjetas de TRABAJO modeladas (R5, 4ª parte).
+     Money-agnostic como manda la cabecera del archivo: los importes salen como
+     advertencia informativa, NUNCA puntúan (no convertimos divisas). */
+  function trabajoBase(p, tope) {
+    var m = [], w = [], score = 0;
+    if (passportTier(p.nationality) <= 2) { score += 16; m.push("Your passport nationality is generally accepted for work applications in this destination."); }
+    else                                   { score += 8;  w.push("Additional documentation requirements may apply for your passport nationality."); }
+    score += scoreEdu(p, "secondary", 24);
+    if (eduRank(p.education) >= eduRank("secondary")) m.push("Your education level is a positive signal for a skilled work application.");
+    score += scoreAge(p.age, 18, 60, 10);
+    return { m: m, w: w, score: score, tope: tope };
+  }
+
   function estudioBase(p, tope) {
     var m = [], w = [], score = 0;
     if (passportTier(p.nationality) <= 2) { score += 14; m.push("Your passport nationality is generally accepted for student applications in this destination."); }
@@ -2833,6 +2846,39 @@ window.Eligibility = (function () {
   /* (el de Georgia va MÁS ABAJO, tras definirse COUNTRY_RULES.GE — si se pone
      aquí, o revienta la app o lo pisa el objeto literal de GE) */
 
+  /* v1.95.0 — R5 (4ª parte): EAU en dos tarjetas. La clásica va atada a la
+     empresa que te contrata; la Green Visa es de auto-patrocinio (5 años) y no
+     se pierde al cambiar de trabajo — es la diferencia que importa contar.
+     Los importes (15.000 AED/mes, 360.000 AED/año) van como AVISO, no puntúan:
+     el motor es money-agnostic a propósito. */
+  COUNTRY_RULES.AE.work = function (p) {
+    var cards = [];
+
+    var b = trabajoBase(p, 60), m = b.m, w = b.w;
+    m.push("The standard UAE work route is sponsored by the company that hires you: the employer applies for the work permit and the residence visa.");
+    w.push("It is normally issued for two to three years and is tied to that employer; if you leave the job, the residence has to be transferred or cancelled.");
+    w.push("You will need a medical fitness test, an Emirates ID and health insurance, and your qualifications may have to be attested.");
+    w.push("This route could not be verified against a captured official source yet. Treat as preliminary guidance.");
+    var std = visaResult("work", Math.min(b.score, b.tope), m, w, []);
+    std.officialName = "UAE work permit and residence visa (employer-sponsored)";
+    std.route = "ae_work_sponsored";
+    cards.push(std);
+
+    var g = trabajoBase(p, 58), gm = g.m, gw = g.w;
+    gm.push("The UAE Green Visa is a five-year residence you sponsor yourself: no company holds it, and you keep it if you change jobs.");
+    gw.push("The skilled-employee route asks for a university degree, a job classified in the top MoHRE skill levels and a monthly salary of at least AED 15,000.");
+    gw.push("Freelancers go through a freelance permit and are asked for around AED 360,000 of income over the two previous years.");
+    gw.push("It also lets you sponsor your family, which the standard employment visa restricts more.");
+    gw.push("This route could not be verified against a captured official source yet. Treat as preliminary guidance.");
+    if (eduRank(p.education) >= eduRank("university")) gm.push("Your university education is a positive signal for the skilled-employee route.");
+    var green = visaResult("work", Math.min(g.score, g.tope), gm, gw, []);
+    green.officialName = "UAE Green Visa (5-year self-sponsored residence)";
+    green.route = "ae_work_green";
+    cards.push(green);
+
+    return cards;
+  };
+
   COUNTRY_RULES.AE.student = function (p) {
     var b = estudioBase(p, 60), m = b.m, w = b.w;
     m.push("A UAE student residence visa is sponsored by the university or higher-education institution that admits you.");
@@ -2853,6 +2899,24 @@ window.Eligibility = (function () {
   COUNTRY_RULES.CR = {
     tourist:       function (p) { return genericDe("CR", "tourist", p); },
     digital_nomad: function (p) { return genericDe("CR", "digital_nomad", p); },
+
+    /* v1.95.0 — R5 (4ª parte). El dato que más despista de Costa Rica: NO existe
+       una «visa de trabajo» suelta — el permiso vive dentro de una residencia
+       temporal. Por eso la tarjeta lo dice en la primera línea. */
+    work: function (p) {
+      var b = trabajoBase(p, 56), m = b.m, w = b.w;
+      m.push("Costa Rica does not issue a separate work visa: the right to work comes inside a temporary residence, usually the special category for employed workers.");
+      w.push("A Costa Rican employer has to sponsor you and show that no Costa Rican or permanent resident can fill the post.");
+      w.push("The employer must be registered with the labour ministry and enrol you in the social security fund (CCSS).");
+      w.push("The permit is tied to that single employer and the process commonly takes between three and eight months.");
+      w.push("Your documents from abroad normally need an apostille and an official Spanish translation.");
+      w.push("If you work remotely for a company abroad, the digital nomad route fits better than this one.");
+      w.push("This route could not be verified against a captured official source yet. Treat as preliminary guidance.");
+      var r = visaResult("work", Math.min(b.score, b.tope), m, w, []);
+      r.officialName = "Costa Rica temporary residence with work permission (categoría especial)";
+      r.route = "cr_work";
+      return r;
+    },
     student: function (p) {
       var b = estudioBase(p, 58), m = b.m, w = b.w;
       m.push("Costa Rica grants a special student category to people admitted to an accredited institution.");
@@ -2941,8 +3005,29 @@ window.Eligibility = (function () {
         p.remoteWork ? ["Your profile indicates remote work, which is the main factor for nomad-style stays."] : [],
         ["Georgia does not currently offer a dedicated Digital Nomad visa.",
          "Citizens of many countries can stay in Georgia visa-free for a full year, which remote workers commonly use.",
+         /* v1.95.0 — CAMBIO REAL de 2026: hasta ahora la idea popular era que en
+            Georgia se podía trabajar sin permiso. Desde el 1-mar-2026 hay
+            régimen de permiso de trabajo y NO está aclarado si alcanza a quien
+            trabaja en remoto para una empresa de fuera. Decirlo es lo honesto. */
+         "Careful: since 1 March 2026 Georgia requires a work permit for paid activity carried out in the country, and the rules do not yet make clear whether remote work for an employer abroad falls under it.",
          "Simulated guidance only. Always verify with official immigration sources."],
         []);
+    },
+
+    /* v1.95.0 — R5 (4ª parte): Georgia no enseñaba NADA a quien elegía
+       «Trabajar», justo el año en que estrena permiso de trabajo. */
+    work: function (p) {
+      var b = trabajoBase(p, 58), m = b.m, w = b.w;
+      m.push("Since 1 March 2026 Georgia has a work permit system: you need the right to labour activity plus a D1 visa or a work residence permit.");
+      w.push("Your employer applies for you, and must first advertise the job on the government portal for 10 working days.");
+      w.push("It covers employees, self-employed people and entrepreneurs earning from activity in Georgia; processing takes up to 30 days.");
+      w.push("Holders of permanent residence are exempt, and people already working there before March 2026 have until 1 January 2027 to get the permit.");
+      w.push("Working without the permit is now fined, for both the worker and the company.");
+      w.push("This route could not be verified against a captured official source yet. Treat as preliminary guidance.");
+      var r = visaResult("work", Math.min(b.score, b.tope), m, w, []);
+      r.officialName = "Georgia work permit (right to labour activity) + D1 visa";
+      r.route = "ge_work";
+      return r;
     },
     /* v1.87.0 — Fase 3: turismo por visa concreta (nivel MODELADO). La entrada
        sin visado de hasta 1 año (Ordenanza 255/2015) es la vía real para casi
