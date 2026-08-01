@@ -1268,6 +1268,15 @@ window.I18N = {
     "Work permit processes may be more complex for your passport nationality.": "Los trámites de permiso de trabajo pueden ser más complejos según tu nacionalidad de pasaporte.",
     "You may need to show sufficient funds and income. Check official digital nomad visa requirements for this destination.": "Puede que debas demostrar fondos e ingresos suficientes. Consulta los requisitos oficiales de la visa de nómada digital de este destino.",
     "Your passport appears to provide strong global visa access.": "Tu pasaporte parece ofrecer un acceso global fuerte a visados.",
+    /* R5 — Panamá turismo ASCENDIDA a nivel auditado (v1.98.0, artículo 43) */
+    "Your passport nationality is generally accepted for visits to this destination.": "Tu nacionalidad de pasaporte suele aceptarse para visitar este destino.",
+    "Panama's migration law sets the entry requirements: you must enter through an officially enabled land, air or sea migration post.": "La ley migratoria de Panamá fija los requisitos de entrada: debes entrar por un puesto migratorio terrestre, aéreo o marítimo oficialmente habilitado.",
+    "You must show your valid passport or travel document and, where required, a valid entry visa.": "Debes presentar tu pasaporte o documento de viaje vigente y, cuando se requiera, la visa de ingreso vigente.",
+    "You must agree to be interviewed by the authorities, to have your biometric data validated on the spot and your luggage and personal documents inspected.": "Debes aceptar ser entrevistado por las autoridades, que tus datos biométricos se validen in situ y que se inspeccionen tu equipaje y tus documentos personales.",
+    "You must hand in the entry and exit card (Tarjeta de Ingreso y Egreso) that the international carrier gives you, filled in.": "Debes entregar debidamente completada la Tarjeta de Ingreso y Egreso que te suministra la empresa de transporte internacional.",
+    "You must comply with the health rules set by the Ministry of Health.": "Debes cumplir las normas sanitarias establecidas por el Ministerio de Salud.",
+    "Border officers can ask for proof of funds and onward travel.": "En frontera pueden pedirte prueba de fondos y billete de salida.",
+    "This is simulated guidance only. Always verify with the Servicio Nacional de Migración.": "Esto es orientación simulada. Verifica siempre con el Servicio Nacional de Migración.",
     /* R5 — Chile estudiantes ASCENDIDA a nivel auditado (v1.97.0, fuente SERMIG) */
     "You need proof of admission or enrolment at the institution: a certificate of regular student status or of enrolment.": "Necesitas acreditar la admisión o matrícula en el centro: certificado de alumno regular o certificado de matrícula.",
     "You must show you can support yourself during your studies, with bank deposits, regular transfers, a notarised affidavit from whoever supports you, or a scholarship certificate.": "Debes acreditar sustento económico durante tus estudios: depósitos bancarios, giros periódicos, declaración jurada de expensas de quien te mantiene firmada ante notario, o certificado de beca.",

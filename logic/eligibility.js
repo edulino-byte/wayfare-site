@@ -3249,6 +3249,35 @@ window.Eligibility = (function () {
   }
 
   /* --- Sin programa: tarjeta honesta (explica la realidad, no la disfraza) -- */
+  /* =========================================================================
+     PANAMÁ — turismo ASCENDIDO A NIVEL AUDITADO (v1.98.0, R5).
+     Fuente capturada el 1-ago-2026: migracion.gob.pa/turistas/ cita LITERALMENTE
+     el artículo 43 de la ley migratoria con los requisitos de entrada, y
+     responde a una descarga normal (vigilable sin trato especial).
+     Snapshot: snapshots/pa-upgrade-2026-08/.
+     ⚠ PA no tenía reglas propias: se declaran TODOS sus tipos (trampa conocida).
+     Los requisitos de estudios y trabajo viven en PDFs enlazados desde
+     /permisos-migratorios/ — candidatos a una tanda posterior.
+  ========================================================================= */
+  COUNTRY_RULES.PA = reglasModeladas("PA", {
+    tourist: function (p) {
+      var m = [], w = [], x = [], pt = passportTier(p.nationality), score = 0;
+      if (pt <= 2) { score += 20; m.push("Your passport nationality is generally accepted for visits to this destination."); }
+      else         { score += 10; w.push("Additional documentation requirements may apply for your passport nationality."); }
+      m.push("Panama's migration law sets the entry requirements: you must enter through an officially enabled land, air or sea migration post.");
+      w.push("You must show your valid passport or travel document and, where required, a valid entry visa.");
+      w.push("You must agree to be interviewed by the authorities, to have your biometric data validated on the spot and your luggage and personal documents inspected.");
+      w.push("You must hand in the entry and exit card (Tarjeta de Ingreso y Egreso) that the international carrier gives you, filled in.");
+      w.push("You must comply with the health rules set by the Ministry of Health.");
+      finReq("Border officers can ask for proof of funds and onward travel.", w);
+      w.push("This is simulated guidance only. Always verify with the Servicio Nacional de Migración.");
+      var r = visaResult("tourist", clamp(score + 32, 0, 64), m, w, x);
+      r.officialName = "Panama visitor entry (Ley de Migración, artículo 43)";
+      r.route = "pa_tourist";
+      return r;
+    },
+  });
+
   COUNTRY_RULES.DO = reglasModeladas("DO", { digital_nomad: honestDN([
     "The Dominican Republic does not offer a dedicated Digital Nomad visa.",
     "Remote workers commonly use the tourist entry, which does not allow taking a job in the country.",
