@@ -286,6 +286,18 @@ window.VERIFICATION = {
       "facts": 5,
       "monitored": false,
       "lastCheck": "2026-08-01"
+    },
+    "PE": {
+      "routes": 3,
+      "facts": 15,
+      "monitored": false,
+      "lastCheck": "2026-08-01"
+    },
+    "BO": {
+      "routes": 3,
+      "facts": 10,
+      "monitored": false,
+      "lastCheck": "2026-08-01"
     }
   }
 };

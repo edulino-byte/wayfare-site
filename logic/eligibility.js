@@ -3152,6 +3152,64 @@ window.Eligibility = (function () {
     tourist: function (p) { return genericDe("CO", "tourist", p); },
   };
   COUNTRY_RULES.PE = mercosurRules("PE", ["student", "tourist", "digital_nomad"]); /* v1.71.0: Perú SÍ tiene visa de nómada (D.L. fin 2023, operativa 2024) */
+
+  /* =========================================================================
+     PERÚ — turismo, estudios y trabajo AL NIVEL AUDITADO (v1.99.0, R5).
+     ⚠ DESBLOQUEO: gob.pe llevaba desde el 29-jul sin responder desde esta red
+     (tarea #13, «PE/EC bloqueados»). El 1-ago-2026 responde con normalidad y se
+     capturaron las tres fichas de trámite. Snapshot: snapshots/pe-upgrade-2026-08/.
+     Las tres son vigilables con descarga normal.
+     El trabajo devuelve DOS tarjetas: la del acuerdo Mercosur (mejor vía para
+     quien puede usarla) y la de trabajador residente, que es la general.
+  ========================================================================= */
+  COUNTRY_RULES.PE.tourist = function (p) {
+    var m = [], w = [], x = [], score = 0, pt = passportTier(p.nationality);
+    if (pt <= 2) { score += 18; m.push("Many Latin American and European nationalities do not need this visa at all — check whether yours is one of them."); }
+    else         { score += 10; w.push("Additional documentation requirements may apply for your passport nationality."); }
+    m.push("If you do need it, the tourist visa is applied for at a Peruvian consular office in the country where you are.");
+    w.push("You must start the procedure 15 calendar days before you travel.");
+    w.push("The maximum stay on this visa is up to 183 calendar days with no extension, whether in one visit or several consecutive visits within 12 months.");
+    w.push("Submitting the application and the documents does not guarantee the visa: each request is assessed individually by the consul.");
+    finReq("The consulate may ask for additional requirements during the process.", w);
+    var r = visaResult("tourist", clamp(score + 30, 0, 62), m, w, x);
+    r.officialName = "Peru tourist visa (visa de turismo)";
+    r.route = "pe_tourist";
+    return r;
+  };
+
+  COUNTRY_RULES.PE.student = function (p) {
+    var b = estudioBase(p, 60), m = b.m, w = b.w;
+    m.push("Peru's student migratory status (formación) covers studies at institutions recognised by the Peruvian State.");
+    w.push("You need an enrolment certificate from the institution showing that the studies last one year or more.");
+    w.push("You must prove you have no judicial, criminal or police record in your country or in any country where you lived over the previous five years.");
+    w.push("You need a sworn declaration of financial means covering the whole length of the stay; for minors it is signed by a parent or guardian.");
+    w.push("Documents issued abroad must be legalised by the Peruvian consulate or carry an apostille, and be translated into Spanish by a registered translator.");
+    w.push("The application fee is S/ 58.80, paid through Pagalo.pe or at a Banco de la Nación branch.");
+    var r = visaResult("student", Math.min(b.score, b.tope), m, w,
+      eduRank(p.education) < eduRank("secondary") ? ["minEdu"] : []);
+    r.officialName = "Peru student migratory status (calidad migratoria de formación, residente)";
+    r.route = "pe_student";
+    return r;
+  };
+
+  COUNTRY_RULES.PE.work = function (p) {
+    var cards = [];
+    /* La tarjeta Mercosur SOLO para quien de verdad puede usar el acuerdo: filtrar
+       por puntuación colaba la tarjeta genérica de trabajo (72) a los europeos. */
+    if (MERCOSUR[p.nationality] && p.nationality !== "PE") cards.push(mercosurWork("PE", p));
+
+    var b = trabajoBase(p, 58), m = b.m, w = b.w;
+    m.push("Peru's resident worker status is the general route: it needs a job contract already approved by the labour authority.");
+    w.push("The contract must be no more than 30 calendar days old when you apply and must run for one year or more.");
+    w.push("The hiring company must appear as active and traceable with the tax authority (Sunat), and its legal representative signs a sworn declaration for you.");
+    w.push("You must prove you have no judicial, criminal or police record in your country or in any country where you lived over the previous five years.");
+    w.push("You will get an answer within a maximum of 30 calendar days.");
+    var r = visaResult("work", Math.min(b.score, b.tope), m, w, []);
+    r.officialName = "Peru resident worker status (calidad migratoria de trabajador residente)";
+    r.route = "pe_work";
+    cards.push(r);
+    return cards;
+  };
   COUNTRY_RULES.EC = mercosurRules("EC", ["digital_nomad", "student", "tourist"]);
   /* =========================================================================
      URUGUAY — nivel AUDITADO (v1.74.0)
@@ -3197,6 +3255,58 @@ window.Eligibility = (function () {
     "Paraguay does not offer a dedicated Digital Nomad visa.",
     "What remote workers actually use is its residence route: the 2022 migration law grants a two-year temporary residence that allows living and working there."],
     { nombre: "Paraguay", iso: "PY" });
+
+  /* =========================================================================
+     BOLIVIA — turismo, estudios y trabajo AL NIVEL AUDITADO (v1.100.0, R5).
+     Fuente capturada el 1-ago-2026: la red consular de la Cancillería publica
+     las tres en UNA sola página, con texto limpio y descarga normal.
+     Snapshot: snapshots/bo-upgrade-2026-08/.
+     El trabajo va por la «Visa de Objeto Determinado», que no es solo laboral:
+     cubre trabajo, voluntariado, intercambio académico, salud y familia.
+  ========================================================================= */
+  COUNTRY_RULES.BO.tourist = function (p) {
+    var m = [], w = [], x = [], pt = passportTier(p.nationality), score = 0;
+    if (pt <= 2) { score += 20; m.push("Bolivia sorts nationalities into three groups: Group I does not need a tourist visa at all, Group II does, and Group III needs one with prior clearance from the migration authority."); }
+    else         { score += 10; w.push("Bolivia sorts nationalities into three groups: Group I does not need a tourist visa at all, Group II does, and Group III needs one with prior clearance from the migration authority."); }
+    w.push("Your passport must be valid for at least six months.");
+    w.push("You need a travel itinerary or return ticket, and either a hosting reservation or an invitation letter from someone living in Bolivia registered with the migration authority.");
+    w.push("A yellow fever vaccination certificate is required if you will visit high-risk endemic areas.");
+    finReq("You must show economic solvency for your stay.", w);
+    w.push("This is simulated guidance only. Always verify with the Bolivian consular network.");
+    var r = visaResult("tourist", clamp(score + 30, 0, 62), m, w, x);
+    r.officialName = "Bolivia tourist visa (visa de ingreso por turismo)";
+    r.route = "bo_tourist";
+    return r;
+  };
+
+  COUNTRY_RULES.BO.student = function (p) {
+    var b = estudioBase(p, 58), m = b.m, w = b.w;
+    m.push("Bolivia's student visa covers primary and secondary schooling as well as higher and professional education.");
+    w.push("The visa itself lasts up to 60 days: with it you then apply to the migration authority for a one-year temporary stay, renewable until you finish your studies.");
+    w.push("You must produce study documents — certificate, degree or academic record — legalised beforehand by the Bolivian consular office.");
+    w.push("A police, criminal or judicial record certificate from your country or country of residence is required from age 16.");
+    finReq("You must show economic solvency through bank statements or a credit card.", w);
+    var r = visaResult("student", Math.min(b.score, b.tope), m, w,
+      eduRank(p.education) < eduRank("secondary") ? ["minEdu"] : []);
+    r.officialName = "Bolivia student visa (visa de estudiante)";
+    r.route = "bo_student";
+    return r;
+  };
+
+  COUNTRY_RULES.BO.work = function (p) {
+    var cards = [];
+    if (MERCOSUR[p.nationality] && p.nationality !== "BO") cards.push(mercosurWork("BO", p));
+    var b = trabajoBase(p, 56), m = b.m, w = b.w;
+    m.push("Bolivia's specific-purpose visa (Objeto Determinado) is the entry permit for work, temporary work, volunteering, academic exchange, health or family reasons — anything other than tourism.");
+    w.push("You need an invitation letter from the company or organisation, with supporting documents, except for temporary work, health and family cases.");
+    w.push("A police, criminal or judicial record certificate from your country or country of residence is required from age 16.");
+    finReq("You must show economic solvency through bank statements or a credit card.", w);
+    var r = visaResult("work", Math.min(b.score, b.tope), m, w, []);
+    r.officialName = "Bolivia specific-purpose visa (visa de objeto determinado)";
+    r.route = "bo_work";
+    cards.push(r);
+    return cards;
+  };
 
   COUNTRY_RULES.BO.digital_nomad = honestDN([
     "Bolivia does not offer a dedicated Digital Nomad visa.",
