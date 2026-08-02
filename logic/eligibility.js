@@ -3585,12 +3585,78 @@ window.Eligibility = (function () {
     "Remote workers commonly use the tourist entry, which covers up to 90 days shared across the CA-4 countries; longer stays need a residence permit."],
     { nombre: "Honduras", iso: "HN" }) });
 
-  COUNTRY_RULES.QA = reglasModeladas("QA", { digital_nomad: honestDN([
+  /* =========================================================================
+     INDIA y CATAR — AUDITADOS (v1.107.0, R5).
+     India: portal oficial de e-visa (indianvisaonline.gov.in) para turismo y el
+     PDF vigente del Ministerio del Interior (AnnexIII) para estudios y trabajo.
+     ⚠ Ese PDF lleva fecha 01/02/2018: es el que el MHA publica como vigente,
+     pero la antigüedad queda anotada en la evidencia.
+     Catar: portal del Ministerio del Interior. Solo turismo — sus páginas de
+     estudios y trabajo están bloqueadas (403 y cáscara JS) y sin fuente no hay
+     ascenso. Snapshot: in-qa-upgrade-2026-08/.
+  ========================================================================= */
+  var IN_AUDITADO = {
+    tourist: function (p) {
+      var m = [], w = [], x = [], pt = passportTier(p.nationality), score = 0;
+      if (pt <= 2) { score += 20; m.push("Your passport nationality is generally accepted for visits to this destination."); }
+      else         { score += 10; w.push("Additional documentation requirements may apply for your passport nationality."); }
+      m.push("India's e-Tourist Visa comes in three lengths: 30 days, one year and five years, all with multiple entries.");
+      w.push("The 30-day version is non-extendable and non-convertible.");
+      w.push("On the one-year and five-year visas your total stay in India during one calendar year cannot exceed 180 days.");
+      w.push("Beware of scams: the Government of India charges no emergency or express fee for any e-visa.");
+      w.push("This is simulated guidance only. Always verify with the Indian Bureau of Immigration.");
+      var r = visaResult("tourist", clamp(score + 30, 0, 62), m, w, x);
+      r.officialName = "India e-Tourist Visa";
+      r.route = "in_tourist";
+      return r;
+    },
+    student: function (p) {
+      var b = estudioBase(p, 58), m = b.m, w = b.w;
+      m.push("India's student visa is for people whose sole objective is to follow on-campus, full-time structured courses at recognised institutions.");
+      w.push("For a medical or para-medical course you must produce a letter of approval or No Objection Certificate from the Ministry of Health.");
+      w.push("You must show evidence of transferring enough funds for at least four months of sustenance in India, or travellers cheques for a similar amount.");
+      w.push("This is simulated guidance only. Always verify with the Indian Bureau of Immigration.");
+      var r = visaResult("student", Math.min(b.score, b.tope), m, w,
+        eduRank(p.education) < eduRank("secondary") ? ["minEdu"] : []);
+      r.officialName = "India Student Visa";
+      r.route = "in_student";
+      return r;
+    },
+    work: function (p) {
+      var b = trabajoBase(p, 56), m = b.m, w = b.w;
+      m.push("India's employment visa is granted to highly skilled or qualified professionals.");
+      w.push("It is not granted for jobs where qualified Indians are available, nor for routine, ordinary or clerical work.");
+      w.push("The person being sponsored must draw a gross salary above Rs. 16.25 lakhs per year, with some listed exceptions.");
+      w.push("This is simulated guidance only. Always verify with the Indian Bureau of Immigration.");
+      var r = visaResult("work", Math.min(b.score, b.tope), m, w, []);
+      r.officialName = "India Employment Visa";
+      r.route = "in_work";
+      return r;
+    },
+  };
+
+  var QA_AUDITADO_TURISMO = function (p) {
+    var m = [], w = [], x = [], pt = passportTier(p.nationality), score = 0;
+    if (pt <= 2) { score += 20; m.push("Your passport nationality is generally accepted for visits to this destination."); }
+    else         { score += 10; w.push("Additional documentation requirements may apply for your passport nationality."); }
+    m.push("Citizens of more than 95 countries can enter Qatar with a visa on arrival at its entry points, for varying lengths of stay.");
+    w.push("You need a passport valid for at least three months and a confirmed onward or return ticket.");
+    w.push("Health insurance is compulsory: the policy must come from an insurer registered with Qatar's Ministry of Public Health.");
+    w.push("This is simulated guidance only. Always verify with the Qatari Ministry of Interior.");
+    var r = visaResult("tourist", clamp(score + 32, 0, 64), m, w, x);
+    r.officialName = "Qatar visa on arrival";
+    r.route = "qa_tourist";
+    return r;
+  };
+
+  COUNTRY_RULES.QA = reglasModeladas("QA", { tourist: QA_AUDITADO_TURISMO, digital_nomad: honestDN([
     "Qatar does not offer a dedicated Digital Nomad visa.",
     "Residence in Qatar is normally tied to a local employer who sponsors you."],
     { nombre: "Qatar", iso: "QA" }) });
 
-  COUNTRY_RULES.IN = reglasModeladas("IN", { digital_nomad: honestDN([
+  COUNTRY_RULES.IN = reglasModeladas("IN", {
+    tourist: IN_AUDITADO.tourist, student: IN_AUDITADO.student, work: IN_AUDITADO.work,
+    digital_nomad: honestDN([
     "India does not offer a dedicated Digital Nomad visa.",
     "Remote workers commonly use the e-tourist visa, which does not allow working for an Indian company."],
     { nombre: "India", iso: "IN" }) });

@@ -346,6 +346,18 @@ window.VERIFICATION = {
       "facts": 3,
       "monitored": false,
       "lastCheck": "2026-08-01"
+    },
+    "IN": {
+      "routes": 3,
+      "facts": 10,
+      "monitored": false,
+      "lastCheck": "2026-08-01"
+    },
+    "QA": {
+      "routes": 1,
+      "facts": 3,
+      "monitored": false,
+      "lastCheck": "2026-08-01"
     }
   }
 };
