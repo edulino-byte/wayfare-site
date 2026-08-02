@@ -3255,6 +3255,45 @@ window.Eligibility = (function () {
     return cards;
   };
   COUNTRY_RULES.EC = mercosurRules("EC", ["digital_nomad", "student", "tourist"]);
+
+  /* =========================================================================
+     ECUADOR — turismo y trabajo AUDITADOS (v1.106.0, R5).
+     ⚠ gob.ec sigue SIN RESPONDER desde esta red (comprobado el 1-ago-2026,
+     código 000, igual que el 29-jul). La vía viable es cancilleria.gob.ec, que
+     sí responde: los requisitos OBLIGATORIOS nacionales están publicados en las
+     subrutas consulares. Se capturó la de Caracas.
+     Snapshot: ec-py-ve-upgrade-2026-08/.
+  ========================================================================= */
+  COUNTRY_RULES.EC.tourist = function (p) {
+    var m = [], w = [], x = [], pt = passportTier(p.nationality), score = 0;
+    if (pt <= 2) { score += 20; m.push("Your passport nationality is generally accepted for visits to this destination."); }
+    else         { score += 10; w.push("Additional documentation requirements may apply for your passport nationality."); }
+    m.push("Ecuador's tourist visa is authorised for 90 days.");
+    w.push("Your passport must be valid for at least six months.");
+    w.push("You need a certificate of no criminal record from your country and from any country where you lived in the last five years; it is valid for 180 days and must be apostilled or legalised.");
+    finReq("You must show a bank balance of at least USD 1,380 — one Ecuadorian basic salary for each month of the 90-day stay — even if you plan to stay less.", w);
+    w.push("This is simulated guidance only. Always verify with the Ecuadorian Ministry of Foreign Affairs.");
+    var r = visaResult("tourist", clamp(score + 30, 0, 62), m, w, x);
+    r.officialName = "Ecuador tourist visa";
+    r.route = "ec_tourist";
+    return r;
+  };
+
+  COUNTRY_RULES.EC.work = function (p) {
+    var cards = [];
+    if (MERCOSUR[p.nationality] && p.nationality !== "EC") cards.push(mercosurWork("EC", p));
+    var b = trabajoBase(p, 56), m = b.m, w = b.w;
+    m.push("Ecuador's temporary resident visa for work is the general route for taking a job there.");
+    w.push("Your passport must be valid for at least six months.");
+    w.push("You need a certificate of no criminal record from your country and from any country where you lived in the last five years, apostilled or legalised, and translated by an authorised professional if it is not in Spanish.");
+    finReq("You must prove lawful means of living that allow you to support your stay.", w);
+    w.push("This is simulated guidance only. Always verify with the Ecuadorian Ministry of Foreign Affairs.");
+    var r = visaResult("work", Math.min(b.score, b.tope), m, w, []);
+    r.officialName = "Ecuador temporary resident visa for work";
+    r.route = "ec_work";
+    cards.push(r);
+    return cards;
+  };
   /* =========================================================================
      URUGUAY — nivel AUDITADO (v1.74.0)
      Fuente capturada 29-jul-2026: gub.uy/tramites/residencia-legal-permanente-
@@ -3295,6 +3334,30 @@ window.Eligibility = (function () {
      Mercosur, no arriba con los demás (los métodos sueltos siempre después del
      objeto que los recibe). Comprobado: ninguno de los dos tiene visa de nómada
      — las listas que dicen lo contrario confunden Paraguay con otros programas. */
+  /* =========================================================================
+     PARAGUAY — turismo AUDITADO (v1.106.0, R5). Fuente: mre.gov.py (Cancillería).
+     ⚠ Estudios y trabajo NO se pueden auditar: dependen de migraciones.gov.py,
+     cuya delegación DNS está ROTA A NIVEL MUNDIAL (comprobado con DNS público:
+     «No Reachable Authority at delegation»). No es cosa de nuestra red.
+     Reintentar en semanas. Snapshot: ec-py-ve-upgrade-2026-08/.
+  ========================================================================= */
+  COUNTRY_RULES.PY.tourist = function (p) {
+    var m = [], w = [], x = [], pt = passportTier(p.nationality), score = 0;
+    if (pt <= 2) { score += 20; m.push("Your passport nationality is generally accepted for visits to this destination."); }
+    else         { score += 10; w.push("Additional documentation requirements may apply for your passport nationality."); }
+    m.push("Paraguay's tourist visa is applied for online through its foreign ministry.");
+    w.push("It is advisable to apply at least 30 days before your planned travel date.");
+    w.push("You need an invitation letter from a person or company based in Paraguay, a hotel or accommodation booking and a possible flight or land itinerary.");
+    w.push("You need a criminal record certificate from your country of residence, duly legalised or apostilled.");
+    w.push("Under-18s cannot apply for the visa on their own.");
+    finReq("You must prove economic solvency with an employment certificate, a bank certificate or another suitable means.", w);
+    w.push("This is simulated guidance only. Always verify with the Paraguayan Ministry of Foreign Affairs.");
+    var r = visaResult("tourist", clamp(score + 30, 0, 62), m, w, x);
+    r.officialName = "Paraguay tourist visa";
+    r.route = "py_tourist";
+    return r;
+  };
+
   COUNTRY_RULES.PY.digital_nomad = honestDN([
     "Paraguay does not offer a dedicated Digital Nomad visa.",
     "What remote workers actually use is its residence route: the 2022 migration law grants a two-year temporary residence that allows living and working there."],
@@ -3401,6 +3464,29 @@ window.Eligibility = (function () {
     Object.keys(extra || {}).forEach(function (k) { reglas[k] = extra[k]; });
     return reglas;
   }
+
+  /* =========================================================================
+     VENEZUELA — turismo AUDITADO (v1.106.0, R5). Fuente: mppre.gob.ve, el
+     catálogo de visados del Ministerio del Poder Popular para Relaciones
+     Exteriores. Snapshot: ec-py-ve-upgrade-2026-08/.
+     ⚠ VE sigue SOLO CON TURISMO: es un recorte deliberado del usuario y no se
+     amplía sin preguntar, aunque la fuente también publique estudios y trabajo.
+  ========================================================================= */
+  COUNTRY_RULES.VE = reglasModeladas("VE", {
+    tourist: function (p) {
+      var m = [], w = [], x = [], pt = passportTier(p.nationality), score = 0;
+      if (pt <= 2) { score += 20; m.push("Your passport nationality is generally accepted for visits to this destination."); }
+      else         { score += 10; w.push("Additional documentation requirements may apply for your passport nationality."); }
+      m.push("Venezuela's tourist visa is granted to foreigners entering for leisure, health or activities that do not involve pay or profit.");
+      w.push("You need the original passport and a copy, valid for at least six months.");
+      finReq("You must provide a bank letter stating when the account was opened, its number and its balance.", w);
+      w.push("This is simulated guidance only. Always verify with the Venezuelan Ministry of Foreign Affairs.");
+      var r = visaResult("tourist", clamp(score + 30, 0, 62), m, w, x);
+      r.officialName = "Venezuela tourist visa (visado de turista)";
+      r.route = "ve_tourist";
+      return r;
+    },
+  });
 
   /* --- Sin programa: tarjeta honesta (explica la realidad, no la disfraza) -- */
   /* =========================================================================
