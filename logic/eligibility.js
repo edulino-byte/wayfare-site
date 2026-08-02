@@ -2956,7 +2956,26 @@ window.Eligibility = (function () {
      la configuración de mock.js. */
   COUNTRY_RULES.CR = {
     tourist:       function (p) { return genericDe("CR", "tourist", p); },
-    digital_nomad: function (p) { return genericDe("CR", "digital_nomad", p); },
+
+    /* v1.109.0 — NÓMADA DIGITAL AUDITADO. Fuente capturada el 1-ago-2026 con el
+       navegador real del usuario: migracion.go.cr está tras un WAF que devuelve
+       403 a cualquier descarga automática, pero el sitio está vivo y publica la
+       subcategoría completa. Snapshot: cr-chrome-2026-08/. */
+    digital_nomad: function (p) {
+      var m = [], w = [], score = 0;
+      if (p.remoteWork) { score += 40; m.push("Your profile indicates remote work, which is the main condition for this route."); }
+      else w.push("This route is for people who provide paid services remotely to a person or company located abroad.");
+      m.push("Costa Rica calls this the Stay for Remote Workers and Service Providers (Estancia para Trabajador y Prestador Remoto de Servicios).");
+      w.push("Your pay must come from abroad and be at least USD 3,000 a month.");
+      w.push("If you also apply for your dependants, the minimum rises to USD 4,000 a month.");
+      w.push("The amounts are converted at the official selling rate set by the Central Bank of Costa Rica.");
+      w.push("Once approved you are issued a DIMEX migration ID card, and you must hold a medical services policy.");
+      w.push("This is simulated guidance only. Always verify with the Dirección General de Migración y Extranjería.");
+      var r = visaResult("digital_nomad", clamp(score + 12, 0, 62), m, w, []);
+      r.officialName = "Costa Rica stay for remote workers (Estancia para Trabajador y Prestador Remoto de Servicios)";
+      r.route = "cr_digital_nomad";
+      return r;
+    },
 
     /* v1.95.0 — R5 (4ª parte). El dato que más despista de Costa Rica: NO existe
        una «visa de trabajo» suelta — el permiso vive dentro de una residencia
@@ -3654,7 +3673,72 @@ window.Eligibility = (function () {
     "Careful with the lists that say otherwise: the country with a nomad visa is Dominica, a different Caribbean state."],
     { nombre: "The Dominican Republic", iso: "DO" }) });
 
-  COUNTRY_RULES.GT = reglasModeladas("GT", { digital_nomad: honestDN([
+  /* =========================================================================
+     NICARAGUA y CUBA — turismo AUDITADO (v1.109.0). Fuentes capturadas el
+     1-ago-2026 con el navegador real del usuario: migob.gob.ni está tras un WAF
+     con reto JavaScript y el portal eVisa cubano es una aplicación JS; ninguna
+     respondía a una descarga simple. Snapshots: gt-ni-chrome-2026-08/ y
+     cu-chrome-2026-08/.
+     ⚠ Ambos países siguen SIN trabajo por recorte deliberado del usuario.
+     ⚠ De Cuba se confirmó algo útil: su portal eVisa existe y funciona, pero
+     solo tiene el formulario y un manual de uso — los requisitos están en el
+     Ministerio de Relaciones Exteriores.
+  ========================================================================= */
+  COUNTRY_RULES.NI = reglasModeladas("NI", {
+    tourist: function (p) {
+      var m = [], w = [], x = [], pt = passportTier(p.nationality), score = 0;
+      if (pt <= 2) { score += 20; m.push("Nicaragua sorts nationalities into two categories: category A needs no entry visa with any kind of passport; category C needs a consulted visa."); }
+      else         { score += 10; w.push("Nicaragua sorts nationalities into two categories: category A needs no entry visa with any kind of passport; category C needs a consulted visa."); }
+      w.push("The consulted visa is requested through a Nicaraguan diplomatic or consular mission abroad.");
+      w.push("You need a passport valid for at least 6 months, a letter of application, a criminal or police record certificate from your country of origin or residence, and a notarised maintenance commitment.");
+      w.push("You must show a return ticket to your country of origin or departure.");
+      w.push("Once the visa is notified to the consulate you have 6 months to use it, or it lapses.");
+      w.push("This is simulated guidance only. Always verify with Nicaragua's Dirección General de Migración y Extranjería.");
+      var r = visaResult("tourist", clamp(score + 30, 0, 62), m, w, x);
+      r.officialName = "Nicaragua entry visa (categoría A / visa consultada C)";
+      r.route = "ni_tourist";
+      return r;
+    },
+  });
+
+  COUNTRY_RULES.CU = reglasModeladas("CU", {
+    tourist: function (p) {
+      var m = [], w = [], x = [], pt = passportTier(p.nationality), score = 0;
+      if (pt <= 2) { score += 20; m.push("Your passport nationality is generally accepted for visits to this destination."); }
+      else         { score += 10; w.push("Additional documentation requirements may apply for your passport nationality."); }
+      m.push("Cuba issues tourist visas or tourist cards only to foreigners travelling for pleasure, tourism or recreation, by air or sea.");
+      w.push("The card is valid for a single entry and a 90-day stay, extendable once for the same period.");
+      w.push("To extend it you ask at your hotel desk or directly at the immigration authorities.");
+      w.push("Foreign minors need their own individual tourist card, even if they appear in their parents' passports.");
+      w.push("Cuba runs an official e-visa portal, but it only holds the application form: the requirements are published by the foreign ministry.");
+      w.push("This is simulated guidance only. Always verify with Cuba's Ministry of Foreign Affairs.");
+      var r = visaResult("tourist", clamp(score + 30, 0, 62), m, w, x);
+      r.officialName = "Cuba tourist card (tarjeta turística)";
+      r.route = "cu_tourist";
+      return r;
+    },
+  });
+
+  /* v1.109.0 — GUATEMALA: turismo AUDITADO. Fuente capturada el 1-ago-2026 con
+     el navegador real del usuario: todo .gob.gt devuelve 403 a curl (también con
+     UA de navegador) pero el sitio está vivo. Snapshot: gt-ni-chrome-2026-08/. */
+  COUNTRY_RULES.GT = reglasModeladas("GT", {
+    tourist: function (p) {
+      var m = [], w = [], x = [], pt = passportTier(p.nationality), score = 0;
+      if (pt <= 2) { score += 20; m.push("Guatemala exempts the nationalities in its category A from needing a visa to enter."); }
+      else         { score += 10; w.push("Guatemala exempts the nationalities in its category A from needing a visa to enter."); }
+      w.push("Your passport must be valid and in good condition; the officer checks that it is authentic and current.");
+      w.push("You must go through an interview and answer truthfully about the purpose of your trip.");
+      finReq("You must show economic solvency with cards or cash covering your stay, and it has to match what you declare.", w);
+      w.push("You need a hotel booking or proof of where you will stay, and a return ticket or other transport that guarantees you leave.");
+      w.push("Granting a visa does not mean unconditional admission: the border officer decides.");
+      w.push("This is simulated guidance only. Always verify with the Instituto Guatemalteco de Migración.");
+      var r = visaResult("tourist", clamp(score + 30, 0, 62), m, w, x);
+      r.officialName = "Guatemala visitor entry (Acuerdo 08-2023)";
+      r.route = "gt_tourist";
+      return r;
+    },
+    digital_nomad: honestDN([
     "Guatemala does not offer a dedicated Digital Nomad visa.",
     "Remote workers commonly use the tourist entry, which covers up to 90 days shared across the CA-4 countries (Guatemala, El Salvador, Honduras and Nicaragua)."],
     { nombre: "Guatemala", iso: "GT" }) });
@@ -3939,11 +4023,15 @@ window.Eligibility = (function () {
 
       /* ── E-visa: universal, siempre visible ───────────────────────────── */
       var vm = [], vw = [];
-      vm.push("Vietnam's e-visa is open to citizens of all countries and territories, for stays of up to 90 days with multiple entries.");
-      vw.push("It is applied for online through Vietnam's official immigration e-visa portal before travelling, and you can only enter through the designated ports of entry.");
+      /* v1.109.0 — AUDITADA con el portal oficial e-visa del Ministerio de
+         Seguridad Pública, capturado con el navegador real del usuario (con
+         curl devolvía 47 caracteres). Snapshot: vn-chrome-2026-08/. */
+      vm.push("Vietnam's e-visa is valid for a maximum of 90 days, for single or multiple entries.");
+      vw.push("The fee is 25 USD for a single-entry visa and 50 USD for a multiple-entry one, and it is not refunded if the visa is refused.");
+      vw.push("You must be outside Vietnam when you apply, with a passport or valid international travel document.");
+      vw.push("You can only enter and leave through the international border gates designated by the Government.");
       vw.push("You cannot take paid work in Vietnam on a tourist e-visa.");
-      finReq("You may need to show sufficient funds for your stay and onward travel.", vw);
-      vw.push("This route could not be verified against a captured official source yet. Treat as preliminary guidance.");
+      vw.push("The Immigration Department recommends filling in the pre-arrival form before you travel, to speed up entry.");
       var evisa = visaResult("tourist", pt <= 2 ? 68 : pt === 3 ? 62 : 56, vm, vw, []);
       evisa.officialName = "Vietnam E-visa — 90 days, multiple entry";
       evisa.route = "vn_tourist_evisa";

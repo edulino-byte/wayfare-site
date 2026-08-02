@@ -376,6 +376,36 @@ window.VERIFICATION = {
       "facts": 3,
       "monitored": false,
       "lastCheck": "2026-08-01"
+    },
+    "CR": {
+      "routes": 1,
+      "facts": 4,
+      "monitored": false,
+      "lastCheck": "2026-08-01"
+    },
+    "VN": {
+      "routes": 1,
+      "facts": 4,
+      "monitored": false,
+      "lastCheck": "2026-08-01"
+    },
+    "GT": {
+      "routes": 1,
+      "facts": 4,
+      "monitored": false,
+      "lastCheck": "2026-08-01"
+    },
+    "NI": {
+      "routes": 1,
+      "facts": 4,
+      "monitored": false,
+      "lastCheck": "2026-08-01"
+    },
+    "CU": {
+      "routes": 1,
+      "facts": 3,
+      "monitored": false,
+      "lastCheck": "2026-08-01"
     }
   }
 };
