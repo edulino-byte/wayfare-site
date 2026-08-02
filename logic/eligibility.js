@@ -2781,6 +2781,46 @@ window.Eligibility = (function () {
     "PE", "PL", "PT", "PY", "RO", "RS", "RU", "SE", "SI", "SK", "SV", "TR", "UA", "UY", "VE"];
   var BR_EVISA = ["US", "CA", "AU"];      // reciprocidad restablecida el 10-abr-2025
 
+  /* =========================================================================
+     BRASIL — estudios y trabajo AUDITADOS (v1.108.0, R5).
+     ⚠ HALLAZGO: gov.br/mre (Exteriores) está tras un escudo antibot F5 y
+     devuelve 311 caracteres en TODAS sus rutas, también con UA de navegador.
+     Pero gov.br/mj (Justicia) sirve el contenido sin problema: es la vía.
+     Fuente: autorización de residencia del Ministerio de Justicia y Seguridad
+     Pública. Snapshot: ge-br-sv-pa-upgrade-2026-08/.
+  ========================================================================= */
+  COUNTRY_RULES.BR.student = function (p) {
+    var b = estudioBase(p, 58), m = b.m, w = b.w;
+    m.push("Brazil grants a residence authorisation for study to immigrants who intend to follow a regular course, an internship or a study or research exchange.");
+    w.push("You must show documentation proving enrolment on the course you intend to take.");
+    w.push("The application is filed with the Federal Police, together with the request for the National Migration Registry Card.");
+    finReq("The fees are R$168.13 for the residence authorisation and R$204.77 for issuing the registry card.", w);
+    w.push("You need criminal record certificates from every country where you have lived in the last five years.");
+    w.push("This is simulated guidance only. Always verify with Brazil's Ministry of Justice.");
+    var r = visaResult("student", Math.min(b.score, b.tope), m, w,
+      eduRank(p.education) < eduRank("secondary") ? ["minEdu"] : []);
+    r.officialName = "Brazil residence authorisation for study";
+    r.route = "br_student";
+    return r;
+  };
+
+  COUNTRY_RULES.BR.work = function (p) {
+    var cards = [];
+    if (MERCOSUR[p.nationality] && p.nationality !== "BR") cards.push(mercosurWork("BR", p));
+    var b = trabajoBase(p, 56), m = b.m, w = b.w;
+    m.push("Brazil grants a residence authorisation for work to immigrants carrying out a job in the country, with or without an employment relationship.");
+    w.push("Work-based applications are filed directly with the Ministry of Justice through the MigranteWeb system.");
+    w.push("There is also a working-holiday residence authorisation for people over 16 from countries that grant the same benefit to Brazilians.");
+    finReq("The fees are R$168.13 for the residence authorisation and R$204.77 for issuing the registry card.", w);
+    w.push("You need criminal record certificates from every country where you have lived in the last five years.");
+    w.push("This is simulated guidance only. Always verify with Brazil's Ministry of Justice.");
+    var r = visaResult("work", Math.min(b.score, b.tope), m, w, []);
+    r.officialName = "Brazil residence authorisation for work";
+    r.route = "br_work";
+    cards.push(r);
+    return cards;
+  };
+
   COUNTRY_RULES.BR.tourist = function (p) {
     var cards = [], nat = p.nationality, libre = inList(BR_VISA_FREE, nat), evisa = inList(BR_EVISA, nat);
 
@@ -3067,8 +3107,12 @@ window.Eligibility = (function () {
         []);
     },
 
-    /* v1.95.0 — R5 (4ª parte): Georgia no enseñaba NADA a quien elegía
-       «Trabajar», justo el año en que estrena permiso de trabajo. */
+    /* v1.108.0 — AUDITADA (R5). Fuentes capturadas el 1-ago-2026: la página de
+       información de visados de una embajada georgiana (*.mfa.gov.ge) y los PDF
+       oficiales D3 (estudios) y D1 (trabajo) del Ministerio de Exteriores.
+       ⚠ geoconsul.gov.ge es cáscara JS en todas sus rutas; los documentos
+       exigidos varían algo según la misión donde solicites.
+       Snapshot: ge-br-sv-pa-upgrade-2026-08/. */
     work: function (p) {
       var b = trabajoBase(p, 58), m = b.m, w = b.w;
       m.push("Since 1 March 2026 Georgia has a work permit system: you need the right to labour activity plus a D1 visa or a work residence permit.");
@@ -3076,6 +3120,8 @@ window.Eligibility = (function () {
       w.push("It covers employees, self-employed people and entrepreneurs earning from activity in Georgia; processing takes up to 30 days.");
       w.push("Holders of permanent residence are exempt, and people already working there before March 2026 have until 1 January 2027 to get the permit.");
       w.push("Working without the permit is now fined, for both the worker and the company.");
+      w.push("For the D1 labour visa you need the work agreement and an invitation registered by the inviting company with the Georgian authorities.");
+      w.push("You also need travel insurance covering accidents above 30,000 GEL for the whole visit, and the visa fee is around USD 20.");
       w.push("This route could not be verified against a captured official source yet. Treat as preliminary guidance.");
       var r = visaResult("work", Math.min(b.score, b.tope), m, w, []);
       r.officialName = "Georgia work permit (right to labour activity) + D1 visa";
@@ -3101,6 +3147,8 @@ window.Eligibility = (function () {
         fw.push("Holding a valid visa or residence permit from certain countries can also open visa-free entry — check the official conditions.");
       }
       fw.push("The visa-free stay covers visiting; if you want to settle you must apply for a residence permit before it runs out.");
+      fw.push("If you do need a visa, the C1 category is the tourist one and a Georgian visa lasts 90 days.");
+      fw.push("Applicants must hold travel or health insurance covering accidents above 30,000 GEL for the period of the visit.");
       fw.push("This route could not be verified against a captured official source yet. Treat as preliminary guidance.");
       var visaFree = visaResult("tourist", full ? 80 : short ? 62 : 22, fm, fw, full || short ? [] : ["passport"]);
       visaFree.officialName = "Georgia visa-free entry — up to 1 year";
@@ -3131,8 +3179,10 @@ window.Eligibility = (function () {
     m.push("Georgia issues a study visa (D3) and, for longer courses, a temporary residence permit for study.");
     w.push("You must be admitted to an institution authorised to run higher-education programmes in Georgia.");
     w.push("Nationals who can enter Georgia visa-free often enrol first and apply for the study residence permit from inside the country.");
-    finReq("You may need to show funds for tuition and living costs.", w);
-    w.push("This route could not be verified against a captured official source yet. Treat as preliminary guidance.");
+    /* v1.108.0 — hechos oficiales del PDF D3 del Ministerio de Exteriores. */
+    w.push("You need an admission letter from the Georgian university and the order of the Minister of Education and Science accepting you.");
+    finReq("You must show proof of financial support or a bank statement for the past 3 months.", w);
+    w.push("Travel insurance covering accidents above 30,000 GEL for the whole visit is required.");
     var r = visaResult("student", Math.min(b.score, b.tope), m, w, eduRank(p.education) < eduRank("secondary") ? ["minEdu"] : []);
     r.officialName = "Georgia study visa (D3) / study residence permit";
     r.route = "ge_student";
@@ -3500,6 +3550,35 @@ window.Eligibility = (function () {
      /permisos-migratorios/ — candidatos a una tanda posterior.
   ========================================================================= */
   COUNTRY_RULES.PA = reglasModeladas("PA", {
+    /* v1.108.0 — estudios y trabajador remoto AUDITADOS con los PDF oficiales
+       enlazados desde /permisos-migratorios/. Snapshot: ge-br-sv-pa-…-2026-08/. */
+    student: function (p) {
+      var b = estudioBase(p, 58), m = b.m, w = b.w;
+      m.push("Panama's temporary permit for education covers full-time regular studies at public or private centres recognised by the Ministry of Education.");
+      w.push("You must enrol in all the subjects of the study plan for the term, in daytime hours, unless the plan itself requires evening classes.");
+      w.push("This permit is exclusively for studying: while it is valid you are banned from working, except for the placements and internships your centre requires.");
+      finReq("A certified cheque for B/.250.00 payable to the National Treasury is required.", w);
+      w.push("This is simulated guidance only. Always verify with the Servicio Nacional de Migración.");
+      var r = visaResult("student", Math.min(b.score, b.tope), m, w,
+        eduRank(p.education) < eduRank("secondary") ? ["minEdu"] : []);
+      r.officialName = "Panama temporary permit for education";
+      r.route = "pa_student";
+      return r;
+    },
+    digital_nomad: function (p) {
+      var m = [], w = [], score = 0;
+      if (p.remoteWork) { score += 40; m.push("Your profile indicates remote work, which is the main condition for this route."); }
+      else w.push("This route is for people employed by a transnational company abroad or self-employed, working in teleworking mode.");
+      m.push("Panama has a short-stay visa for remote workers: your work must produce its effects outside Panama.");
+      w.push("You must receive income from a foreign source of at least B/.36,000 a year, or the equivalent in another currency.");
+      w.push("The visa lasts nine months, renewable once for the same period, and the card costs B/.50.");
+      m.push("Once granted, it lets you work remotely from Panama with no extra permit from any other state body.");
+      w.push("This is simulated guidance only. Always verify with the Servicio Nacional de Migración.");
+      var r = visaResult("digital_nomad", clamp(score + 12, 0, 62), m, w, []);
+      r.officialName = "Panama short-stay visa for remote workers";
+      r.route = "pa_digital_nomad";
+      return r;
+    },
     tourist: function (p) {
       var m = [], w = [], x = [], pt = passportTier(p.nationality), score = 0;
       if (pt <= 2) { score += 20; m.push("Your passport nationality is generally accepted for visits to this destination."); }
@@ -3717,7 +3796,26 @@ window.Eligibility = (function () {
     { nombre: "Fiji", iso: "FJ" }) });
 
   /* --- CON programa real: tarjeta de verdad ------------------------------- */
+  /* v1.108.0 — EL SALVADOR: turismo AUDITADO con el formulario oficial de visa
+     consultada (PDF de migracion.gob.sv). Su residencia de estudios y trabajo
+     vive en PDFs alojados en Google Drive, fuera de dominio gubernamental: no
+     se auditan por eso. Snapshot: ge-br-sv-pa-upgrade-2026-08/. */
   COUNTRY_RULES.SV = reglasModeladas("SV", {
+    tourist: function (p) {
+      var m = [], w = [], x = [], pt = passportTier(p.nationality), score = 0;
+      if (pt <= 2) { score += 20; m.push("Your passport nationality is generally accepted for visits to this destination."); }
+      else         { score += 10; w.push("Additional documentation requirements may apply for your passport nationality."); }
+      m.push("El Salvador's consulted visa is filed at the Salvadoran consular office of your choice.");
+      w.push("The application must be submitted four weeks before you enter Salvadoran territory.");
+      w.push("If you hold a US, Canadian or Schengen visa valid for at least six months before your planned entry, you must contact the visa officer of the foreign ministry.");
+      w.push("You need a photocopy of the ticket quote or travel itinerary showing the airline, flight number and the dates you enter and leave the country.");
+      w.push("Accepting your documents does not mean the visa is granted, and the fee is not refundable.");
+      w.push("This is simulated guidance only. Always verify with the Salvadoran migration authority.");
+      var r = visaResult("tourist", clamp(score + 30, 0, 62), m, w, x);
+      r.officialName = "El Salvador consulted visa (visa consultada)";
+      r.route = "sv_tourist";
+      return r;
+    },
     digital_nomad: function (p) {
       var m = [], w = [], score = 0;
       if (p.remoteWork) { score += 40; m.push("Your profile indicates remote work, which is the main condition for this route."); }

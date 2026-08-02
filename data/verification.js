@@ -282,8 +282,8 @@ window.VERIFICATION = {
       "lastCheck": "2026-08-01"
     },
     "PA": {
-      "routes": 1,
-      "facts": 5,
+      "routes": 3,
+      "facts": 11,
       "monitored": false,
       "lastCheck": "2026-08-01"
     },
@@ -354,6 +354,24 @@ window.VERIFICATION = {
       "lastCheck": "2026-08-01"
     },
     "QA": {
+      "routes": 1,
+      "facts": 3,
+      "monitored": false,
+      "lastCheck": "2026-08-01"
+    },
+    "GE": {
+      "routes": 3,
+      "facts": 8,
+      "monitored": false,
+      "lastCheck": "2026-08-01"
+    },
+    "BR": {
+      "routes": 2,
+      "facts": 6,
+      "monitored": false,
+      "lastCheck": "2026-08-01"
+    },
+    "SV": {
       "routes": 1,
       "facts": 3,
       "monitored": false,
