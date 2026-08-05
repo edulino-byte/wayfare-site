@@ -2116,6 +2116,23 @@ window.I18N = {
     "EU freedom of movement: no student visa needed":
       "Libre circulación en la UE: no necesitas visado de estudios",
     /* v1.153.0 — faltaba la tercera hermana: la de nómada digital */
+    /* v1.164.0 — Norte de Chipre: aviso oficial, no destino */
+    "The Republic of Cyprus states that it does not exercise effective control in the northern part of the island, which has been under military occupation by Türkiye since 1974.":
+      "La República de Chipre declara que no ejerce control efectivo en la parte norte de la isla, bajo ocupación militar de Turquía desde 1974.",
+    "It also states that the legal points of entry to the Republic are the airports of Larnaca and Paphos and the ports of Larnaca, Limassol, Latsi and Paphos, and that entry through any airport or port in the occupied area is illegal.":
+      "También declara que los puntos de entrada legales a la República son los aeropuertos de Lárnaca y Pafos y los puertos de Lárnaca, Limasol, Latsi y Pafos, y que entrar por cualquier aeropuerto o puerto del área ocupada es ilegal.",
+    "Because it does not control the area, the Republic says it cannot guarantee the safety of visitors there, nor provide consular assistance.":
+      "Al no controlar la zona, la República advierte de que no puede garantizar la seguridad de quien la visite ni prestarle asistencia consular.",
+    "Wayfare does not assess eligibility here: there is no route to assess.":
+      "Wayfare no evalúa elegibilidad aquí: no hay ninguna vía que evaluar.",
+    "Be careful with study offers in the northern part of Cyprus. The Republic of Cyprus states that the institutions calling themselves universities there operate unlawfully, and are not accredited by its competent authorities.":
+      "Cuidado con las ofertas de estudios en el norte de Chipre. La República de Chipre declara que las instituciones que allí se llaman universidades operan de forma ilegal y no están acreditadas por sus autoridades competentes.",
+    "It warns that traffickers advertise this as an easy route of migration into the European Union, selling so-called student visas, and that this is not a legal way to enter Cyprus or the European Union.":
+      "Advierte de que los traficantes lo anuncian como una vía fácil de migración a la Unión Europea, vendiendo supuestos visados de estudiante, y de que esa no es una forma legal de entrar en Chipre ni en la Unión Europea.",
+    "It adds that people who take that route often end up stranded there, or become victims of human trafficking.":
+      "Añade que muchas de las personas que toman ese camino acaban varadas allí, o víctimas de trata de personas.",
+    "If someone is offering you a study place there as a way into Europe, check it with the Republic of Cyprus before paying anything.":
+      "Si alguien te ofrece una plaza de estudios allí como puerta de entrada a Europa, compruébalo con la República de Chipre antes de pagar nada.",
     /* v1.160.0 — Rumanía: condiciones nacionales de estudios, con su antigüedad */
     "Romania grants the long stay visa for studies as a student, master student or doctoral candidate, at a public or private institution, on condition that it is accredited.":
       "Rumanía concede el visado de larga estancia por estudios como estudiante, alumno de máster o doctorando, en una institución pública o privada, a condición de que esté acreditada.",

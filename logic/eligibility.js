@@ -2944,6 +2944,61 @@ var r = visaResult("student", Math.min(score, 62), m, w, x);
   }
   EU_SCHENGEN_SHARED.forEach(function (iso) { COUNTRY_RULES[iso] = makeSchengenRules(iso); });
 
+  /* ═══════════════════════════════════════════════════════════════════════
+     NORTE DE CHIPRE (XNC) — AVISO, NO DESTINO. v1.164.0
+     ───────────────────────────────────────────────────────────────────────
+     Hasta hoy este territorio heredaba el código CY, así que quien lo pinchaba
+     en el mapa recibía las normas de la República de Chipre, incluido un
+     permiso de estudios europeo con nota 56. Eso no es un matiz geográfico:
+     la República de Chipre publica que entrar por los puertos y aeropuertos de
+     esa zona ES ILEGAL a sus efectos, y advierte de que allí operan
+     «universidades» sin acreditar que los traficantes anuncian como vía fácil
+     de migración a la UE vendiendo «visados de estudiante».
+
+     O sea, la app orientaba hacia una ruta de trata documentada, y justo al
+     perfil de persona que la usa. Es el fallo con peores consecuencias posibles
+     de todos los encontrados, y el único donde el daño no sería un viaje mal
+     planificado.
+
+     Esta tarjeta NO evalúa elegibilidad: no hay nada que evaluar. Repite lo que
+     la fuente oficial dice, atribuido, y no puntúa.
+     Fuente: «Legal ports of entry in the Republic of Cyprus», organismo chipriota
+     de acreditación de educación superior (dipae.ac.cy), capturado el 5-ago-2026.
+     Snapshot: snapshots/cy-norte-2026-08/
+     ═══════════════════════════════════════════════════════════════════════ */
+  COUNTRY_RULES.XNC = {
+    tourist: function (p) {
+      var w = [
+        "The Republic of Cyprus states that it does not exercise effective control in the northern part of the island, which has been under military occupation by Türkiye since 1974.",
+        "It also states that the legal points of entry to the Republic are the airports of Larnaca and Paphos and the ports of Larnaca, Limassol, Latsi and Paphos, and that entry through any airport or port in the occupied area is illegal.",
+        "Because it does not control the area, the Republic says it cannot guarantee the safety of visitors there, nor provide consular assistance.",
+        "Wayfare does not assess eligibility here: there is no route to assess.",
+      ];
+      var r = {
+        type: "tourist", score: null, status: "nodata",
+        matched: [], warnings: w, missing: [],
+      };
+      r.officialName = "Northern Cyprus: not a route Wayfare can assess";
+      r.route = "xnc_aviso";
+      return r;
+    },
+    student: function (p) {
+      var w = [
+        "Be careful with study offers in the northern part of Cyprus. The Republic of Cyprus states that the institutions calling themselves universities there operate unlawfully, and are not accredited by its competent authorities.",
+        "It warns that traffickers advertise this as an easy route of migration into the European Union, selling so-called student visas, and that this is not a legal way to enter Cyprus or the European Union.",
+        "It adds that people who take that route often end up stranded there, or become victims of human trafficking.",
+        "If someone is offering you a study place there as a way into Europe, check it with the Republic of Cyprus before paying anything.",
+      ];
+      var r = {
+        type: "student", score: null, status: "nodata",
+        matched: [], warnings: w, missing: [],
+      };
+      r.officialName = "Northern Cyprus: study offers carry an official warning";
+      r.route = "xnc_estudios_aviso";
+      return r;
+    },
+  };
+
   /* ── RUMANÍA: condiciones nacionales de estudios (v1.160.0) ──────────────
      La tarjeta rumana usaba los mínimos de la Directiva 2016/801 y decía
      expresamente que le faltaban las condiciones nacionales. Aquí entran, del

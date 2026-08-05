@@ -1036,7 +1036,13 @@ const statusColor = (s, a) => {
   const c = STATUS_RGB[s] || [120, 130, 128];
   return `rgba(${c[0]},${c[1]},${c[2]},${a})`;
 };
-const NAME_ISO_FIX = { France: "FR", Norway: "NO", Kosovo: "XK", "N. Cyprus": "CY", Somaliland: "SO" };
+const NAME_ISO_FIX = {
+  France: "FR",
+  Norway: "NO",
+  Kosovo: "XK",
+  "N. Cyprus": "XNC",
+  Somaliland: "XSL"
+};
 function featISO(props) {
   const iso = props.ISO_A2;
   if (iso && iso !== "-99") return iso;

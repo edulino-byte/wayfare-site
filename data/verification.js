@@ -412,6 +412,12 @@ window.VERIFICATION = {
       "facts": 24,
       "monitored": false,
       "lastCheck": "2026-08-03"
+    },
+    "XNC": {
+      "routes": 2,
+      "facts": 6,
+      "monitored": false,
+      "lastCheck": "2026-08-05"
     }
   }
 };
