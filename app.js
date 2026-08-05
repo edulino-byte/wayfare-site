@@ -1166,7 +1166,8 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
     const microPills = [];
     const pillData = features.filter((f) => {
       const r = results[f.__id];
-      return r && !r.synthetic;
+      if (!r || r.synthetic) return false;
+      return r.status !== "nodata";
     }).map((f) => {
       const c = featureCentroid(f) || [0, 0];
       return { iso: f.__iso, lat: c[1], lng: c[0], r: results[f.__id], f };
