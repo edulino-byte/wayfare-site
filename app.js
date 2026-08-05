@@ -459,16 +459,28 @@ const fmt = {
   money: (n) => "$" + Math.round(n).toLocaleString("en-US"),
   int: (n) => Math.round(n).toLocaleString("en-US")
 };
+let _idField = 0;
 function Field({ label, hint, full, children }) {
-  return /* @__PURE__ */ React.createElement("div", { className: "field" + (full ? " full" : "") }, /* @__PURE__ */ React.createElement("label", null, label), children, hint ? /* @__PURE__ */ React.createElement("span", { className: "hint" }, hint) : null);
+  const id = React.useMemo(function() {
+    return "wf-f" + ++_idField;
+  }, []);
+  const labelId = id + "-l";
+  const hijo = !React.isValidElement(children) ? children : typeof children.type === "function" ? React.cloneElement(children, { controlId: id, labelId }) : React.cloneElement(children, {
+    role: children.props.role || "group",
+    "aria-labelledby": labelId
+  });
+  const esControl = React.isValidElement(children) && typeof children.type === "function" && children.type.aceptaControlId === true;
+  return /* @__PURE__ */ React.createElement("div", { className: "field" + (full ? " full" : "") }, /* @__PURE__ */ React.createElement("label", { id: labelId, htmlFor: esControl ? id : void 0 }, label), hijo, hint ? /* @__PURE__ */ React.createElement("span", { className: "hint" }, hint) : null);
 }
-function SelectControl({ value, onChange, options }) {
-  return /* @__PURE__ */ React.createElement("div", { className: "control has-caret" }, /* @__PURE__ */ React.createElement("select", { value, onChange: (e) => onChange(e.target.value) }, options.map((o) => /* @__PURE__ */ React.createElement("option", { key: o.value, value: o.value }, o.label))));
+function SelectControl({ value, onChange, options, controlId }) {
+  return /* @__PURE__ */ React.createElement("div", { className: "control has-caret" }, /* @__PURE__ */ React.createElement("select", { id: controlId, value, onChange: (e) => onChange(e.target.value) }, options.map((o) => /* @__PURE__ */ React.createElement("option", { key: o.value, value: o.value }, o.label))));
 }
-function TextControl({ value, onChange, type, placeholder, prefix }) {
+SelectControl.aceptaControlId = true;
+function TextControl({ value, onChange, type, placeholder, prefix, controlId }) {
   return /* @__PURE__ */ React.createElement("div", { className: "control" + (prefix ? " with-prefix" : "") }, prefix ? /* @__PURE__ */ React.createElement("span", { className: "prefix" }, prefix) : null, /* @__PURE__ */ React.createElement(
     "input",
     {
+      id: controlId,
       type: type || "text",
       value,
       placeholder: placeholder || "",
@@ -476,8 +488,9 @@ function TextControl({ value, onChange, type, placeholder, prefix }) {
     }
   ));
 }
-function Segmented({ value, onChange, options }) {
-  return /* @__PURE__ */ React.createElement("div", { className: "seg" }, options.map((o) => /* @__PURE__ */ React.createElement(
+TextControl.aceptaControlId = true;
+function Segmented({ value, onChange, options, labelId }) {
+  return /* @__PURE__ */ React.createElement("div", { className: "seg", role: labelId ? "group" : void 0, "aria-labelledby": labelId }, options.map((o) => /* @__PURE__ */ React.createElement(
     "button",
     {
       key: o.value,
@@ -488,10 +501,11 @@ function Segmented({ value, onChange, options }) {
     o.label
   )));
 }
-function Slider({ value, onChange, min, max, step, format }) {
+function Slider({ value, onChange, min, max, step, format, controlId }) {
   return /* @__PURE__ */ React.createElement("div", { className: "range-row" }, /* @__PURE__ */ React.createElement(
     "input",
     {
+      id: controlId,
       type: "range",
       min,
       max,
@@ -501,9 +515,10 @@ function Slider({ value, onChange, min, max, step, format }) {
     }
   ), /* @__PURE__ */ React.createElement("div", { className: "range-val" }, format ? format(value) : value));
 }
-function Chips({ selected, onToggle, options }) {
+Slider.aceptaControlId = true;
+function Chips({ selected, onToggle, options, labelId }) {
   const set = new Set(selected);
-  return /* @__PURE__ */ React.createElement("div", { className: "chips" }, options.map((o) => /* @__PURE__ */ React.createElement(
+  return /* @__PURE__ */ React.createElement("div", { className: "chips", role: labelId ? "group" : void 0, "aria-labelledby": labelId }, options.map((o) => /* @__PURE__ */ React.createElement(
     "button",
     {
       key: o.value,
@@ -820,6 +835,25 @@ function Questionnaire({ t, lang, profile, setProfile, onSubmit, onBack, onDisca
     const resto = (profile.visaTypes || []).filter((tp) => !def.types.includes(tp));
     set("visaTypes", on ? resto : resto.concat(def.types));
   };
+  const barRef = React.useRef(null);
+  React.useEffect(function() {
+    const el = barRef.current;
+    if (!el) return;
+    const medir = function() {
+      document.documentElement.style.setProperty("--submitbar-h", el.offsetHeight + "px");
+    };
+    medir();
+    let ro = null;
+    if (typeof ResizeObserver !== "undefined") {
+      ro = new ResizeObserver(medir);
+      ro.observe(el);
+    }
+    window.addEventListener("resize", medir);
+    return function() {
+      if (ro) ro.disconnect();
+      window.removeEventListener("resize", medir);
+    };
+  }, []);
   return /* @__PURE__ */ React.createElement("div", { className: "q-scroll" }, /* @__PURE__ */ React.createElement(BackgroundGlobe, null), /* @__PURE__ */ React.createElement("div", { className: "q-wrap" }, /* @__PURE__ */ React.createElement("div", { className: "q-head" }, /* @__PURE__ */ React.createElement("span", { className: "q-eyebrow" }, /* @__PURE__ */ React.createElement("span", { className: "dot" }), t("g_simulated")), /* @__PURE__ */ React.createElement("h1", null, t("q_title")), /* @__PURE__ */ React.createElement("p", null, t("q_sub"))), /* @__PURE__ */ React.createElement("section", { className: "section" }, /* @__PURE__ */ React.createElement("div", { className: "section-head" }, /* @__PURE__ */ React.createElement("span", { className: "section-num" }, "01"), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h2", null, t("sec_identity")), /* @__PURE__ */ React.createElement("p", null, t("sec_identity_sub")))), /* @__PURE__ */ React.createElement("div", { className: "grid" }, /* @__PURE__ */ React.createElement(Field, { label: t("f_nationality") }, /* @__PURE__ */ React.createElement(SelectControl, { value: profile.nationality, onChange: (v) => set("nationality", v), options: passportOpts })), /* @__PURE__ */ React.createElement(Field, { label: t("f_residence") }, /* @__PURE__ */ React.createElement(SelectControl, { value: profile.currentResidence, onChange: (v) => set("currentResidence", v), options: residenceOpts })), /* @__PURE__ */ React.createElement(Field, { label: t("f_age") }, /* @__PURE__ */ React.createElement(
     Slider,
     {
@@ -842,7 +876,7 @@ function Questionnaire({ t, lang, profile, setProfile, onSubmit, onBack, onDisca
   )))), /* @__PURE__ */ React.createElement("section", { className: "section" }, /* @__PURE__ */ React.createElement("div", { className: "section-head" }, /* @__PURE__ */ React.createElement("span", { className: "section-num" }, "04"), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("h2", null, t("sec_intent")), /* @__PURE__ */ React.createElement("p", null, t("sec_intent_sub")))), /* @__PURE__ */ React.createElement("div", { className: "grid" }, /* @__PURE__ */ React.createElement(Field, { label: t("f_visas"), hint: t("f_visas_hint"), full: true }, /* @__PURE__ */ React.createElement("div", { ref: goalsRef }, /* @__PURE__ */ React.createElement(Chips, { selected: goalsSelected, onToggle: (g) => {
     setGoalError(false);
     toggleGoal(g);
-  }, options: goalOpts }), goalError ? /* @__PURE__ */ React.createElement("p", { className: "goal-error" }, t("goal_required")) : null))))), /* @__PURE__ */ React.createElement("div", { className: "submitbar" }, /* @__PURE__ */ React.createElement("div", { className: "submit-row" }, onBack ? !dirty ? /* @__PURE__ */ React.createElement("button", { type: "button", className: "btn-map-back", onClick: onBack }, /* @__PURE__ */ React.createElement("svg", { width: "16", height: "16", viewBox: "0 0 24 24", fill: "none", "aria-hidden": "true" }, /* @__PURE__ */ React.createElement("path", { d: "M19 12H5M11 18l-6-6 6-6", stroke: "currentColor", strokeWidth: "2.2", strokeLinecap: "round", strokeLinejoin: "round" })), t("q_back_map")) : /* @__PURE__ */ React.createElement("button", { type: "button", className: "btn-map-back btn-map-discard", onClick: onDiscard }, /* @__PURE__ */ React.createElement("svg", { width: "16", height: "16", viewBox: "0 0 24 24", fill: "none", "aria-hidden": "true" }, /* @__PURE__ */ React.createElement("path", { d: "M9 14l-4-4 4-4M5 10h9a5 5 0 015 5v3", stroke: "currentColor", strokeWidth: "2.2", strokeLinecap: "round", strokeLinejoin: "round" })), t("q_discard")) : null, /* @__PURE__ */ React.createElement("button", { className: "btn-primary", onClick: trySubmit }, onBack && dirty ? t("submit_update") : t("submit"), /* @__PURE__ */ React.createElement("svg", { className: "arr", width: "18", height: "18", viewBox: "0 0 24 24", fill: "none" }, /* @__PURE__ */ React.createElement("path", { d: "M5 12h14M13 6l6 6-6 6", stroke: "currentColor", strokeWidth: "2.2", strokeLinecap: "round", strokeLinejoin: "round" })))), /* @__PURE__ */ React.createElement("p", { className: "disclaimer-short" }, t("disclaimer_short"), " ", /* @__PURE__ */ React.createElement("span", { className: "legal-links" }, /* @__PURE__ */ React.createElement("a", { href: "seo/privacidad.html" }, t("legal_privacy")), " \xB7 ", /* @__PURE__ */ React.createElement("a", { href: "seo/aviso-legal.html" }, t("legal_notice")))), onReset ? /* @__PURE__ */ React.createElement("button", { type: "button", className: "q-reset-link", onClick: onReset }, t("q_reset")) : null));
+  }, options: goalOpts }), goalError ? /* @__PURE__ */ React.createElement("p", { className: "goal-error" }, t("goal_required")) : null))))), /* @__PURE__ */ React.createElement("div", { className: "submitbar", ref: barRef }, /* @__PURE__ */ React.createElement("div", { className: "submit-row" }, onBack ? !dirty ? /* @__PURE__ */ React.createElement("button", { type: "button", className: "btn-map-back", onClick: onBack }, /* @__PURE__ */ React.createElement("svg", { width: "16", height: "16", viewBox: "0 0 24 24", fill: "none", "aria-hidden": "true" }, /* @__PURE__ */ React.createElement("path", { d: "M19 12H5M11 18l-6-6 6-6", stroke: "currentColor", strokeWidth: "2.2", strokeLinecap: "round", strokeLinejoin: "round" })), t("q_back_map")) : /* @__PURE__ */ React.createElement("button", { type: "button", className: "btn-map-back btn-map-discard", onClick: onDiscard }, /* @__PURE__ */ React.createElement("svg", { width: "16", height: "16", viewBox: "0 0 24 24", fill: "none", "aria-hidden": "true" }, /* @__PURE__ */ React.createElement("path", { d: "M9 14l-4-4 4-4M5 10h9a5 5 0 015 5v3", stroke: "currentColor", strokeWidth: "2.2", strokeLinecap: "round", strokeLinejoin: "round" })), t("q_discard")) : null, /* @__PURE__ */ React.createElement("button", { className: "btn-primary", onClick: trySubmit }, onBack && dirty ? t("submit_update") : t("submit"), /* @__PURE__ */ React.createElement("svg", { className: "arr", width: "18", height: "18", viewBox: "0 0 24 24", fill: "none" }, /* @__PURE__ */ React.createElement("path", { d: "M5 12h14M13 6l6 6-6 6", stroke: "currentColor", strokeWidth: "2.2", strokeLinecap: "round", strokeLinejoin: "round" })))), /* @__PURE__ */ React.createElement("p", { className: "disclaimer-short" }, t("disclaimer_short"), " ", /* @__PURE__ */ React.createElement("span", { className: "legal-links" }, /* @__PURE__ */ React.createElement("a", { href: lang === "en" ? "seo/privacy.html" : "seo/privacidad.html", hrefLang: lang === "en" ? "en" : "es" }, t("legal_privacy")), " \xB7 ", /* @__PURE__ */ React.createElement("a", { href: lang === "en" ? "seo/legal-notice.html" : "seo/aviso-legal.html", hrefLang: lang === "en" ? "en" : "es" }, t("legal_notice")))), onReset ? /* @__PURE__ */ React.createElement("button", { type: "button", className: "q-reset-link", onClick: onReset }, t("q_reset")) : null));
 }
 function countryName(iso, lang) {
   if (lang === "es" && window.COUNTRY_NAMES && window.COUNTRY_NAMES.es && window.COUNTRY_NAMES.es[iso]) {
@@ -992,8 +1026,11 @@ const STATUS_RGB = {
   /* sage-teal green — softer than #1f9d57     */
   partial: [190, 130, 30],
   /* warm ochre — less saturated amber         */
-  ineligible: [170, 85, 55]
+  ineligible: [170, 85, 55],
   /* muted terracotta                          */
+  /* v1.155.0 — gris, el mismo de «Aún sin datos» en la leyenda: una tarjeta sin
+     fuente capturada no se pinta con el color de un veredicto, porque no lo es. */
+  nodata: [148, 163, 160]
 };
 const statusColor = (s, a) => {
   const c = STATUS_RGB[s] || [120, 130, 128];
@@ -1056,6 +1093,8 @@ function GlobeStars() {
 function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
   const hostRef = React.useRef(null);
   const globeRef = React.useRef(null);
+  const langRef = React.useRef(lang);
+  langRef.current = lang;
   const globeLib = useGlobeLib();
   const [features, setFeatures] = React.useState(null);
   const [results, setResults] = React.useState(null);
@@ -1069,10 +1108,14 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
   const [compareIso, setCompareIso] = React.useState(null);
   const selRef = React.useRef(null);
   const hoverRef = React.useRef(null);
+  const pendienteRef = React.useRef(null);
   const mousePosRef = React.useRef({ x: 0, y: 0 });
   React.useEffect(() => {
     let alive = true;
-    (window.__WAYFARE_GEOJSON ? Promise.resolve(window.__WAYFARE_GEOJSON) : fetch(GEOJSON_URL).then((r) => r.json()).then((gj) => window.__WAYFARE_GEOJSON = gj)).then((gj) => {
+    (window.__WAYFARE_GEOJSON ? Promise.resolve(window.__WAYFARE_GEOJSON) : fetch(GEOJSON_URL).then((r) => {
+      if (!r.ok) throw new Error("geojson HTTP " + r.status);
+      return r.json();
+    }).then((gj) => window.__WAYFARE_GEOJSON = gj)).then((gj) => {
       if (!alive) return;
       if (!window.Eligibility || typeof window.Eligibility.evaluateAll !== "function") {
         console.error("[Wayfare] window.Eligibility.evaluateAll is not available. Check eligibility.js for syntax errors.");
@@ -1102,7 +1145,10 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
       )));
       setFeatures(feats);
       setResults(res);
-    }).catch((e) => console.error("GeoJSON load failed", e));
+    }).catch((e) => {
+      console.error("GeoJSON load failed", e);
+      if (alive) setEligError(true);
+    });
     return () => {
       alive = false;
     };
@@ -1143,7 +1189,7 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
       if (!window.WAYFARE_PERF.lite) {
         if (d) {
           setHoverData({
-            name: countryName(d.iso, lang) || d.iso,
+            name: countryName(d.iso, langRef.current) || d.iso,
             iso: d.iso,
             status: d.r ? d.r.status : null,
             x: mousePosRef.current.x,
@@ -1157,16 +1203,24 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
       const el = document.createElement("button");
       el.type = "button";
       el.className = "micro-flag";
-      el.title = countryName(d.iso, lang) || d.iso;
+      el.dataset.iso = d.iso;
+      el.title = countryName(d.iso, langRef.current) || d.iso;
       if (d.r && !d.r.synthetic) el.style.borderColor = statusColor(d.r.status, 1);
       const img = document.createElement("img");
       img.className = "mf-img";
       img.alt = "";
-      img.src = "assets/flags/" + d.iso.toLowerCase() + ".svg";
+      img.loading = "lazy";
+      img.decoding = "async";
+      var iso = String(d.iso || "").toLowerCase();
+      img.src = "assets/flags-min/" + iso + ".png";
+      img.onerror = function() {
+        this.onerror = null;
+        this.src = "assets/flags/" + iso + ".svg";
+      };
       el.appendChild(img);
       const nm = document.createElement("span");
       nm.className = "mf-name";
-      nm.textContent = countryName(d.iso, lang) || d.iso;
+      nm.textContent = countryName(d.iso, langRef.current) || d.iso;
       el.appendChild(nm);
       el.addEventListener("click", (ev) => {
         ev.stopPropagation();
@@ -1284,6 +1338,20 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
     globeRef.current = world;
     globeRef.current.__select = (d) => selectFeature(d);
     globeRef.current.__byIso = (iso) => features.find((f) => f.__iso === iso);
+    try {
+      window.__wayfareGloboListo = true;
+    } catch (e) {
+    }
+    try {
+      window.__wfDiag = Object.assign(window.__wfDiag || {}, { byIso: true });
+    } catch (e) {
+    }
+    if (pendienteRef.current) {
+      const pedido = pendienteRef.current;
+      pendienteRef.current = null;
+      const fp = features.find((f) => f.__iso === pedido);
+      if (fp) selectFeature(fp);
+    }
     globeRef.current.__deselect = () => {
       world.polygonAltitude(altOf).polygonCapColor(capColor).polygonStrokeColor(strokeColor);
     };
@@ -1345,10 +1413,29 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
         world.controls().removeEventListener("change", actualizarMicroPills);
       } catch (e) {
       }
+      try {
+        host.removeEventListener("pointerdown", stop);
+      } catch (e) {
+      }
+      if (window.__WAYFARE_WORLD === world) {
+        try {
+          delete window.__WAYFARE_WORLD;
+        } catch (e) {
+          window.__WAYFARE_WORLD = null;
+        }
+      }
       destroyGlobe(world, host);
       globeRef.current = null;
     };
   }, [features, results, globeLib]);
+  React.useEffect(() => {
+    document.querySelectorAll(".micro-flag[data-iso]").forEach((el) => {
+      const nombre = countryName(el.dataset.iso, lang) || el.dataset.iso;
+      el.title = nombre;
+      const nm = el.querySelector(".mf-name");
+      if (nm) nm.textContent = nombre;
+    });
+  }, [lang]);
   React.useEffect(() => {
     if (globeRef.current) {
       globeRef.current.globeImageUrl(GLOBE_TEXTURES[globeStyle] || GLOBE_TEXTURES.textured);
@@ -1380,8 +1467,10 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
       globeRef.current.polygonCapColor(globeRef.current.polygonCapColor());
     }
   }, [hoverIdx]);
-  const tally = results ? window.Eligibility.tally(results) : null;
-  const recs = results ? window.Eligibility.topRecommendations(results, 6) : [];
+  const tally = React.useMemo(
+    () => results ? window.Eligibility.tally(results) : null,
+    [results]
+  );
   const pickIso = (iso) => {
     const f = globeRef.current && globeRef.current.__byIso(iso);
     if (f && globeRef.current.__select) globeRef.current.__select(f);
@@ -1414,7 +1503,7 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
     let archivo = null;
     try {
       const blob = await window.estampaResultado({ nE, nP, t });
-      if (blob) archivo = new File([blob], "wayfare-mi-mapa.png", { type: "image/png" });
+      if (blob) archivo = new File([blob], t("share_filename"), { type: "image/png" });
     } catch (e) {
     }
     try {
@@ -1432,7 +1521,7 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
         if (archivo) {
           const a = document.createElement("a");
           a.href = URL.createObjectURL(archivo);
-          a.download = "wayfare-mi-mapa.png";
+          a.download = t("share_filename");
           a.click();
           setTimeout(() => URL.revokeObjectURL(a.href), 4e3);
         }
@@ -1458,7 +1547,36 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
         globeRef.current.controls().autoRotate = false;
         globeRef.current.pointOfView({ lat: m.lat, lng: m.lng - 12, altitude: 1.2 }, 900);
       }
+      return;
     }
+    pendienteRef.current = iso;
+    try {
+      window.__wfDiag = Object.assign(window.__wfDiag || {}, { pendiente: iso });
+    } catch (e) {
+    }
+    let intentos = 0;
+    const reloj = setInterval(() => {
+      if (pendienteRef.current !== iso) {
+        clearInterval(reloj);
+        return;
+      }
+      const g = globeRef.current;
+      const hallado = g && g.__byIso && g.__byIso(iso);
+      if (hallado) {
+        clearInterval(reloj);
+        pendienteRef.current = null;
+        pickIso(iso);
+        return;
+      }
+      if (++intentos > 30) {
+        clearInterval(reloj);
+        pendienteRef.current = null;
+        try {
+          window.__wfDiag = Object.assign(window.__wfDiag || {}, { pendienteAgotado: iso });
+        } catch (e) {
+        }
+      }
+    }, 100);
   };
   const closeDetail = () => {
     selRef.current = null;
@@ -1469,6 +1587,14 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
       globeRef.current.pointOfView({ lat: 20, lng: 10, altitude: 1.7 }, 900);
     }
   };
+  React.useEffect(() => {
+    if (!detailOpen) return;
+    const alPulsar = (e) => {
+      if (e.key === "Escape") closeDetail();
+    };
+    window.addEventListener("keydown", alPulsar);
+    return () => window.removeEventListener("keydown", alPulsar);
+  }, [detailOpen]);
   return /* @__PURE__ */ React.createElement("div", { className: "globe-stage" + (detailOpen ? " detail-open" : "") }, /* @__PURE__ */ React.createElement(GlobeStars, null), /* @__PURE__ */ React.createElement("div", { className: "globe-host" + (detailOpen ? " globe-host--shifted" : ""), ref: hostRef }), hoverData && !detailOpen ? /* @__PURE__ */ React.createElement("div", { className: "globe-tooltip", style: { left: hoverData.x, top: hoverData.y }, "aria-hidden": "true" }, /* @__PURE__ */ React.createElement("span", { className: "gt-flag" }, isoToFlag(hoverData.iso)), /* @__PURE__ */ React.createElement("span", { className: "gt-name" }, (() => {
     const n = countryName(hoverData.iso, lang);
     return n && n !== hoverData.iso ? n : hoverData.name || n;
@@ -1476,7 +1602,20 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
     const lista = grupos && grupos[st] || [];
     const abierto = openGroup === st;
     const label = st === "eligible" ? "g_legend_eligible" : st === "partial" ? "g_legend_partial" : "g_legend_unlikely";
-    return /* @__PURE__ */ React.createElement("div", { key: st, className: "lg-group" + (abierto ? " lg-group--open" : "") }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "row lg-row", onClick: () => setOpenGroup(abierto ? null : st) }, /* @__PURE__ */ React.createElement("span", { className: "sw", style: { background: statusColor(st, 1) } }), t(label), /* @__PURE__ */ React.createElement("span", { className: "lg-count", style: { color: statusColor(st, 1) } }, lista.length), /* @__PURE__ */ React.createElement("svg", { className: "lg-caret", width: "10", height: "10", viewBox: "0 0 24 24", fill: "none" }, /* @__PURE__ */ React.createElement("path", { d: "M9 6l6 6-6 6", stroke: "currentColor", strokeWidth: "2.4", strokeLinecap: "round", strokeLinejoin: "round" }))), abierto ? /* @__PURE__ */ React.createElement("div", { className: "lg-list" }, lista.length ? lista.map((c) => /* @__PURE__ */ React.createElement("button", { type: "button", key: c.iso, className: "lg-item", onClick: () => irA(c.iso) }, /* @__PURE__ */ React.createElement("img", { className: "lg-flag", alt: "", src: "assets/flags/" + c.iso.toLowerCase() + ".svg" }), c.name)) : /* @__PURE__ */ React.createElement("div", { className: "lg-empty" }, "\u2014")) : null);
+    return /* @__PURE__ */ React.createElement("div", { key: st, className: "lg-group" + (abierto ? " lg-group--open" : "") }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "row lg-row", onClick: () => setOpenGroup(abierto ? null : st) }, /* @__PURE__ */ React.createElement("span", { className: "sw", style: { background: statusColor(st, 1) } }), t(label), /* @__PURE__ */ React.createElement("span", { className: "lg-count", style: { color: statusColor(st, 1) } }, lista.length), /* @__PURE__ */ React.createElement("svg", { className: "lg-caret", width: "10", height: "10", viewBox: "0 0 24 24", fill: "none" }, /* @__PURE__ */ React.createElement("path", { d: "M9 6l6 6-6 6", stroke: "currentColor", strokeWidth: "2.4", strokeLinecap: "round", strokeLinejoin: "round" }))), abierto ? /* @__PURE__ */ React.createElement("div", { className: "lg-list" }, lista.length ? lista.map((c) => /* @__PURE__ */ React.createElement("button", { type: "button", key: c.iso, className: "lg-item", onClick: () => irA(c.iso) }, /* @__PURE__ */ React.createElement(
+      "img",
+      {
+        className: "lg-flag",
+        alt: "",
+        loading: "lazy",
+        decoding: "async",
+        src: "assets/flags-min/" + c.iso.toLowerCase() + ".png",
+        onError: (e) => {
+          e.currentTarget.onerror = null;
+          e.currentTarget.src = "assets/flags/" + c.iso.toLowerCase() + ".svg";
+        }
+      }
+    ), c.name)) : /* @__PURE__ */ React.createElement("div", { className: "lg-empty" }, "\u2014")) : null);
   }), /* @__PURE__ */ React.createElement("div", { className: "row" }, /* @__PURE__ */ React.createElement("span", { className: "sw", style: { background: "rgba(148,163,160,0.55)" } }), t("g_legend_nodata")), /* @__PURE__ */ React.createElement("button", { type: "button", className: "lg-share", onClick: compartirMapa }, /* @__PURE__ */ React.createElement("svg", { width: "14", height: "14", viewBox: "0 0 24 24", fill: "none", "aria-hidden": "true" }, /* @__PURE__ */ React.createElement(
     "path",
     {
@@ -1495,7 +1634,7 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
       strokeLinecap: "round",
       strokeLinejoin: "round"
     }
-  )), t("g_share_btn")) : null, shareMsg && !detailOpen ? /* @__PURE__ */ React.createElement("div", { className: "share-float-done" }, shareMsg) : null, selected && detailOpen ? /* @__PURE__ */ React.createElement("aside", { className: "detail-panel" }, /* @__PURE__ */ React.createElement("div", { className: "detail-panel-inner" }, /* @__PURE__ */ React.createElement("button", { className: "detail-panel-close", onClick: closeDetail, "aria-label": "Close" }, /* @__PURE__ */ React.createElement("svg", { width: "14", height: "14", viewBox: "0 0 24 24", fill: "none", "aria-hidden": "true", style: { pointerEvents: "none" } }, /* @__PURE__ */ React.createElement("path", { d: "M18 6L6 18M6 6l12 12", stroke: "currentColor", strokeWidth: "2.2", strokeLinecap: "round" }))), /* @__PURE__ */ React.createElement(
+  )), t("g_share_btn")) : null, shareMsg && !detailOpen ? /* @__PURE__ */ React.createElement("div", { className: "share-float-done" }, shareMsg) : null, selected && detailOpen ? /* @__PURE__ */ React.createElement("aside", { className: "detail-panel" }, /* @__PURE__ */ React.createElement("div", { className: "detail-panel-inner" }, /* @__PURE__ */ React.createElement("button", { className: "detail-panel-close", onClick: closeDetail, "aria-label": t("a11y_close") }, /* @__PURE__ */ React.createElement("svg", { width: "14", height: "14", viewBox: "0 0 24 24", fill: "none", "aria-hidden": "true", style: { pointerEvents: "none" } }, /* @__PURE__ */ React.createElement("path", { d: "M18 6L6 18M6 6l12 12", stroke: "currentColor", strokeWidth: "2.2", strokeLinecap: "round" }))), /* @__PURE__ */ React.createElement(
     CountryDetail,
     {
       key: selected.iso,
@@ -1522,11 +1661,21 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
   ) : null);
 }
 function CompareView({ t, lang, profile, isoA, isoB, setIsoB, onClose }) {
+  React.useEffect(() => {
+    const alPulsar = (e) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", alPulsar);
+    return () => window.removeEventListener("keydown", alPulsar);
+  }, [onClose]);
   const D = window.VISA_DATA;
-  const opciones = D.COUNTRIES.filter((c) => c.iso !== isoA && window.Eligibility.hasRealRules(c.iso)).map((c) => ({ iso: c.iso, nombre: countryName(c.iso, lang) || c.name })).sort((a, b) => a.nombre.localeCompare(b.nombre));
-  const res = window.Eligibility.evaluateAll(
-    [{ id: "a", iso: isoA, name: isoA }, { id: "b", iso: isoB, name: isoB }],
-    profile
+  const opciones = React.useMemo(() => D.COUNTRIES.filter((c) => c.iso !== isoA && window.Eligibility.hasRealRules(c.iso)).map((c) => ({ iso: c.iso, nombre: countryName(c.iso, lang) || c.name })).sort((a, b) => a.nombre.localeCompare(b.nombre)), [isoA, lang]);
+  const res = React.useMemo(
+    () => window.Eligibility.evaluateAll(
+      [{ id: "a", iso: isoA, name: isoA }, { id: "b", iso: isoB, name: isoB }],
+      profile
+    ),
+    [isoA, isoB, profile]
   );
   const A = res.a, B = res.b;
   const tipos = [];
@@ -1536,15 +1685,15 @@ function CompareView({ t, lang, profile, isoA, isoB, setIsoB, onClose }) {
   const celda = (r, tipo) => {
     const v = (r.visas || []).find((x) => x.type === tipo);
     if (!v) return /* @__PURE__ */ React.createElement("div", { className: "cmp-cell cmp-cell--empty" }, "\u2014");
-    const sk = v.status === "eligible" ? "st_eligible" : v.status === "partial" ? "st_partial" : "st_ineligible";
+    const sk = v.status === "nodata" ? "st_nodata" : v.status === "eligible" ? "st_eligible" : v.status === "partial" ? "st_partial" : "st_ineligible";
     return /* @__PURE__ */ React.createElement("div", { className: "cmp-cell" }, /* @__PURE__ */ React.createElement("span", { className: "cmp-pill", style: {
       background: `rgba(${STATUS_RGB[v.status].join(",")},0.16)`,
       color: statusColor(v.status, 1)
-    } }, /* @__PURE__ */ React.createElement("span", { className: "sw", style: { background: statusColor(v.status, 1) } }), t(sk), " \xB7 ", v.score), /* @__PURE__ */ React.createElement("span", { className: "cmp-name" }, v.officialName || t("vt_" + v.type)));
+    } }, /* @__PURE__ */ React.createElement("span", { className: "sw", style: { background: statusColor(v.status, 1) } }), t(sk), v.score === null ? "" : " \xB7 " + v.score), /* @__PURE__ */ React.createElement("span", { className: "cmp-name" }, v.officialName || t("vt_" + v.type)));
   };
   return /* @__PURE__ */ React.createElement("div", { className: "cmp-overlay", onClick: (e) => {
     if (e.target === e.currentTarget) onClose();
-  } }, /* @__PURE__ */ React.createElement("div", { className: "cmp-card", role: "dialog", "aria-label": t("cmp_title") }, /* @__PURE__ */ React.createElement("button", { className: "detail-panel-close", onClick: onClose, "aria-label": "Close" }, /* @__PURE__ */ React.createElement("svg", { width: "14", height: "14", viewBox: "0 0 24 24", fill: "none", "aria-hidden": "true", style: { pointerEvents: "none" } }, /* @__PURE__ */ React.createElement("path", { d: "M18 6L6 18M6 6l12 12", stroke: "currentColor", strokeWidth: "2.2", strokeLinecap: "round" }))), /* @__PURE__ */ React.createElement("h2", { className: "cmp-title" }, t("cmp_title")), /* @__PURE__ */ React.createElement("div", { className: "cmp-grid" }, /* @__PURE__ */ React.createElement("div", { className: "cmp-head" }), /* @__PURE__ */ React.createElement("div", { className: "cmp-head" }, isoToFlag(isoA), " ", countryName(isoA, lang) || isoA), /* @__PURE__ */ React.createElement("div", { className: "cmp-head" }, /* @__PURE__ */ React.createElement(
+  } }, /* @__PURE__ */ React.createElement("div", { className: "cmp-card", role: "dialog", "aria-modal": "true", "aria-label": t("cmp_title") }, /* @__PURE__ */ React.createElement("button", { className: "detail-panel-close", onClick: onClose, "aria-label": t("a11y_close") }, /* @__PURE__ */ React.createElement("svg", { width: "14", height: "14", viewBox: "0 0 24 24", fill: "none", "aria-hidden": "true", style: { pointerEvents: "none" } }, /* @__PURE__ */ React.createElement("path", { d: "M18 6L6 18M6 6l12 12", stroke: "currentColor", strokeWidth: "2.2", strokeLinecap: "round" }))), /* @__PURE__ */ React.createElement("h2", { className: "cmp-title" }, t("cmp_title")), /* @__PURE__ */ React.createElement("div", { className: "cmp-grid" }, /* @__PURE__ */ React.createElement("div", { className: "cmp-head" }), /* @__PURE__ */ React.createElement("div", { className: "cmp-head" }, isoToFlag(isoA), " ", countryName(isoA, lang) || isoA), /* @__PURE__ */ React.createElement("div", { className: "cmp-head" }, /* @__PURE__ */ React.createElement(
     "select",
     {
       className: "cmp-select",
@@ -1556,6 +1705,14 @@ function CompareView({ t, lang, profile, isoA, isoB, setIsoB, onClose }) {
   )), tipos.map((tipo) => /* @__PURE__ */ React.createElement(React.Fragment, { key: tipo }, /* @__PURE__ */ React.createElement("div", { className: "cmp-row-label" }, /* @__PURE__ */ React.createElement("span", { className: "vc-icon" }, D.VISA_TYPES[tipo].icon), " ", t("vt_" + tipo)), celda(A, tipo), celda(B, tipo)))), /* @__PURE__ */ React.createElement("p", { className: "cmp-note" }, t("cmp_note"))));
 }
 function CountryDetail({ t, lang, result, profile, onCompare }) {
+  const [, repintar] = React.useReducer((n) => n + 1, 0);
+  React.useEffect(() => {
+    if (window.EVIDENCE) return;
+    if (window.__wayfareCargarEvidencia) window.__wayfareCargarEvidencia();
+    const alLlegar = () => repintar();
+    window.addEventListener("wayfare:evidencia-lista", alLlegar);
+    return () => window.removeEventListener("wayfare:evidencia-lista", alLlegar);
+  }, []);
   function tx(value) {
     if (!value) return "";
     var translated = t(value);
@@ -1615,10 +1772,10 @@ function CountryDetail({ t, lang, result, profile, onCompare }) {
       /* @__PURE__ */ React.createElement("div", { className: "sub-label" }, t("g_visas_here")),
       result.visas.length === 0 ? /* @__PURE__ */ React.createElement("div", { className: "empty" }, /* @__PURE__ */ React.createElement("h3", null, t("g_no_visas_goal")), /* @__PURE__ */ React.createElement("p", null, t("g_no_visas_goal_sub"))) : null,
       result.visas.map((v, i) => {
-        const vStatusKey = v.status === "eligible" ? "st_eligible" : v.status === "partial" ? "st_partial" : "st_ineligible";
+        const vStatusKey = v.status === "nodata" ? "st_nodata" : v.status === "eligible" ? "st_eligible" : v.status === "partial" ? "st_partial" : "st_ineligible";
         return (
           /* v1.39.0 — entrada escalonada de las tarjetas */
-          /* @__PURE__ */ React.createElement("div", { className: "visa-card", key: v.type + i, style: { animationDelay: i * 80 + "ms" } }, /* @__PURE__ */ React.createElement("div", { className: "vc-head" }, /* @__PURE__ */ React.createElement("span", { className: "vc-icon" }, window.VISA_DATA.VISA_TYPES[v.type].icon), /* @__PURE__ */ React.createElement("span", { className: "vc-name" }, v.officialName ? tx(v.officialName) : t("vt_" + v.type)), /* @__PURE__ */ React.createElement("span", { className: "vc-stat", style: { background: statusColor(v.status, 1) } })), /* @__PURE__ */ React.createElement("div", { className: "vc-meta" }, /* @__PURE__ */ React.createElement("span", { className: "vc-meta-status", style: { color: statusColor(v.status, 1) } }, t(vStatusKey)), /* @__PURE__ */ React.createElement("span", { className: "vc-meta-score" }, t("g_score"), ": ", v.score)), v.matched && v.matched.length ? /* @__PURE__ */ React.createElement("details", { className: "vc-acc", open: secOpen("matched", v) }, /* @__PURE__ */ React.createElement("summary", { className: "vc-acc-sum" }, /* @__PURE__ */ React.createElement("span", { className: "vc-acc-label" }, t("g_matched")), /* @__PURE__ */ React.createElement("span", { className: "vc-acc-count" }, v.matched.length)), /* @__PURE__ */ React.createElement("div", { className: "vc-acc-body vc-matched" }, v.matched.map((m, mi) => /* @__PURE__ */ React.createElement(
+          /* @__PURE__ */ React.createElement("div", { className: "visa-card", key: v.type + i, style: { animationDelay: i * 80 + "ms" } }, /* @__PURE__ */ React.createElement("div", { className: "vc-head" }, /* @__PURE__ */ React.createElement("span", { className: "vc-icon" }, window.VISA_DATA.VISA_TYPES[v.type].icon), /* @__PURE__ */ React.createElement("span", { className: "vc-name" }, v.officialName ? tx(v.officialName) : t("vt_" + v.type)), window.EVIDENCE && v.status !== "nodata" && !(window.EVIDENCE.routes || {})[result.iso + "|" + (v.route || "")] ? /* @__PURE__ */ React.createElement("span", { className: "vc-modelled", title: t("vc_modelled_title") }, t("vc_modelled")) : null, /* @__PURE__ */ React.createElement("span", { className: "vc-stat", style: { background: statusColor(v.status, 1) } })), /* @__PURE__ */ React.createElement("div", { className: "vc-meta" }, /* @__PURE__ */ React.createElement("span", { className: "vc-meta-status", style: { color: statusColor(v.status, 1) } }, t(vStatusKey)), v.score === null ? null : /* @__PURE__ */ React.createElement("span", { className: "vc-meta-score" }, t("g_score"), ": ", v.score)), v.matched && v.matched.length ? /* @__PURE__ */ React.createElement("details", { className: "vc-acc", open: secOpen("matched", v) }, /* @__PURE__ */ React.createElement("summary", { className: "vc-acc-sum" }, /* @__PURE__ */ React.createElement("span", { className: "vc-acc-label" }, t("g_matched")), /* @__PURE__ */ React.createElement("span", { className: "vc-acc-count" }, v.matched.length)), /* @__PURE__ */ React.createElement("div", { className: "vc-acc-body vc-matched" }, v.matched.map((m, mi) => /* @__PURE__ */ React.createElement(
             EvidenceRow,
             {
               className: "vc-match-row",
@@ -1691,9 +1848,9 @@ function CountryDetail({ t, lang, result, profile, onCompare }) {
           t("adv_web")
         ) : null), a.langs && a.langs.length ? /* @__PURE__ */ React.createElement("div", { className: "adv-mini-langs" }, t("adv_langs"), a.langs.join(", ")) : null)), /* @__PURE__ */ React.createElement("a", { className: "adv-all", href: "seo/asesores.html#" + adv.anchor, target: "_blank", rel: "noopener noreferrer" }, t("adv_view_all")))));
       })(),
-      result.synthetic ? /* @__PURE__ */ React.createElement("div", { className: "synthetic-note" }, /* @__PURE__ */ React.createElement("svg", { width: "13", height: "13", viewBox: "0 0 24 24", fill: "none" }, /* @__PURE__ */ React.createElement("circle", { cx: "12", cy: "12", r: "9", stroke: "currentColor", strokeWidth: "2" }), /* @__PURE__ */ React.createElement("path", { d: "M12 8v5M12 16.5v.5", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round" })), t("g_simulated")) : null,
+      result.synthetic ? /* @__PURE__ */ React.createElement("div", { className: "synthetic-note" }, /* @__PURE__ */ React.createElement("svg", { width: "13", height: "13", viewBox: "0 0 24 24", fill: "none" }, /* @__PURE__ */ React.createElement("circle", { cx: "12", cy: "12", r: "9", stroke: "currentColor", strokeWidth: "2" }), /* @__PURE__ */ React.createElement("path", { d: "M12 8v5M12 16.5v.5", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round" })), t("g_nodata_panel")) : null,
       /* @__PURE__ */ React.createElement(DataFreshness, { t, lang, iso: result.iso, synthetic: result.synthetic }),
-      /* @__PURE__ */ React.createElement("div", { className: "disclaimer-long" }, /* @__PURE__ */ React.createElement("svg", { width: "11", height: "11", viewBox: "0 0 24 24", fill: "none", style: { flexShrink: 0, marginTop: "1px" } }, /* @__PURE__ */ React.createElement("circle", { cx: "12", cy: "12", r: "9", stroke: "currentColor", strokeWidth: "2" }), /* @__PURE__ */ React.createElement("path", { d: "M12 8v5M12 16.5v.5", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round" })), /* @__PURE__ */ React.createElement("span", null, t("disclaimer_long"), " ", /* @__PURE__ */ React.createElement("span", { className: "legal-links" }, /* @__PURE__ */ React.createElement("a", { href: "seo/privacidad.html" }, t("legal_privacy")), " \xB7 ", /* @__PURE__ */ React.createElement("a", { href: "seo/aviso-legal.html" }, t("legal_notice")))))
+      /* @__PURE__ */ React.createElement("div", { className: "disclaimer-long" }, /* @__PURE__ */ React.createElement("svg", { width: "11", height: "11", viewBox: "0 0 24 24", fill: "none", style: { flexShrink: 0, marginTop: "1px" } }, /* @__PURE__ */ React.createElement("circle", { cx: "12", cy: "12", r: "9", stroke: "currentColor", strokeWidth: "2" }), /* @__PURE__ */ React.createElement("path", { d: "M12 8v5M12 16.5v.5", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round" })), /* @__PURE__ */ React.createElement("span", null, t("disclaimer_long"), " ", /* @__PURE__ */ React.createElement("span", { className: "legal-links" }, /* @__PURE__ */ React.createElement("a", { href: lang === "en" ? "seo/privacy.html" : "seo/privacidad.html", hrefLang: lang === "en" ? "en" : "es" }, t("legal_privacy")), " \xB7 ", /* @__PURE__ */ React.createElement("a", { href: lang === "en" ? "seo/legal-notice.html" : "seo/aviso-legal.html", hrefLang: lang === "en" ? "en" : "es" }, t("legal_notice")))))
     )
   );
 }
@@ -1776,6 +1933,24 @@ const TWEAK_DEFAULTS = (
     "autoRotate": true
   }
 );
+function sanearPerfil(p) {
+  const D = window.VISA_DATA || {};
+  const base = defaultProfile();
+  const dentro = (lista, v) => Array.isArray(lista) && lista.indexOf(v) !== -1;
+  const codigos = (D.PASSPORTS || []).map((x) => x.code);
+  const residencias = (D.RESIDENCES || D.PASSPORTS || []).map((x) => x.code);
+  const out = Object.assign({}, p);
+  if (!dentro(codigos, out.nationality)) out.nationality = base.nationality;
+  if (!dentro(residencias, out.currentResidence)) out.currentResidence = base.currentResidence;
+  if (!dentro(D.EDUCATION, out.education)) out.education = base.education;
+  if (!dentro((D.ENGLISH || []).map((x) => x && x.id || x), out.english)) out.english = base.english;
+  if (typeof out.age !== "number" || out.age < 16 || out.age > 70) out.age = base.age;
+  if (!Array.isArray(out.visaTypes)) out.visaTypes = [];
+  else if (Array.isArray(D.VISA_TYPE_IDS)) {
+    out.visaTypes = out.visaTypes.filter((v) => D.VISA_TYPE_IDS.indexOf(v) !== -1);
+  }
+  return out;
+}
 function defaultProfile() {
   return {
     nationality: "ES",
@@ -1784,9 +1959,7 @@ function defaultProfile() {
     situation: "alone",
     education: "university_plus",
     english: "b2",
-    savings: 15e3,
     remoteWork: false,
-    monthlyIncome: 0,
     visaTypes: []
     /* v1.21.0 — sin preselección (feedback de usuarios); vacío = se evalúan todas */
   };
@@ -1822,6 +1995,8 @@ function App() {
     }
     return "en";
   });
+  const langRef = React.useRef(lang);
+  langRef.current = lang;
   const setLang = React.useCallback(function(l) {
     setLangState(l);
     try {
@@ -1829,15 +2004,22 @@ function App() {
     } catch (e) {
     }
   }, []);
+  React.useEffect(function() {
+    try {
+      document.documentElement.lang = lang;
+    } catch (e) {
+    }
+  }, [lang]);
   const [submitted, setSubmitted] = React.useState(() => {
     const s = loadStored(STORE_SUBMITTED);
     if (s && s.profile && s.version) return s;
     return { profile: defaultProfile(), version: 1, demo: true };
   });
   const [screen, setScreen] = React.useState("globe");
-  const [profile, setProfile] = React.useState(() => Object.assign(defaultProfile(), loadStored(STORE_PROFILE) || {}));
+  const [profile, setProfile] = React.useState(() => sanearPerfil(Object.assign(defaultProfile(), loadStored(STORE_PROFILE) || {})));
   React.useEffect(() => {
-    saveStored(STORE_PROFILE, profile);
+    const id = setTimeout(() => saveStored(STORE_PROFILE, profile), 250);
+    return () => clearTimeout(id);
   }, [profile]);
   React.useEffect(() => {
     if (!(submitted && submitted.demo)) saveStored(STORE_SUBMITTED, submitted);
@@ -1846,6 +2028,9 @@ function App() {
     wfTrack(submitted && !submitted.demo ? "embudo-0-retorno" : "embudo-1-cuestionario");
   }, []);
   const resetAll = React.useCallback(() => {
+    const tabla = window.I18N && window.I18N[langRef.current] || {};
+    const aviso = tabla.q_reset_confirm || "This will delete your saved profile and your map on this device. Continue?";
+    if (typeof window.confirm === "function" && !window.confirm(aviso)) return;
     saveStored(STORE_PROFILE, null);
     saveStored(STORE_SUBMITTED, null);
     setProfile(defaultProfile());
@@ -1870,7 +2055,7 @@ function App() {
     "span",
     {
       className: "version-badge",
-      title: "Versi\xF3n de la app \u2014 ver VERSIONS.md",
+      title: tr("app_version_title"),
       style: {
         marginLeft: 8,
         padding: "1px 7px",
@@ -1961,5 +2146,43 @@ function tint(hex, amt) {
   const [r, g, b] = hexToRgb(hex);
   return rgbToHex(r + (255 - r) * amt, g + (255 - g) * amt, b + (255 - b) * amt);
 }
-ReactDOM.createRoot(document.getElementById("root")).render(/* @__PURE__ */ React.createElement(App, null));
+class RedDeSeguridad extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { roto: false };
+  }
+  static getDerivedStateFromError() {
+    return { roto: true };
+  }
+  componentDidCatch(error, info) {
+    console.error("[Wayfare] la interfaz lanz\xF3 una excepci\xF3n", error, info);
+    try {
+      if (window.wfTrack) window.wfTrack("error-pantalla");
+    } catch (e) {
+    }
+  }
+  render() {
+    if (!this.state.roto) return this.props.children;
+    let idioma = "es";
+    try {
+      const g = localStorage.getItem("wayfare_lang_v1");
+      idioma = g === "es" || g === "en" ? g : (navigator.language || "").toLowerCase().indexOf("es") === 0 ? "es" : "en";
+    } catch (e) {
+    }
+    const tabla = window.I18N && window.I18N[idioma] || {};
+    const tr = (k, alt) => tabla[k] || alt;
+    const empezarDeCero = () => {
+      try {
+        localStorage.removeItem("wayfare_profile_v1");
+        localStorage.removeItem("wayfare_submitted_v1");
+      } catch (e) {
+      }
+      window.location.reload();
+    };
+    return /* @__PURE__ */ React.createElement("div", { className: "crash-screen", role: "alert" }, /* @__PURE__ */ React.createElement("h1", { className: "crash-title" }, tr("crash_title", "Se ha roto algo por nuestra parte")), /* @__PURE__ */ React.createElement("p", { className: "crash-text" }, tr("crash_text", "Lo sentimos: esta pantalla no ha cargado. Tu perfil guardado est\xE1 intacto.")), /* @__PURE__ */ React.createElement("div", { className: "crash-actions" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "btn-primary", onClick: () => window.location.reload() }, tr("crash_reload", "Recargar")), /* @__PURE__ */ React.createElement("button", { type: "button", className: "btn-map-back", onClick: empezarDeCero }, tr("crash_reset", "Recargar y empezar de cero"))));
+  }
+}
+ReactDOM.createRoot(document.getElementById("root")).render(
+  /* @__PURE__ */ React.createElement(RedDeSeguridad, null, /* @__PURE__ */ React.createElement(App, null))
+);
 

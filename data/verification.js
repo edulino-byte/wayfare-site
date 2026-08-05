@@ -2,402 +2,402 @@
    Resumen de verificación de datos por destino (Fase 1 · Dato vivo).
    Regenerar: node tools/build/genVerification.mjs */
 window.VERIFICATION = {
-  "generatedAt": "2026-08-02",
-  "monitorLastRun": "2026-07-31",
+  "generatedAt": "2026-08-05",
+  "monitorLastRun": "2026-08-03",
   "destinations": {
     "NZ": {
-      "routes": 36,
-      "facts": 633,
+      "routes": 39,
+      "facts": 685,
       "monitored": true,
-      "lastCheck": "2026-07-31"
+      "lastCheck": "2026-08-03"
     },
     "AU": {
-      "routes": 7,
-      "facts": 49,
+      "routes": 10,
+      "facts": 65,
       "monitored": false,
-      "lastCheck": "2026-07-13"
+      "lastCheck": "2026-08-02"
     },
     "GB": {
-      "routes": 4,
-      "facts": 43,
+      "routes": 6,
+      "facts": 52,
       "monitored": true,
-      "lastCheck": "2026-07-31"
+      "lastCheck": "2026-08-03"
     },
     "CA": {
-      "routes": 4,
-      "facts": 26,
+      "routes": 6,
+      "facts": 32,
       "monitored": true,
-      "lastCheck": "2026-07-31"
+      "lastCheck": "2026-08-03"
     },
     "PT": {
-      "routes": 5,
-      "facts": 18,
+      "routes": 6,
+      "facts": 23,
       "monitored": true,
-      "lastCheck": "2026-07-31"
+      "lastCheck": "2026-08-03"
     },
     "ES": {
-      "routes": 5,
-      "facts": 11,
+      "routes": 6,
+      "facts": 19,
       "monitored": true,
-      "lastCheck": "2026-07-31"
+      "lastCheck": "2026-08-03"
     },
     "JP": {
-      "routes": 3,
-      "facts": 16,
+      "routes": 5,
+      "facts": 29,
       "monitored": true,
-      "lastCheck": "2026-07-31"
+      "lastCheck": "2026-08-03"
     },
     "US": {
-      "routes": 3,
-      "facts": 5,
+      "routes": 6,
+      "facts": 15,
       "monitored": true,
-      "lastCheck": "2026-07-31"
+      "lastCheck": "2026-08-03"
     },
     "AT": {
-      "routes": 1,
-      "facts": 1,
+      "routes": 6,
+      "facts": 24,
       "monitored": true,
-      "lastCheck": "2026-07-31"
+      "lastCheck": "2026-08-03"
     },
     "BE": {
-      "routes": 1,
-      "facts": 1,
+      "routes": 6,
+      "facts": 24,
       "monitored": true,
-      "lastCheck": "2026-07-31"
+      "lastCheck": "2026-08-03"
     },
     "BG": {
-      "routes": 1,
-      "facts": 1,
+      "routes": 6,
+      "facts": 24,
       "monitored": true,
-      "lastCheck": "2026-07-31"
+      "lastCheck": "2026-08-03"
     },
     "CH": {
-      "routes": 1,
-      "facts": 1,
+      "routes": 4,
+      "facts": 12,
       "monitored": true,
-      "lastCheck": "2026-07-31"
+      "lastCheck": "2026-08-03"
     },
     "CZ": {
-      "routes": 1,
-      "facts": 1,
+      "routes": 7,
+      "facts": 31,
       "monitored": true,
-      "lastCheck": "2026-07-31"
+      "lastCheck": "2026-08-03"
     },
     "DE": {
-      "routes": 2,
-      "facts": 4,
+      "routes": 7,
+      "facts": 43,
       "monitored": true,
-      "lastCheck": "2026-07-31"
+      "lastCheck": "2026-08-03"
     },
     "DK": {
-      "routes": 1,
-      "facts": 1,
+      "routes": 4,
+      "facts": 14,
       "monitored": true,
-      "lastCheck": "2026-07-31"
+      "lastCheck": "2026-08-03"
     },
     "EE": {
-      "routes": 1,
-      "facts": 1,
+      "routes": 6,
+      "facts": 30,
       "monitored": true,
-      "lastCheck": "2026-07-31"
+      "lastCheck": "2026-08-03"
     },
     "FI": {
-      "routes": 1,
-      "facts": 1,
+      "routes": 6,
+      "facts": 24,
       "monitored": true,
-      "lastCheck": "2026-07-31"
+      "lastCheck": "2026-08-03"
     },
     "FR": {
-      "routes": 2,
-      "facts": 4,
+      "routes": 7,
+      "facts": 41,
       "monitored": true,
-      "lastCheck": "2026-07-31"
+      "lastCheck": "2026-08-03"
     },
     "GR": {
-      "routes": 1,
-      "facts": 1,
+      "routes": 7,
+      "facts": 25,
       "monitored": true,
-      "lastCheck": "2026-07-31"
+      "lastCheck": "2026-08-03"
     },
     "HR": {
-      "routes": 1,
-      "facts": 1,
+      "routes": 7,
+      "facts": 29,
       "monitored": true,
-      "lastCheck": "2026-07-31"
+      "lastCheck": "2026-08-03"
     },
     "HU": {
-      "routes": 1,
-      "facts": 1,
+      "routes": 7,
+      "facts": 29,
       "monitored": true,
-      "lastCheck": "2026-07-31"
+      "lastCheck": "2026-08-03"
     },
     "IS": {
-      "routes": 1,
-      "facts": 1,
+      "routes": 6,
+      "facts": 22,
       "monitored": true,
-      "lastCheck": "2026-07-31"
+      "lastCheck": "2026-08-03"
     },
     "IT": {
-      "routes": 1,
-      "facts": 1,
+      "routes": 6,
+      "facts": 35,
       "monitored": true,
-      "lastCheck": "2026-07-31"
+      "lastCheck": "2026-08-03"
     },
     "LI": {
-      "routes": 1,
-      "facts": 1,
+      "routes": 4,
+      "facts": 14,
       "monitored": true,
-      "lastCheck": "2026-07-31"
+      "lastCheck": "2026-08-03"
     },
     "LT": {
-      "routes": 1,
-      "facts": 1,
+      "routes": 6,
+      "facts": 24,
       "monitored": true,
-      "lastCheck": "2026-07-31"
+      "lastCheck": "2026-08-03"
     },
     "LU": {
-      "routes": 1,
-      "facts": 1,
+      "routes": 6,
+      "facts": 24,
       "monitored": true,
-      "lastCheck": "2026-07-31"
+      "lastCheck": "2026-08-03"
     },
     "LV": {
-      "routes": 1,
-      "facts": 1,
+      "routes": 7,
+      "facts": 29,
       "monitored": true,
-      "lastCheck": "2026-07-31"
+      "lastCheck": "2026-08-03"
     },
     "MT": {
-      "routes": 1,
-      "facts": 1,
+      "routes": 7,
+      "facts": 29,
       "monitored": true,
-      "lastCheck": "2026-07-31"
+      "lastCheck": "2026-08-03"
     },
     "NL": {
-      "routes": 1,
-      "facts": 1,
+      "routes": 6,
+      "facts": 27,
       "monitored": true,
-      "lastCheck": "2026-07-31"
+      "lastCheck": "2026-08-03"
     },
     "NO": {
-      "routes": 1,
-      "facts": 1,
+      "routes": 4,
+      "facts": 14,
       "monitored": true,
-      "lastCheck": "2026-07-31"
+      "lastCheck": "2026-08-03"
     },
     "PL": {
-      "routes": 1,
-      "facts": 1,
+      "routes": 6,
+      "facts": 24,
       "monitored": true,
-      "lastCheck": "2026-07-31"
+      "lastCheck": "2026-08-03"
     },
     "RO": {
-      "routes": 1,
-      "facts": 1,
+      "routes": 6,
+      "facts": 28,
       "monitored": true,
-      "lastCheck": "2026-07-31"
+      "lastCheck": "2026-08-03"
     },
     "SE": {
-      "routes": 1,
-      "facts": 1,
+      "routes": 6,
+      "facts": 33,
       "monitored": true,
-      "lastCheck": "2026-07-31"
+      "lastCheck": "2026-08-03"
     },
     "SI": {
-      "routes": 1,
-      "facts": 1,
+      "routes": 7,
+      "facts": 32,
       "monitored": true,
-      "lastCheck": "2026-07-31"
+      "lastCheck": "2026-08-03"
     },
     "SK": {
-      "routes": 1,
-      "facts": 1,
+      "routes": 6,
+      "facts": 24,
       "monitored": true,
-      "lastCheck": "2026-07-31"
+      "lastCheck": "2026-08-03"
     },
     "IE": {
-      "routes": 1,
-      "facts": 3,
+      "routes": 5,
+      "facts": 14,
       "monitored": true,
-      "lastCheck": "2026-07-31"
+      "lastCheck": "2026-08-03"
     },
     "KR": {
       "routes": 4,
       "facts": 15,
       "monitored": true,
-      "lastCheck": "2026-07-31"
+      "lastCheck": "2026-08-03"
     },
     "AR": {
-      "routes": 3,
-      "facts": 7,
+      "routes": 5,
+      "facts": 17,
       "monitored": true,
-      "lastCheck": "2026-07-31"
+      "lastCheck": "2026-08-03"
     },
     "MX": {
-      "routes": 1,
-      "facts": 3,
+      "routes": 4,
+      "facts": 16,
       "monitored": true,
-      "lastCheck": "2026-07-31"
+      "lastCheck": "2026-08-03"
     },
     "TH": {
-      "routes": 2,
-      "facts": 8,
+      "routes": 5,
+      "facts": 14,
       "monitored": true,
-      "lastCheck": "2026-07-31"
+      "lastCheck": "2026-08-03"
     },
     "SG": {
-      "routes": 2,
-      "facts": 7,
+      "routes": 3,
+      "facts": 13,
       "monitored": true,
-      "lastCheck": "2026-07-31"
+      "lastCheck": "2026-08-03"
     },
     "CO": {
-      "routes": 2,
-      "facts": 11,
+      "routes": 5,
+      "facts": 24,
       "monitored": false,
-      "lastCheck": "2026-07-29"
+      "lastCheck": "2026-08-02"
     },
     "UY": {
-      "routes": 1,
-      "facts": 6,
+      "routes": 4,
+      "facts": 18,
       "monitored": true,
-      "lastCheck": "2026-07-31"
+      "lastCheck": "2026-08-03"
     },
     "ID": {
-      "routes": 1,
-      "facts": 7,
+      "routes": 3,
+      "facts": 18,
       "monitored": true,
-      "lastCheck": "2026-07-31"
+      "lastCheck": "2026-08-03"
     },
     "AE": {
-      "routes": 1,
-      "facts": 5,
+      "routes": 3,
+      "facts": 12,
       "monitored": true,
-      "lastCheck": "2026-07-31"
+      "lastCheck": "2026-08-03"
     },
     "CL": {
-      "routes": 1,
-      "facts": 7,
-      "monitored": false,
-      "lastCheck": "2026-08-01"
-    },
-    "PA": {
-      "routes": 3,
-      "facts": 11,
-      "monitored": false,
-      "lastCheck": "2026-08-01"
-    },
-    "PE": {
       "routes": 3,
       "facts": 15,
-      "monitored": false,
-      "lastCheck": "2026-08-01"
+      "monitored": true,
+      "lastCheck": "2026-08-03"
+    },
+    "PA": {
+      "routes": 4,
+      "facts": 15,
+      "monitored": true,
+      "lastCheck": "2026-08-03"
+    },
+    "PE": {
+      "routes": 4,
+      "facts": 25,
+      "monitored": true,
+      "lastCheck": "2026-08-03"
     },
     "BO": {
-      "routes": 3,
-      "facts": 10,
-      "monitored": false,
-      "lastCheck": "2026-08-01"
+      "routes": 4,
+      "facts": 24,
+      "monitored": true,
+      "lastCheck": "2026-08-03"
     },
     "BZ": {
-      "routes": 3,
-      "facts": 10,
-      "monitored": false,
-      "lastCheck": "2026-08-01"
+      "routes": 4,
+      "facts": 15,
+      "monitored": true,
+      "lastCheck": "2026-08-03"
     },
     "DO": {
-      "routes": 3,
-      "facts": 9,
-      "monitored": false,
-      "lastCheck": "2026-08-01"
+      "routes": 4,
+      "facts": 12,
+      "monitored": true,
+      "lastCheck": "2026-08-03"
     },
     "ZA": {
-      "routes": 3,
-      "facts": 9,
-      "monitored": false,
-      "lastCheck": "2026-08-01"
+      "routes": 4,
+      "facts": 16,
+      "monitored": true,
+      "lastCheck": "2026-08-03"
     },
     "LK": {
-      "routes": 3,
-      "facts": 8,
-      "monitored": false,
-      "lastCheck": "2026-08-01"
+      "routes": 4,
+      "facts": 17,
+      "monitored": true,
+      "lastCheck": "2026-08-03"
     },
     "FJ": {
-      "routes": 3,
-      "facts": 9,
-      "monitored": false,
-      "lastCheck": "2026-08-01"
+      "routes": 4,
+      "facts": 12,
+      "monitored": true,
+      "lastCheck": "2026-08-03"
     },
     "EC": {
-      "routes": 2,
-      "facts": 6,
-      "monitored": false,
-      "lastCheck": "2026-08-01"
+      "routes": 5,
+      "facts": 18,
+      "monitored": true,
+      "lastCheck": "2026-08-03"
     },
     "PY": {
-      "routes": 1,
-      "facts": 4,
-      "monitored": false,
-      "lastCheck": "2026-08-01"
+      "routes": 2,
+      "facts": 14,
+      "monitored": true,
+      "lastCheck": "2026-08-03"
     },
     "VE": {
-      "routes": 1,
-      "facts": 3,
-      "monitored": false,
-      "lastCheck": "2026-08-01"
+      "routes": 4,
+      "facts": 13,
+      "monitored": true,
+      "lastCheck": "2026-08-03"
     },
     "IN": {
-      "routes": 3,
-      "facts": 10,
-      "monitored": false,
-      "lastCheck": "2026-08-01"
+      "routes": 4,
+      "facts": 11,
+      "monitored": true,
+      "lastCheck": "2026-08-03"
     },
     "QA": {
-      "routes": 1,
-      "facts": 3,
-      "monitored": false,
-      "lastCheck": "2026-08-01"
-    },
-    "GE": {
       "routes": 3,
       "facts": 8,
-      "monitored": false,
-      "lastCheck": "2026-08-01"
+      "monitored": true,
+      "lastCheck": "2026-08-03"
+    },
+    "GE": {
+      "routes": 4,
+      "facts": 14,
+      "monitored": true,
+      "lastCheck": "2026-08-03"
     },
     "BR": {
-      "routes": 2,
-      "facts": 6,
-      "monitored": false,
-      "lastCheck": "2026-08-01"
+      "routes": 3,
+      "facts": 17,
+      "monitored": true,
+      "lastCheck": "2026-08-03"
     },
     "SV": {
-      "routes": 1,
-      "facts": 3,
-      "monitored": false,
-      "lastCheck": "2026-08-01"
+      "routes": 3,
+      "facts": 5,
+      "monitored": true,
+      "lastCheck": "2026-08-03"
     },
     "CR": {
-      "routes": 1,
-      "facts": 4,
+      "routes": 4,
+      "facts": 13,
       "monitored": false,
-      "lastCheck": "2026-08-01"
+      "lastCheck": "2026-08-03"
     },
     "VN": {
       "routes": 1,
-      "facts": 4,
+      "facts": 5,
       "monitored": false,
       "lastCheck": "2026-08-01"
     },
     "GT": {
-      "routes": 1,
-      "facts": 4,
+      "routes": 3,
+      "facts": 12,
       "monitored": false,
-      "lastCheck": "2026-08-01"
+      "lastCheck": "2026-08-03"
     },
     "NI": {
-      "routes": 1,
-      "facts": 4,
+      "routes": 2,
+      "facts": 12,
       "monitored": false,
       "lastCheck": "2026-08-01"
     },
@@ -406,6 +406,12 @@ window.VERIFICATION = {
       "facts": 3,
       "monitored": false,
       "lastCheck": "2026-08-01"
+    },
+    "CY": {
+      "routes": 6,
+      "facts": 24,
+      "monitored": false,
+      "lastCheck": "2026-08-03"
     }
   }
 };

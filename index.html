@@ -1,9 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <!-- v1.116.0 — sin maximum-scale: bloquear el zoom impide ampliar a quien lo
+       necesita para leer (WCAG 1.4.4). Y lang="es": la interfaz arranca en
+       español, así que un lector de pantalla leía español con voz inglesa
+       (ui/App.jsx lo actualiza al cambiar de idioma). -->
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Wayfare — descubre a qué países puedes irte con tu pasaporte</title>
+  <meta name="description" content="Descubre a qué países puedes irte con tu pasaporte. Requisitos de visado verificados contra las fuentes oficiales de cada gobierno." />
   <!-- WAYFARE-INDEXACION (v1.91.0): esta es la plantilla que se PUBLICA (la de
        index.html es la de desarrollo). Puerta cerrada a buscadores; abrir las dos
        el día del lanzamiento. No afecta a quien entre con el enlace. -->
@@ -12,7 +17,7 @@
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Wayfare" />
   <meta property="og:title" content="Wayfare — descubre a qué países puedes irte con tu pasaporte" />
-  <meta property="og:description" content="47 destinos y 158 rutas de visa verificadas contra fuentes oficiales. Tu mapa en 2 minutos." />
+  <meta property="og:description" content="68 destinos y 368 rutas de visa verificadas contra fuentes oficiales. Tu mapa en 2 minutos." />
   <meta property="og:url" content="https://edulino-byte.github.io/wayfare-site/" />
   <meta property="og:image" content="https://edulino-byte.github.io/wayfare-site/assets/brand/wayfare-og-card.png" />
   <meta property="og:image:width" content="1200" />
@@ -23,30 +28,64 @@
   <!-- Datos estructurados (v1.60.0) -->
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Wayfare","url":"https://edulino-byte.github.io/wayfare-site/","inLanguage":"es","description":"Simulador de elegibilidad de visas con datos verificados contra fuentes oficiales."}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Wayfare","url":"https://edulino-byte.github.io/wayfare-site/","logo":"https://edulino-byte.github.io/wayfare-site/assets/brand/wayfare-icon-512.png"}</script>
-  <link rel="icon" type="image/svg+xml" href="assets/brand/wayfare-favicon.svg?v=1.109.0" />
-  <link rel="apple-touch-icon" sizes="180x180" href="assets/brand/wayfare-touch-180.png?v=1.109.0" />
+  <link rel="icon" type="image/svg+xml" href="assets/brand/wayfare-favicon.svg?v=1.163.0" />
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/brand/wayfare-touch-180.png?v=1.163.0" />
   <link rel="manifest" href="manifest.webmanifest" />
   <!-- v1.96.0 — fuentes servidas desde el propio sitio: cero peticiones a Google -->
-  <link rel="stylesheet" href="assets/fonts/fonts.css?v=1.109.0" />
-  <link rel="stylesheet" href="styles.css?v=1.109.0" />
-  <link rel="stylesheet" href="screens.css?v=1.109.0" />
+  <link rel="stylesheet" href="assets/fonts/fonts.css?v=1.163.0" />
+  <link rel="stylesheet" href="styles.css?v=1.163.0" />
+  <link rel="stylesheet" href="screens.css?v=1.163.0" />
 </head>
 <body>
+  <!-- v1.116.0 — encabezado principal para lectores de pantalla: la interfaz es
+       un globo interactivo y no anunciaba de qué trata la página. -->
+  <h1 class="solo-lectores">Wayfare — descubre a qué países puedes irte con tu pasaporte</h1>
   <div id="root"></div>
   <!-- librerías empaquetadas localmente, sin CDN. El motor 3D (vendor-globe)
-       baja en paralelo SIN bloquear: el cuestionario es interactivo antes. -->
-  <script src="vendor-core.js?v=1.109.0"></script>
-  <script async src="vendor-globe.js?v=1.109.0"></script>
+       baja en paralelo SIN bloquear: el cuestionario es interactivo antes.
+
+       v1.162.0 — TODO CON defer. Antes, ocho scripts bloqueaban el parseo del
+       HTML uno detrás de otro: el navegador no podía ni terminar de leer la
+       página mientras los descargaba. Con defer los baja en paralelo y los
+       ejecuta al final, EN ORDEN, que es la garantía que necesitamos porque
+       app.js depende de todo lo anterior. En un móvil de gama media esto es lo
+       que separa «pantalla en blanco» de «algo que responde». -->
+  <script defer src="vendor-core.js?v=1.163.0"></script>
+  <script async src="vendor-globe.js?v=1.163.0"></script>
   <!-- datos + lógica + i18n: copias byte a byte del fuente auditado -->
-  <script src="version.js?v=1.109.0"></script>
-  <script src="data/mock.js?v=1.109.0"></script>
-  <script src="data/verification.js?v=1.109.0"></script>
-  <script src="data/evidence.js?v=1.109.0"></script>
-  <script src="data/advisors-meta.js?v=1.109.0"></script>
-  <script src="i18n/strings.js?v=1.109.0"></script>
-  <script src="logic/eligibility.js?v=1.109.0"></script>
+  <script defer src="version.js?v=1.163.0"></script>
+  <script defer src="data/mock.js?v=1.163.0"></script>
+  <script defer src="data/verification.js?v=1.163.0"></script>
+  <script defer src="data/advisors-meta.js?v=1.163.0"></script>
+  <script defer src="i18n/strings.js?v=1.163.0"></script>
+  <script defer src="logic/eligibility.js?v=1.163.0"></script>
   <!-- UI precompilada (JSX ya transformado, sin Babel en el navegador) -->
-  <script src="app.js?v=1.109.0"></script>
+  <script defer src="app.js?v=1.163.0"></script>
+  <!-- v1.162.0 — data/evidence.js (662 KB, el mayor de todos) YA NO ENTRA AQUÍ.
+       Solo hace falta al abrir la ficha de un país, para enseñar la cita que
+       respalda cada frase; en la primera pantalla no se usa para nada. El
+       código que lo consume ya toleraba su ausencia —lee (window.EVIDENCE || {})
+       en los dos sitios donde aparece—, así que se carga en cuanto el navegador
+       está ocioso, o antes si el usuario abre un país. -->
+  <script>
+  (function () {
+    var pedido = false;
+    window.__wayfareCargarEvidencia = function () {
+      if (pedido) return; pedido = true;
+      var s = document.createElement("script");
+      s.src = "data/evidence.js?v=1.163.0";
+      s.async = true;
+      s.onload = function () {
+        try { window.dispatchEvent(new Event("wayfare:evidencia-lista")); } catch (e) {}
+      };
+      document.head.appendChild(s);
+    };
+    /* en cuanto haya un hueco de inactividad; si el navegador no soporta
+       requestIdleCallback, un respiro tras la carga */
+    if (window.requestIdleCallback) requestIdleCallback(window.__wayfareCargarEvidencia, { timeout: 4000 });
+    else window.addEventListener("load", function () { setTimeout(window.__wayfareCargarEvidencia, 1200); });
+  })();
+  </script>
   <!-- Analítica sin cookies (GoatCounter) — no cuenta visitas desde localhost -->
   <script data-goatcounter="https://edulino.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 </body>

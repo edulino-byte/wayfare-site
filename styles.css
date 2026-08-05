@@ -194,3 +194,31 @@ input, select, button { font-family: inherit; }
   .lang button.active { background: rgba(23,48,60,0.09); }
   .on-stage .lang button.active { background: rgba(23,48,60,0.85); color: #f2f7fa; }
 }
+/* v1.116.0 — texto solo para lectores de pantalla. La app es un globo
+   interactivo y no tenía ningún h1: sin él, quien navega con lector de
+   pantalla no oye de qué trata la página. Se oculta a la vista sin usar
+   display:none (eso también lo esconde de las tecnologías de apoyo). */
+.solo-lectores {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* v1.116.0 — FOCO VISIBLE (WCAG 2.4.7). La app no marcaba dónde está el foco:
+   quien navega con teclado (o no puede usar ratón) no veía en qué control
+   estaba. Se usa :focus-visible para que el anillo salga al tabular pero no
+   al hacer clic con el ratón, que es lo que molesta visualmente. */
+:focus-visible {
+  outline: 2px solid var(--accent, #8b7bf7);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+/* En superficies claras el acento pierde contraste: se refuerza con un halo. */
+@media (prefers-color-scheme: light) {
+  :focus-visible { outline-color: #4b3fd6; box-shadow: 0 0 0 4px rgba(75,63,214,0.18); }
+}

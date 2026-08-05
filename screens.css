@@ -224,8 +224,12 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
      archivo y ganaría el empate de especificidad */
   .submitbar .disclaimer-short { max-width: none; width: 100%; text-align: center;
     font-size: 10.5px; }
-  .q-reset-link { width: 100%; text-align: center; margin-top: 0; }
-  .q-wrap { padding-bottom: 260px; }
+  .q-reset-link { width: 100%; text-align: center; margin-top: 0;
+  /* v1.116.0 — 17px de alto: por debajo del mínimo táctil de 24px. */
+  min-height: 24px; padding: 4px 2px; }
+  /* v1.116.0 — el hueco lo publica la propia barra (ver Questionnaire.jsx);
+     260px es solo el respaldo por si el medidor no ha corrido todavía. */
+  .q-wrap { padding-bottom: calc(var(--submitbar-h, 260px) + 16px); }
 }
 
 /* Short disclaimer â€” below the CTA button, right-aligned to match */
@@ -254,7 +258,9 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
   color: inherit;
   text-decoration: underline dotted;
   text-underline-offset: 2px;
-}
+  /* v1.116.0 — medían 14px de alto: por debajo del mínimo táctil de 24px
+     (WCAG 2.5.8). Se agranda el área sin cambiar el aspecto. */
+  display: inline-block; padding: 5px 2px; }
 .legal-links a:hover { color: var(--accent); }
 
 /* Long disclaimer â€” bottom of country detail card */
@@ -737,7 +743,10 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
 
 /* Leyenda interactiva (v1.40.0) */
 .lg-group { display: flex; flex-direction: column; }
-.lg-row { background: none; border: none; padding: 0; cursor: pointer; text-align: left;
+/* v1.116.0 — la fila medía 18px de alto: por debajo del mínimo táctil de 24px
+   (WCAG 2.5.8), incómoda de acertar en móvil. Se agranda el área sin mover el
+   diseño, con padding vertical y min-height. */
+.lg-row { background: none; border: none; padding: 3px 0; min-height: 24px; cursor: pointer; text-align: left;
   display: flex; align-items: center; gap: 8px; color: inherit; font: inherit; width: 100%; }
 .lg-row:hover { color: #fff; }
 .lg-count { margin-left: auto; font-weight: 700; font-size: 12px; }
@@ -759,7 +768,9 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
    (barra fija inferior); las píldoras pequeñas de cabecera se retiraron. */
 .q-reset-link { margin-top: 10px; background: none; border: none; padding: 0; cursor: pointer;
   font-size: 12px; color: var(--on-dark-2); opacity: 0.65; text-decoration: underline;
-  text-underline-offset: 2px; }
+  text-underline-offset: 2px;
+  /* v1.116.0 — 17px de alto: por debajo del mínimo táctil de 24px (WCAG 2.5.8). */
+  min-height: 24px; padding: 4px 2px; }
 .q-reset-link:hover { opacity: 0.95; }
 
 /* Comparador de destinos (v1.28.0, idea #3) */
@@ -988,3 +999,63 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
     .vc-acc-count { background: rgba(20,35,30,0.07); }
   }
 }
+/* v1.118.0 — EL AVISO DEL MAPA DE EJEMPLO TAPABA EL NOMBRE DEL PAÍS.
+   Al abrir un país, el panel de detalle entra por la derecha (min(440px,44vw))
+   y el aviso, centrado sobre toda la ventana, se le montaba encima: la primera
+   vez que alguien usa la app —que es justo cuando se muestra el aviso— no veía
+   de qué país estaba leyendo. Con el panel abierto, el aviso se centra en el
+   espacio que queda a su izquierda. En móvil el panel es una hoja inferior y no
+   hay solape, así que la regla solo aplica al diseño ancho. */
+@media (min-width: 701px) {
+  .globe-stage.detail-open ~ .demo-banner {
+    left: calc((100% - min(440px, 44vw)) / 2);
+    max-width: min(calc(92vw - min(440px, 44vw)), 640px);
+  }
+  /* El botón flotante vive pegado al borde derecho, justo donde entra el panel.
+     Apartarlo no basta: entonces pisa el texto del aviso. Con el panel abierto
+     se oculta el flotante y el aviso enseña SU PROPIO botón (que en pantalla
+     ancha va oculto). Así no se pierde ni el aviso de «mapa de ejemplo» —que
+     es la advertencia de que ese resultado no es suyo— ni la llamada a crear
+     su mapa, y no se solapa nada. */
+  .globe-stage.detail-open ~ .demo-cta-float { display: none; }
+  .globe-stage.detail-open ~ .demo-banner .demo-banner-cta {
+    display: inline-flex;
+    padding: 11px 24px;
+    font-size: 15px;
+  }
+}
+
+/* v1.118.0 — En MÓVIL el panel de detalle es una hoja que ocupa casi toda la
+   pantalla, así que no hay hueco al que mover el aviso: tapaba el nombre del
+   país igual que en escritorio. Mientras el panel está abierto se oculta; al
+   cerrarlo vuelve a verse, que es cuando sirve de algo. */
+@media (max-width: 700px) {
+  .globe-stage.detail-open ~ .demo-banner,
+  .globe-stage.detail-open ~ .demo-cta-float { display: none; }
+}
+
+/* v1.119.0 — pantalla de la red de seguridad. Sobria a propósito: si llegamos
+   aquí es porque algo ha fallado, y lo último que ayuda es un diseño elaborado
+   que también dependa de lo que se ha roto. */
+.crash-screen {
+  min-height: 100dvh;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 18px; padding: 32px 24px; text-align: center;
+  color: var(--on-dark, #eef3f1); background: var(--space-0, #05090b);
+}
+.crash-title { font-size: 24px; font-weight: 700; letter-spacing: -0.02em; margin: 0; }
+.crash-text  { font-size: 15px; line-height: 1.6; max-width: 460px; opacity: 0.85; margin: 0; }
+.crash-actions { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 6px; }
+.crash-actions button { min-height: 44px; }
+
+/* v1.121.0 — sello de «sin fuente capturada» en la cabecera de cada tarjeta.
+   Discreto pero legible: no es una alarma, es una etiqueta de procedencia. */
+.vc-modelled {
+  flex: 0 0 auto;
+  font-size: 10.5px; font-weight: 700; letter-spacing: 0.02em;
+  padding: 3px 8px; border-radius: 999px;
+  color: #d9b26a; border: 1px solid rgba(217,178,106,0.45);
+  background: rgba(217,178,106,0.10);
+  white-space: nowrap;
+}
+@media (max-width: 700px) { .vc-modelled { font-size: 10px; padding: 2px 7px; } }
