@@ -692,10 +692,73 @@ window.Eligibility = (function () {
     UY: { name: "Uruguay Working Holiday Visa",   maxAge: 35, quota: 200,  funds: 4200, czExtension: true },
   };
 
-  function nzWhResult(cfg, score, m, w, x) {
+  /* =========================================================================
+     v1.168.0 — «APTO» NO ES LO MISMO QUE «PUEDES SOLICITAR HOY».
+     Lo señaló el usuario y tenía toda la razón: la app le decía a un argentino
+     «Argentina Working Holiday Visa · nota 80 · Podrías calificar», en verde, sin
+     mencionar en ninguna parte que esa vía está CERRADA y no abre hasta el 24 de
+     septiembre. Cumplir los requisitos y poder solicitar son dos cosas distintas,
+     y confundirlas manda a alguien a una puerta que está cerrada.
+
+     De las 33 vías de working holiday de Nueva Zelanda, OCHO están cerradas hoy
+     — y de esas, China y México ni siquiera publican cuándo abren.
+
+     El estado va SIEMPRE el primero de la tarjeta, con su fecha de comprobación:
+     un «cerrada» caducado engaña igual que un «abierta» caducado.
+     Fuente y estado: data/aperturas.js · snapshots/nz-aperturas-2026-08/
+  ========================================================================= */
+  function estadoAperturaNZ(nat, m, w) {
+    var API = (typeof window !== "undefined" && window.APERTURAS) || null;
+    if (!API || !API.estadoDe) return;
+    var e = API.estadoDe(nat);
+    if (!e) return;
+
+    /* v1.168.0 — LAS FRASES FIJAS Y LOS DATOS, SEPARADOS. La primera versión
+       metía la fecha dentro del párrafo, y salían seis frases casi idénticas que
+       habría que retraducir enteras cada vez que un gobierno mueva un día. Aquí
+       la explicación es fija —se traduce una vez— y la fecha va en su propia
+       línea corta. Cambiar una fecha ya solo toca una línea. */
+    if (e.estado === "abierta") {
+      m.unshift("Applications for your nationality were open when Wayfare last checked with Immigration New Zealand.");
+      return;
+    }
+    if (e.instanteUTC) {
+      /* la línea variable va PRIMERO, que es el dato que la persona busca */
+      if (e.husoDiscrepa) {
+        w.unshift("Careful with the hour: their page says " + e.husoDeclarado +
+                  " on a date when New Zealand is on " + e.husoReal +
+                  ", so treat the earlier of the two as the real one.");
+      }
+      w.unshift("It opens on " + e.fecha + " at " + e.hora + ", New Zealand time.");
+      w.unshift("Applications for your nationality were CLOSED when Wayfare last checked, and the places run out: set yourself a reminder before it opens.");
+    } else {
+      w.unshift("Applications for your nationality were CLOSED when Wayfare last checked, and Immigration New Zealand does not publish when they reopen. There is no date to set a reminder for.");
+    }
+    w.push("Wayfare checked this with the official source on " + e.comprobado + "; an opening or closing can change at any time.");
+  }
+
+  function nzWhResult(cfg, score, m, w, x, nat) {
+    if (cfg && nat) estadoAperturaNZ(nat, m, w);
     var r = visaResult("work_and_holiday", score, m, w, x);
     if (cfg) {
       r.officialName = cfg.name;
+      /* v1.169.0 — EL ESTADO NO SE PEGA AL NOMBRE. En v1.168.0 lo metí dentro
+         de officialName («… — closed, opens 2026-09-24») y eso tenía dos fallos:
+         el nombre oficial de la visa dejaba de ser el nombre oficial, y esa
+         coletilla salía EN INGLÉS en la interfaz española, porque officialName se
+         traduce buscando la cadena entera en el diccionario y esa cadena ya no
+         existía en él.
+
+         Ahora viaja en su propio campo y la interfaz lo pinta como sello
+         traducible al lado del nombre. Lo que la persona necesita entender de un
+         vistazo es exactamente esto: «cumplo los requisitos, PERO ahora está
+         cerrada, y abre tal día». Dos hechos distintos, dos sitios distintos. */
+      var API = (typeof window !== "undefined" && window.APERTURAS) || null;
+      var est = (API && API.estadoDe && nat) ? API.estadoDe(nat) : null;
+      if (est) {
+        r.apertura = { estado: est.estado, fecha: est.fecha || null,
+                       hora: est.hora || null, comprobado: est.comprobado || null };
+      }
       r.route        = "nz_working_holiday";
     } else {
       /* v1.155.0 — la rama «tu pasaporte no está en la lista» salía SIN NOMBRE
@@ -818,7 +881,7 @@ window.Eligibility = (function () {
         : "Your age appears to be outside the eligible range for this visa. The range is 18 to 30.");
       nzSharedWarnings(p, cfg, w);
       /* Passport matches but age is out of range — ineligible */
-      return nzWhResult(cfg, 32, m, w, x);
+      return nzWhResult(cfg, 32, m, w, x, nat);
     }
     score += 38;
     m.push(cfg.maxAge === 35
@@ -909,7 +972,7 @@ window.Eligibility = (function () {
     /* Cap to partial when a verifiable China condition does not appear to match */
     score = Math.min(score, cap);
 
-    return nzWhResult(cfg, clamp(score, 0, 100), m, w, x);
+    return nzWhResult(cfg, clamp(score, 0, 100), m, w, x, nat);
   }
 
   /* ── NEW ZEALAND ───────────────────────────────────────────────────────── */

@@ -181,6 +181,10 @@ window.I18N = {
     st_ineligible: "Unlikely",
     /* v1.155.0 — una tarjeta sin fuente capturada no lleva veredicto */
     st_nodata: "No source captured yet",
+    ap_comprobado: "Checked with the official source on ",
+    ap_abierta: "Open now",
+    ap_cerrada_sin_fecha: "Closed \u00b7 no date published",
+    ap_cerrada_abre: "Closed \u00b7 opens ",
 
     /* requirement labels (for "missing") */
     rq_minAge: "minimum age",
@@ -829,6 +833,10 @@ window.I18N = {
     st_ineligible: "Poco probable",
     /* v1.155.0 — una tarjeta sin fuente capturada no lleva veredicto */
     st_nodata: "Sin fuente capturada",
+    ap_comprobado: "Comprobado en la fuente oficial el ",
+    ap_abierta: "Abierta ahora",
+    ap_cerrada_sin_fecha: "Cerrada · sin fecha publicada",
+    ap_cerrada_abre: "Cerrada · abre el ",
     "No official source captured yet": "Todavía sin fuente oficial capturada",
     /* v1.155.0 — las cuatro tarjetas honestas: relleno genérico sin puntuación */
     "Wayfare has not yet captured an official source for the visitor route in this destination, so this card carries no score: general guidance only, not an assessment of your case.":
@@ -2116,6 +2124,29 @@ window.I18N = {
     "EU freedom of movement: no student visa needed":
       "Libre circulación en la UE: no necesitas visado de estudios",
     /* v1.153.0 — faltaba la tercera hermana: la de nómada digital */
+    /* v1.168.0 — estado de apertura de los cupos: explicación fija, dato aparte */
+    "Applications for your nationality were open when Wayfare last checked with Immigration New Zealand.":
+      "Cuando Wayfare lo comprobó, las solicitudes para tu nacionalidad estaban abiertas en Immigration New Zealand.",
+    "Applications for your nationality were CLOSED when Wayfare last checked, and the places run out: set yourself a reminder before it opens.":
+      "Cuando Wayfare lo comprobó, las solicitudes para tu nacionalidad estaban CERRADAS, y las plazas se agotan: ponte un recordatorio antes de que abra.",
+    "Applications for your nationality were CLOSED when Wayfare last checked, and Immigration New Zealand does not publish when they reopen. There is no date to set a reminder for.":
+      "Cuando Wayfare lo comprobó, las solicitudes para tu nacionalidad estaban CERRADAS, e Immigration New Zealand no publica cuándo vuelven a abrir. No hay fecha para la que ponerse un recordatorio.",
+    "Careful with the hour: their page says NZST on a date when New Zealand is on NZDT, so treat the earlier of the two as the real one.":
+      "Ojo con la hora: su página dice NZST en una fecha en la que Nueva Zelanda está en NZDT, así que da por buena la más temprana de las dos.",
+    "Wayfare checked this with the official source on 2026-08-06; an opening or closing can change at any time.":
+      "Wayfare lo comprobó en la fuente oficial el 6 de agosto de 2026; una apertura o un cierre pueden cambiar en cualquier momento.",
+    "It opens on 2026-08-19 at 10:00, New Zealand time.":
+      "Abre el 19 de agosto de 2026 a las 10:00, hora de Nueva Zelanda.",
+    "It opens on 2026-09-24 at 10:00, New Zealand time.":
+      "Abre el 24 de septiembre de 2026 a las 10:00, hora de Nueva Zelanda.",
+    "It opens on 2026-10-01 at 10:00, New Zealand time.":
+      "Abre el 1 de octubre de 2026 a las 10:00, hora de Nueva Zelanda.",
+    "It opens on 2026-10-08 at 10:00, New Zealand time.":
+      "Abre el 8 de octubre de 2026 a las 10:00, hora de Nueva Zelanda.",
+    "It opens on 2026-10-15 at 10:00, New Zealand time.":
+      "Abre el 15 de octubre de 2026 a las 10:00, hora de Nueva Zelanda.",
+    "It opens on 2026-11-17 at 10:00, New Zealand time.":
+      "Abre el 17 de noviembre de 2026 a las 10:00, hora de Nueva Zelanda.",
     /* v1.164.0 — Norte de Chipre: aviso oficial, no destino */
     "The Republic of Cyprus states that it does not exercise effective control in the northern part of the island, which has been under military occupation by Türkiye since 1974.":
       "La República de Chipre declara que no ejerce control efectivo en la parte norte de la isla, bajo ocupación militar de Turquía desde 1974.",

@@ -1050,6 +1050,24 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
 
 /* v1.121.0 — sello de «sin fuente capturada» en la cabecera de cada tarjeta.
    Discreto pero legible: no es una alarma, es una etiqueta de procedencia. */
+/* v1.169.0 — sello de apertura. Ámbar para «cerrada» (atención, no error: la
+   persona SÍ cumple los requisitos) y verde discreto para «abierta ahora».
+   Va al lado del nombre de la visa, que es donde se mira primero. */
+.vc-cerrada, .vc-abierta {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 11.5px; font-weight: 700; letter-spacing: .01em;
+  border-radius: 999px; padding: 3px 9px; white-space: nowrap; cursor: help;
+}
+.vc-cerrada { background: rgba(190,130,30,.16); color: #a8791c; border: 1px solid rgba(190,130,30,.42); }
+.vc-abierta { background: rgba(38,140,90,.14);  color: #2c6b48; border: 1px solid rgba(38,140,90,.38); }
+@media (prefers-color-scheme: dark) {
+  .vc-cerrada { color: #e0b768; }
+  .vc-abierta { color: #7fd0a4; }
+}
+@media (max-width: 700px) {
+  .vc-cerrada, .vc-abierta { font-size: 10.5px; padding: 2px 7px; }
+}
+
 .vc-modelled {
   flex: 0 0 auto;
   font-size: 10.5px; font-weight: 700; letter-spacing: 0.02em;

@@ -1,0 +1,238 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Wayfare//Aperturas de cupo//ES
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Wayfare · todas las aperturas de cupo
+X-WR-TIMEZONE:UTC
+X-WR-CALDESC:Aperturas de cupo con fecha oficial publicada. Generado por W
+ ayfare.
+BEGIN:VEVENT
+UID:wayfare-lt-2026-08-19@wayfare
+DTSTAMP:20260806T034808Z
+DTSTART:20260818T220000Z
+DTEND:20260818T230000Z
+SUMMARY:Abre: Working Holiday NZ para Lituania
+DESCRIPTION:Apertura del cupo: Working Holiday NZ para Lituania.\n\nLo que
+  dice la fuente oficial\, literalmente:\n"This visa will open at 10:00 on
+  19 August 2026 (NZST)."\n\nFuente: https://www.immigration.govt.nz/visas
+ /lithuania-working-holiday-visa/\n\nLos cupos se agotan. Ten la documenta
+ ción lista ANTES de que suene.\nWayfare no decide nada: la fuente oficia
+ l manda.
+URL:https://www.immigration.govt.nz/visas/lithuania-working-holiday-visa/
+STATUS:CONFIRMED
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:-P7D
+DESCRIPTION:Falta una semana: prepara la documentación — Working Holida
+ y NZ para Lituania
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:-PT24H
+DESCRIPTION:Falta un día — Working Holiday NZ para Lituania
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:-PT1H
+DESCRIPTION:Falta una hora — Working Holiday NZ para Lituania
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:-PT10M
+DESCRIPTION:Faltan 10 minutos: ten la solicitud abierta — Working Holida
+ y NZ para Lituania
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:wayfare-ar-2026-09-24@wayfare
+DTSTAMP:20260806T034808Z
+DTSTART:20260923T220000Z
+DTEND:20260923T230000Z
+SUMMARY:Abre: Working Holiday NZ para Argentina
+DESCRIPTION:Apertura del cupo: Working Holiday NZ para Argentina.\n\nLo qu
+ e dice la fuente oficial\, literalmente:\n"This visa will open at 10:00 2
+ 4 September 2026 (NZST)."\n\nFuente: https://www.immigration.govt.nz/visa
+ s/argentina-working-holiday-visa/\n\nLos cupos se agotan. Ten la document
+ ación lista ANTES de que suene.\nWayfare no decide nada: la fuente ofici
+ al manda.
+URL:https://www.immigration.govt.nz/visas/argentina-working-holiday-visa/
+STATUS:CONFIRMED
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:-P7D
+DESCRIPTION:Falta una semana: prepara la documentación — Working Holida
+ y NZ para Argentina
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:-PT24H
+DESCRIPTION:Falta un día — Working Holiday NZ para Argentina
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:-PT1H
+DESCRIPTION:Falta una hora — Working Holiday NZ para Argentina
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:-PT10M
+DESCRIPTION:Faltan 10 minutos: ten la solicitud abierta — Working Holida
+ y NZ para Argentina
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:wayfare-pe-2026-10-01@wayfare
+DTSTAMP:20260806T034808Z
+DTSTART:20260930T210000Z
+DTEND:20260930T220000Z
+SUMMARY:Abre: Working Holiday NZ para Perú
+DESCRIPTION:Apertura del cupo: Working Holiday NZ para Perú.\n\nLo que di
+ ce la fuente oficial\, literalmente:\n"This visa will open at 10:00 1 Oct
+ ober 2026 (NZDT)."\n\nFuente: https://www.immigration.govt.nz/visas/peru-
+ working-holiday-visa/\n\nLos cupos se agotan. Ten la documentación lista
+  ANTES de que suene.\nWayfare no decide nada: la fuente oficial manda.
+URL:https://www.immigration.govt.nz/visas/peru-working-holiday-visa/
+STATUS:CONFIRMED
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:-P7D
+DESCRIPTION:Falta una semana: prepara la documentación — Working Holida
+ y NZ para Perú
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:-PT24H
+DESCRIPTION:Falta un día — Working Holiday NZ para Perú
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:-PT1H
+DESCRIPTION:Falta una hora — Working Holiday NZ para Perú
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:-PT10M
+DESCRIPTION:Faltan 10 minutos: ten la solicitud abierta — Working Holida
+ y NZ para Perú
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:wayfare-br-2026-10-08@wayfare
+DTSTAMP:20260806T034808Z
+DTSTART:20261007T210000Z
+DTEND:20261007T220000Z
+SUMMARY:Abre: Working Holiday NZ para Brasil
+DESCRIPTION:Apertura del cupo: Working Holiday NZ para Brasil.\n\nLo que d
+ ice la fuente oficial\, literalmente:\n"This visa will open at 10:00 8 Oc
+ tober 2026 (NZDT)."\n\nFuente: https://www.immigration.govt.nz/visas/braz
+ il-working-holiday-visa/\n\nLos cupos se agotan. Ten la documentación li
+ sta ANTES de que suene.\nWayfare no decide nada: la fuente oficial manda.
+URL:https://www.immigration.govt.nz/visas/brazil-working-holiday-visa/
+STATUS:CONFIRMED
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:-P7D
+DESCRIPTION:Falta una semana: prepara la documentación — Working Holida
+ y NZ para Brasil
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:-PT24H
+DESCRIPTION:Falta un día — Working Holiday NZ para Brasil
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:-PT1H
+DESCRIPTION:Falta una hora — Working Holiday NZ para Brasil
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:-PT10M
+DESCRIPTION:Faltan 10 minutos: ten la solicitud abierta — Working Holida
+ y NZ para Brasil
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:wayfare-cl-2026-10-15@wayfare
+DTSTAMP:20260806T034808Z
+DTSTART:20261014T210000Z
+DTEND:20261014T220000Z
+SUMMARY:Abre: Working Holiday NZ para Chile
+DESCRIPTION:Apertura del cupo: Working Holiday NZ para Chile.\n\nLo que di
+ ce la fuente oficial\, literalmente:\n"This visa will open at 10:00 15 Oc
+ tober 2026 (NZDT)."\n\nFuente: https://www.immigration.govt.nz/visas/chil
+ e-working-holiday-visa/\n\nLos cupos se agotan. Ten la documentación lis
+ ta ANTES de que suene.\nWayfare no decide nada: la fuente oficial manda.
+URL:https://www.immigration.govt.nz/visas/chile-working-holiday-visa/
+STATUS:CONFIRMED
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:-P7D
+DESCRIPTION:Falta una semana: prepara la documentación — Working Holida
+ y NZ para Chile
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:-PT24H
+DESCRIPTION:Falta un día — Working Holiday NZ para Chile
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:-PT1H
+DESCRIPTION:Falta una hora — Working Holiday NZ para Chile
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:-PT10M
+DESCRIPTION:Faltan 10 minutos: ten la solicitud abierta — Working Holida
+ y NZ para Chile
+END:VALARM
+END:VEVENT
+BEGIN:VEVENT
+UID:wayfare-uy-2026-11-17@wayfare
+DTSTAMP:20260806T034808Z
+DTSTART:20261116T210000Z
+DTEND:20261116T220000Z
+SUMMARY:Abre: Working Holiday NZ para Uruguay
+DESCRIPTION:Apertura del cupo: Working Holiday NZ para Uruguay.\n\nLo que 
+ dice la fuente oficial\, literalmente:\n"This visa will open at 10:00 17 
+ November 2026 (NZST)."\n\nAVISO SOBRE LA HORA: la página oficial dice NZ
+ ST\, pero ese día Nueva Zelanda está en NZDT. Este recordatorio usa la 
+ hora MÁS TEMPRANA de las dos posibles: llegar una hora antes no cuesta n
+ ada\, llegar tarde puede costarte el cupo. Confirma en la fuente.\n\nFuen
+ te: https://www.immigration.govt.nz/visas/uruguay-working-holiday-visa/\n
+ \nLos cupos se agotan. Ten la documentación lista ANTES de que suene.\nW
+ ayfare no decide nada: la fuente oficial manda.
+URL:https://www.immigration.govt.nz/visas/uruguay-working-holiday-visa/
+STATUS:CONFIRMED
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:-P7D
+DESCRIPTION:Falta una semana: prepara la documentación — Working Holida
+ y NZ para Uruguay
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:-PT24H
+DESCRIPTION:Falta un día — Working Holiday NZ para Uruguay
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:-PT1H
+DESCRIPTION:Falta una hora — Working Holiday NZ para Uruguay
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:-PT10M
+DESCRIPTION:Faltan 10 minutos: ten la solicitud abierta — Working Holida
+ y NZ para Uruguay
+END:VALARM
+END:VEVENT
+END:VCALENDAR

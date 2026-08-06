@@ -1,0 +1,47 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Wayfare//Aperturas de cupo//ES
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Wayfare · Working Holiday NZ para Brasil
+X-WR-TIMEZONE:UTC
+X-WR-CALDESC:Aperturas de cupo con fecha oficial publicada. Generado por W
+ ayfare.
+BEGIN:VEVENT
+UID:wayfare-br-2026-10-08@wayfare
+DTSTAMP:20260806T034808Z
+DTSTART:20261007T210000Z
+DTEND:20261007T220000Z
+SUMMARY:Abre: Working Holiday NZ para Brasil
+DESCRIPTION:Apertura del cupo: Working Holiday NZ para Brasil.\n\nLo que d
+ ice la fuente oficial\, literalmente:\n"This visa will open at 10:00 8 Oc
+ tober 2026 (NZDT)."\n\nFuente: https://www.immigration.govt.nz/visas/braz
+ il-working-holiday-visa/\n\nLos cupos se agotan. Ten la documentación li
+ sta ANTES de que suene.\nWayfare no decide nada: la fuente oficial manda.
+URL:https://www.immigration.govt.nz/visas/brazil-working-holiday-visa/
+STATUS:CONFIRMED
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:-P7D
+DESCRIPTION:Falta una semana: prepara la documentación — Working Holida
+ y NZ para Brasil
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:-PT24H
+DESCRIPTION:Falta un día — Working Holiday NZ para Brasil
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:-PT1H
+DESCRIPTION:Falta una hora — Working Holiday NZ para Brasil
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:-PT10M
+DESCRIPTION:Faltan 10 minutos: ten la solicitud abierta — Working Holida
+ y NZ para Brasil
+END:VALARM
+END:VEVENT
+END:VCALENDAR

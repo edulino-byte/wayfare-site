@@ -588,9 +588,23 @@ function useGlobeLib() {
   const [ready, setReady] = React.useState(!!window.Globe);
   React.useEffect(() => {
     if (ready) return;
+    if (window.Globe) {
+      setReady(true);
+      return;
+    }
     const h = () => setReady(true);
     window.addEventListener("wayfare:globe-ready", h, { once: true });
-    return () => window.removeEventListener("wayfare:globe-ready", h);
+    let intentos = 0;
+    const reloj = setInterval(() => {
+      if (window.Globe) {
+        clearInterval(reloj);
+        setReady(true);
+      } else if (++intentos > 40) clearInterval(reloj);
+    }, 250);
+    return () => {
+      clearInterval(reloj);
+      window.removeEventListener("wayfare:globe-ready", h);
+    };
   }, [ready]);
   return ready;
 }
@@ -1043,6 +1057,17 @@ const NAME_ISO_FIX = {
   "N. Cyprus": "XNC",
   Somaliland: "XSL"
 };
+function fechaCorta(iso, lang) {
+  try {
+    const [a, m, d] = iso.split("-").map(Number);
+    return new Date(Date.UTC(a, m - 1, d)).toLocaleDateString(
+      lang === "en" ? "en-GB" : "es-ES",
+      { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" }
+    );
+  } catch (e) {
+    return iso;
+  }
+}
 function featISO(props) {
   const iso = props.ISO_A2;
   if (iso && iso !== "-99") return iso;
@@ -1782,7 +1807,21 @@ function CountryDetail({ t, lang, result, profile, onCompare }) {
         const vStatusKey = v.status === "nodata" ? "st_nodata" : v.status === "eligible" ? "st_eligible" : v.status === "partial" ? "st_partial" : "st_ineligible";
         return (
           /* v1.39.0 — entrada escalonada de las tarjetas */
-          /* @__PURE__ */ React.createElement("div", { className: "visa-card", key: v.type + i, style: { animationDelay: i * 80 + "ms" } }, /* @__PURE__ */ React.createElement("div", { className: "vc-head" }, /* @__PURE__ */ React.createElement("span", { className: "vc-icon" }, window.VISA_DATA.VISA_TYPES[v.type].icon), /* @__PURE__ */ React.createElement("span", { className: "vc-name" }, v.officialName ? tx(v.officialName) : t("vt_" + v.type)), window.EVIDENCE && v.status !== "nodata" && !(window.EVIDENCE.routes || {})[result.iso + "|" + (v.route || "")] ? /* @__PURE__ */ React.createElement("span", { className: "vc-modelled", title: t("vc_modelled_title") }, t("vc_modelled")) : null, /* @__PURE__ */ React.createElement("span", { className: "vc-stat", style: { background: statusColor(v.status, 1) } })), /* @__PURE__ */ React.createElement("div", { className: "vc-meta" }, /* @__PURE__ */ React.createElement("span", { className: "vc-meta-status", style: { color: statusColor(v.status, 1) } }, t(vStatusKey)), v.score === null ? null : /* @__PURE__ */ React.createElement("span", { className: "vc-meta-score" }, t("g_score"), ": ", v.score)), v.matched && v.matched.length ? /* @__PURE__ */ React.createElement("details", { className: "vc-acc", open: secOpen("matched", v) }, /* @__PURE__ */ React.createElement("summary", { className: "vc-acc-sum" }, /* @__PURE__ */ React.createElement("span", { className: "vc-acc-label" }, t("g_matched")), /* @__PURE__ */ React.createElement("span", { className: "vc-acc-count" }, v.matched.length)), /* @__PURE__ */ React.createElement("div", { className: "vc-acc-body vc-matched" }, v.matched.map((m, mi) => /* @__PURE__ */ React.createElement(
+          /* @__PURE__ */ React.createElement("div", { className: "visa-card", key: v.type + i, style: { animationDelay: i * 80 + "ms" } }, /* @__PURE__ */ React.createElement("div", { className: "vc-head" }, /* @__PURE__ */ React.createElement("span", { className: "vc-icon" }, window.VISA_DATA.VISA_TYPES[v.type].icon), /* @__PURE__ */ React.createElement("span", { className: "vc-name" }, v.officialName ? tx(v.officialName) : t("vt_" + v.type)), window.EVIDENCE && v.status !== "nodata" && !(window.EVIDENCE.routes || {})[result.iso + "|" + (v.route || "")] ? /* @__PURE__ */ React.createElement("span", { className: "vc-modelled", title: t("vc_modelled_title") }, t("vc_modelled")) : null, v.apertura && v.apertura.estado === "cerrada" ? /* @__PURE__ */ React.createElement(
+            "span",
+            {
+              className: "vc-cerrada",
+              title: v.apertura.comprobado ? t("ap_comprobado") + v.apertura.comprobado : ""
+            },
+            v.apertura.fecha ? t("ap_cerrada_abre") + fechaCorta(v.apertura.fecha, lang) : t("ap_cerrada_sin_fecha")
+          ) : null, v.apertura && v.apertura.estado === "abierta" ? /* @__PURE__ */ React.createElement(
+            "span",
+            {
+              className: "vc-abierta",
+              title: v.apertura.comprobado ? t("ap_comprobado") + v.apertura.comprobado : ""
+            },
+            t("ap_abierta")
+          ) : null, /* @__PURE__ */ React.createElement("span", { className: "vc-stat", style: { background: statusColor(v.status, 1) } })), /* @__PURE__ */ React.createElement("div", { className: "vc-meta" }, /* @__PURE__ */ React.createElement("span", { className: "vc-meta-status", style: { color: statusColor(v.status, 1) } }, t(vStatusKey)), v.score === null ? null : /* @__PURE__ */ React.createElement("span", { className: "vc-meta-score" }, t("g_score"), ": ", v.score)), v.matched && v.matched.length ? /* @__PURE__ */ React.createElement("details", { className: "vc-acc", open: secOpen("matched", v) }, /* @__PURE__ */ React.createElement("summary", { className: "vc-acc-sum" }, /* @__PURE__ */ React.createElement("span", { className: "vc-acc-label" }, t("g_matched")), /* @__PURE__ */ React.createElement("span", { className: "vc-acc-count" }, v.matched.length)), /* @__PURE__ */ React.createElement("div", { className: "vc-acc-body vc-matched" }, v.matched.map((m, mi) => /* @__PURE__ */ React.createElement(
             EvidenceRow,
             {
               className: "vc-match-row",

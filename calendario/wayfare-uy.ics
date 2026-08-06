@@ -1,0 +1,51 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Wayfare//Aperturas de cupo//ES
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Wayfare · Working Holiday NZ para Uruguay
+X-WR-TIMEZONE:UTC
+X-WR-CALDESC:Aperturas de cupo con fecha oficial publicada. Generado por W
+ ayfare.
+BEGIN:VEVENT
+UID:wayfare-uy-2026-11-17@wayfare
+DTSTAMP:20260806T034808Z
+DTSTART:20261116T210000Z
+DTEND:20261116T220000Z
+SUMMARY:Abre: Working Holiday NZ para Uruguay
+DESCRIPTION:Apertura del cupo: Working Holiday NZ para Uruguay.\n\nLo que 
+ dice la fuente oficial\, literalmente:\n"This visa will open at 10:00 17 
+ November 2026 (NZST)."\n\nAVISO SOBRE LA HORA: la página oficial dice NZ
+ ST\, pero ese día Nueva Zelanda está en NZDT. Este recordatorio usa la 
+ hora MÁS TEMPRANA de las dos posibles: llegar una hora antes no cuesta n
+ ada\, llegar tarde puede costarte el cupo. Confirma en la fuente.\n\nFuen
+ te: https://www.immigration.govt.nz/visas/uruguay-working-holiday-visa/\n
+ \nLos cupos se agotan. Ten la documentación lista ANTES de que suene.\nW
+ ayfare no decide nada: la fuente oficial manda.
+URL:https://www.immigration.govt.nz/visas/uruguay-working-holiday-visa/
+STATUS:CONFIRMED
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:-P7D
+DESCRIPTION:Falta una semana: prepara la documentación — Working Holida
+ y NZ para Uruguay
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:-PT24H
+DESCRIPTION:Falta un día — Working Holiday NZ para Uruguay
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:-PT1H
+DESCRIPTION:Falta una hora — Working Holiday NZ para Uruguay
+END:VALARM
+BEGIN:VALARM
+ACTION:DISPLAY
+TRIGGER:-PT10M
+DESCRIPTION:Faltan 10 minutos: ten la solicitud abierta — Working Holida
+ y NZ para Uruguay
+END:VALARM
+END:VEVENT
+END:VCALENDAR
