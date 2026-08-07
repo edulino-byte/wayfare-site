@@ -1990,6 +1990,7 @@ function CountryDetail({ t, lang, result, profile, onCompare }) {
       })(),
       result.synthetic ? /* @__PURE__ */ React.createElement("div", { className: "synthetic-note" }, /* @__PURE__ */ React.createElement("svg", { width: "13", height: "13", viewBox: "0 0 24 24", fill: "none" }, /* @__PURE__ */ React.createElement("circle", { cx: "12", cy: "12", r: "9", stroke: "currentColor", strokeWidth: "2" }), /* @__PURE__ */ React.createElement("path", { d: "M12 8v5M12 16.5v.5", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round" })), t("g_nodata_panel")) : null,
       /* @__PURE__ */ React.createElement(DataFreshness, { t, lang, iso: result.iso, synthetic: result.synthetic }),
+      /* @__PURE__ */ React.createElement(AvisoCorreo, { t, iso: result.iso, nombrePais: result.name }),
       /* @__PURE__ */ React.createElement("div", { className: "disclaimer-long" }, /* @__PURE__ */ React.createElement("svg", { width: "11", height: "11", viewBox: "0 0 24 24", fill: "none", style: { flexShrink: 0, marginTop: "1px" } }, /* @__PURE__ */ React.createElement("circle", { cx: "12", cy: "12", r: "9", stroke: "currentColor", strokeWidth: "2" }), /* @__PURE__ */ React.createElement("path", { d: "M12 8v5M12 16.5v.5", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round" })), /* @__PURE__ */ React.createElement("span", null, t("disclaimer_long"), " ", /* @__PURE__ */ React.createElement("span", { className: "legal-links" }, /* @__PURE__ */ React.createElement("a", { href: lang === "en" ? "seo/privacy.html" : "seo/privacidad.html", hrefLang: lang === "en" ? "en" : "es" }, t("legal_privacy")), " \xB7 ", /* @__PURE__ */ React.createElement("a", { href: lang === "en" ? "seo/legal-notice.html" : "seo/aviso-legal.html", hrefLang: lang === "en" ? "en" : "es" }, t("legal_notice")))))
     )
   );
@@ -2031,6 +2032,61 @@ function EvidenceRow({ t, lang, className, icon, text, fact }) {
     t("ev_source"),
     " \u2197"
   ), dateStr ? /* @__PURE__ */ React.createElement("span", null, " \xB7 ", t("ev_captured"), dateStr) : null, fact.r ? /* @__PURE__ */ React.createElement("span", { className: "ev-review" }, " \xB7 ", t("ev_review")) : null)) : null);
+}
+function AvisoCorreo({ t, iso, nombrePais }) {
+  const API = typeof window !== "undefined" && window.BOLETIN || null;
+  const [correo, setCorreo] = React.useState("");
+  const [acepta, setAcepta] = React.useState(false);
+  const [estado, setEstado] = React.useState("");
+  if (!API || !API.visible()) return null;
+  const previa = API.esVistaPrevia();
+  const valido = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(correo.trim());
+  const enviar = (e) => {
+    e.preventDefault();
+    if (!valido || !acepta || estado === "enviando") return;
+    setEstado("enviando");
+    API.suscribir(correo.trim(), iso).then(() => {
+      setEstado("ok");
+      setCorreo("");
+      setAcepta(false);
+    }).catch(() => setEstado("error"));
+  };
+  if (estado === "ok") {
+    return /* @__PURE__ */ React.createElement("div", { className: "aviso-correo aviso-correo--hecho", role: "status" }, /* @__PURE__ */ React.createElement("strong", null, t("bol_revisa")), /* @__PURE__ */ React.createElement("span", null, t("bol_revisa_pie")));
+  }
+  return /* @__PURE__ */ React.createElement("form", { className: "aviso-correo" + (previa ? " aviso-correo--previa" : ""), onSubmit: enviar }, previa ? /* @__PURE__ */ React.createElement("div", { className: "ac-previa" }, t("bol_previa")) : null, /* @__PURE__ */ React.createElement("div", { className: "ac-titulo" }, t("bol_titulo").replace("{pais}", nombrePais || "")), /* @__PURE__ */ React.createElement("div", { className: "ac-sub" }, t("bol_sub")), /* @__PURE__ */ React.createElement(
+    "input",
+    {
+      type: "email",
+      className: "ac-input",
+      value: correo,
+      inputMode: "email",
+      autoComplete: "email",
+      placeholder: t("bol_placeholder"),
+      "aria-label": t("bol_placeholder"),
+      disabled: previa,
+      onChange: (e) => {
+        setCorreo(e.target.value);
+        if (estado) setEstado("");
+      }
+    }
+  ), /* @__PURE__ */ React.createElement("label", { className: "ac-consent" }, /* @__PURE__ */ React.createElement(
+    "input",
+    {
+      type: "checkbox",
+      checked: acepta,
+      disabled: previa,
+      onChange: (e) => setAcepta(e.target.checked)
+    }
+  ), /* @__PURE__ */ React.createElement("span", null, t("bol_consent"), " ", /* @__PURE__ */ React.createElement("a", { href: "seo/privacidad.html", target: "_blank", rel: "noopener" }, t("legal_privacy")), ".")), /* @__PURE__ */ React.createElement(
+    "button",
+    {
+      type: "submit",
+      className: "ac-btn",
+      disabled: previa || !valido || !acepta || estado === "enviando"
+    },
+    estado === "enviando" ? t("bol_enviando") : t("bol_boton")
+  ), estado === "error" ? /* @__PURE__ */ React.createElement("div", { className: "ac-error", role: "alert" }, t("bol_error")) : null);
 }
 function DataFreshness({ t, lang, iso, synthetic }) {
   if (synthetic) return null;

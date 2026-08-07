@@ -17,6 +17,17 @@ window.I18N = {
        descargaba con el nombre «share_filename» en vez de wayfare-mi-mapa.png.
        Las otras seis tenían texto de reserva en el código y por eso no cantaban.
        Apareció al mirar el aria-label del tirador nuevo. */
+    /* v1.176.0 — avisos por correo cuando cambie una fuente oficial */
+    bol_previa: "⚠ Preview: this does not work yet. It is here so you can see where the product is going — tell us what you think.",
+    bol_titulo: "Want us to email you if anything changes in {pais}?",
+    bol_sub: "Only when an official source changes: a rule, a requirement, or a quota opening. Nothing else.",
+    bol_placeholder: "your@email.com",
+    bol_consent: "I want to receive these notices, and I have read the",
+    bol_boton: "Notify me",
+    bol_enviando: "Sending…",
+    bol_revisa: "Check your inbox",
+    bol_revisa_pie: "We have sent you an email to confirm. Until you click it you are not subscribed — that is on purpose.",
+    bol_error: "It could not be sent. Try again in a moment.",
     a11y_close: "Close",
     app_version_title: "App version",
     q_reset_confirm: "This will delete your saved profile and your map on this device. Continue?",
@@ -560,6 +571,17 @@ window.I18N = {
        descargaba con el nombre «share_filename» en vez de wayfare-mi-mapa.png.
        Las otras seis tenían texto de reserva en el código y por eso no cantaban.
        Apareció al mirar el aria-label del tirador nuevo. */
+    /* v1.176.0 — avisos por correo cuando cambie una fuente oficial */
+    bol_previa: "⚠ Vista previa: esto todavía no funciona. Está aquí para que veas por dónde va el producto — dinos qué te parece.",
+    bol_titulo: "¿Te avisamos por correo si cambia algo de {pais}?",
+    bol_sub: "Solo cuando cambie una fuente oficial: una norma, un requisito o la apertura de un cupo. Nada más.",
+    bol_placeholder: "tu@correo.com",
+    bol_consent: "Quiero recibir estos avisos, y he leído la",
+    bol_boton: "Avísame",
+    bol_enviando: "Enviando…",
+    bol_revisa: "Revisa tu correo",
+    bol_revisa_pie: "Te hemos enviado un correo para confirmar. Hasta que no lo pulses no estás suscrito — y es a propósito.",
+    bol_error: "No se ha podido enviar. Inténtalo dentro de un momento.",
     a11y_close: "Cerrar",
     app_version_title: "Versión de la app",
     q_reset_confirm: "Esto borrará tu perfil guardado y tu mapa en este dispositivo. ¿Seguimos?",

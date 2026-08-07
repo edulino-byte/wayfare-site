@@ -28,13 +28,13 @@
   <!-- Datos estructurados (v1.60.0) -->
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"Wayfare","url":"https://edulino-byte.github.io/wayfare-site/","inLanguage":"es","description":"Simulador de elegibilidad de visas con datos verificados contra fuentes oficiales."}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Wayfare","url":"https://edulino-byte.github.io/wayfare-site/","logo":"https://edulino-byte.github.io/wayfare-site/assets/brand/wayfare-icon-512.png"}</script>
-  <link rel="icon" type="image/svg+xml" href="assets/brand/wayfare-favicon.svg?v=1.175.0" />
-  <link rel="apple-touch-icon" sizes="180x180" href="assets/brand/wayfare-touch-180.png?v=1.175.0" />
+  <link rel="icon" type="image/svg+xml" href="assets/brand/wayfare-favicon.svg?v=1.177.0" />
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/brand/wayfare-touch-180.png?v=1.177.0" />
   <link rel="manifest" href="manifest.webmanifest" />
   <!-- v1.96.0 — fuentes servidas desde el propio sitio: cero peticiones a Google -->
-  <link rel="stylesheet" href="assets/fonts/fonts.css?v=1.175.0" />
-  <link rel="stylesheet" href="styles.css?v=1.175.0" />
-  <link rel="stylesheet" href="screens.css?v=1.175.0" />
+  <link rel="stylesheet" href="assets/fonts/fonts.css?v=1.177.0" />
+  <link rel="stylesheet" href="styles.css?v=1.177.0" />
+  <link rel="stylesheet" href="screens.css?v=1.177.0" />
 </head>
 <body>
   <!-- v1.116.0 — encabezado principal para lectores de pantalla: la interfaz es
@@ -50,20 +50,21 @@
        ejecuta al final, EN ORDEN, que es la garantía que necesitamos porque
        app.js depende de todo lo anterior. En un móvil de gama media esto es lo
        que separa «pantalla en blanco» de «algo que responde». -->
-  <script defer src="vendor-core.js?v=1.175.0"></script>
-  <script async src="vendor-globe.js?v=1.175.0"></script>
+  <script defer src="vendor-core.js?v=1.177.0"></script>
+  <script async src="vendor-globe.js?v=1.177.0"></script>
   <!-- datos + lógica + i18n: copias byte a byte del fuente auditado -->
-  <script defer src="version.js?v=1.175.0"></script>
-  <script defer src="data/mock.js?v=1.175.0"></script>
-  <script defer src="data/verification.js?v=1.175.0"></script>
-  <script defer src="data/advisors-meta.js?v=1.175.0"></script>
+  <script defer src="version.js?v=1.177.0"></script>
+  <script defer src="data/mock.js?v=1.177.0"></script>
+  <script defer src="data/verification.js?v=1.177.0"></script>
+  <script defer src="data/advisors-meta.js?v=1.177.0"></script>
   <!-- v1.168.0 — estado de apertura de los cupos. Va ANTES de eligibility.js
        porque el motor lo consulta para decir si una vía está cerrada. -->
-  <script defer src="data/aperturas.js?v=1.175.0"></script>
-  <script defer src="i18n/strings.js?v=1.175.0"></script>
-  <script defer src="logic/eligibility.js?v=1.175.0"></script>
+  <script defer src="data/aperturas.js?v=1.177.0"></script>
+  <script defer src="data/boletin.js?v=1.177.0"></script>
+  <script defer src="i18n/strings.js?v=1.177.0"></script>
+  <script defer src="logic/eligibility.js?v=1.177.0"></script>
   <!-- UI precompilada (JSX ya transformado, sin Babel en el navegador) -->
-  <script defer src="app.js?v=1.175.0"></script>
+  <script defer src="app.js?v=1.177.0"></script>
   <!-- v1.162.0 — data/evidence.js (662 KB, el mayor de todos) YA NO ENTRA AQUÍ.
        Solo hace falta al abrir la ficha de un país, para enseñar la cita que
        respalda cada frase; en la primera pantalla no se usa para nada. El
@@ -76,7 +77,7 @@
     window.__wayfareCargarEvidencia = function () {
       if (pedido) return; pedido = true;
       var s = document.createElement("script");
-      s.src = "data/evidence.js?v=1.175.0";
+      s.src = "data/evidence.js?v=1.177.0";
       s.async = true;
       s.onload = function () {
         try { window.dispatchEvent(new Event("wayfare:evidencia-lista")); } catch (e) {}
