@@ -1614,14 +1614,29 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
   const arrastre = React.useRef(null);
   const puedeArrastrar = () => window.matchMedia("(max-width: 700px)").matches;
   const alEmpezar = (e, desdeTirador) => {
-    if (!puedeArrastrar() || e.pointerType === "mouse") return;
+    if (!puedeArrastrar()) return;
     const inner = hojaRef.current && hojaRef.current.querySelector(".detail-panel-inner");
     if (!desdeTirador && inner && inner.scrollTop > 0) return;
-    arrastre.current = { y0: e.clientY, dy: 0, t0: Date.now(), activo: true };
+    try {
+      e.currentTarget.setPointerCapture(e.pointerId);
+    } catch (err) {
+    }
+    arrastre.current = {
+      y0: e.clientY,
+      dy: 0,
+      t0: Date.now(),
+      activo: true,
+      id: e.pointerId,
+      origen: e.currentTarget
+    };
+    if (hojaRef.current) {
+      hojaRef.current.style.animation = "none";
+      hojaRef.current.style.willChange = "transform";
+    }
   };
   const alMover = (e) => {
     const a = arrastre.current;
-    if (!a || !a.activo) return;
+    if (!a || !a.activo || e.pointerId !== a.id) return;
     const dy = e.clientY - a.y0;
     if (dy <= 0) {
       a.dy = 0;
@@ -1635,9 +1650,16 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
       hojaRef.current.style.opacity = String(Math.max(0.55, 1 - dy / 620));
     }
   };
-  const alSoltar = () => {
+  const alSoltar = (e) => {
     const a = arrastre.current;
+    if (a && a.origen && e && e.pointerId != null) {
+      try {
+        a.origen.releasePointerCapture(e.pointerId);
+      } catch (err) {
+      }
+    }
     arrastre.current = null;
+    if (hojaRef.current) hojaRef.current.style.willChange = "";
     if (!a || !a.activo) return;
     const velocidad = a.dy / Math.max(1, Date.now() - a.t0);
     const cerrar = a.dy > 110 || velocidad > 0.55;
