@@ -1610,6 +1610,50 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
       }
     }, 100);
   };
+  const hojaRef = React.useRef(null);
+  const arrastre = React.useRef(null);
+  const puedeArrastrar = () => window.matchMedia("(max-width: 700px)").matches;
+  const alEmpezar = (e, desdeTirador) => {
+    if (!puedeArrastrar() || e.pointerType === "mouse") return;
+    const inner = hojaRef.current && hojaRef.current.querySelector(".detail-panel-inner");
+    if (!desdeTirador && inner && inner.scrollTop > 0) return;
+    arrastre.current = { y0: e.clientY, dy: 0, t0: Date.now(), activo: true };
+  };
+  const alMover = (e) => {
+    const a = arrastre.current;
+    if (!a || !a.activo) return;
+    const dy = e.clientY - a.y0;
+    if (dy <= 0) {
+      a.dy = 0;
+      if (hojaRef.current) hojaRef.current.style.transform = "";
+      return;
+    }
+    a.dy = dy;
+    if (hojaRef.current) {
+      hojaRef.current.style.transition = "none";
+      hojaRef.current.style.transform = "translateY(" + (dy < 120 ? dy : 120 + (dy - 120) * 0.35) + "px)";
+      hojaRef.current.style.opacity = String(Math.max(0.55, 1 - dy / 620));
+    }
+  };
+  const alSoltar = () => {
+    const a = arrastre.current;
+    arrastre.current = null;
+    if (!a || !a.activo) return;
+    const velocidad = a.dy / Math.max(1, Date.now() - a.t0);
+    const cerrar = a.dy > 110 || velocidad > 0.55;
+    const hoja = hojaRef.current;
+    if (!hoja) return;
+    if (cerrar) {
+      hoja.style.transition = "transform .22s ease, opacity .22s ease";
+      hoja.style.transform = "translateY(100%)";
+      hoja.style.opacity = "0";
+      setTimeout(closeDetail, 180);
+    } else {
+      hoja.style.transition = "transform .26s cubic-bezier(.2,.8,.2,1), opacity .26s ease";
+      hoja.style.transform = "";
+      hoja.style.opacity = "";
+    }
+  };
   const closeDetail = () => {
     selRef.current = null;
     setSelected(null);
@@ -1666,20 +1710,49 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
       strokeLinecap: "round",
       strokeLinejoin: "round"
     }
-  )), t("g_share_btn")) : null, shareMsg && !detailOpen ? /* @__PURE__ */ React.createElement("div", { className: "share-float-done" }, shareMsg) : null, selected && detailOpen ? /* @__PURE__ */ React.createElement("aside", { className: "detail-panel" }, /* @__PURE__ */ React.createElement("div", { className: "detail-panel-inner" }, /* @__PURE__ */ React.createElement("button", { className: "detail-panel-close", onClick: closeDetail, "aria-label": t("a11y_close") }, /* @__PURE__ */ React.createElement("svg", { width: "14", height: "14", viewBox: "0 0 24 24", fill: "none", "aria-hidden": "true", style: { pointerEvents: "none" } }, /* @__PURE__ */ React.createElement("path", { d: "M18 6L6 18M6 6l12 12", stroke: "currentColor", strokeWidth: "2.2", strokeLinecap: "round" }))), /* @__PURE__ */ React.createElement(
-    CountryDetail,
+  )), t("g_share_btn")) : null, shareMsg && !detailOpen ? /* @__PURE__ */ React.createElement("div", { className: "share-float-done" }, shareMsg) : null, selected && detailOpen ? /* @__PURE__ */ React.createElement(
+    "aside",
     {
-      key: selected.iso,
-      t,
-      lang,
-      result: selected,
-      profile,
-      onCompare: () => {
-        wfTrack("embudo-6-profundiza");
-        setCompareIso(selected.iso === "NZ" ? "AU" : "NZ");
+      className: "detail-panel",
+      ref: hojaRef,
+      onPointerDown: (e) => alEmpezar(e, false),
+      onPointerMove: alMover,
+      onPointerUp: alSoltar,
+      onPointerCancel: alSoltar
+    },
+    /* @__PURE__ */ React.createElement("div", { className: "detail-panel-inner" }, /* @__PURE__ */ React.createElement(
+      "button",
+      {
+        type: "button",
+        className: "sheet-grab",
+        "aria-label": t("a11y_close"),
+        onPointerDown: (e) => {
+          e.stopPropagation();
+          alEmpezar(e, true);
+        },
+        onPointerMove: alMover,
+        onPointerUp: alSoltar,
+        onPointerCancel: alSoltar,
+        onClick: () => {
+          if (!arrastre.current) closeDetail();
+        }
+      },
+      /* @__PURE__ */ React.createElement("span", { className: "sheet-grab-bar", "aria-hidden": "true" })
+    ), /* @__PURE__ */ React.createElement("button", { className: "detail-panel-close", onClick: closeDetail, "aria-label": t("a11y_close") }, /* @__PURE__ */ React.createElement("svg", { width: "14", height: "14", viewBox: "0 0 24 24", fill: "none", "aria-hidden": "true", style: { pointerEvents: "none" } }, /* @__PURE__ */ React.createElement("path", { d: "M18 6L6 18M6 6l12 12", stroke: "currentColor", strokeWidth: "2.2", strokeLinecap: "round" }))), /* @__PURE__ */ React.createElement(
+      CountryDetail,
+      {
+        key: selected.iso,
+        t,
+        lang,
+        result: selected,
+        profile,
+        onCompare: () => {
+          wfTrack("embudo-6-profundiza");
+          setCompareIso(selected.iso === "NZ" ? "AU" : "NZ");
+        }
       }
-    }
-  ))) : null, selected && compareIso ? /* @__PURE__ */ React.createElement(
+    ))
+  ) : null, selected && compareIso ? /* @__PURE__ */ React.createElement(
     CompareView,
     {
       t,

@@ -8,6 +8,15 @@
    ========================================================================== */
 
 window.I18N = {
+  en: {
+    /* v1.173.0 — ESTAS OCHO CLAVES ESTABAN FUERA DEL BLOQUE DE IDIOMA.
+       Colgaban un nivel más arriba, en la raíz de window.I18N, y t() busca
+       dentro de I18N[idioma]. Resultado: nunca se encontraban.
+       Dos se notaban de verdad: los botones de cerrar se anunciaban a los
+       lectores de pantalla como «a11y_close», y el mapa compartido se
+       descargaba con el nombre «share_filename» en vez de wayfare-mi-mapa.png.
+       Las otras seis tenían texto de reserva en el código y por eso no cantaban.
+       Apareció al mirar el aria-label del tirador nuevo. */
     a11y_close: "Close",
     app_version_title: "App version",
     q_reset_confirm: "This will delete your saved profile and your map on this device. Continue?",
@@ -16,7 +25,6 @@ window.I18N = {
     crash_reload: "Reload",
     crash_reset: "Reload and start from scratch",
     share_filename: "wayfare-my-map.png",
-  en: {
     vc_modelled_title: "This route is modelled: we have not captured its official source yet. Check it before you make any decision.",
     vc_modelled: "No captured official source",
     /* brand + chrome */
@@ -543,6 +551,15 @@ window.I18N = {
     "You must hold a valid physical passport when you apply; without one your application may be declined.": "You must hold a valid physical passport when you apply; without one your application may be declined.",
   },
 
+  es: {
+    /* v1.173.0 — ESTAS OCHO CLAVES ESTABAN FUERA DEL BLOQUE DE IDIOMA.
+       Colgaban un nivel más arriba, en la raíz de window.I18N, y t() busca
+       dentro de I18N[idioma]. Resultado: nunca se encontraban.
+       Dos se notaban de verdad: los botones de cerrar se anunciaban a los
+       lectores de pantalla como «a11y_close», y el mapa compartido se
+       descargaba con el nombre «share_filename» en vez de wayfare-mi-mapa.png.
+       Las otras seis tenían texto de reserva en el código y por eso no cantaban.
+       Apareció al mirar el aria-label del tirador nuevo. */
     a11y_close: "Cerrar",
     app_version_title: "Versión de la app",
     q_reset_confirm: "Esto borrará tu perfil guardado y tu mapa en este dispositivo. ¿Seguimos?",
@@ -551,7 +568,6 @@ window.I18N = {
     crash_reload: "Recargar",
     crash_reset: "Recargar y empezar de cero",
     share_filename: "wayfare-mi-mapa.png",
-  es: {
     "Always verify with Irish Immigration Service Delivery (irishimmigration.ie).": "Verifica siempre en el Servicio de Inmigración de Irlanda (irishimmigration.ie).",
     "As an EU/EEA or Swiss citizen you can work in Ireland without an employment permit.": "Como ciudadano de la UE, del EEE o suizo, puedes trabajar en Irlanda sin permiso de trabajo.",
     "As an EU/EEA or Swiss citizen you do not need permission to study in Ireland.": "Como ciudadano de la UE, del EEE o suizo, no necesitas permiso para estudiar en Irlanda.",

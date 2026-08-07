@@ -524,6 +524,9 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
   color: var(--on-dark); line-height: 1;
 }
 /* â”€â”€ Detail panel â€” right-side split layout â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* v1.173.0 — el tirador es solo del móvil: en escritorio la ficha es un panel
+   lateral, no una hoja, y ahí la X sigue siendo lo correcto. */
+.sheet-grab { display: none; }
 .detail-panel {
   position: absolute;
   top: 60px;             /* clears topbar; topbar has EN/ES + edit profile  */
@@ -878,14 +881,29 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
     max-height: 85vh;
     max-height: 85dvh;
   }
-  /* grab-handle: scrolls away with content, sits above the sticky close btn */
-  .detail-panel-inner::before {
-    content: ""; display: block;
-    width: 40px; height: 4px; margin: 2px auto 12px;
-    border-radius: 999px; background: rgba(255, 255, 255, 0.24);
+  /* v1.173.0 — EL TIRADOR, Y LA X FUERA.
+     La barrita de arriba era un ::before decorativo. Ahora es un botón real:
+     de él se agarra el gesto de arrastrar hacia abajo para cerrar, y además
+     se puede pulsar. Eso último no es un extra: un arrastre no es accesible
+     para quien usa lector de pantalla, así que si se quita la X hay que dejar
+     un control que sí lo sea. La zona táctil es de 44 px de alto aunque la
+     barrita se vea de 4, que es el mínimo cómodo para un dedo. */
+  .detail-panel-inner::before { content: none; }
+  .sheet-grab {
+    display: flex; align-items: center; justify-content: center;
+    width: 100%; height: 30px; margin: -6px 0 6px;
+    background: none; border: 0; padding: 0; cursor: grab;
+    touch-action: none;            /* el gesto lo maneja la app, no el navegador */
   }
-  /* easier tap target for the close button */
-  .detail-panel-close { width: 36px; height: 36px; }
+  .sheet-grab:active { cursor: grabbing; }
+  .sheet-grab-bar {
+    width: 40px; height: 4px; border-radius: 999px;
+    background: rgba(255, 255, 255, 0.28);
+    transition: background .15s ease, width .15s ease;
+  }
+  .sheet-grab:active .sheet-grab-bar { background: rgba(255,255,255,.5); width: 52px; }
+  /* la X sobra en el móvil: se cierra arrastrando o pulsando el tirador */
+  .detail-panel-close { display: none; }
 
   /* (v1.51.0: los desplegables de visa pasaron a estilos base — valen
      para móvil y escritorio; aquí ya no hace falta nada) */
@@ -898,6 +916,9 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
    únicamente los valores que estaban «cosidos» en oscuro.
    ========================================================================== */
 @media (prefers-color-scheme: light) {
+  /* v1.173.0 — en tema claro la barrita blanca no se veía sobre fondo claro */
+  .sheet-grab-bar { background: rgba(20, 25, 30, 0.22); }
+  .sheet-grab:active .sheet-grab-bar { background: rgba(20, 25, 30, 0.40); }
 
   /* cielo de día (v1.42.1): estrellas apagadas; azul de cénit arriba,
      horizonte pálido abajo y un resplandor cálido de sol arriba a la derecha */
