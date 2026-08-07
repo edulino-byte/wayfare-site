@@ -360,14 +360,34 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
   .globe-tooltip { display: none; }
 }
 
+/* v1.172.0 — ESTE AVISO OCUPABA EL 10,7% DE LA PANTALLA DE UN MÓVIL.
+   Tres cosas iban mal y se alimentaban entre ellas:
+
+   1. `left: 50%` sin anchura declarada. Un elemento absoluto se ajusta al
+      contenido, pero el espacio del que dispone se mide DESDE su borde
+      izquierdo: al empezar en la mitad, solo podía crecer hacia la derecha.
+      En una pantalla de 390 px le quedaban 195 — la mitad justa — así que
+      partía la frase en cuatro líneas cuando cabía en dos.
+   2. El punto se aplastaba. Es hijo de un flex y no tenía flex-shrink: 0,
+      así que al apretarse el texto el navegador le robaba anchura: medía
+      2,05 x 7 px. Un óvalo, no un círculo.
+   3. No había ninguna regla para móvil: mismo tamaño y relleno que en
+      escritorio, en una pantalla que es un tercio de ancha.
+
+   Ahora se le da anchura de contenido con tope, y en móvil se aprieta. */
 .globe-hint { position: absolute; left: 50%; bottom: 26px; transform: translateX(-50%);
+  width: max-content; max-width: min(calc(100vw - 28px), 560px);
   color: var(--on-dark-2); font-size: 13px; font-weight: 600; letter-spacing: .01em;
   background: rgba(8,14,16,.5); border: 1px solid var(--glass-line); padding: 8px 16px; border-radius: 999px;
   backdrop-filter: blur(6px); display: flex; align-items: center; gap: 9px; animation: fadeIn 1s ease both;
   pointer-events: none; z-index: 2; }
-.globe-hint .pin { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 10px 1px var(--accent); }
+.globe-hint .pin { flex: 0 0 auto; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 10px 1px var(--accent); }
+@media (max-width: 700px) {
+  .globe-hint { bottom: 16px; font-size: 12px; line-height: 1.35; padding: 7px 14px; gap: 8px;
+                border-radius: 16px; }
+}
 .globe-hint--error { border-color: rgba(210, 100, 70, 0.40); }
-.globe-hint--error .pin--error { width: 7px; height: 7px; border-radius: 50%; background: #d96a3a; box-shadow: 0 0 8px 1px rgba(217,106,58,0.6); }
+.globe-hint--error .pin--error { flex: 0 0 auto; width: 7px; height: 7px; border-radius: 50%; background: #d96a3a; box-shadow: 0 0 8px 1px rgba(217,106,58,0.6); }
 
 .legend { position: absolute; left: 24px; bottom: 24px; display: flex; flex-direction: column; gap: 9px;
   background: var(--glass); border: 1px solid var(--glass-line); border-radius: var(--radius);
