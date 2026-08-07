@@ -1682,7 +1682,6 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
     setDetailOpen(false);
     if (globeRef.current) {
       if (globeRef.current.__deselect) globeRef.current.__deselect();
-      globeRef.current.pointOfView({ lat: 20, lng: 10, altitude: 1.7 }, 900);
     }
   };
   React.useEffect(() => {
