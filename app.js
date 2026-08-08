@@ -1172,6 +1172,8 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
   const globeRef = React.useRef(null);
   const despertarRef = React.useRef(null);
   const arrastrandoRef = React.useRef(false);
+  const inerciaRef = React.useRef(false);
+  const cortarInerciaRef = React.useRef(null);
   const langRef = React.useRef(lang);
   langRef.current = lang;
   const globeLib = useGlobeLib();
@@ -1246,7 +1248,7 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
       return { iso: f.__iso, lat: c[1], lng: c[0], r: results[f.__id], f };
     }).concat(micros.map((m) => ({ iso: m.iso, lat: m.lat, lng: m.lng, r: m.r, micro: true })));
     const world = G(window.WAYFARE_PERF.globeConfig)(host).width(host.clientWidth).height(host.clientHeight).backgroundColor("rgba(0,0,0,0)").globeImageUrl(GLOBE_TEXTURES[globeStyle] || GLOBE_TEXTURES.textured).bumpImageUrl(BUMP_URL).showAtmosphere(true).atmosphereColor("#7ab8d4").atmosphereAltitude(0.26).polygonsData(features).polygonCapColor(capColor).polygonSideColor(() => "rgba(0,0,0,0.06)").polygonStrokeColor(strokeColor).polygonAltitude(altOf).polygonsTransitionDuration(220).onPolygonHover((d) => {
-      if (arrastrandoRef.current) return;
+      if (arrastrandoRef.current || inerciaRef.current) return;
       hoverRef.current = d;
       setHoverIdx(d ? d.__id : null);
       host.style.cursor = d ? "pointer" : "grab";
@@ -1325,7 +1327,7 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
     }
     let ultimaPasadaPills = 0;
     const actualizarMicroPills = () => {
-      if (arrastrandoRef.current) return;
+      if (arrastrandoRef.current || inerciaRef.current) return;
       const ahora = performance.now();
       if (ahora - ultimaPasadaPills < 150) return;
       ultimaPasadaPills = ahora;
@@ -1414,19 +1416,92 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
     const AL_TOCAR = ["pointerdown", "pointermove", "wheel", "touchstart"];
     const alTocar = () => despertar();
     AL_TOCAR.forEach((ev) => host.addEventListener(ev, alTocar, { passive: true }));
+    const REDUCIR_MOVIMIENTO = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let muestrasGiro = [];
+    let inerciaRafId = 0;
+    const cortarInercia = () => {
+      if (inerciaRafId) {
+        cancelAnimationFrame(inerciaRafId);
+        inerciaRafId = 0;
+      }
+      inerciaRef.current = false;
+    };
+    cortarInerciaRef.current = cortarInercia;
+    const anotarGiro = () => {
+      if (!arrastrandoRef.current) return;
+      const pov = world.pointOfView();
+      muestrasGiro.push({ t: performance.now(), lat: pov.lat, lng: pov.lng });
+      if (muestrasGiro.length > 4) muestrasGiro.shift();
+    };
+    const terminarGesto = () => {
+      ultimaPasadaPills = 0;
+      actualizarMicroPills();
+    };
+    const diag = (motivo, extra) => {
+      window.__wfDiag = window.__wfDiag || {};
+      window.__wfDiag.inercia = Object.assign({ motivo, t: Math.round(performance.now()) }, extra || {});
+      return motivo === "lanzada";
+    };
+    const lanzarInercia = () => {
+      if (REDUCIR_MOVIMIENTO) return diag("reduced-motion");
+      if (muestrasGiro.length < 2) return diag("sin-muestras", { n: muestrasGiro.length });
+      const a = muestrasGiro[0], b = muestrasGiro[muestrasGiro.length - 1];
+      const dt = b.t - a.t;
+      if (dt <= 0) return diag("dt-cero");
+      const frescura = performance.now() - b.t;
+      if (frescura > 120) return diag("muestras-viejas", { ms: Math.round(frescura) });
+      let dLng = b.lng - a.lng;
+      if (dLng > 180) dLng -= 360;
+      else if (dLng < -180) dLng += 360;
+      let vLng = dLng / dt, vLat = (b.lat - a.lat) / dt;
+      const rapidez = Math.hypot(vLng, vLat);
+      if (rapidez < 0.02) return diag("suelta-lenta", { v: +rapidez.toFixed(4) });
+      const TOPE = 0.4;
+      if (rapidez > TOPE) {
+        vLng *= TOPE / rapidez;
+        vLat *= TOPE / rapidez;
+      }
+      diag("lanzada", { v: +rapidez.toFixed(4) });
+      inerciaRef.current = true;
+      let antes = performance.now();
+      const paso = (ahora) => {
+        const paso_ms = Math.min(50, ahora - antes);
+        antes = ahora;
+        const pov = world.pointOfView();
+        world.pointOfView({
+          lat: Math.max(-85, Math.min(85, pov.lat + vLat * paso_ms)),
+          lng: pov.lng + vLng * paso_ms,
+          altitude: pov.altitude
+        }, 0);
+        const freno = Math.pow(0.96, paso_ms / 16.7);
+        vLng *= freno;
+        vLat *= freno;
+        if (Math.hypot(vLng, vLat) > 3e-3) {
+          inerciaRafId = requestAnimationFrame(paso);
+        } else {
+          cortarInercia();
+          terminarGesto();
+        }
+      };
+      inerciaRafId = requestAnimationFrame(paso);
+      return true;
+    };
     const alAgarrar = () => {
+      cortarInercia();
       arrastrandoRef.current = true;
+      muestrasGiro = [];
       setHoverData(null);
     };
     const alSoltarGlobo = () => {
       if (!arrastrandoRef.current) return;
       arrastrandoRef.current = false;
-      ultimaPasadaPills = 0;
-      actualizarMicroPills();
+      if (!lanzarInercia()) terminarGesto();
+      muestrasGiro = [];
     };
     host.addEventListener("pointerdown", alAgarrar, { passive: true });
     window.addEventListener("pointerup", alSoltarGlobo, { passive: true });
     window.addEventListener("pointercancel", alSoltarGlobo, { passive: true });
+    world.controls().addEventListener("change", anotarGiro);
     let revealTimer = null;
     {
       const home = features.find((f) => f.__iso === profile.nationality);
@@ -1575,6 +1650,12 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
       }
       try {
         window.removeEventListener("pointercancel", alSoltarGlobo);
+      } catch (e) {
+      }
+      cortarInercia();
+      if (cortarInerciaRef.current === cortarInercia) cortarInerciaRef.current = null;
+      try {
+        world.controls().removeEventListener("change", anotarGiro);
       } catch (e) {
       }
       try {
@@ -1822,6 +1903,7 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
     const world = globeRef.current, host = hostRef.current;
     if (!world || !host) return;
     world.controls().autoRotate = false;
+    if (cortarInerciaRef.current) cortarInerciaRef.current();
     if (despertarRef.current) despertarRef.current(1800);
     if (!esEscritorio()) {
       world.pointOfView({ lat, lng: lng - 12, altitude: altMovil || 1.2 }, 900);
@@ -1845,6 +1927,7 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
       if (globeRef.current.__deselect) globeRef.current.__deselect();
       const host = hostRef.current;
       if (despertarRef.current) despertarRef.current(1600);
+      if (cortarInerciaRef.current) cortarInerciaRef.current();
       if (host && esEscritorio()) {
         const escena = host.parentElement || host;
         const pov = globeRef.current.pointOfView();
