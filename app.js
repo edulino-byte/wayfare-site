@@ -1167,7 +1167,7 @@ function anchoFicha(anchoEscena) {
 function esEscritorio() {
   return typeof window !== "undefined" && typeof window.matchMedia === "function" ? window.matchMedia("(min-width: 701px)").matches : true;
 }
-function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
+function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible, onElegirCamino, caminoActual }) {
   const hostRef = React.useRef(null);
   const globeRef = React.useRef(null);
   const despertarRef = React.useRef(null);
@@ -2041,6 +2041,8 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
         lang,
         result: selected,
         profile,
+        onElegirCamino,
+        caminoActual,
         onCompare: () => {
           wfTrack("embudo-6-profundiza");
           setCompareIso(selected.iso === "NZ" ? "AU" : "NZ");
@@ -2104,7 +2106,7 @@ function CompareView({ t, lang, profile, isoA, isoB, setIsoB, onClose }) {
     opciones.map((o) => /* @__PURE__ */ React.createElement("option", { key: o.iso, value: o.iso }, isoToFlag(o.iso), " ", o.nombre))
   )), tipos.map((tipo) => /* @__PURE__ */ React.createElement(React.Fragment, { key: tipo }, /* @__PURE__ */ React.createElement("div", { className: "cmp-row-label" }, /* @__PURE__ */ React.createElement("span", { className: "vc-icon" }, D.VISA_TYPES[tipo].icon), " ", t("vt_" + tipo)), celda(A, tipo), celda(B, tipo)))), /* @__PURE__ */ React.createElement("p", { className: "cmp-note" }, t("cmp_note"))));
 }
-function CountryDetail({ t, lang, result, profile, onCompare }) {
+function CountryDetail({ t, lang, result, profile, onCompare, onElegirCamino, caminoActual }) {
   const [, repintar] = React.useReducer((n) => n + 1, 0);
   React.useEffect(() => {
     if (window.EVIDENCE) return;
@@ -2211,7 +2213,29 @@ function CountryDetail({ t, lang, result, profile, onCompare }) {
               fact: findEvidence(result.iso, v.route, profile && profile.nationality, w),
               icon: /* @__PURE__ */ React.createElement("svg", { width: "11", height: "11", viewBox: "0 0 24 24", fill: "none", style: { flexShrink: 0, marginTop: "1px" } }, /* @__PURE__ */ React.createElement("circle", { cx: "12", cy: "12", r: "9", stroke: "currentColor", strokeWidth: "2" }), /* @__PURE__ */ React.createElement("path", { d: "M12 8v4M12 15.5v.5", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round" }))
             }
-          )))) : null, v.missing && v.missing.length ? /* @__PURE__ */ React.createElement("details", { className: "vc-acc", open: secOpen("missing", v) }, /* @__PURE__ */ React.createElement("summary", { className: "vc-acc-sum" }, /* @__PURE__ */ React.createElement("span", { className: "vc-acc-label" }, t("g_missing")), /* @__PURE__ */ React.createElement("span", { className: "vc-acc-count" }, v.missing.length)), /* @__PURE__ */ React.createElement("div", { className: "vc-acc-body missing" }, /* @__PURE__ */ React.createElement("span", { className: "lbl" }, t("g_missing")), v.missing.map((m) => /* @__PURE__ */ React.createElement("span", { className: "miss-tag", key: m }, t("rq_" + m))))) : null)
+          )))) : null, v.missing && v.missing.length ? /* @__PURE__ */ React.createElement("details", { className: "vc-acc", open: secOpen("missing", v) }, /* @__PURE__ */ React.createElement("summary", { className: "vc-acc-sum" }, /* @__PURE__ */ React.createElement("span", { className: "vc-acc-label" }, t("g_missing")), /* @__PURE__ */ React.createElement("span", { className: "vc-acc-count" }, v.missing.length)), /* @__PURE__ */ React.createElement("div", { className: "vc-acc-body missing" }, /* @__PURE__ */ React.createElement("span", { className: "lbl" }, t("g_missing")), v.missing.map((m) => /* @__PURE__ */ React.createElement("span", { className: "miss-tag", key: m }, t("rq_" + m))))) : null, onElegirCamino && v.score !== null && v.score !== void 0 ? caminoActual && caminoActual.iso === result.iso && (caminoActual.route || caminoActual.type) === (v.route || v.type) ? /* @__PURE__ */ React.createElement(
+            "button",
+            {
+              type: "button",
+              className: "vc-camino vc-camino--activo",
+              onClick: () => onElegirCamino(null)
+            },
+            "\u2605 ",
+            t("cam_es_tu_camino")
+          ) : /* @__PURE__ */ React.createElement(
+            "button",
+            {
+              type: "button",
+              className: "vc-camino",
+              onClick: () => {
+                wfTrack("camino-elegido");
+                wfTrack("camino-" + result.iso);
+                onElegirCamino({ iso: result.iso, route: v.route || null, type: v.type });
+              }
+            },
+            "\u2192 ",
+            t("cam_elegir")
+          ) : null)
         );
       })),
       (() => {
@@ -2395,6 +2419,122 @@ function featureCentroid(f) {
 }
 Object.assign(window, { GlobeView });
 
+/* ===== ui/Camino.jsx ===== */
+function huellaRequisito(texto) {
+  var s = String(texto || "").trim().toLowerCase().replace(/\s+/g, " ");
+  var h = 5381;
+  for (var i = 0; i < s.length; i++) h = (h << 5) + h + s.charCodeAt(i) | 0;
+  return (h >>> 0).toString(36);
+}
+var CAMINO_CHECKS = "wayfare_camino_checks_v1";
+var CAMINO_VISTO = "wayfare_camino_visto_v1";
+function cargarLS(k) {
+  try {
+    var s = localStorage.getItem(k);
+    return s ? JSON.parse(s) : null;
+  } catch (e) {
+    return null;
+  }
+}
+function guardarLS(k, v) {
+  try {
+    v == null ? localStorage.removeItem(k) : localStorage.setItem(k, JSON.stringify(v));
+  } catch (e) {
+  }
+}
+function CaminoView({ t, lang, profile, camino, onExplorar, onAbandonar, onEditProfile }) {
+  const datos = React.useMemo(() => {
+    try {
+      const res = window.Eligibility.evaluateAll(
+        [{ id: "c", iso: camino.iso, name: camino.iso }],
+        profile
+      );
+      const r = res.c || res[Object.keys(res)[0]];
+      if (!r || !r.visas) return null;
+      const visa2 = r.visas.find((v) => v.route && v.route === camino.route) || r.visas.find((v) => v.type === camino.type) || null;
+      return visa2 ? { r, visa: visa2 } : null;
+    } catch (e) {
+      return null;
+    }
+  }, [camino.iso, camino.route, camino.type, profile]);
+  const tx = (v) => {
+    const tr2 = t(v);
+    return tr2 && tr2 !== v ? tr2 : v;
+  };
+  const nombrePais = countryName(camino.iso, lang) || camino.iso;
+  const visa = datos && datos.visa;
+  const pendientes = React.useMemo(() => {
+    if (!visa) return [];
+    return (visa.missing || []).map((x) => ({ crudo: "m:" + x, texto: t("rq_" + x), tipo: "missing" })).concat((visa.warnings || []).map((x) => ({ crudo: "w:" + x, texto: tx(x), tipo: "warning" }))).map((it) => Object.assign({ clave: huellaRequisito(it.crudo) }, it));
+  }, [visa, lang]);
+  const cumplidos = visa && visa.matched || [];
+  const [checks, setChecks] = React.useState(() => cargarLS(CAMINO_CHECKS) || {});
+  const marcar = (clave) => {
+    setChecks((prev) => {
+      const s = Object.assign({}, prev, { [clave]: !prev[clave] });
+      if (!s[clave]) delete s[clave];
+      guardarLS(CAMINO_CHECKS, s);
+      return s;
+    });
+  };
+  const visitaRef = React.useRef(null);
+  if (visitaRef.current === null) {
+    const previa = cargarLS(CAMINO_VISTO);
+    const clavesHoy = pendientes.map((p) => p.clave);
+    let resultado = { primera: !previa, fecha: previa && previa.fecha, nuevos: [], retirados: 0 };
+    if (previa && previa.camino === camino.iso + "|" + (camino.route || camino.type)) {
+      const antes = new Set(previa.claves || []);
+      resultado.nuevos = clavesHoy.filter((c) => !antes.has(c));
+      resultado.retirados = (previa.claves || []).filter((c) => clavesHoy.indexOf(c) < 0).length;
+    } else if (previa) {
+      resultado.primera = true;
+    }
+    visitaRef.current = resultado;
+  }
+  const visita = visitaRef.current;
+  React.useEffect(() => {
+    guardarLS(CAMINO_VISTO, {
+      camino: camino.iso + "|" + (camino.route || camino.type),
+      fecha: (/* @__PURE__ */ new Date()).toISOString().slice(0, 10),
+      claves: pendientes.map((p) => p.clave)
+    });
+  }, [camino.iso, camino.route, pendientes]);
+  const esNuevo = (clave) => visita.nuevos.indexOf(clave) >= 0;
+  const hechos = pendientes.filter((p) => checks[p.clave]).length;
+  const pct = pendientes.length ? Math.round(hechos / pendientes.length * 100) : 0;
+  const apertura = visa && visa.apertura;
+  let diasParaAbrir = null;
+  if (apertura && apertura.estado === "cerrada" && apertura.fecha) {
+    const d = Math.ceil((/* @__PURE__ */ new Date(apertura.fecha + "T00:00:00Z") - Date.now()) / 864e5);
+    if (d >= 0) diasParaAbrir = d;
+  }
+  if (!datos) {
+    return /* @__PURE__ */ React.createElement("div", { className: "q-scroll camino-scroll" }, /* @__PURE__ */ React.createElement("div", { className: "camino-wrap" }, /* @__PURE__ */ React.createElement("div", { className: "camino-vacio" }, /* @__PURE__ */ React.createElement("h2", null, t("cam_perdido_titulo")), /* @__PURE__ */ React.createElement("p", null, t("cam_perdido_sub")), /* @__PURE__ */ React.createElement("div", { className: "camino-acciones" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "btn-primary", onClick: onExplorar }, t("cam_explorar")), /* @__PURE__ */ React.createElement("button", { type: "button", className: "camino-abandonar", onClick: onAbandonar }, t("cam_abandonar"))))));
+  }
+  const st = visa.status;
+  return /* @__PURE__ */ React.createElement("div", { className: "q-scroll camino-scroll" }, /* @__PURE__ */ React.createElement("div", { className: "camino-wrap" }, /* @__PURE__ */ React.createElement("div", { className: "camino-head" }, /* @__PURE__ */ React.createElement(
+    "div",
+    {
+      className: "camino-flag-banner",
+      "aria-hidden": "true",
+      style: { backgroundImage: "linear-gradient(to right, rgba(8,16,14,0.95) 0%, rgba(8,16,14,0.66) 45%, rgba(8,16,14,0.14) 80%, rgba(8,16,14,0) 100%),url(assets/flags/" + String(camino.iso).toLowerCase() + ".svg)" }
+    }
+  ), /* @__PURE__ */ React.createElement("div", { className: "camino-head-texto" }, /* @__PURE__ */ React.createElement("div", { className: "camino-sobre" }, t("cam_titulo_pre")), /* @__PURE__ */ React.createElement("h1", { className: "camino-titulo" }, isoToFlag(camino.iso), " ", nombrePais), /* @__PURE__ */ React.createElement("div", { className: "camino-ruta" }, visa.officialName ? tx(visa.officialName) : t("vt_" + visa.type)), /* @__PURE__ */ React.createElement("div", { className: "camino-pills" }, visa.score !== null && visa.score !== void 0 ? /* @__PURE__ */ React.createElement("span", { className: "status-pill", style: {
+    background: statusColor(st, 0.14),
+    color: statusColor(st, 1)
+  } }, /* @__PURE__ */ React.createElement("span", { className: "sw", style: { background: statusColor(st, 1) } }), t(st === "eligible" ? "st_eligible" : st === "partial" ? "st_partial" : "st_ineligible"), "\xA0\xB7 ", t("g_score"), ": ", visa.score) : null))), visita.primera ? null : visita.nuevos.length || visita.retirados ? /* @__PURE__ */ React.createElement("div", { className: "camino-cambios camino-cambios--hay" }, /* @__PURE__ */ React.createElement("strong", null, t("cam_visita_pre"), visita.fecha ? " (" + fechaCorta(visita.fecha, lang) + ")" : "", ":"), " ", visita.nuevos.length ? visita.nuevos.length + " " + t("cam_visita_nuevos") : null, visita.nuevos.length && visita.retirados ? " \xB7 " : null, visita.retirados ? visita.retirados + " " + t("cam_visita_retirados") : null) : /* @__PURE__ */ React.createElement("div", { className: "camino-cambios" }, t("cam_visita_igual"), visita.fecha ? " " + t("cam_visita_desde") + " " + fechaCorta(visita.fecha, lang) : "", "."), apertura ? /* @__PURE__ */ React.createElement("div", { className: "camino-apertura" + (apertura.estado === "cerrada" ? " camino-apertura--cerrada" : " camino-apertura--abierta") }, apertura.estado === "cerrada" ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("span", { className: "cam-ap-estado" }, t("cam_ap_cerrada")), apertura.fecha ? /* @__PURE__ */ React.createElement("span", { className: "cam-ap-fecha" }, t("ap_cerrada_abre"), fechaCorta(apertura.fecha, lang), diasParaAbrir !== null ? /* @__PURE__ */ React.createElement("strong", null, " \xB7 ", diasParaAbrir, " ", t("cam_dias")) : null) : /* @__PURE__ */ React.createElement("span", { className: "cam-ap-fecha" }, t("ap_cerrada_sin_fecha"))) : /* @__PURE__ */ React.createElement("span", { className: "cam-ap-estado" }, t("ap_abierta"))) : null, pendientes.length ? /* @__PURE__ */ React.createElement("div", { className: "camino-progreso" }, /* @__PURE__ */ React.createElement("div", { className: "camino-progreso-num" }, hechos, " / ", pendientes.length, " \xB7 ", pct, "%"), /* @__PURE__ */ React.createElement("div", { className: "camino-barra" }, /* @__PURE__ */ React.createElement("div", { className: "camino-barra-relleno", style: { width: pct + "%" } }))) : null, pendientes.length ? /* @__PURE__ */ React.createElement("section", { className: "camino-seccion" }, /* @__PURE__ */ React.createElement("h2", { className: "sub-label" }, t("cam_pendientes")), pendientes.map((p) => /* @__PURE__ */ React.createElement("label", { key: p.clave, className: "camino-item" + (checks[p.clave] ? " camino-item--hecho" : "") }, /* @__PURE__ */ React.createElement("input", { type: "checkbox", checked: !!checks[p.clave], onChange: () => marcar(p.clave) }), /* @__PURE__ */ React.createElement("span", { className: "camino-item-texto" }, p.texto, esNuevo(p.clave) ? /* @__PURE__ */ React.createElement("span", { className: "camino-nuevo" }, t("cam_nuevo")) : null)))) : null, cumplidos.length ? /* @__PURE__ */ React.createElement("section", { className: "camino-seccion" }, /* @__PURE__ */ React.createElement("h2", { className: "sub-label" }, t("g_matched")), cumplidos.map((m, i) => /* @__PURE__ */ React.createElement("div", { key: i, className: "camino-item camino-item--cumplido" }, /* @__PURE__ */ React.createElement("svg", { width: "13", height: "13", viewBox: "0 0 24 24", fill: "none", "aria-hidden": "true" }, /* @__PURE__ */ React.createElement("path", { d: "M5 12l5 5L19 7", stroke: "currentColor", strokeWidth: "2.4", strokeLinecap: "round", strokeLinejoin: "round" })), /* @__PURE__ */ React.createElement("span", { className: "camino-item-texto" }, tx(m))))) : null, /* @__PURE__ */ React.createElement(DataFreshness, { t, lang, iso: camino.iso, synthetic: datos.r.synthetic }), /* @__PURE__ */ React.createElement(AvisoCorreo, { t, iso: camino.iso, nombrePais }), /* @__PURE__ */ React.createElement("div", { className: "camino-acciones" }, /* @__PURE__ */ React.createElement("button", { type: "button", className: "btn-primary", onClick: onExplorar }, t("cam_explorar")), /* @__PURE__ */ React.createElement(
+    "button",
+    {
+      type: "button",
+      className: "camino-abandonar",
+      onClick: () => {
+        if (window.confirm(t("cam_abandonar_confirma"))) onAbandonar();
+      }
+    },
+    t("cam_abandonar")
+  )), /* @__PURE__ */ React.createElement("div", { className: "disclaimer-long camino-pie" }, /* @__PURE__ */ React.createElement("span", null, t("disclaimer_long")))));
+}
+
 /* ===== ui/App.jsx ===== */
 const TWEAK_DEFAULTS = (
   /*EDITMODE-BEGIN*/
@@ -2436,6 +2576,7 @@ function defaultProfile() {
 }
 const STORE_PROFILE = "wayfare_profile_v1";
 const STORE_SUBMITTED = "wayfare_submitted_v1";
+const STORE_CAMINO = "wayfare_camino_v1";
 function loadStored(key) {
   try {
     const s = localStorage.getItem(key);
@@ -2485,7 +2626,23 @@ function App() {
     if (s && s.profile && s.version) return s;
     return { profile: defaultProfile(), version: 1, demo: true };
   });
-  const [screen, setScreen] = React.useState("globe");
+  const [camino, setCaminoState] = React.useState(() => {
+    const c = loadStored(STORE_CAMINO);
+    return c && c.iso ? c : null;
+  });
+  const setCamino = React.useCallback((c) => {
+    setCaminoState(c);
+    saveStored(STORE_CAMINO, c);
+    if (c == null) {
+      saveStored("wayfare_camino_checks_v1", null);
+      saveStored("wayfare_camino_visto_v1", null);
+    }
+  }, []);
+  const [screen, setScreen] = React.useState(() => {
+    const c = loadStored(STORE_CAMINO);
+    const s = loadStored(STORE_SUBMITTED);
+    return c && c.iso && s && s.profile ? "camino" : "globe";
+  });
   const [profile, setProfile] = React.useState(() => sanearPerfil(Object.assign(defaultProfile(), loadStored(STORE_PROFILE) || {})));
   React.useEffect(() => {
     const id = setTimeout(() => saveStored(STORE_PROFILE, profile), 250);
@@ -2520,6 +2677,9 @@ function App() {
     const tbl = window.I18N[lang] || window.I18N.en;
     return tbl[key] != null ? tbl[key] : key;
   }, [lang]);
+  React.useEffect(() => {
+    if (screen === "camino" && (!camino || !submitted)) setScreen("globe");
+  }, [screen, camino, submitted]);
   const onStage = screen === "globe" || screen === "processing";
   return /* @__PURE__ */ React.createElement("div", { className: "app" }, /* @__PURE__ */ React.createElement("header", { className: "topbar" + (onStage ? " on-stage" : "") }, /* @__PURE__ */ React.createElement("div", { className: "brand" }, /* @__PURE__ */ React.createElement("span", { className: "brand-mark" }), tr("brand"), /* @__PURE__ */ React.createElement(
     "span",
@@ -2541,7 +2701,7 @@ function App() {
     },
     "v",
     window.WAYFARE_VERSION || "?"
-  )), /* @__PURE__ */ React.createElement("div", { className: "topbar-right" }, screen === "globe" && /* @__PURE__ */ React.createElement("button", { className: "btn-edit-topbar", onClick: () => setScreen("questionnaire") }, /* @__PURE__ */ React.createElement("svg", { width: "13", height: "13", viewBox: "0 0 24 24", fill: "none", "aria-hidden": "true" }, /* @__PURE__ */ React.createElement("path", { d: "M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round" }), /* @__PURE__ */ React.createElement("path", { d: "M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round" })), tr("g_restart")), /* @__PURE__ */ React.createElement("div", { className: "lang" }, ["en", "es"].map((l) => /* @__PURE__ */ React.createElement("button", { key: l, className: lang === l ? "active" : "", onClick: () => setLang(l) }, l.toUpperCase()))))), /* @__PURE__ */ React.createElement("div", { className: "screen" }, screen === "questionnaire" && /* @__PURE__ */ React.createElement(
+  )), /* @__PURE__ */ React.createElement("div", { className: "topbar-right" }, camino && screen === "globe" && /* @__PURE__ */ React.createElement("button", { className: "btn-edit-topbar btn-camino-topbar", onClick: () => setScreen("camino") }, "\u2605 ", tr("cam_chip")), (screen === "globe" || screen === "camino") && /* @__PURE__ */ React.createElement("button", { className: "btn-edit-topbar", onClick: () => setScreen("questionnaire") }, /* @__PURE__ */ React.createElement("svg", { width: "13", height: "13", viewBox: "0 0 24 24", fill: "none", "aria-hidden": "true" }, /* @__PURE__ */ React.createElement("path", { d: "M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round" }), /* @__PURE__ */ React.createElement("path", { d: "M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z", stroke: "currentColor", strokeWidth: "2", strokeLinecap: "round", strokeLinejoin: "round" })), tr("g_restart")), /* @__PURE__ */ React.createElement("div", { className: "lang" }, ["en", "es"].map((l) => /* @__PURE__ */ React.createElement("button", { key: l, className: lang === l ? "active" : "", onClick: () => setLang(l) }, l.toUpperCase()))))), /* @__PURE__ */ React.createElement("div", { className: "screen" }, screen === "questionnaire" && /* @__PURE__ */ React.createElement(
     Questionnaire,
     {
       t: tr,
@@ -2558,6 +2718,20 @@ function App() {
       onDiscard: submitted ? discardAndBack : null,
       dirty: submitted ? JSON.stringify(profile) !== JSON.stringify(submitted.profile) : false,
       onReset: resetAll
+    }
+  ), screen === "camino" && camino && submitted && /* @__PURE__ */ React.createElement(
+    CaminoView,
+    {
+      t: tr,
+      lang,
+      profile: submitted.profile,
+      camino,
+      onExplorar: () => setScreen("globe"),
+      onAbandonar: () => {
+        setCamino(null);
+        setScreen("globe");
+      },
+      onEditProfile: () => setScreen("questionnaire")
     }
   ), screen === "processing" && /* @__PURE__ */ React.createElement(Processing, { t: tr, onDone: () => {
     wfTrack("embudo-4-mapa");
@@ -2577,7 +2751,13 @@ function App() {
         profile: submitted.profile,
         globeStyle: t.globeStyle,
         visible: screen === "globe",
-        onEditProfile: () => setScreen("questionnaire")
+        onEditProfile: () => setScreen("questionnaire"),
+        caminoActual: camino,
+        onElegirCamino: submitted.demo ? null : (sel) => {
+          if (sel) setCamino(sel);
+          window.scrollTo(0, 0);
+          setScreen("camino");
+        }
       }
     ),
     submitted.demo && screen === "globe" ? (() => {

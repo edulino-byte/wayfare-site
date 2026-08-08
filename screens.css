@@ -1282,3 +1282,131 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
   white-space: nowrap;
 }
 @media (max-width: 700px) { .vc-modelled { font-size: 10px; padding: 2px 7px; } }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   v1.183.0 — «MI CAMINO»: EL GIRO DE PRODUCTO
+   ---------------------------------------------------------------------------
+   La app deja de ser una consulta de una sola vez. Esta pantalla es el
+   acompañante de quien ya eligió destino: sus requisitos como lista de tareas
+   persistente, la apertura de cupo como cuenta atrás, y el aviso de qué cambió
+   desde la última visita. El globo pasa a ser la exploración, a un botón.
+   ═══════════════════════════════════════════════════════════════════════════ */
+.camino-scroll { overflow-y: auto; }
+.camino-wrap {
+  max-width: 760px; margin: 0 auto; padding: 84px 22px 80px;
+  color: var(--on-dark);
+}
+.camino-head {
+  position: relative; border-radius: var(--radius-sm); overflow: hidden;
+  border: 1px solid var(--glass-line); background: var(--glass);
+  margin-bottom: 14px;
+}
+.camino-flag-banner {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center 30%;
+  opacity: 0.55; filter: blur(2px) saturate(1.05);
+  pointer-events: none;
+}
+.camino-head-texto { position: relative; z-index: 1; padding: 26px 26px 22px; }
+.camino-sobre {
+  font-size: 12px; text-transform: uppercase; letter-spacing: .1em;
+  font-weight: 700; color: var(--on-dark-2);
+  text-shadow: 0 1px 8px rgba(0,0,0,0.6);
+}
+.camino-titulo {
+  font-family: var(--font-display); font-weight: 600; font-size: 34px;
+  letter-spacing: -0.02em; margin: 4px 0 2px;
+  text-shadow: 0 1px 14px rgba(0,0,0,0.65), 0 1px 3px rgba(0,0,0,0.5);
+}
+.camino-ruta { font-size: 15px; font-weight: 600; color: rgba(232,241,238,0.9);
+  text-shadow: 0 1px 10px rgba(0,0,0,0.6); }
+.camino-pills { margin-top: 12px; }
+
+/* el aviso de cambios: el gancho de recurrencia, con jerarquía según si hay algo */
+.camino-cambios {
+  font-size: 13px; color: var(--on-dark-2);
+  padding: 10px 14px; border-radius: var(--radius-sm);
+  border: 1px solid var(--glass-line); background: rgba(255,255,255,0.03);
+  margin-bottom: 12px;
+}
+.camino-cambios--hay {
+  color: #d9b26a; border-color: rgba(217,178,106,0.45);
+  background: rgba(217,178,106,0.10); font-size: 13.5px;
+}
+
+.camino-apertura {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  padding: 12px 14px; border-radius: var(--radius-sm); margin-bottom: 12px;
+  border: 1px solid var(--glass-line);
+}
+.camino-apertura--cerrada { border-color: rgba(217,140,106,0.4); background: rgba(217,140,106,0.08); }
+.camino-apertura--abierta { border-color: rgba(80,200,130,0.4); background: rgba(80,200,130,0.08); }
+.cam-ap-estado { font-weight: 800; font-size: 13px; text-transform: uppercase; letter-spacing: .05em; }
+.camino-apertura--cerrada .cam-ap-estado { color: #d98c6a; }
+.camino-apertura--abierta .cam-ap-estado { color: var(--st-eligible); }
+.cam-ap-fecha { font-size: 13.5px; color: var(--on-dark-2); }
+.cam-ap-fecha strong { color: var(--on-dark); }
+
+.camino-progreso { display: flex; align-items: center; gap: 14px; margin: 18px 2px 6px; }
+.camino-progreso-num { font-weight: 800; font-size: 13px; white-space: nowrap; }
+.camino-barra { flex: 1; height: 8px; border-radius: 999px; background: rgba(255,255,255,0.08); overflow: hidden; }
+.camino-barra-relleno { height: 100%; border-radius: 999px; background: var(--accent);
+  transition: width .35s cubic-bezier(.2,.8,.2,1); }
+
+.camino-seccion { margin-top: 18px; }
+.camino-item {
+  display: flex; align-items: flex-start; gap: 11px;
+  padding: 11px 13px; margin-bottom: 7px;
+  border: 1px solid var(--glass-line); border-radius: var(--radius-sm);
+  background: rgba(255,255,255,0.035);
+  font-size: 13.5px; line-height: 1.5; cursor: pointer;
+  transition: background .14s, border-color .14s, opacity .14s;
+}
+.camino-item:hover { background: rgba(255,255,255,0.07); }
+.camino-item input[type="checkbox"] {
+  width: 17px; height: 17px; margin-top: 1px; flex: 0 0 auto;
+  accent-color: var(--accent); cursor: pointer;
+}
+.camino-item--hecho { opacity: 0.55; }
+.camino-item--hecho .camino-item-texto { text-decoration: line-through; }
+.camino-item--cumplido { cursor: default; color: rgba(80,200,130,0.9); }
+.camino-item--cumplido svg { flex: 0 0 auto; margin-top: 3px; }
+.camino-item-texto { flex: 1; min-width: 0; }
+.camino-nuevo {
+  display: inline-block; margin-left: 8px; padding: 1px 7px;
+  font-size: 10px; font-weight: 800; letter-spacing: .06em;
+  color: #d9b26a; border: 1px solid rgba(217,178,106,0.5); border-radius: 999px;
+  background: rgba(217,178,106,0.12); vertical-align: 1px;
+}
+
+.camino-acciones { display: flex; gap: 12px; align-items: center; margin-top: 26px; flex-wrap: wrap; }
+.camino-abandonar {
+  background: none; border: 1px solid var(--glass-line); border-radius: 10px;
+  color: var(--on-dark-2); font-size: 12.5px; font-weight: 600;
+  padding: 10px 16px; cursor: pointer; transition: .14s;
+}
+.camino-abandonar:hover { color: #d98c6a; border-color: rgba(217,140,106,0.5); }
+.camino-vacio { text-align: center; padding: 60px 10px; }
+.camino-vacio h2 { font-size: 20px; margin-bottom: 10px; }
+.camino-vacio p { color: var(--on-dark-2); font-size: 14px; max-width: 440px; margin: 0 auto 22px; }
+.camino-pie { margin-top: 26px; }
+.btn-camino-topbar { color: var(--accent); border-color: var(--accent-deep); }
+
+@media (max-width: 560px) {
+  .camino-wrap { padding: 74px 14px 60px; }
+  .camino-titulo { font-size: 27px; }
+  .camino-head-texto { padding: 20px 18px 16px; }
+}
+
+/* v1.183.1 de la cabecera del camino — EL VELO ES SIEMPRE OSCURO, EL TEXTO ES
+   SIEMPRE CLARO. La primera captura en modo día enseñó «MI CAMINO A» y la
+   píldora de estado casi invisibles: los colores del tema flipaban a oscuro
+   sobre una bandera con velo oscuro. Sobre esta cabecera el tema no decide. */
+.camino-head .camino-sobre  { color: rgba(232,241,238,0.72); }
+.camino-head .camino-titulo { color: #eef3f1; }
+.camino-head .camino-ruta   { color: rgba(232,241,238,0.92); }
+.camino-head .status-pill {
+  background: rgba(8,16,14,0.55) !important;
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 2px 14px rgba(0,0,0,0.3);
+}
