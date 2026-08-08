@@ -542,11 +542,38 @@ const WAYFARE_PERF = (() => {
   return {
     lite,
     globeConfig: lite ? { rendererConfig: { antialias: false, powerPreference: "low-power" } } : void 0,
+    /* ── v1.179.0 · EL TOPE DE RESOLUCIÓN AHORA VALE TAMBIÉN EN ORDENADOR ──
+           Hasta aquí este método salía por la puerta si NO estabas en modo ligero,
+           o sea: en ordenador el globo dibujaba a resolución nativa. Medido en una
+           ventana de 1440x900 con pantalla Retina, eso era un lienzo de 2880x1800
+           — 5,18 MILLONES de píxeles sombreados en cada fotograma. Y el ordenador
+           es justo donde las ventanas son más grandes, así que era el sitio donde
+           más se notaba y el único sin tope.
+    
+           POR QUÉ NO SACRIFICA CALIDAD, que es la condición del encargo:
+           · El tope solo afecta al LIENZO DEL GLOBO. Los textos, los bordes y toda
+             la interfaz son HTML y siguen dibujándose a la resolución nativa: no
+             pierden un ápice de nitidez.
+           · Lo que hay dentro del lienzo es una FOTOGRAFÍA de la Tierra. En
+             imágenes orgánicas la diferencia entre 1,5x y 2x no la ve el ojo; donde
+             se nota un tope de resolución es en el texto y en las líneas rectas de
+             un píxel, y aquí no hay ninguna de las dos cosas.
+           · 1,5x es exactamente el tope que este mismo proyecto lleva usando en
+             móviles desde v1.44.0 sin una sola queja.
+    
+           EL GLOBO DEL CUESTIONARIO SE QUEDA EN 1,5x, NO EN 1x. Escribí primero 1x
+           dando por hecho que iba desenfocado detrás del formulario; una captura
+           demostró que no: se ve grande y nítido, ocupando la pantalla entera. A 1x
+           en una pantalla Retina las costas se habrían ablandado y eso ya no es
+           «sin sacrificar calidad». El 1x se mantiene solo en modo ligero, que es
+           como estaba desde v1.44.0 y lleva un año sin quejas. */
+    topeRatio(esFondo) {
+      return esFondo && this.lite ? 1 : 1.5;
+    },
     tune(world, esFondo) {
-      if (!this.lite) return;
       try {
         world.renderer().setPixelRatio(
-          esFondo ? 1 : Math.min(window.devicePixelRatio || 1, 1.5)
+          Math.min(window.devicePixelRatio || 1, this.topeRatio(esFondo))
         );
       } catch (e) {
       }
@@ -1143,6 +1170,7 @@ function esEscritorio() {
 function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
   const hostRef = React.useRef(null);
   const globeRef = React.useRef(null);
+  const despertarRef = React.useRef(null);
   const langRef = React.useRef(lang);
   langRef.current = lang;
   const globeLib = useGlobeLib();
@@ -1354,6 +1382,35 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
       world.controls().autoRotate = false;
     };
     host.addEventListener("pointerdown", stop, { once: true });
+    let dormido = false, tempSueno = 0, ultimoAviso = 0;
+    const dormir = () => {
+      if (dormido) return;
+      if (world.controls().autoRotate) return;
+      try {
+        world.pauseAnimation();
+        dormido = true;
+      } catch (e) {
+      }
+    };
+    const despertar = (msQuieto) => {
+      if (dormido) {
+        dormido = false;
+        try {
+          world.resumeAnimation();
+        } catch (e) {
+        }
+      }
+      const ahora = performance.now();
+      if (!msQuieto && ahora - ultimoAviso < 200) return;
+      ultimoAviso = ahora;
+      clearTimeout(tempSueno);
+      tempSueno = setTimeout(dormir, msQuieto || 2e3);
+    };
+    despertarRef.current = despertar;
+    world.controls().addEventListener("change", despertar);
+    const AL_TOCAR = ["pointerdown", "pointermove", "wheel", "touchstart"];
+    const alTocar = () => despertar();
+    AL_TOCAR.forEach((ev) => host.addEventListener(ev, alTocar, { passive: true }));
     let revealTimer = null;
     {
       const home = features.find((f) => f.__iso === profile.nationality);
@@ -1376,6 +1433,7 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
         const p = Math.min(1, (performance.now() - t0) / DUR);
         revealRef.current = p * p * (3 - 2 * p);
         world.polygonCapColor(capColor);
+        despertar(900);
         if (p < 1) {
           revealTimer = setTimeout(tick, 90);
         } else {
@@ -1422,6 +1480,7 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
         ultimoW = w;
         ultimoH = h;
         world.width(w).height(h);
+        despertar(1200);
       });
     });
     observador.observe(host);
@@ -1467,6 +1526,18 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
       if (pendiente) cancelAnimationFrame(pendiente);
       if (revealTimer) clearTimeout(revealTimer);
       clearTimeout(pillTimer);
+      clearTimeout(tempSueno);
+      if (despertarRef.current === despertar) despertarRef.current = null;
+      AL_TOCAR.forEach((ev) => {
+        try {
+          host.removeEventListener(ev, alTocar);
+        } catch (e) {
+        }
+      });
+      try {
+        world.controls().removeEventListener("change", despertar);
+      } catch (e) {
+      }
       try {
         world.controls().removeEventListener("change", actualizarMicroPills);
       } catch (e) {
@@ -1497,6 +1568,7 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
   React.useEffect(() => {
     if (globeRef.current) {
       globeRef.current.globeImageUrl(GLOBE_TEXTURES[globeStyle] || GLOBE_TEXTURES.textured);
+      if (despertarRef.current) despertarRef.current(3e3);
     }
   }, [globeStyle]);
   React.useEffect(() => {
@@ -1506,8 +1578,9 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
       w.pauseAnimation();
       w.__wayfarePaused = true;
     } else if (w.__wayfarePaused) {
-      w.resumeAnimation();
       w.__wayfarePaused = false;
+      if (despertarRef.current) despertarRef.current(2e3);
+      else w.resumeAnimation();
     }
   }, [visible, features, results]);
   React.useEffect(() => {
@@ -1515,7 +1588,10 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
       const w = globeRef.current;
       if (!w) return;
       if (document.hidden) w.pauseAnimation();
-      else if (!w.__wayfarePaused) w.resumeAnimation();
+      else if (!w.__wayfarePaused) {
+        if (despertarRef.current) despertarRef.current(2e3);
+        else w.resumeAnimation();
+      }
     };
     document.addEventListener("visibilitychange", onVis);
     return () => document.removeEventListener("visibilitychange", onVis);
@@ -1703,6 +1779,7 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
     const world = globeRef.current, host = hostRef.current;
     if (!world || !host) return;
     world.controls().autoRotate = false;
+    if (despertarRef.current) despertarRef.current(1800);
     if (!esEscritorio()) {
       world.pointOfView({ lat, lng: lng - 12, altitude: altMovil || 1.2 }, 900);
       return;
@@ -1724,6 +1801,7 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
     if (globeRef.current) {
       if (globeRef.current.__deselect) globeRef.current.__deselect();
       const host = hostRef.current;
+      if (despertarRef.current) despertarRef.current(1600);
       if (host && esEscritorio()) {
         const escena = host.parentElement || host;
         const pov = globeRef.current.pointOfView();
