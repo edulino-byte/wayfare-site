@@ -1171,6 +1171,7 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
   const hostRef = React.useRef(null);
   const globeRef = React.useRef(null);
   const despertarRef = React.useRef(null);
+  const arrastrandoRef = React.useRef(false);
   const langRef = React.useRef(lang);
   langRef.current = lang;
   const globeLib = useGlobeLib();
@@ -1245,6 +1246,7 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
       return { iso: f.__iso, lat: c[1], lng: c[0], r: results[f.__id], f };
     }).concat(micros.map((m) => ({ iso: m.iso, lat: m.lat, lng: m.lng, r: m.r, micro: true })));
     const world = G(window.WAYFARE_PERF.globeConfig)(host).width(host.clientWidth).height(host.clientHeight).backgroundColor("rgba(0,0,0,0)").globeImageUrl(GLOBE_TEXTURES[globeStyle] || GLOBE_TEXTURES.textured).bumpImageUrl(BUMP_URL).showAtmosphere(true).atmosphereColor("#7ab8d4").atmosphereAltitude(0.26).polygonsData(features).polygonCapColor(capColor).polygonSideColor(() => "rgba(0,0,0,0.06)").polygonStrokeColor(strokeColor).polygonAltitude(altOf).polygonsTransitionDuration(220).onPolygonHover((d) => {
+      if (arrastrandoRef.current) return;
       hoverRef.current = d;
       setHoverIdx(d ? d.__id : null);
       host.style.cursor = d ? "pointer" : "grab";
@@ -1323,6 +1325,7 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
     }
     let ultimaPasadaPills = 0;
     const actualizarMicroPills = () => {
+      if (arrastrandoRef.current) return;
       const ahora = performance.now();
       if (ahora - ultimaPasadaPills < 150) return;
       ultimaPasadaPills = ahora;
@@ -1411,6 +1414,19 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
     const AL_TOCAR = ["pointerdown", "pointermove", "wheel", "touchstart"];
     const alTocar = () => despertar();
     AL_TOCAR.forEach((ev) => host.addEventListener(ev, alTocar, { passive: true }));
+    const alAgarrar = () => {
+      arrastrandoRef.current = true;
+      setHoverData(null);
+    };
+    const alSoltarGlobo = () => {
+      if (!arrastrandoRef.current) return;
+      arrastrandoRef.current = false;
+      ultimaPasadaPills = 0;
+      actualizarMicroPills();
+    };
+    host.addEventListener("pointerdown", alAgarrar, { passive: true });
+    window.addEventListener("pointerup", alSoltarGlobo, { passive: true });
+    window.addEventListener("pointercancel", alSoltarGlobo, { passive: true });
     let revealTimer = null;
     {
       const home = features.find((f) => f.__iso === profile.nationality);
@@ -1534,6 +1550,19 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
         } catch (e) {
         }
       });
+      arrastrandoRef.current = false;
+      try {
+        host.removeEventListener("pointerdown", alAgarrar);
+      } catch (e) {
+      }
+      try {
+        window.removeEventListener("pointerup", alSoltarGlobo);
+      } catch (e) {
+      }
+      try {
+        window.removeEventListener("pointercancel", alSoltarGlobo);
+      } catch (e) {
+      }
       try {
         world.controls().removeEventListener("change", despertar);
       } catch (e) {
