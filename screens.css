@@ -1053,8 +1053,8 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
    hay solape, así que la regla solo aplica al diseño ancho. */
 @media (min-width: 701px) {
   .globe-stage.detail-open ~ .demo-banner {
-    left: calc((100% - min(440px, 44vw)) / 2);
-    max-width: min(calc(92vw - min(440px, 44vw)), 640px);
+    left: calc((100% - var(--ficha-ancho)) / 2);
+    max-width: min(calc(92vw - var(--ficha-ancho)), 640px);
   }
   /* El botón flotante vive pegado al borde derecho, justo donde entra el panel.
      Apartarlo no basta: entonces pisa el texto del aviso. Con el panel abierto
@@ -1067,6 +1067,71 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
     display: inline-flex;
     padding: 11px 24px;
     font-size: 15px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   v1.178.0 — ESCRITORIO: LA FICHA MANDA Y EL GLOBO SE APARTA
+   ---------------------------------------------------------------------------
+   El reparto anterior estaba al revés de la intención del producto: el planeta
+   se quedaba con el 69% de la pantalla y el contenido —el motivo por el que
+   alguien abre un país— vivía apretado en una tira de 440px a la derecha. El
+   globo es la puerta de entrada, no el destino: en cuanto has elegido país ya
+   hizo su trabajo.
+
+   Ahora, de 701px para arriba, la ficha se lleva ~62% y el globo se queda con
+   una columna propia a la izquierda. Dos cosas que no se ven pero importan:
+
+   · El globo ya no se DESPLAZA (translateX): se ENCOGE de verdad. El lienzo
+     WebGL pasa a tener un tercio de píxeles, así que mientras lees la ficha el
+     ordenador deja de redibujar un planeta entero que nadie está mirando.
+   · --ficha-ancho lo publica JS (anchoFicha en Globe.jsx), no un clamp() de
+     aquí. La cámara necesita saber el hueco final ANTES de que la transición
+     empiece; si el número viviera solo en CSS, JS tendría que medirlo a medias
+     y encuadraría contra un tamaño que ya no es el bueno.
+
+   MÓVIL NO SE TOCA. Ahí la ficha ya es una hoja que ocupa casi todo y el globo
+   queda detrás; nada de esto aplica.
+   ═══════════════════════════════════════════════════════════════════════════ */
+:root { --ficha-ancho: 440px; }   /* respaldo por si JS aún no lo ha publicado */
+
+@media (min-width: 701px) {
+  .detail-panel { width: var(--ficha-ancho); }
+
+  /* La duración es distinta según la dirección, y no es un capricho:
+     · AL ABRIR (.--shifted) el globo se encoge en 0,55 s, el mismo tiempo que
+       tarda la ficha en entrar. Van juntos y no se ve ningún hueco.
+     · AL CERRAR la ficha desaparece de golpe (no tiene animación de salida),
+       así que si el globo tardara otros 0,55 s en recuperar el ancho quedaría
+       medio segundo de vacío negro a la derecha. Se ve. Por eso vuelve en 0,3 s
+       y con una curva que arranca deprisa. */
+  .globe-host {
+    transition: right .3s cubic-bezier(.2,.8,.3,1),
+                transform .3s cubic-bezier(.2,.8,.3,1);
+  }
+  .globe-host--shifted {
+    transform: none;
+    right: var(--ficha-ancho);
+    transition: right .55s cubic-bezier(.4,0,.2,1),
+                transform .55s cubic-bezier(.4,0,.2,1);
+  }
+
+  /* con el doble de ancho, el aire de dentro también sube */
+  .detail-panel-inner { padding: 30px 36px 56px; }
+  .detail-panel .detail-head .flag { font-size: 58px; }
+  .detail-panel .detail-head .nm   { font-size: 29px; }
+}
+
+/* Dos columnas de tarjetas cuando la ficha da de sí. No es adorno: a partir de
+   ~700px de ancho útil, una sola columna produce renglones tan largos que al
+   saltar de línea el ojo pierde por dónde iba. El umbral está en el ancho de
+   VENTANA a partir del cual cada columna pasa de 330px. */
+@media (min-width: 1250px) {
+  .detail-panel .vc-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 18px;
+    align-items: start;
   }
 }
 

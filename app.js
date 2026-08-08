@@ -1121,6 +1121,25 @@ function GlobeStars() {
     "aria-hidden": "true"
   });
 }
+const FOV_GLOBO = 50;
+function altitudDeEncaje(host, ocupacion) {
+  if (!host) return 1.7;
+  const w = host.clientWidth, h = host.clientHeight;
+  if (!w || !h) return 1.7;
+  const tg = Math.tan(FOV_GLOBO * Math.PI / 180 / 2);
+  const radios = 1 / (ocupacion || 0.8);
+  const distV = radios / tg;
+  const distH = radios / (tg * (w / h));
+  const dist = Math.max(distV, distH);
+  return Math.min(4, Math.max(0.6, dist - 1));
+}
+function anchoFicha(anchoEscena) {
+  const holgado = Math.min(1200, Math.max(520, anchoEscena * 0.62));
+  return Math.round(Math.max(320, Math.min(holgado, anchoEscena - 300)));
+}
+function esEscritorio() {
+  return typeof window !== "undefined" && typeof window.matchMedia === "function" ? window.matchMedia("(min-width: 701px)").matches : true;
+}
 function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
   const hostRef = React.useRef(null);
   const globeRef = React.useRef(null);
@@ -1272,8 +1291,7 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
       wfTrack("embudo-5-destino");
       wfTrack("destino-" + d.iso);
       setDetailOpen(true);
-      world.controls().autoRotate = false;
-      world.pointOfView({ lat: d.lat, lng: d.lng - 12, altitude: 1.2 }, 900);
+      enfocarPais(d.lat, d.lng);
     }
     let ultimaPasadaPills = 0;
     const actualizarMicroPills = () => {
@@ -1394,10 +1412,19 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
       }
     };
     host.addEventListener("mousemove", onMouseMove, { passive: true });
-    const onResize = () => {
-      world.width(host.clientWidth).height(host.clientHeight);
-    };
-    window.addEventListener("resize", onResize);
+    let pendiente = 0, ultimoW = host.clientWidth, ultimoH = host.clientHeight;
+    const observador = new ResizeObserver(() => {
+      if (pendiente) return;
+      pendiente = requestAnimationFrame(() => {
+        pendiente = 0;
+        const w = host.clientWidth, h = host.clientHeight;
+        if (!w || !h || w === ultimoW && h === ultimoH) return;
+        ultimoW = w;
+        ultimoH = h;
+        world.width(w).height(h);
+      });
+    });
+    observador.observe(host);
     function altOf(d) {
       if (selRef.current && d.__id === selRef.current.__id) return 0.06;
       if (hoverRef.current && d.__id === hoverRef.current.__id) return 0.025;
@@ -1430,15 +1457,14 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
       world.polygonAltitude(altOf).polygonCapColor(capColor).polygonStrokeColor(strokeColor);
       try {
         const coords = featureCentroid(d);
-        if (coords) {
-          world.pointOfView({ lat: coords[1], lng: coords[0] - 12, altitude: 1.4 }, 900);
-        }
+        if (coords) enfocarPais(coords[1], coords[0], 1.4);
       } catch (e) {
       }
     }
     return () => {
       host.removeEventListener("mousemove", onMouseMove);
-      window.removeEventListener("resize", onResize);
+      observador.disconnect();
+      if (pendiente) cancelAnimationFrame(pendiente);
       if (revealTimer) clearTimeout(revealTimer);
       clearTimeout(pillTimer);
       try {
@@ -1575,10 +1601,7 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
       selRef.current = null;
       setSelected(Object.assign({}, m.r, { iso: m.iso }));
       setDetailOpen(true);
-      if (globeRef.current) {
-        globeRef.current.controls().autoRotate = false;
-        globeRef.current.pointOfView({ lat: m.lat, lng: m.lng - 12, altitude: 1.2 }, 900);
-      }
+      enfocarPais(m.lat, m.lng);
       return;
     }
     pendienteRef.current = iso;
@@ -1676,14 +1699,61 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
       hoja.style.opacity = "";
     }
   };
+  const enfocarPais = (lat, lng, altMovil) => {
+    const world = globeRef.current, host = hostRef.current;
+    if (!world || !host) return;
+    world.controls().autoRotate = false;
+    if (!esEscritorio()) {
+      world.pointOfView({ lat, lng: lng - 12, altitude: altMovil || 1.2 }, 900);
+      return;
+    }
+    const anchoEscena = (host.parentElement || host).clientWidth || host.clientWidth;
+    world.pointOfView({
+      lat,
+      lng,
+      altitude: altitudDeEncaje(
+        { clientWidth: anchoEscena - anchoFicha(anchoEscena), clientHeight: host.clientHeight },
+        0.82
+      )
+    }, 900);
+  };
   const closeDetail = () => {
     selRef.current = null;
     setSelected(null);
     setDetailOpen(false);
     if (globeRef.current) {
       if (globeRef.current.__deselect) globeRef.current.__deselect();
+      const host = hostRef.current;
+      if (host && esEscritorio()) {
+        const escena = host.parentElement || host;
+        const pov = globeRef.current.pointOfView();
+        globeRef.current.pointOfView({
+          lat: pov.lat,
+          lng: pov.lng,
+          altitude: altitudDeEncaje(
+            { clientWidth: escena.clientWidth, clientHeight: host.clientHeight },
+            0.8
+          )
+        }, 700);
+      }
     }
   };
+  React.useEffect(() => {
+    const publicar = () => {
+      if (!window.innerWidth) return;
+      document.documentElement.style.setProperty(
+        "--ficha-ancho",
+        anchoFicha(window.innerWidth) + "px"
+      );
+    };
+    publicar();
+    window.addEventListener("resize", publicar, { passive: true });
+    document.addEventListener("visibilitychange", publicar);
+    return () => {
+      window.removeEventListener("resize", publicar);
+      document.removeEventListener("visibilitychange", publicar);
+    };
+  }, []);
   React.useEffect(() => {
     if (!detailOpen) return;
     const alPulsar = (e) => {
@@ -1897,7 +1967,7 @@ function CountryDetail({ t, lang, result, profile, onCompare }) {
       advInfo && advInfo.advisors.length ? /* @__PURE__ */ React.createElement("button", { type: "button", className: "adv-chip", onClick: openAdvisors }, "\u{1F9D1}\u200D\u{1F4BC} ", t("adv_section"), /* @__PURE__ */ React.createElement("span", { className: "adv-chip-n" }, advInfo.advisors.length)) : null,
       /* @__PURE__ */ React.createElement("div", { className: "sub-label" }, t("g_visas_here")),
       result.visas.length === 0 ? /* @__PURE__ */ React.createElement("div", { className: "empty" }, /* @__PURE__ */ React.createElement("h3", null, t("g_no_visas_goal")), /* @__PURE__ */ React.createElement("p", null, t("g_no_visas_goal_sub"))) : null,
-      result.visas.map((v, i) => {
+      /* @__PURE__ */ React.createElement("div", { className: "vc-list" }, result.visas.map((v, i) => {
         const vStatusKey = v.status === "nodata" ? "st_nodata" : v.status === "eligible" ? "st_eligible" : v.status === "partial" ? "st_partial" : "st_ineligible";
         return (
           /* v1.39.0 — entrada escalonada de las tarjetas */
@@ -1939,7 +2009,7 @@ function CountryDetail({ t, lang, result, profile, onCompare }) {
             }
           )))) : null, v.missing && v.missing.length ? /* @__PURE__ */ React.createElement("details", { className: "vc-acc", open: secOpen("missing", v) }, /* @__PURE__ */ React.createElement("summary", { className: "vc-acc-sum" }, /* @__PURE__ */ React.createElement("span", { className: "vc-acc-label" }, t("g_missing")), /* @__PURE__ */ React.createElement("span", { className: "vc-acc-count" }, v.missing.length)), /* @__PURE__ */ React.createElement("div", { className: "vc-acc-body missing" }, /* @__PURE__ */ React.createElement("span", { className: "lbl" }, t("g_missing")), v.missing.map((m) => /* @__PURE__ */ React.createElement("span", { className: "miss-tag", key: m }, t("rq_" + m))))) : null)
         );
-      }),
+      })),
       (() => {
         const adv = advInfo;
         if (!adv || !adv.advisors || !adv.advisors.length) return null;
