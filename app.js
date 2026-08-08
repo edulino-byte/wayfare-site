@@ -1487,16 +1487,29 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
     };
     host.addEventListener("mousemove", onMouseMove, { passive: true });
     let pendiente = 0, ultimoW = host.clientWidth, ultimoH = host.clientHeight;
+    let ultimaAplicacion = 0, colaResize = 0;
+    const aplicarTamano = () => {
+      const w = host.clientWidth, h = host.clientHeight;
+      if (!w || !h || w === ultimoW && h === ultimoH) return;
+      ultimoW = w;
+      ultimoH = h;
+      ultimaAplicacion = performance.now();
+      world.width(w).height(h);
+      despertar(1200);
+    };
     const observador = new ResizeObserver(() => {
       if (pendiente) return;
       pendiente = requestAnimationFrame(() => {
         pendiente = 0;
-        const w = host.clientWidth, h = host.clientHeight;
-        if (!w || !h || w === ultimoW && h === ultimoH) return;
-        ultimoW = w;
-        ultimoH = h;
-        world.width(w).height(h);
-        despertar(1200);
+        const espera = 150 - (performance.now() - ultimaAplicacion);
+        if (espera <= 0) {
+          aplicarTamano();
+          return;
+        }
+        if (!colaResize) colaResize = setTimeout(() => {
+          colaResize = 0;
+          aplicarTamano();
+        }, espera);
       });
     });
     observador.observe(host);
@@ -1540,6 +1553,7 @@ function GlobeView({ t, lang, profile, onEditProfile, globeStyle, visible }) {
       host.removeEventListener("mousemove", onMouseMove);
       observador.disconnect();
       if (pendiente) cancelAnimationFrame(pendiente);
+      if (colaResize) clearTimeout(colaResize);
       if (revealTimer) clearTimeout(revealTimer);
       clearTimeout(pillTimer);
       clearTimeout(tempSueno);
