@@ -1122,17 +1122,70 @@ input[type=range]::-moz-range-thumb { width: 22px; height: 22px; border-radius: 
   .detail-panel .detail-head .nm   { font-size: 29px; }
 }
 
-/* Dos columnas de tarjetas cuando la ficha da de sí. No es adorno: a partir de
-   ~700px de ancho útil, una sola columna produce renglones tan largos que al
-   saltar de línea el ojo pierde por dónde iba. El umbral está en el ancho de
-   VENTANA a partir del cual cada columna pasa de 330px. */
-@media (min-width: 1250px) {
-  .detail-panel .vc-list {
+/* ═══════════════════════════════════════════════════════════════════════════
+   v1.178.1 — LA TARJETA POR DENTRO, NO SOLO LA COLUMNA QUE OCUPA
+   ---------------------------------------------------------------------------
+   v1.178.0 ensanchó la ficha y puso las tarjetas en DOS COLUMNAS. Estaba mal, y
+   el usuario lo vio enseguida: eso no adapta nada, solo pone la tarjeta vieja
+   —de 550px, la misma de siempre— dos veces al lado. Y tenía un defecto propio:
+   en una rejilla, dos tarjetas de la misma fila comparten alto. Al desplegar
+   «Requisitos y advertencias» (12 puntos) la tarjeta crecía y la vecina se
+   quedaba corta, dejando MEDIA FICHA en negro. Justo lo contrario de aprovechar
+   el espacio.
+
+   Ahora la tarjeta ocupa todo el ancho y es su CONTENIDO el que se reparte:
+   · el título y el estado comparten renglón, cada uno en su punta;
+   · las listas de requisitos fluyen en columnas (`columns`), que rellenan de
+     arriba abajo y de izquierda a derecha sin dejar huecos por construcción.
+
+   Se usa `columns: 290px 2` y no `grid`: con columnas el navegador decide
+   cuántas caben y equilibra las alturas él solo. Una rejilla de dos columnas
+   volvería a crear el mismo hueco un nivel más abajo.
+
+   El corte está en 1050px y no más arriba PORQUE la regla se autorregula: con
+   `columns: 290px 2` el navegador solo abre la segunda columna si caben 290px
+   de verdad. En un portátil estrecho la lista se queda en una y no hay que
+   inventar un segundo punto de corte para ella.
+   ═══════════════════════════════════════════════════════════════════════════ */
+@media (min-width: 1050px) {
+  /* cabecera: nombre a la izquierda, veredicto a la derecha, un solo renglón */
+  .detail-panel .visa-card {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0 18px;
-    align-items: start;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 24px;
+    padding: 18px 22px;
   }
+  .detail-panel .visa-card > *        { grid-column: 1 / -1; }
+  .detail-panel .visa-card > .vc-head { grid-column: 1; grid-row: 1; }
+  .detail-panel .visa-card > .vc-meta {
+    grid-column: 2; grid-row: 1;
+    margin-top: 0; justify-self: end; align-self: center;
+    white-space: nowrap;
+  }
+  /* El nombre deja de estirarse (`flex: 1`): así el puntito de estado y los
+     sellos se quedan pegados al título en vez de irse al borde, y el veredicto
+     de la derecha no queda separado por un vacío en pantallas medianas. */
+  .detail-panel .vc-name { font-size: 16.5px; flex: 0 1 auto; }
+
+  /* Las listas, en columnas. `display: block` es obligatorio: sobre un
+     contenedor flex las columnas no hacen nada, y el gap de flex deja de
+     aplicar, así que la separación pasa a margin-bottom. */
+  .detail-panel .vc-acc-body.vc-matched,
+  .detail-panel .vc-acc-body.vc-warnings,
+  .detail-panel .vc-acc-body.missing {
+    display: block;
+    columns: 290px 2;
+    column-gap: 34px;
+  }
+  .detail-panel .vc-acc-body > * {
+    break-inside: avoid;                 /* un punto no se parte por la mitad */
+    -webkit-column-break-inside: avoid;
+    margin-bottom: 9px;
+  }
+
+  /* La barra del desplegable ocupa todo el ancho; con el contador pegado al
+     borde derecho quedaba un número solo a un metro de su etiqueta. */
+  .detail-panel .vc-acc > .vc-acc-sum { justify-content: flex-start; gap: 10px; }
 }
 
 /* v1.118.0 — En MÓVIL el panel de detalle es una hoja que ocupa casi toda la
